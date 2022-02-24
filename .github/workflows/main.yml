@@ -14,6 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
+        token: ${{ secrets.BUILDBOT_PERSONAL_TOKEN }}
         submodules: recursive
 
     - name: Get branch name
