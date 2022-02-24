@@ -19,8 +19,8 @@ public class MockItemServer extends AbstractMockServer {
     }
 
     public MockItemServiceImpl getItemService() {
-        for(var service : super.getServices()) {
-            if(service instanceof MockItemServiceImpl)  {
+        for (var service : super.getServices()) {
+            if (service instanceof MockItemServiceImpl) {
                 return (MockItemServiceImpl) service;
             }
         }
@@ -28,8 +28,8 @@ public class MockItemServer extends AbstractMockServer {
     }
 
     public MockItemStreamingImpl getItemStream() {
-        for(var service : super.getServices()) {
-            if(service instanceof MockItemStreamingImpl)  {
+        for (var service : super.getServices()) {
+            if (service instanceof MockItemStreamingImpl) {
                 return (MockItemStreamingImpl) service;
             }
         }

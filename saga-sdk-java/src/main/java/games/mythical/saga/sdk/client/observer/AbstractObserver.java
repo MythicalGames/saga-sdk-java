@@ -14,7 +14,7 @@ public abstract class AbstractObserver<V> implements StreamObserver<V> {
     private final int maxCount = 16;
 
     protected void sleepBetweenReconnects() {
-        if(!retry) {
+        if (!retry) {
             retry = true;
             return;
         }
@@ -24,7 +24,7 @@ public abstract class AbstractObserver<V> implements StreamObserver<V> {
             log.trace("Sleeping {} milliseconds before reconnect", sleepTimeMillis);
             TimeUnit.MILLISECONDS.sleep(sleepTimeMillis);
 
-            if(requestCount < maxCount) {
+            if (requestCount < maxCount) {
                 requestCount++;
             }
         } catch (InterruptedException e) {

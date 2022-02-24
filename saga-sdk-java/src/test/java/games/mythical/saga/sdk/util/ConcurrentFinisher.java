@@ -14,13 +14,13 @@ public class ConcurrentFinisher {
     }
 
     public static void finish(String trackingId) {
-        if(finishedTracker.containsKey(trackingId)) {
+        if (finishedTracker.containsKey(trackingId)) {
             finishedTracker.get(trackingId).set(true);
         }
     }
 
     public static void wait(String trackingId) throws Exception {
-        if(finishedTracker.containsKey(trackingId)) {
+        if (finishedTracker.containsKey(trackingId)) {
             while (!finishedTracker.get(trackingId).compareAndSet(true, false)) {
                 Thread.sleep(10);
             }

@@ -1,11 +1,10 @@
 package games.mythical.saga.sdk.server.item;
 
-import games.mythical.saga.sdk.client.model.IVIItem;
-import games.mythical.saga.sdk.client.model.IVIMetadata;
-import games.mythical.saga.sdk.exception.IVIException;
-import games.mythical.ivi.sdk.proto.api.item.*;
-import games.mythical.ivi.sdk.proto.common.Finalized;
-import games.mythical.ivi.sdk.proto.common.item.ItemState;
+import games.mythical.saga.sdk.client.model.SagaObject;
+import games.mythical.saga.sdk.exception.SagaException;
+import games.mythical.saga.sdk.proto.api.item.*;
+import games.mythical.saga.sdk.proto.common.Finalized;
+import games.mythical.saga.sdk.proto.common.item.ItemState;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
-    private final Map<String, IVIItem> items = new ConcurrentHashMap<>();
+    private final Map<String, SagaObject> items = new ConcurrentHashMap<>();
 
     @Override
     public void issueItem(IssueItemRequest request, StreamObserver<IssueItemStartedResponse> responseObserver) {
@@ -34,12 +33,12 @@ public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
 
     @Override
     public void getItem(GetItemRequest request, StreamObserver<Item> responseObserver) {
-        if(items.containsKey(request.getGameInventoryId())) {
+        if (items.containsKey(request.getGameInventoryId())) {
             try {
                 var item = items.get(request.getGameInventoryId());
                 responseObserver.onNext(toProto(item));
                 responseObserver.onCompleted();
-            } catch (IVIException e) {
+            } catch (SagaException e) {
                 log.error("Couldn't convert item!", e);
                 responseObserver.onError(e);
             }
@@ -54,21 +53,21 @@ public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
             var result = new ArrayList<Item>();
 
             ItemState state;
-            if(request.getFinalized().equals(Finalized.YES) || request.getFinalized().equals(Finalized.ALL)) {
+            if (request.getFinalized().equals(Finalized.YES) || request.getFinalized().equals(Finalized.ALL)) {
                 state = ItemState.ISSUED;
             } else {
                 state = ItemState.PENDING_ISSUED;
             }
 
             for (var item : items.values()) {
-                if (item.getItemState().equals(state)) {
-                    result.add(toProto(item));
-                }
+//                if (item.getItemState().equals(state)) {
+                result.add(toProto(item));
+//                }
             }
 
             responseObserver.onNext(Items.newBuilder().addAllItems(result).build());
             responseObserver.onCompleted();
-        } catch (IVIException e) {
+        } catch (SagaException e) {
             log.error("Couldn't convert item!", e);
             responseObserver.onError(e);
         }
@@ -78,15 +77,15 @@ public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
     public void getItemsForPlayer(GetItemsForPlayerRequest request, StreamObserver<Items> responseObserver) {
         try {
             var result = new ArrayList<Item>();
-            for(var item : items.values()) {
-                if(item.getPlayerId().equals(request.getPlayerId())) {
-                    result.add(toProto(item));
-                }
+            for (var item : items.values()) {
+//                if (item.getPlayerId().equals(request.getPlayerId())) {
+                result.add(toProto(item));
+//                }
             }
 
             responseObserver.onNext(Items.newBuilder().addAllItems(result).build());
             responseObserver.onCompleted();
-        } catch (IVIException e) {
+        } catch (SagaException e) {
             log.error("Couldn't convert item!", e);
             responseObserver.onError(e);
         }
@@ -94,7 +93,7 @@ public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
 
     @Override
     public void transferItem(TransferItemRequest request, StreamObserver<TransferItemStartedResponse> responseObserver) {
-        if(!items.containsKey(request.getGameItemInventoryId())) {
+        if (!items.containsKey(request.getGameItemInventoryId())) {
             responseObserver.onError(Status.NOT_FOUND.asException());
             return;
         }
@@ -102,7 +101,7 @@ public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
         try {
             var newItemBuilder = toProto(items.get(request.getGameItemInventoryId())).toBuilder();
             newItemBuilder.setPlayerId(request.getDestinationPlayerId());
-            items.put(request.getGameItemInventoryId(), IVIItem.fromProto(newItemBuilder.build()));
+            items.put(request.getGameItemInventoryId(), SagaObject.fromProto(newItemBuilder.build()));
 
             var response = TransferItemStartedResponse.newBuilder()
                     .setTrackingId(RandomStringUtils.randomAlphanumeric(30))
@@ -111,7 +110,7 @@ public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
-        } catch (IVIException e) {
+        } catch (SagaException e) {
             log.error("Couldn't convert item!", e);
             responseObserver.onError(e);
         }
@@ -122,7 +121,7 @@ public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
         try {
             var newItemBuilder = toProto(items.get(request.getGameItemInventoryId())).toBuilder();
             newItemBuilder.setItemState(ItemState.PENDING_BURNED);
-            items.put(request.getGameItemInventoryId(), IVIItem.fromProto(newItemBuilder.build()));
+            items.put(request.getGameItemInventoryId(), SagaObject.fromProto(newItemBuilder.build()));
 
             var response = BurnItemStartedResponse.newBuilder()
                     .setTrackingId(RandomStringUtils.randomAlphanumeric(30))
@@ -131,7 +130,7 @@ public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
-        } catch (IVIException e) {
+        } catch (SagaException e) {
             log.error("Couldn't convert item!", e);
             responseObserver.onError(e);
         }
@@ -150,23 +149,23 @@ public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
             updateMap.put(updateItem.getGameInventoryId(), updateItem);
         }
 
-        try {
-            for (var gameInventoryId : updateMap.keySet()) {
-                var item = items.get(gameInventoryId);
-                item.setMetadata(IVIMetadata.fromProto(updateMap.get(gameInventoryId).getMetadata()));
-            }
-
-            responseObserver.onNext(UpdateItemMetadataResponse.newBuilder().build());
-            responseObserver.onCompleted();
-        } catch (IVIException e) {
-            log.error("Couldn't convert item!", e);
-            responseObserver.onError(e);
-        }
+//        try {
+//            for (var gameInventoryId : updateMap.keySet()) {
+//                var item = items.get(gameInventoryId);
+//                item.setMetadata(IVIMetadata.fromProto(updateMap.get(gameInventoryId).getMetadata()));
+//            }
+//
+//            responseObserver.onNext(UpdateItemMetadataResponse.newBuilder().build());
+//            responseObserver.onCompleted();
+//        } catch (SagaException e) {
+//            log.error("Couldn't convert item!", e);
+//            responseObserver.onError(e);
+//        }
     }
 
-    public void setItems(Collection<IVIItem> items) {
-        for(var item : items) {
-            this.items.putIfAbsent(item.getGameInventoryId(), item);
+    public void setItems(Collection<SagaObject> items) {
+        for (var item : items) {
+            this.items.putIfAbsent("temp", item);
         }
     }
 
@@ -174,22 +173,9 @@ public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
         items.clear();
     }
 
-    private Item toProto(IVIItem item) throws IVIException {
+    private Item toProto(SagaObject item) throws SagaException {
         return Item.newBuilder()
-                .setGameInventoryId(item.getGameInventoryId())
-                .setGameItemTypeId(item.getGameItemTypeId())
-                .setDgoodsId(item.getDGoodsId())
-                .setItemName(item.getItemName())
-                .setPlayerId(item.getPlayerId())
-                .setOwnerSidechainAccount(item.getOwnerSidechainAccount())
-                .setSerialNumber(item.getSerialNumber())
-                .setCurrencyBase(item.getCurrencyBase())
-                .setMetadataUri(item.getMetadataUri())
-                .setTrackingId(item.getTrackingId())
-                .setMetadata(IVIMetadata.toProto(item.getMetadata()))
-                .setItemState(item.getItemState())
-                .setCreatedTimestamp(item.getCreatedTimestamp().getEpochSecond())
-                .setUpdatedTimestamp(item.getUpdatedTimestamp().getEpochSecond())
+                .setGameInventoryId("temp")
                 .build();
     }
 }

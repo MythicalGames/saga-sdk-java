@@ -10,50 +10,50 @@ import org.apache.commons.lang3.StringUtils;
 import java.net.HttpURLConnection;
 
 @Slf4j
-public class IVIException extends Exception {
+public class SagaException extends Exception {
     public static final int UNPROCESSABLE_ENTITY = 422;
 
-    private final IVIErrorCode code;
+    private final SagaErrorCode code;
     public static final String HTTP_CODE_KEY = "HttpCode";
 
-    public IVIException(IVIErrorCode code) {
+    public SagaException(SagaErrorCode code) {
         super();
         this.code = code;
     }
 
-    public IVIException(String message, IVIErrorCode code) {
+    public SagaException(String message, SagaErrorCode code) {
         super(message);
         this.code = code;
     }
 
-    public IVIException(String message, Throwable cause, IVIErrorCode code) {
+    public SagaException(String message, Throwable cause, SagaErrorCode code) {
         super(message, cause);
         this.code = code;
     }
 
-    public IVIException(Throwable cause, IVIErrorCode code) {
+    public SagaException(Throwable cause, SagaErrorCode code) {
         super(cause);
         this.code = code;
     }
 
-    public IVIException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, IVIErrorCode code) {
+    public SagaException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, SagaErrorCode code) {
         super(message, cause, enableSuppression, writableStackTrace);
         this.code = code;
     }
 
-    public IVIErrorCode getCode() {
+    public SagaErrorCode getCode() {
         return code;
     }
 
-    public static IVIException fromGrpcException(StatusException exception) {
+    public static SagaException fromGrpcException(StatusException exception) {
         return fromGrpcExceptionMessaging(exception.getStatus().getCode(), exception.getTrailers(), exception.getMessage());
     }
 
-    public static IVIException fromGrpcException(StatusRuntimeException exception) {
+    public static SagaException fromGrpcException(StatusRuntimeException exception) {
         return fromGrpcExceptionMessaging(exception.getStatus().getCode(), exception.getTrailers(), exception.getMessage());
     }
 
-    private static IVIException fromGrpcExceptionMessaging(Code exception, Metadata metadata, String message) {
+    private static SagaException fromGrpcExceptionMessaging(Code exception, Metadata metadata, String message) {
         // GRPC Status doesn't handle all http codes, so check if one was added
         if (metadata != null) {
             var httpCodeString = metadata.get(Metadata.Key.of(HTTP_CODE_KEY, Metadata.ASCII_STRING_MARSHALLER));
@@ -65,58 +65,59 @@ public class IVIException extends Exception {
 
         switch (exception) {
             case INVALID_ARGUMENT:
-                return logError(message, IVIErrorCode.INVALID_ARGUMENT);
+                return logError(message, SagaErrorCode.INVALID_ARGUMENT);
             case NOT_FOUND:
-                return logError(message, IVIErrorCode.NOT_FOUND);
+                return logError(message, SagaErrorCode.NOT_FOUND);
             case PERMISSION_DENIED:
-                return logError(message, IVIErrorCode.PERMISSION_DENIED);
+                return logError(message, SagaErrorCode.PERMISSION_DENIED);
             case UNIMPLEMENTED:
-                return logError(message, IVIErrorCode.UNIMPLEMENTED);
+                return logError(message, SagaErrorCode.UNIMPLEMENTED);
             case UNAUTHENTICATED:
-                return logError(message, IVIErrorCode.UNAUTHENTICATED);
+                return logError(message, SagaErrorCode.UNAUTHENTICATED);
             case UNAVAILABLE:
-                return logError(message, IVIErrorCode.UNAVAILABLE);
+                return logError(message, SagaErrorCode.UNAVAILABLE);
             case RESOURCE_EXHAUSTED:
-                return logError(message, IVIErrorCode.RESOURCE_EXHAUSTED);
+                return logError(message, SagaErrorCode.RESOURCE_EXHAUSTED);
             case ABORTED:
-                return logError(message, IVIErrorCode.ABORTED);
+                return logError(message, SagaErrorCode.ABORTED);
             case DEADLINE_EXCEEDED:
             case FAILED_PRECONDITION:
             case OUT_OF_RANGE:
-                return logError(message, IVIErrorCode.BAD_REQUEST);
+                return logError(message, SagaErrorCode.BAD_REQUEST);
             case ALREADY_EXISTS:
-                return logError(message, IVIErrorCode.CONFLICT);
+                return logError(message, SagaErrorCode.CONFLICT);
             case DATA_LOSS:
             case INTERNAL:
             case UNKNOWN:
-                return logError(message, IVIErrorCode.SERVER_ERROR);
+                return logError(message, SagaErrorCode.SERVER_ERROR);
             default:
-                return logError(message, IVIErrorCode.UNKNOWN_GRPC_ERROR);
+                return logError(message, SagaErrorCode.UNKNOWN_GRPC_ERROR);
         }
     }
 
-    private static IVIException logError(String message, IVIErrorCode code) {
+    private static SagaException logError(String message, SagaErrorCode code) {
         log.error("gRPC error from IVI server: code: {} message: {}", code, message);
-        return new IVIException(message, code);
+        return new SagaException(message, code);
     }
-    private static IVIErrorCode fromStatusCode(int statusCode) {
+
+    private static SagaErrorCode fromStatusCode(int statusCode) {
         switch (statusCode) {
             case HttpURLConnection.HTTP_BAD_REQUEST:
-                return IVIErrorCode.BAD_REQUEST;
+                return SagaErrorCode.BAD_REQUEST;
             case HttpURLConnection.HTTP_UNAUTHORIZED:
-                return IVIErrorCode.NOT_AUTHORIZED;
+                return SagaErrorCode.NOT_AUTHORIZED;
             case HttpURLConnection.HTTP_FORBIDDEN:
-                return IVIErrorCode.FORBIDDEN;
+                return SagaErrorCode.FORBIDDEN;
             case HttpURLConnection.HTTP_NOT_FOUND:
-                return IVIErrorCode.NOT_FOUND;
+                return SagaErrorCode.NOT_FOUND;
             case HttpURLConnection.HTTP_CONFLICT:
-                return IVIErrorCode.CONFLICT;
+                return SagaErrorCode.CONFLICT;
             case HttpURLConnection.HTTP_CLIENT_TIMEOUT:
-                return IVIErrorCode.TIMEOUT;
+                return SagaErrorCode.TIMEOUT;
             case UNPROCESSABLE_ENTITY:
-                return IVIErrorCode.UNPROCESSABLE_ENTITY;
+                return SagaErrorCode.UNPROCESSABLE_ENTITY;
             default:
-                return IVIErrorCode.SERVER_ERROR;
+                return SagaErrorCode.SERVER_ERROR;
         }
     }
 }

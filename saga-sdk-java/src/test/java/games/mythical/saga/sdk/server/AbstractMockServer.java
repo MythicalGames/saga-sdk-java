@@ -10,7 +10,7 @@ import java.net.ServerSocket;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 public abstract class AbstractMockServer {
@@ -18,11 +18,11 @@ public abstract class AbstractMockServer {
     private final Server server;
     private final MockInterceptor mockInterceptor;
 
-    public AbstractMockServer(BindableService ... services) throws Exception {
+    public AbstractMockServer(BindableService... services) throws Exception {
         this.services = Arrays.asList(services);
         this.mockInterceptor = new MockInterceptor();
         var serverBuilder = ServerBuilder.forPort(findPort());
-        for(var service : this.services) {
+        for (var service : this.services) {
             serverBuilder.addService(service);
         }
         this.server = serverBuilder.intercept(this.mockInterceptor).build();
@@ -52,7 +52,7 @@ public abstract class AbstractMockServer {
     }
 
     private int findPort() throws IOException {
-        try(var socket = new ServerSocket(0)) {
+        try (var socket = new ServerSocket(0)) {
             socket.setReuseAddress(true);
             return socket.getLocalPort();
         } catch (IOException e) {

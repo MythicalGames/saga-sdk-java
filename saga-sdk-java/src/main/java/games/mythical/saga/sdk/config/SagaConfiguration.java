@@ -1,6 +1,7 @@
 package games.mythical.saga.sdk.config;
 
-public class IVIConfiguration {
+// TODO: change me
+public class SagaConfiguration {
     private static String environmentId;
     private static String apiKey;
     private static String host = "sdk-api.iviengine.com";
@@ -8,35 +9,35 @@ public class IVIConfiguration {
     private static int keepAlive = 30;
 
     public static String getEnvironmentId() {
-        return IVIConfiguration.environmentId;
+        return SagaConfiguration.environmentId;
     }
 
     public static void setEnvironmentId(String environmentId) {
-        IVIConfiguration.environmentId = environmentId;
+        SagaConfiguration.environmentId = environmentId;
     }
 
     public static String getApiKey() {
-        return IVIConfiguration.apiKey;
+        return SagaConfiguration.apiKey;
     }
 
     public static void setApiKey(String apiKey) {
-        IVIConfiguration.apiKey = apiKey;
+        SagaConfiguration.apiKey = apiKey;
     }
 
     public static String getHost() {
-        return IVIConfiguration.host;
+        return SagaConfiguration.host;
     }
 
     public static void setHost(String host) {
-        IVIConfiguration.host = host;
+        SagaConfiguration.host = host;
     }
 
     public static Integer getPort() {
-        return IVIConfiguration.port;
+        return SagaConfiguration.port;
     }
 
     public static void setPort(Integer port) {
-        IVIConfiguration.port = port;
+        SagaConfiguration.port = port;
     }
 
     public static int getKeepAlive() {
@@ -44,6 +45,6 @@ public class IVIConfiguration {
     }
 
     public static void setKeepAlive(int keepAlive) {
-        IVIConfiguration.keepAlive = keepAlive;
+        SagaConfiguration.keepAlive = keepAlive;
     }
 }

@@ -1,6 +1,6 @@
 package games.mythical.saga.sdk.exception;
 
-public enum IVIErrorCode {
+public enum SagaErrorCode {
     ENVIRONMENT_ID_NOT_SET,
     APIKEY_NOT_SET,
     HOST_NOT_SET,

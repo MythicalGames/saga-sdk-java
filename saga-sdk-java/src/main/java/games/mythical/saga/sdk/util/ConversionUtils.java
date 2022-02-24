@@ -7,15 +7,15 @@ import com.google.gson.JsonObject;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Struct;
 import com.google.protobuf.util.JsonFormat;
-import games.mythical.saga.sdk.exception.IVIErrorCode;
-import games.mythical.saga.sdk.exception.IVIException;
+import games.mythical.saga.sdk.exception.SagaErrorCode;
+import games.mythical.saga.sdk.exception.SagaException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
 @Slf4j
 public class ConversionUtils {
-    public static Struct convertProperties(Map<String, Object> properties) throws IVIException {
+    public static Struct convertProperties(Map<String, Object> properties) throws SagaException {
         try {
             var metadata = (JsonObject) new Gson().toJsonTree(properties);
             var structBuilder = Struct.newBuilder();
@@ -23,18 +23,19 @@ public class ConversionUtils {
             return structBuilder.build();
         } catch (InvalidProtocolBufferException e) {
             log.error("ConversionUtils: couldn't convert properties map!", e);
-            throw new IVIException(IVIErrorCode.PARSING_DATA_EXCEPTION);
+            throw new SagaException(SagaErrorCode.PARSING_DATA_EXCEPTION);
         }
     }
 
-    public static Map<String, Object> convertProperties(Struct properties) throws IVIException {
+    public static Map<String, Object> convertProperties(Struct properties) throws SagaException {
         try {
             var objectMapper = new ObjectMapper();
             var propertiesString = JsonFormat.printer().print(properties);
-            return objectMapper.readValue(propertiesString, new TypeReference<>() {});
-        } catch (Exception  e) {
+            return objectMapper.readValue(propertiesString, new TypeReference<>() {
+            });
+        } catch (Exception e) {
             log.error("ConversionUtils: couldn't convert properties struct!", e);
-            throw new IVIException(IVIErrorCode.PARSING_DATA_EXCEPTION);
+            throw new SagaException(SagaErrorCode.PARSING_DATA_EXCEPTION);
         }
     }
 }
