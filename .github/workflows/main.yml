@@ -40,7 +40,7 @@ jobs:
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       run: |
-        ./gradlew -i :saga-sdk-java:test :saga-sdk-java:jacocoTestReport :saga-sdk-java:coverallsJacoco
+        ./gradlew codeCoverageReport
 
     - name: Build with Gradle
       run: |
