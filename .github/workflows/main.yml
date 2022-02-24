@@ -16,6 +16,14 @@ jobs:
       with:
         token: ${{ secrets.BUILDBOT_PERSONAL_TOKEN }}
         submodules: recursive
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
 
     - name: Get branch name
       shell: bash
@@ -26,6 +34,13 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 15
+
+    - name: Run unit tests and generate code coverage
+      if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/release'
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+      run: |
+        ./gradlew -i :saga-sdk-java:test :saga-sdk-java:jacocoTestReport :saga-sdk-java:coverallsJacoco
 
     - name: Build with Gradle
       run: |
