@@ -9,6 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -27,6 +28,7 @@ class SagaItemClientTest extends AbstractClientTest {
         setUpConfig();
 
 //        items = generateItems(3);
+        items = new HashMap<>();
         items.put("temp", new SagaObject());
         itemServer.getItemService().setItems(items.values());
 
