@@ -1,0 +1,4 @@
+[submodule "saga-sdk-proto/src/main/proto"]
+	path = saga-sdk-proto/src/main/proto
+	url = git@github.com:MythicalGames/saga-sdk-proto.git
+	branch = develop

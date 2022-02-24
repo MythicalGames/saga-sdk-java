@@ -1,0 +1,4 @@
+rootProject.name = "saga-sdk-java"
+
+include 'saga-sdk-proto'
+include 'saga-sdk-java'
