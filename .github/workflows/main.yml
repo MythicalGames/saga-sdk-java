@@ -16,6 +16,14 @@ jobs:
       with:
         token: ${{ secrets.BUILDBOT_PERSONAL_TOKEN }}
         submodules: recursive
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
 
     - name: Get branch name
       shell: bash
@@ -27,6 +35,11 @@ jobs:
       with:
         java-version: 15
 
+    - name: Run unit tests and generate code coverage
+      if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/release'
+      run: |
+        ./gradlew -i :saga-sdk-java:test :saga-sdk-java:jacocoTestRepo
+
     - name: Build with Gradle
       run: |
         ./gradlew build -x test
@@ -35,3 +48,22 @@ jobs:
       run: |
         rm -f ~/.gradle/caches/modules-2/modules-2.lock
         rm -f ~/.gradle/caches/modules-2/gc.properties
+
+    - name: Slack Notification
+      uses: 8398a7/action-slack@v3
+      if: always()
+      with:
+        status: custom
+        fields: workflow,job,commit,repo,ref,author,took,message
+        custom_payload: |
+          {
+            username: 'github-actions',
+            icon_emoji: ':octocat:',
+            attachments: [{
+              color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+              text: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO} by ${process.env.AS_AUTHOR} finished in ${process.env.AS_TOOK}\nMessage: ${process.env.AS_MESSAGE}`,
+            }]
+          }
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
