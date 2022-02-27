@@ -26,7 +26,7 @@ public class MockUserStreamingImpl extends UserStreamGrpc.UserStreamImplBase {
         responseObserver.onNext(Empty.newBuilder().build());
         responseObserver.onCompleted();
 
-        ConcurrentFinisher.finish(request.getTrackingId());
+        ConcurrentFinisher.finish(request.getTraceId());
     }
 
     public void sendStatus(String environmentId, UserProto proto, UserState userState) {

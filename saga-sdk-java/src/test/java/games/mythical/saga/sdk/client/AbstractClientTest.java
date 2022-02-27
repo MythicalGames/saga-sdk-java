@@ -36,7 +36,7 @@ public abstract class AbstractClientTest {
         for (var i = 0; i < count; i++) {
             UserState state;
             if (RandomUtils.nextBoolean()) {
-                state = UserState.PENDING_LINKED;
+                state = UserState.FAILED;
             } else {
                 state = UserState.LINKED;
             }

@@ -29,7 +29,7 @@ public class SagaUserObserver extends AbstractObserver<UserStatusUpdate> {
         resetConnectionRetry();
         try {
             sagaUserExecutor.updateUser(message.getOauthId());
-            updateUserConfirmation(message.getOauthId(), message.getTrackingId(), message.getUserState());
+            updateUserConfirmation(message.getOauthId(), message.getTraceId(), message.getUserState());
         } catch (Exception e) {
             log.error("Exception calling updateUser for {}. {}", message.getOauthId(), e);
         }
@@ -49,10 +49,10 @@ public class SagaUserObserver extends AbstractObserver<UserStatusUpdate> {
         resubscribe.accept(this);
     }
 
-    private void updateUserConfirmation(String oauthId, String trackingId, UserState userState) {
+    private void updateUserConfirmation(String oauthId, String traceId, UserState userState) {
         var request = UserStatusConfirmRequest.newBuilder()
                 .setOauthId(oauthId)
-                .setTrackingId(trackingId)
+                .setTraceId(traceId)
                 .setUserState(userState)
                 .build();
         streamBlockingStub.userStatusConfirmation(request);
