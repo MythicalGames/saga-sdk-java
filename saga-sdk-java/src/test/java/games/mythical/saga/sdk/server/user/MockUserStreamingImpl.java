@@ -26,15 +26,15 @@ public class MockUserStreamingImpl extends UserStreamGrpc.UserStreamImplBase {
         responseObserver.onNext(Empty.newBuilder().build());
         responseObserver.onCompleted();
 
-        ConcurrentFinisher.finish(request.getTrackingId());
+        ConcurrentFinisher.finish(request.getTraceId());
     }
 
     public void sendStatus(String environmentId, UserProto proto, UserState userState) {
         if (streamObservers.containsKey(environmentId)) {
             var observer = streamObservers.get(environmentId);
-            // TODO: need to visit all these test when the protos are defined
             var userStatus = UserStatusUpdate.newBuilder()
                     .setOauthId(proto.getOauthId())
+                    .setTraceId(proto.getTraceId())
                     .setUserState(userState)
                     .build();
             observer.onNext(userStatus);

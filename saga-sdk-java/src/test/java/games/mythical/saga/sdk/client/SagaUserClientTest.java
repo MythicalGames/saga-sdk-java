@@ -2,22 +2,40 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockUserExecutor;
 import games.mythical.saga.sdk.client.model.SagaUser;
+import games.mythical.saga.sdk.proto.api.user.UserProto;
+import games.mythical.saga.sdk.proto.api.user.UserServiceGrpc;
+import games.mythical.saga.sdk.proto.common.user.UserState;
 import games.mythical.saga.sdk.server.user.MockUserServer;
+import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class SagaUserClientTest extends AbstractClientTest {
+    private final MockUserExecutor executor = MockUserExecutor.builder().build();
     private MockUserServer userServer;
-    private MockUserExecutor executor;
     private SagaUserClient userClient;
     private Map<String, SagaUser> users;
+
+    @Mock
+    private UserServiceGrpc.UserServiceBlockingStub mockServiceBlockingStub;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -26,15 +44,15 @@ class SagaUserClientTest extends AbstractClientTest {
         port = userServer.getPort();
         setUpConfig();
 
-        users = generateUsers(3);
-        userServer.getUserService().setUsers(users.values());
-
         channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext()
                 .build();
 
-        executor = MockUserExecutor.builder().build();
         userClient = new SagaUserClient(executor, channel);
+        // mocking the service blocking stub clients are connected to
+        FieldUtils.writeField(userClient, "serviceBlockingStub", mockServiceBlockingStub, true);
+
+        users = generateUsers(3);
     }
 
     @AfterEach
@@ -45,18 +63,62 @@ class SagaUserClientTest extends AbstractClientTest {
     @Test
     public void getUser() throws Exception {
         var oauthId = users.keySet().iterator().next();
-
+        var expectedResponse = UserProto.newBuilder()
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .setOauthId(oauthId)
+                .setChainAddress(RandomStringUtils.randomAlphanumeric(30))
+                .build();
+        when(mockServiceBlockingStub.getUser(any())).thenReturn(expectedResponse);
         var userResponse = userClient.getUser(oauthId);
 
         assertTrue(userResponse.isPresent());
         var user = userResponse.get();
+        assertEquals(expectedResponse.getTraceId(), user.getTraceId());
         assertEquals(oauthId, user.getOauthId());
+        assertEquals(expectedResponse.getChainAddress(), user.getChainAddress());
 
-        oauthId = "INVALID-OAUTH-ID";
-        userResponse = userClient.getUser(oauthId);
+        when(mockServiceBlockingStub.getUser(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
+        userResponse = userClient.getUser("INVALID-OAUTH-ID");
 
         assertTrue(userResponse.isEmpty());
+    }
 
-        userServer.verifyCalls("GetUser", 2);
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.MINUTES)
+    public void updateUser() throws Exception {
+        var oauthId = users.keySet().iterator().next();
+
+        var expectedResponse = UserProto.newBuilder()
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .setOauthId(oauthId)
+                .setChainAddress(RandomStringUtils.randomAlphanumeric(30))
+                .build();
+        when(mockServiceBlockingStub.updateUser(any())).thenReturn(expectedResponse);
+        var userResponse = userClient.updateUser(oauthId);
+
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertEquals(expectedResponse.getOauthId(), executor.getOauthId());
+        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        // a short wait is needed so the status stream can be hooked up
+        // before the emitting the event from the sendStatus method
+        Thread.sleep(500);
+        ConcurrentFinisher.start(executor.getTraceId());
+
+        userServer.getUserStream().sendStatus(environmentId, UserProto.newBuilder()
+                .setOauthId(executor.getOauthId())
+                .setTraceId(executor.getTraceId())
+                .build(), UserState.FAILED);
+
+        ConcurrentFinisher.wait(executor.getTraceId());
+
+        assertTrue(userResponse.isPresent());
+        var user = userResponse.get();
+        assertEquals(oauthId, user.getOauthId());
+        assertEquals(expectedResponse.getTraceId(), user.getTraceId());
+        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        userServer.verifyCalls("UserStatusStream", 1);
+        userServer.verifyCalls("UserStatusConfirmation", 1);
     }
 }

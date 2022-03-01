@@ -24,7 +24,7 @@ public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
     public void issueItem(IssueItemRequest request, StreamObserver<IssueItemStartedResponse> responseObserver) {
         var response = IssueItemStartedResponse.newBuilder()
                 .setTrackingId(RandomStringUtils.randomAlphanumeric(30))
-                .setItemState(ItemState.PENDING_ISSUED)
+                .setItemState(ItemState.ISSUED)
                 .build();
 
         responseObserver.onNext(response);
@@ -56,7 +56,7 @@ public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
             if (request.getFinalized().equals(Finalized.YES) || request.getFinalized().equals(Finalized.ALL)) {
                 state = ItemState.ISSUED;
             } else {
-                state = ItemState.PENDING_ISSUED;
+                state = ItemState.FAILED;
             }
 
             for (var item : items.values()) {
@@ -105,7 +105,7 @@ public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
 
             var response = TransferItemStartedResponse.newBuilder()
                     .setTrackingId(RandomStringUtils.randomAlphanumeric(30))
-                    .setItemState(ItemState.PENDING_TRANSFERRED)
+                    .setItemState(ItemState.TRANSFERRED)
                     .build();
 
             responseObserver.onNext(response);
@@ -120,12 +120,12 @@ public class MockItemServiceImpl extends ItemServiceGrpc.ItemServiceImplBase {
     public void burnItem(BurnItemRequest request, StreamObserver<BurnItemStartedResponse> responseObserver) {
         try {
             var newItemBuilder = toProto(items.get(request.getGameItemInventoryId())).toBuilder();
-            newItemBuilder.setItemState(ItemState.PENDING_BURNED);
+            newItemBuilder.setItemState(ItemState.BURNED);
             items.put(request.getGameItemInventoryId(), SagaObject.fromProto(newItemBuilder.build()));
 
             var response = BurnItemStartedResponse.newBuilder()
                     .setTrackingId(RandomStringUtils.randomAlphanumeric(30))
-                    .setItemState(ItemState.PENDING_BURNED)
+                    .setItemState(ItemState.BURNED)
                     .build();
 
             responseObserver.onNext(response);

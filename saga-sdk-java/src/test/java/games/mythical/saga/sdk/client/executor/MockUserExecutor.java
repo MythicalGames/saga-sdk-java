@@ -7,13 +7,11 @@ import lombok.Data;
 @Builder
 public class MockUserExecutor implements SagaUserExecutor {
     private String oauthId;
+    private String traceId;
 
     @Override
-    public void updateUser(String oauthId) {
+    public void updateUser(String oauthId, String traceId) {
         this.oauthId = oauthId;
+        this.traceId = traceId;
     }
-
-//    public void setFromItem(SagaObject item) {
-//        updateItem("temp");
-//    }
 }

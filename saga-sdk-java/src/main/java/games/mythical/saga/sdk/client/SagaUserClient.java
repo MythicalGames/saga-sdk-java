@@ -3,8 +3,10 @@ package games.mythical.saga.sdk.client;
 import games.mythical.saga.sdk.client.executor.SagaUserExecutor;
 import games.mythical.saga.sdk.client.model.SagaUser;
 import games.mythical.saga.sdk.client.observer.SagaUserObserver;
+import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.user.GetUserRequest;
+import games.mythical.saga.sdk.proto.api.user.UpdateUserRequest;
 import games.mythical.saga.sdk.proto.api.user.UserServiceGrpc;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.user.UserStreamGrpc;
@@ -71,6 +73,28 @@ public class SagaUserClient extends AbstractSagaClient {
             }
 
             throw SagaException.fromGrpcException(e);
+        }
+    }
+
+    public Optional<SagaUser> updateUser(String oauthId) throws SagaException {
+        var request = UpdateUserRequest.newBuilder()
+                .setTitleId(environmentId)
+                .setOauthId(oauthId)
+                .build();
+
+        try {
+            var userProto = serviceBlockingStub.updateUser(request);
+            sagaUserExecutor.updateUser(userProto.getOauthId(), userProto.getTraceId());
+            return Optional.of(SagaUser.fromProto(userProto));
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus() == Status.NOT_FOUND) {
+                return Optional.empty();
+            }
+
+            throw SagaException.fromGrpcException(e);
+        } catch (Exception e) {
+            log.error("Exception calling updateItemState on issueItem, item will be in an invalid state!", e);
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
 }
