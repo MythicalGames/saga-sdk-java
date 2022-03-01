@@ -16,6 +16,15 @@ jobs:
       with:
         token: ${{ secrets.BUILDBOT_PERSONAL_TOKEN }}
         submodules: recursive
+    - name: auth
+      uses: google-github-actions/auth@v0
+      with:
+        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+    - name: GCloud Init
+      uses: google-github-actions/setup-gcloud@v0
+      with:
+        project_id: mythical-games
+
     - uses: actions/cache@v2
       with:
         path: |
