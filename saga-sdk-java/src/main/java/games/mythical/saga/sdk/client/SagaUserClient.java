@@ -84,7 +84,7 @@ public class SagaUserClient extends AbstractSagaClient {
 
         try {
             var userProto = serviceBlockingStub.updateUser(request);
-            sagaUserExecutor.updateUser(oauthId);
+            sagaUserExecutor.updateUser(userProto.getOauthId(), userProto.getTraceId());
             return Optional.of(SagaUser.fromProto(userProto));
         } catch (StatusRuntimeException e) {
             if (e.getStatus() == Status.NOT_FOUND) {

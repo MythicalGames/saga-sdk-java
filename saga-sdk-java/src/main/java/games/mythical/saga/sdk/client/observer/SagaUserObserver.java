@@ -28,7 +28,7 @@ public class SagaUserObserver extends AbstractObserver<UserStatusUpdate> {
         log.trace("UserObserver.onNext for user: {}", message.getOauthId());
         resetConnectionRetry();
         try {
-            sagaUserExecutor.updateUser(message.getOauthId());
+            sagaUserExecutor.updateUser(message.getOauthId(), message.getTraceId());
             updateUserConfirmation(message.getOauthId(), message.getTraceId(), message.getUserState());
         } catch (Exception e) {
             log.error("Exception calling updateUser for {}. {}", message.getOauthId(), e);

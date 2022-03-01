@@ -7,21 +7,29 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ConcurrentFinisher {
     public static final Map<String, AtomicBoolean> finishedTracker = new ConcurrentHashMap<>();
 
-    public static void start(String trackingId) {
-        var finished = new AtomicBoolean();
-        finished.set(false);
-        finishedTracker.put(trackingId, finished);
+    public static Boolean get(String traceId) {
+        if (finishedTracker.containsKey(traceId)) {
+            return finishedTracker.get(traceId).get();
+        }
+
+        return null;
     }
 
-    public static void finish(String trackingId) {
-        if (finishedTracker.containsKey(trackingId)) {
-            finishedTracker.get(trackingId).set(true);
+    public static void start(String traceId) {
+        var finished = new AtomicBoolean(false);
+        finishedTracker.putIfAbsent(traceId, finished);
+    }
+
+    public static void finish(String traceId) {
+        if (finishedTracker.containsKey(traceId)) {
+            finishedTracker.get(traceId).set(true);
         }
     }
 
-    public static void wait(String trackingId) throws Exception {
-        if (finishedTracker.containsKey(trackingId)) {
-            while (!finishedTracker.get(trackingId).compareAndSet(true, false)) {
+    // wait until the finish method is called and boolean flips from false to true
+    public static void wait(String traceId) throws Exception {
+        if (finishedTracker.containsKey(traceId)) {
+            while (!finishedTracker.get(traceId).compareAndSet(true, true)) {
                 Thread.sleep(10);
             }
         }
