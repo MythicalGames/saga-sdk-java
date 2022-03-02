@@ -1,6 +1,5 @@
 package games.mythical.saga.sdk.client;
 
-import games.mythical.saga.sdk.client.model.SagaUser;
 import games.mythical.saga.sdk.proto.api.payment.PaymentServiceGrpc;
 import games.mythical.saga.sdk.proto.api.payments.Address;
 import games.mythical.saga.sdk.proto.api.payments.CardPaymentData;
@@ -14,8 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -24,7 +21,6 @@ import static org.mockito.Mockito.when;
 public class SagaPaymentClientTest extends AbstractClientTest {
 
     private SagaPaymentClient paymentClient;
-    private Map<String, SagaUser> users;
 
     private CybersourcePaymentData cybersourcePaymentData = CybersourcePaymentData.newBuilder()
             .setCardType("VISA")
@@ -44,7 +40,6 @@ public class SagaPaymentClientTest extends AbstractClientTest {
     void setup() throws Exception {
 
         setUpConfig();
-        users = generateUsers(4);
         paymentClient = new SagaPaymentClient();
 
         // mocking the service blocking stub clients are connected to
@@ -53,7 +48,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
 
     @Test
     public void createPaymentMethod() throws Exception {
-        var oauthId = users.keySet().iterator().next();
+        var oauthId = RandomStringUtils.randomAlphanumeric(30);
 
         var expectedResponse = PaymentMethodProto.newBuilder()
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
@@ -69,7 +64,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
 
     @Test
     public void updateaymentMethod() throws Exception {
-        var oauthId = users.keySet().iterator().next();
+        var oauthId = RandomStringUtils.randomAlphanumeric(30);
 
         var expectedResponse = PaymentMethodProto.newBuilder()
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
@@ -87,7 +82,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
 
     @Test
     public void deletePaymentMethod() throws Exception {
-        var oauthId = users.keySet().iterator().next();
+        var oauthId = RandomStringUtils.randomAlphanumeric(30);
 
         var expectedResponse = PaymentMethodProto.newBuilder()
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
@@ -103,7 +98,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
 
     @Test
     public void getPaymentMethod() throws Exception {
-        var oauthId = users.keySet().iterator().next();
+        var oauthId = RandomStringUtils.randomAlphanumeric(30);
 
         var expectedResponse = PaymentMethodProto.newBuilder()
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))

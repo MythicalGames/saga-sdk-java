@@ -1,7 +1,7 @@
 package games.mythical.saga.sdk.server.item;
 
 import com.google.protobuf.Empty;
-import games.mythical.saga.sdk.proto.api.item.Item;
+import games.mythical.saga.sdk.proto.api.item.ItemProto;
 import games.mythical.saga.sdk.proto.common.item.ItemState;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.item.ItemStatusConfirmRequest;
@@ -26,20 +26,19 @@ public class MockItemStreamingImpl extends ItemStreamGrpc.ItemStreamImplBase {
         responseObserver.onNext(Empty.newBuilder().build());
         responseObserver.onCompleted();
 
-        ConcurrentFinisher.finish(request.getTrackingId());
+        ConcurrentFinisher.finish(request.getTraceId());
     }
 
-    public void sendStatus(String environmentId, Item item, ItemState itemState) {
+    public void sendStatus(String environmentId, ItemProto item, ItemState itemState) {
         if (streamObservers.containsKey(environmentId)) {
             var observer = streamObservers.get(environmentId);
             var itemStatus = ItemStatusUpdate.newBuilder()
                     .setGameInventoryId(item.getGameInventoryId())
-                    .setPlayerId(item.getPlayerId())
-                    .setDgoodsId(item.getDgoodsId())
+                    .setOauthId(item.getOauthId())
                     .setSerialNumber(item.getSerialNumber())
                     .setGameItemTypeId(item.getGameItemTypeId())
                     .setMetadataUri(item.getMetadataUri())
-                    .setTrackingId(item.getTrackingId())
+                    .setTraceId(item.getTraceId())
                     .setItemState(itemState)
                     .build();
             observer.onNext(itemStatus);
