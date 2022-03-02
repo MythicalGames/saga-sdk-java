@@ -1,4 +1,5 @@
 plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.2"
     id("com.google.cloud.artifactregistry.gradle-plugin") version "2.1.5"
 }
 
@@ -16,7 +17,7 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${jackson_version}"
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: "${commons_lang_version}"
     implementation group: 'org.slf4j', name: 'slf4j-api', version: "${slf4j_version}"
-    implementation group: 'games.mythical', name: 'mythos-java-shared', version: "${mythos_version}"
+    shadow group: 'games.mythical', name: 'mythos-java-shared', version: "${mythos_version}"
 
     testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: "${slf4j_version}"
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: "${mockito_version}"
