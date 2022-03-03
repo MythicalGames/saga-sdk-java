@@ -4,7 +4,7 @@ import games.mythical.saga.sdk.proto.common.item.ItemState;
 
 public interface SagaItemExecutor {
     void updateItem(String gameInventoryId,
-                    String itemTypeId,
+                    String gameItemTypeId,
                     String oauthId,
                     int serialNumber,
                     String metadataUri,

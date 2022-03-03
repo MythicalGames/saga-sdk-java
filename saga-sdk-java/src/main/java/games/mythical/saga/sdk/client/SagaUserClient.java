@@ -21,21 +21,21 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class SagaUserClient extends AbstractSagaClient {
-    private final SagaUserExecutor sagaUserExecutor;
+    private final SagaUserExecutor executor;
     private UserServiceGrpc.UserServiceBlockingStub serviceBlockingStub;
 
-    public SagaUserClient(SagaUserExecutor sagaUserExecutor) throws SagaException {
+    public SagaUserClient(SagaUserExecutor executor) throws SagaException {
         super();
 
-        this.sagaUserExecutor = sagaUserExecutor;
+        this.executor = executor;
         this.channel = ManagedChannelBuilder.forAddress(host, port)
                 .keepAliveTime(keepAlive, TimeUnit.SECONDS)
                 .build();
         initStub();
     }
 
-    public SagaUserClient(SagaUserExecutor sagaUserExecutor, ManagedChannel channel) throws SagaException {
-        this.sagaUserExecutor = sagaUserExecutor;
+    public SagaUserClient(SagaUserExecutor executor, ManagedChannel channel) throws SagaException {
+        this.executor = executor;
         this.channel = channel;
         initStub();
     }
@@ -45,7 +45,7 @@ public class SagaUserClient extends AbstractSagaClient {
         serviceBlockingStub = UserServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
         var streamBlockingStub = UserStreamGrpc.newBlockingStub(channel)
                 .withCallCredentials(addAuthentication());
-        subscribeToStream(new SagaUserObserver(sagaUserExecutor, streamBlockingStub, this::subscribeToStream));
+        subscribeToStream(new SagaUserObserver(executor, streamBlockingStub, this::subscribeToStream));
     }
 
     void subscribeToStream(SagaUserObserver observer) {
@@ -84,7 +84,7 @@ public class SagaUserClient extends AbstractSagaClient {
 
         try {
             var userProto = serviceBlockingStub.updateUser(request);
-            sagaUserExecutor.updateUser(userProto.getOauthId(), userProto.getTraceId());
+            executor.updateUser(userProto.getOauthId(), userProto.getTraceId());
             return Optional.of(SagaUser.fromProto(userProto));
         } catch (StatusRuntimeException e) {
             if (e.getStatus() == Status.NOT_FOUND) {

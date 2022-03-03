@@ -8,7 +8,7 @@ import lombok.Data;
 @Builder
 public class MockItemExecutor implements SagaItemExecutor {
     private String gameInventoryId;
-    private String itemTypeId;
+    private String gameItemTypeId;
     private String oauthId;
     private int serialNumber;
     private String metadataUri;
@@ -17,14 +17,14 @@ public class MockItemExecutor implements SagaItemExecutor {
 
     @Override
     public void updateItem(String gameInventoryId,
-                           String itemTypeId,
+                           String gameItemTypeId,
                            String oauthId,
                            int serialNumber,
                            String metadataUri,
                            String traceId,
                            ItemState itemState) throws Exception {
         this.gameInventoryId = gameInventoryId;
-        this.itemTypeId = itemTypeId;
+        this.gameItemTypeId = gameItemTypeId;
         this.oauthId = oauthId;
         this.serialNumber = serialNumber;
         this.metadataUri = metadataUri;

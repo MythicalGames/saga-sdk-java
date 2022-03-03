@@ -24,21 +24,21 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class SagaItemClient extends AbstractSagaClient {
-    private final SagaItemExecutor sagaItemExecutor;
+    private final SagaItemExecutor executor;
     private ItemServiceGrpc.ItemServiceBlockingStub serviceBlockingStub;
 
-    public SagaItemClient(SagaItemExecutor sagaItemExecutor) throws SagaException {
+    public SagaItemClient(SagaItemExecutor executor) throws SagaException {
         super();
 
-        this.sagaItemExecutor = sagaItemExecutor;
+        this.executor = executor;
         this.channel = ManagedChannelBuilder.forAddress(host, port)
                 .keepAliveTime(keepAlive, TimeUnit.SECONDS)
                 .build();
         initStub();
     }
 
-    SagaItemClient(SagaItemExecutor sagaItemExecutor, ManagedChannel channel) throws SagaException {
-        this.sagaItemExecutor = sagaItemExecutor;
+    SagaItemClient(SagaItemExecutor executor, ManagedChannel channel) throws SagaException {
+        this.executor = executor;
         this.channel = channel;
         initStub();
     }
@@ -48,7 +48,7 @@ public class SagaItemClient extends AbstractSagaClient {
         serviceBlockingStub = ItemServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
         var streamBlockingStub = ItemStreamGrpc.newBlockingStub(channel)
                 .withCallCredentials(addAuthentication());
-        subscribeToStream(new SagaItemObserver(sagaItemExecutor, streamBlockingStub, this::subscribeToStream));
+        subscribeToStream(new SagaItemObserver(executor, streamBlockingStub, this::subscribeToStream));
     }
 
     void subscribeToStream(SagaItemObserver observer) {
@@ -108,7 +108,7 @@ public class SagaItemClient extends AbstractSagaClient {
 
         try {
             var receivedResponse = serviceBlockingStub.issueItem(builder.build());
-            sagaItemExecutor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
+            executor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
@@ -133,7 +133,7 @@ public class SagaItemClient extends AbstractSagaClient {
 
         try {
             var receivedResponse = serviceBlockingStub.transferItem(builder.build());
-            sagaItemExecutor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
+            executor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
@@ -150,7 +150,7 @@ public class SagaItemClient extends AbstractSagaClient {
 
         try {
             var receivedResponse = serviceBlockingStub.burnItem(request);
-            sagaItemExecutor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
+            executor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
