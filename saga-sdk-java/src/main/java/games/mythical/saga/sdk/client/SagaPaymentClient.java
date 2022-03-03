@@ -12,6 +12,7 @@ import java.util.Optional;
 public class SagaPaymentClient extends AbstractSagaClient {
 
     private PaymentServiceGrpc.PaymentServiceBlockingStub serviceBlockingStub;
+
     public SagaPaymentClient() throws SagaException {
         super();
     }

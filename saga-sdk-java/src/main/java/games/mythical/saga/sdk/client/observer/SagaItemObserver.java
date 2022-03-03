@@ -29,8 +29,16 @@ public class SagaItemObserver extends AbstractObserver<ItemStatusUpdate> {
         log.trace("ItemObserver.onNext for item: {}", message.getGameInventoryId());
         resetConnectionRetry();
         try {
-            sagaItemExecutor.updateItem("temp");
-            updateItemConfirmation(message.getGameInventoryId(), message.getTrackingId(), message.getItemState());
+            sagaItemExecutor.updateItem(
+                    message.getGameInventoryId(),
+                    message.getGameItemTypeId(),
+                    message.getOauthId(),
+                    message.getSerialNumber(),
+                    message.getMetadataUri(),
+                    message.getTraceId(),
+                    message.getItemState()
+            );
+            updateItemConfirmation(message.getGameInventoryId(), message.getTraceId(), message.getItemState());
         } catch (Exception e) {
             log.error("Exception calling updateItem for {}. {}", message.getGameInventoryId(), e);
         }
@@ -50,11 +58,11 @@ public class SagaItemObserver extends AbstractObserver<ItemStatusUpdate> {
         resubscribe.accept(this);
     }
 
-    private void updateItemConfirmation(String gameInventoryId, String trackingId, ItemState itemState) {
+    private void updateItemConfirmation(String gameInventoryId, String traceId, ItemState itemState) {
         var request = ItemStatusConfirmRequest.newBuilder()
                 .setEnvironmentId(SagaConfiguration.getEnvironmentId())
                 .setGameInventoryId(gameInventoryId)
-                .setTrackingId(trackingId)
+                .setTraceId(traceId)
                 .setItemState(itemState)
                 .build();
         streamBlockingStub.itemStatusConfirmation(request);

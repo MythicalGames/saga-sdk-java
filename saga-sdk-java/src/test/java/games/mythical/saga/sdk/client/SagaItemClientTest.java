@@ -1,24 +1,45 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockItemExecutor;
-import games.mythical.saga.sdk.client.model.SagaObject;
+import games.mythical.saga.sdk.client.model.SagaMetadata;
+import games.mythical.saga.sdk.proto.api.item.ItemProto;
+import games.mythical.saga.sdk.proto.api.item.ItemServiceGrpc;
+import games.mythical.saga.sdk.proto.api.item.UpdateItemsMetadataResponse;
+import games.mythical.saga.sdk.proto.common.ReceivedResponse;
+import games.mythical.saga.sdk.proto.common.item.ItemState;
 import games.mythical.saga.sdk.server.item.MockItemServer;
+import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class SagaItemClientTest extends AbstractClientTest {
+    private static final String GAME_INVENTORY_ID = RandomStringUtils.randomAlphanumeric(30);
+
+    private final MockItemExecutor executor = MockItemExecutor.builder().build();
     private MockItemServer itemServer;
-    private MockItemExecutor itemExecutor;
     private SagaItemClient itemClient;
-    private Map<String, SagaObject> items;
+
+    @Mock
+    private ItemServiceGrpc.ItemServiceBlockingStub mockServiceBlockingStub;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -27,17 +48,13 @@ class SagaItemClientTest extends AbstractClientTest {
         port = itemServer.getPort();
         setUpConfig();
 
-//        items = generateItems(3);
-        items = new HashMap<>();
-        items.put("temp", new SagaObject());
-        itemServer.getItemService().setItems(items.values());
-
         channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext()
                 .build();
 
-        itemExecutor = MockItemExecutor.builder().build();
-        itemClient = new SagaItemClient(itemExecutor, channel);
+        itemClient = new SagaItemClient(executor, channel);
+        // mocking the service blocking stub clients are connected to
+        FieldUtils.writeField(itemClient, "serviceBlockingStub", mockServiceBlockingStub, true);
     }
 
     @AfterEach
@@ -47,19 +64,147 @@ class SagaItemClientTest extends AbstractClientTest {
 
     @Test
     public void getItem() throws Exception {
-        var gameInventoryId = items.keySet().iterator().next();
-
-        var itemResponse = itemClient.getItem(gameInventoryId, false);
+        var expectedResponse = ItemProto.newBuilder()
+                .setGameInventoryId(GAME_INVENTORY_ID)
+                .setGameItemTypeId(RandomStringUtils.randomAlphanumeric(30))
+                .setOauthId(RandomStringUtils.randomAlphanumeric(30))
+                .setSerialNumber(RandomUtils.nextInt(10, 100))
+                .setMetadataUri(RandomStringUtils.randomAlphanumeric(30))
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .setMetadata(SagaMetadata.toProto(generateItemMetadata()))
+                .setItemState(ItemState.forNumber(RandomUtils.nextInt(1, ItemState.values().length)))
+                .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
+                .setUpdatedTimestamp(Instant.now().toEpochMilli())
+                .build();
+        when(mockServiceBlockingStub.getItem(any())).thenReturn(expectedResponse);
+        var itemResponse = itemClient.getItem(GAME_INVENTORY_ID, false);
 
         assertTrue(itemResponse.isPresent());
         var item = itemResponse.get();
-//        assertEquals(gameInventoryId, item.getGameInventoryId());
+        assertEquals(GAME_INVENTORY_ID, item.getGameInventoryId());
+        assertEquals(expectedResponse.getOauthId(), item.getOauthId());
 
-        gameInventoryId = RandomStringUtils.randomAlphanumeric(30);
-        itemResponse = itemClient.getItem(gameInventoryId, false);
+        when(mockServiceBlockingStub.getItem(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
+        itemResponse = itemClient.getItem("INVALID-ITEM-ID", false);
 
         assertTrue(itemResponse.isEmpty());
+    }
 
-        itemServer.verifyCalls("GetItem", 2);
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.MINUTES)
+    public void issueItem() throws Exception {
+        final var EXPECTED_OAUTH_ID = RandomStringUtils.randomAlphanumeric(30);
+        final var EXPECTED_METADATA = generateItemMetadata();
+
+        final var expectedResponse = ReceivedResponse.newBuilder()
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .build();
+        when(mockServiceBlockingStub.issueItem(any())).thenReturn(expectedResponse);
+        itemClient.issueItem(
+                GAME_INVENTORY_ID,
+                EXPECTED_OAUTH_ID,
+                RandomStringUtils.randomAlphanumeric(30),
+                EXPECTED_METADATA,
+                null, null, null
+        );
+
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        // a short wait is needed so the status stream can be hooked up
+        // before the emitting the event from the sendStatus method
+        Thread.sleep(500);
+        ConcurrentFinisher.start(executor.getTraceId());
+
+        itemServer.getItemStream().sendStatus(environmentId, ItemProto.newBuilder()
+                .setOauthId(EXPECTED_OAUTH_ID)
+                .setTraceId(executor.getTraceId())
+                .build(), ItemState.ISSUED);
+
+        ConcurrentFinisher.wait(executor.getTraceId());
+
+        assertEquals(EXPECTED_OAUTH_ID, executor.getOauthId());
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertEquals(ItemState.ISSUED, executor.getItemState());
+        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        itemServer.verifyCalls("ItemStatusStream", 1);
+        itemServer.verifyCalls("ItemStatusConfirmation", 1);
+    }
+
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.MINUTES)
+    public void transferItem() throws Exception {
+        final var SOURCE = RandomStringUtils.randomAlphanumeric(30);
+        final var DEST = RandomStringUtils.randomAlphanumeric(30);
+
+        final var expectedResponse = ReceivedResponse.newBuilder()
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .build();
+        when(mockServiceBlockingStub.transferItem(any())).thenReturn(expectedResponse);
+        itemClient.transferItem(GAME_INVENTORY_ID, SOURCE, DEST, null);
+
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        // a short wait is needed so the status stream can be hooked up
+        // before the emitting the event from the sendStatus method
+        Thread.sleep(500);
+        ConcurrentFinisher.start(executor.getTraceId());
+
+        itemServer.getItemStream().sendStatus(environmentId, ItemProto.newBuilder()
+                .setOauthId(DEST)
+                .setTraceId(executor.getTraceId())
+                .build(), ItemState.TRANSFERRED);
+
+        ConcurrentFinisher.wait(executor.getTraceId());
+
+        assertEquals(DEST, executor.getOauthId());
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertEquals(ItemState.TRANSFERRED, executor.getItemState());
+        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        itemServer.verifyCalls("ItemStatusStream", 1);
+        itemServer.verifyCalls("ItemStatusConfirmation", 1);
+    }
+
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.MINUTES)
+    public void burnItem() throws Exception {
+        final var expectedResponse = ReceivedResponse.newBuilder()
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .build();
+        when(mockServiceBlockingStub.burnItem(any())).thenReturn(expectedResponse);
+        itemClient.burnItem(GAME_INVENTORY_ID);
+
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        // a short wait is needed so the status stream can be hooked up
+        // before the emitting the event from the sendStatus method
+        Thread.sleep(500);
+        ConcurrentFinisher.start(executor.getTraceId());
+
+        itemServer.getItemStream().sendStatus(environmentId, ItemProto.newBuilder()
+                .setOauthId(RandomStringUtils.randomAlphanumeric(30))
+                .setTraceId(executor.getTraceId())
+                .build(), ItemState.BURNED);
+
+        ConcurrentFinisher.wait(executor.getTraceId());
+
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertEquals(ItemState.BURNED, executor.getItemState());
+        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        itemServer.verifyCalls("ItemStatusStream", 1);
+        itemServer.verifyCalls("ItemStatusConfirmation", 1);
+    }
+
+    @Test
+    public void updateItemMetadata() throws Exception {
+        final var EXPECTED_METADATA = generateItemMetadata();
+
+        when(mockServiceBlockingStub.updateItemsMetadata(any())).thenReturn(UpdateItemsMetadataResponse.newBuilder().build());
+        itemClient.updateItemMetadata(GAME_INVENTORY_ID, EXPECTED_METADATA);
     }
 }
