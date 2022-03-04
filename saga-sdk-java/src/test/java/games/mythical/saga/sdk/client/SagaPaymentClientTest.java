@@ -63,7 +63,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
     }
 
     @Test
-    public void updateaymentMethod() throws Exception {
+    public void updatePaymentMethod() throws Exception {
         var oauthId = RandomStringUtils.randomAlphanumeric(30);
 
         var expectedResponse = PaymentMethodProto.newBuilder()
