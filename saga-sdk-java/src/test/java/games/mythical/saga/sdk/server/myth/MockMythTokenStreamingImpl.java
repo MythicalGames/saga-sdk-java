@@ -1,7 +1,6 @@
 package games.mythical.saga.sdk.server.myth;
 
 import com.google.protobuf.Empty;
-import games.mythical.saga.sdk.proto.api.myth.MythTokenProto;
 import games.mythical.saga.sdk.proto.common.myth.MythTokenState;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.myth.MythTokenStatusConfirmRequest;
@@ -29,12 +28,12 @@ public class MockMythTokenStreamingImpl extends MythTokenStreamGrpc.MythTokenStr
         ConcurrentFinisher.finish(request.getTraceId());
     }
 
-    public void sendStatus(String environmentId, MythTokenProto mythToken, MythTokenState tokenState) {
+    public void sendStatus(String environmentId, String traceId, MythTokenState tokenState) {
         if (streamObserverMap.containsKey(environmentId)) {
             var observer = streamObserverMap.get(environmentId);
             var tokenStatus = MythTokenStatusUpdate.newBuilder()
                     .setTokenState(tokenState)
-                    .setTraceId(mythToken.getTraceId())
+                    .setTraceId(traceId)
                     .build();
             observer.onNext(tokenStatus);
         }

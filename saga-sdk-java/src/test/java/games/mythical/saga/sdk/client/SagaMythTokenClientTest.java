@@ -128,10 +128,7 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        mythTokenServer.getMythTokenStream().sendStatus(environmentId, MythTokenProto.newBuilder()
-                .setTraceId(executor.getTraceId())
-                .setQuoteId(QUOTE_ID)
-                .build(), MythTokenState.TRANSFERRED);
+        mythTokenServer.getMythTokenStream().sendStatus(environmentId, executor.getTraceId(), MythTokenState.TRANSFERRED);
 
         ConcurrentFinisher.wait(executor.getTraceId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
@@ -171,14 +168,11 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        mythTokenServer.getMythTokenStream().sendStatus(environmentId, MythTokenProto.newBuilder()
-                .setTraceId(executor.getTraceId())
-                .setQuoteId(QUOTE_ID)
-                .build(), MythTokenState.TRANSFERRED);
+        mythTokenServer.getMythTokenStream().sendStatus(environmentId, executor.getTraceId(), MythTokenState.WITHDRAWN);
 
         ConcurrentFinisher.wait(executor.getTraceId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertEquals(MythTokenState.TRANSFERRED, executor.getTokenState());
+        assertEquals(MythTokenState.WITHDRAWN, executor.getTokenState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         mythTokenServer.verifyCalls("MythTokenStatusStream", 1);
