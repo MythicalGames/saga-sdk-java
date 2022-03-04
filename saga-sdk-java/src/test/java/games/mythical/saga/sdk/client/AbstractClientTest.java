@@ -2,6 +2,7 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.config.SagaConfiguration;
+import games.mythical.saga.sdk.security.CredentialsFactory;
 import io.grpc.ManagedChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;

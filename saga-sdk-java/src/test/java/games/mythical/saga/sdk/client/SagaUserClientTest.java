@@ -81,7 +81,7 @@ class SagaUserClientTest extends AbstractClientTest {
     }
 
     @Test
-    @Timeout(value = 1, unit = TimeUnit.MINUTES)
+    @Timeout(value = 2, unit = TimeUnit.MINUTES)
     public void updateUser() throws Exception {
         var expectedResponse = UserProto.newBuilder()
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))

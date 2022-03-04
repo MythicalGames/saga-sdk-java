@@ -3,9 +3,11 @@ package games.mythical.saga.sdk.client;
 import games.mythical.saga.sdk.config.SagaConfiguration;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
+import games.mythical.saga.sdk.security.CredentialsFactory;
 import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.grpc.Metadata;
+import java.util.concurrent.atomic.AtomicReference;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -18,6 +20,7 @@ public abstract class AbstractSagaClient {
     protected final int port;
     protected final String environmentId;
     protected final String apiKey;
+    protected final CredentialsFactory credentialsFactory = CredentialsFactory.getInstance();
 
     // gRPC settings
     protected final int keepAlive;
@@ -53,7 +56,8 @@ public abstract class AbstractSagaClient {
             @Override
             public void applyRequestMetadata(RequestInfo requestInfo, Executor appExecutor, MetadataApplier applier) {
                 var metadata = new Metadata();
-                metadata.put(Metadata.Key.of("API-KEY", Metadata.ASCII_STRING_MARSHALLER), SagaConfiguration.getApiKey());
+                metadata.put(Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER), "Bearer " + credentialsFactory.getToken());
+                // metadata.put(Metadata.Key.of("API-KEY", Metadata.ASCII_STRING_MARSHALLER), SagaConfiguration.getApiKey());
                 applier.apply(metadata);
             }
 
