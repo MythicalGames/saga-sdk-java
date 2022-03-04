@@ -29,13 +29,13 @@ public class MockUserStreamingImpl extends UserStreamGrpc.UserStreamImplBase {
         ConcurrentFinisher.finish(request.getTraceId());
     }
 
-    public void sendStatus(String environmentId, UserProto proto, UserState userState) {
+    public void sendStatus(String environmentId, UserProto proto, UserState state) {
         if (streamObservers.containsKey(environmentId)) {
             var observer = streamObservers.get(environmentId);
             var userStatus = UserStatusUpdate.newBuilder()
                     .setOauthId(proto.getOauthId())
                     .setTraceId(proto.getTraceId())
-                    .setUserState(userState)
+                    .setUserState(state)
                     .build();
             observer.onNext(userStatus);
         }

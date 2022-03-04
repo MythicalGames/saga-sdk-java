@@ -4,7 +4,6 @@ import games.mythical.saga.sdk.proto.api.item.ItemProto;
 import games.mythical.saga.sdk.proto.common.item.ItemState;
 import games.mythical.shared.util.ProtoUtil;
 import games.mythical.shared.util.dto.DtoExclude;
-import games.mythical.shared.util.proto.ProtoExclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +22,6 @@ public class SagaItem {
     private String oauthId;
     private int serialNumber;
     private String metadataUri;
-    @ProtoExclude
     @DtoExclude
     private SagaMetadata metadata;
     private ItemState itemState;

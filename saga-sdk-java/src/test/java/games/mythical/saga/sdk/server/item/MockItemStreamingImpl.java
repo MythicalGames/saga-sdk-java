@@ -29,17 +29,17 @@ public class MockItemStreamingImpl extends ItemStreamGrpc.ItemStreamImplBase {
         ConcurrentFinisher.finish(request.getTraceId());
     }
 
-    public void sendStatus(String environmentId, ItemProto item, ItemState itemState) {
+    public void sendStatus(String environmentId, ItemProto proto, ItemState state) {
         if (streamObservers.containsKey(environmentId)) {
             var observer = streamObservers.get(environmentId);
             var itemStatus = ItemStatusUpdate.newBuilder()
-                    .setGameInventoryId(item.getGameInventoryId())
-                    .setOauthId(item.getOauthId())
-                    .setSerialNumber(item.getSerialNumber())
-                    .setGameItemTypeId(item.getGameItemTypeId())
-                    .setMetadataUri(item.getMetadataUri())
-                    .setTraceId(item.getTraceId())
-                    .setItemState(itemState)
+                    .setGameInventoryId(proto.getGameInventoryId())
+                    .setOauthId(proto.getOauthId())
+                    .setSerialNumber(proto.getSerialNumber())
+                    .setGameItemTypeId(proto.getGameItemTypeId())
+                    .setMetadataUri(proto.getMetadataUri())
+                    .setTraceId(proto.getTraceId())
+                    .setItemState(state)
                     .build();
             observer.onNext(itemStatus);
         }
