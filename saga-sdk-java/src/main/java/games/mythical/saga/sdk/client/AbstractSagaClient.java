@@ -1,5 +1,6 @@
 package games.mythical.saga.sdk.client;
 
+import com.google.common.net.HttpHeaders;
 import games.mythical.saga.sdk.config.Constants;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaException;
@@ -31,7 +32,7 @@ public abstract class AbstractSagaClient {
             @Override
             public void applyRequestMetadata(RequestInfo requestInfo, Executor appExecutor, MetadataApplier applier) {
                 var metadata = new Metadata();
-                metadata.put(Metadata.Key.of(Constants.AUTHORIZATION_HEADER, Metadata.ASCII_STRING_MARSHALLER),
+                metadata.put(Metadata.Key.of(HttpHeaders.AUTHORIZATION, Metadata.ASCII_STRING_MARSHALLER),
                         Constants.AUTH_TYPE + " " + sagaCredentialsFactory.getToken());
                 applier.apply(metadata);
             }

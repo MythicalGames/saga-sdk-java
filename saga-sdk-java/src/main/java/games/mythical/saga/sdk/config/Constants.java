@@ -3,8 +3,11 @@ package games.mythical.saga.sdk.config;
 public class Constants {
   // Authentication
   public final static String DEFAULT_AUTH_URL = "https://auth-internal.mythicalgames.com/oauth2/token";
-  public final static String AUTHORIZATION_HEADER = "Authorization";
   public final static String AUTH_TYPE = "Bearer";
+
+  // HTTP
+  public final static String USER_AGENT_TYPE = "Java 11 HttpClient Bot";
+  public final static String WWW_FORM_URL_ENCODED = "application/x-www-form-urlencoded";
 
   // SDK Gateway
   public final static String DEFAULT_GATEWAY_HOST = "sdk-api.sagaengine.com";
