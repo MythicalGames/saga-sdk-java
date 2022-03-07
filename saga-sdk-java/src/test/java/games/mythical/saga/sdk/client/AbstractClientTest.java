@@ -1,8 +1,8 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.model.SagaMetadata;
-import games.mythical.saga.sdk.config.SagaConfiguration;
-import io.grpc.ManagedChannel;
+import games.mythical.saga.sdk.config.SagaSdkConfig;
+import games.mythical.saga.sdk.exception.SagaException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -19,17 +19,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Slf4j
 public abstract class AbstractClientTest {
     protected static final String host = "localhost";
-    protected static final String apiKey = "MOCK_API_KEY";
-    protected static final String environmentId = "MOCK_ENV_ID";
+    protected static final String titleSecret = "MOCK_TITLE_SECRET";
+    protected static final String titleId = "MOCK_TITLE_ID";
 
+    protected SagaSdkConfig config;
     protected int port;
-    protected ManagedChannel channel;
 
-    protected void setUpConfig() {
-        SagaConfiguration.setHost(host);
-        SagaConfiguration.setPort(port);
-        SagaConfiguration.setApiKey(apiKey);
-        SagaConfiguration.setEnvironmentId(environmentId);
+    protected SagaClientFactory setUpFactory() throws SagaException {
+        return SagaClientFactory.initialize(setUpConfig());
+    }
+
+    protected SagaSdkConfig setUpConfig() {
+        config = SagaSdkConfig.builder()
+                .host(host)
+                .port(port)
+                .titleId(titleId)
+                .titleSecret(titleSecret)
+                .plainText(true)
+                .authenticated(false)
+                .build();
+        return config;
     }
 
     protected SagaMetadata generateItemMetadata() {

@@ -38,9 +38,8 @@ public class SagaPaymentClientTest extends AbstractClientTest {
 
     @BeforeEach
     void setup() throws Exception {
-
-        setUpConfig();
-        paymentClient = new SagaPaymentClient();
+        port = 65001; // Doesn't matter since there isn't anything to connect to.
+        paymentClient = setUpFactory().createSagaPaymentClient();
 
         // mocking the service blocking stub clients are connected to
         FieldUtils.writeField(paymentClient, "serviceBlockingStub", mockServiceBlockingStub, true);

@@ -1,6 +1,7 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.model.SagaPaymentMethod;
+import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.payment.PaymentServiceGrpc;
 import games.mythical.saga.sdk.proto.api.payments.*;
@@ -10,11 +11,11 @@ import java.util.Optional;
 
 @Slf4j
 public class SagaPaymentClient extends AbstractSagaClient {
-
     private PaymentServiceGrpc.PaymentServiceBlockingStub serviceBlockingStub;
 
-    public SagaPaymentClient() throws SagaException {
-        super();
+    SagaPaymentClient(SagaSdkConfig config) throws SagaException {
+        super(config);
+        initStub();
     }
 
     @Override

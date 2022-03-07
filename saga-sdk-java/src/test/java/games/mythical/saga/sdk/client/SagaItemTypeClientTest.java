@@ -8,7 +8,6 @@ import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
 import games.mythical.saga.sdk.server.itemtype.MockItemTypeServer;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -45,13 +44,8 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         itemTypeServer = new MockItemTypeServer();
         itemTypeServer.start();
         port = itemTypeServer.getPort();
-        setUpConfig();
 
-        channel = ManagedChannelBuilder.forAddress(host, port)
-                .usePlaintext()
-                .build();
-
-        itemTypeClient = new SagaItemTypeClient(executor, channel);
+        itemTypeClient = setUpFactory().createSagaItemTypeClient(executor);
         // mocking the service blocking stub clients are connected to
         FieldUtils.writeField(itemTypeClient, "serviceBlockingStub", mockServiceBlockingStub, true);
     }
@@ -112,7 +106,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        itemTypeServer.getItemTypeStream().sendStatus(environmentId, ItemTypeProto.newBuilder()
+        itemTypeServer.getItemTypeStream().sendStatus(titleId, ItemTypeProto.newBuilder()
                 .setGameItemTypeId(GAME_ITEM_TYPE_ID)
                 .setTraceId(executor.getTraceId())
                 .build(), ItemTypeState.CREATED);

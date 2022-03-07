@@ -8,7 +8,6 @@ import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.myth.MythTokenState;
 import games.mythical.saga.sdk.server.myth.MockMythTokenServer;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
-import io.grpc.ManagedChannelBuilder;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,13 +50,7 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         mythTokenServer = new MockMythTokenServer();
         mythTokenServer.start();
         port = mythTokenServer.getPort();
-        setUpConfig();
-
-        channel = ManagedChannelBuilder.forAddress(host, port)
-                .usePlaintext()
-                .build();
-
-        mythTokenClient = new SagaMythTokenClient(executor, channel);
+        mythTokenClient = setUpFactory().createSagaMythTokenClient(executor);
         // mocking the service blocking stub clients are connected to
         FieldUtils.writeField(mythTokenClient, "serviceBlockingStub", mockServiceBlockingStub, true);
     }
@@ -128,7 +121,7 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        mythTokenServer.getMythTokenStream().sendStatus(environmentId, executor.getTraceId(), MythTokenState.TRANSFERRED);
+        mythTokenServer.getMythTokenStream().sendStatus(config.getTitleId(), executor.getTraceId(), MythTokenState.TRANSFERRED);
 
         ConcurrentFinisher.wait(executor.getTraceId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
@@ -168,7 +161,7 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        mythTokenServer.getMythTokenStream().sendStatus(environmentId, executor.getTraceId(), MythTokenState.WITHDRAWN);
+        mythTokenServer.getMythTokenStream().sendStatus(config.getTitleId(), executor.getTraceId(), MythTokenState.WITHDRAWN);
 
         ConcurrentFinisher.wait(executor.getTraceId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());

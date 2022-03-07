@@ -6,7 +6,6 @@ import games.mythical.saga.sdk.proto.api.user.UserServiceGrpc;
 import games.mythical.saga.sdk.proto.common.user.UserState;
 import games.mythical.saga.sdk.server.user.MockUserServer;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -42,13 +41,8 @@ class SagaUserClientTest extends AbstractClientTest {
         userServer = new MockUserServer();
         userServer.start();
         port = userServer.getPort();
-        setUpConfig();
 
-        channel = ManagedChannelBuilder.forAddress(host, port)
-                .usePlaintext()
-                .build();
-
-        userClient = new SagaUserClient(executor, channel);
+        userClient = setUpFactory().createSagaUserClient(executor);
         // mocking the service blocking stub clients are connected to
         FieldUtils.writeField(userClient, "serviceBlockingStub", mockServiceBlockingStub, true);
     }
@@ -100,7 +94,7 @@ class SagaUserClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        userServer.getUserStream().sendStatus(environmentId, UserProto.newBuilder()
+        userServer.getUserStream().sendStatus(titleId, UserProto.newBuilder()
                 .setOauthId(executor.getOauthId())
                 .setTraceId(executor.getTraceId())
                 .build(), UserState.FAILED);

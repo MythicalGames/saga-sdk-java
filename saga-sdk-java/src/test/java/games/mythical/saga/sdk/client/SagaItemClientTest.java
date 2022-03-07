@@ -9,7 +9,6 @@ import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.item.ItemState;
 import games.mythical.saga.sdk.server.item.MockItemServer;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -46,13 +45,7 @@ class SagaItemClientTest extends AbstractClientTest {
         itemServer = new MockItemServer();
         itemServer.start();
         port = itemServer.getPort();
-        setUpConfig();
-
-        channel = ManagedChannelBuilder.forAddress(host, port)
-                .usePlaintext()
-                .build();
-
-        itemClient = new SagaItemClient(executor, channel);
+        itemClient = setUpFactory().createSagaItemClient(executor);
         // mocking the service blocking stub clients are connected to
         FieldUtils.writeField(itemClient, "serviceBlockingStub", mockServiceBlockingStub, true);
     }
@@ -116,7 +109,7 @@ class SagaItemClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        itemServer.getItemStream().sendStatus(environmentId, ItemProto.newBuilder()
+        itemServer.getItemStream().sendStatus(titleId, ItemProto.newBuilder()
                 .setOauthId(EXPECTED_OAUTH_ID)
                 .setTraceId(executor.getTraceId())
                 .build(), ItemState.ISSUED);
@@ -152,7 +145,7 @@ class SagaItemClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        itemServer.getItemStream().sendStatus(environmentId, ItemProto.newBuilder()
+        itemServer.getItemStream().sendStatus(titleId, ItemProto.newBuilder()
                 .setOauthId(DEST)
                 .setTraceId(executor.getTraceId())
                 .build(), ItemState.TRANSFERRED);
@@ -185,7 +178,7 @@ class SagaItemClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        itemServer.getItemStream().sendStatus(environmentId, ItemProto.newBuilder()
+        itemServer.getItemStream().sendStatus(titleId, ItemProto.newBuilder()
                 .setOauthId(RandomStringUtils.randomAlphanumeric(30))
                 .setTraceId(executor.getTraceId())
                 .build(), ItemState.BURNED);
