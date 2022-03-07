@@ -2,44 +2,30 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaItemExecutor;
 import games.mythical.saga.sdk.client.model.SagaItem;
-import games.mythical.saga.sdk.client.model.SagaItemMetadataUpdate;
 import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.client.observer.SagaItemObserver;
+import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.item.*;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.item.ItemStreamGrpc;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class SagaItemClient extends AbstractSagaClient {
     private final SagaItemExecutor executor;
     private ItemServiceGrpc.ItemServiceBlockingStub serviceBlockingStub;
 
-    public SagaItemClient(SagaItemExecutor executor) throws SagaException {
-        super();
-
+    SagaItemClient(SagaSdkConfig config, SagaItemExecutor executor) throws SagaException {
+        super(config);
         this.executor = executor;
-        this.channel = ManagedChannelBuilder.forAddress(host, port)
-                .keepAliveTime(keepAlive, TimeUnit.SECONDS)
-                .build();
-        initStub();
-    }
-
-    SagaItemClient(SagaItemExecutor executor, ManagedChannel channel) throws SagaException {
-        this.executor = executor;
-        this.channel = channel;
         initStub();
     }
 
@@ -48,14 +34,14 @@ public class SagaItemClient extends AbstractSagaClient {
         serviceBlockingStub = ItemServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
         var streamBlockingStub = ItemStreamGrpc.newBlockingStub(channel)
                 .withCallCredentials(addAuthentication());
-        subscribeToStream(new SagaItemObserver(executor, streamBlockingStub, this::subscribeToStream));
+        subscribeToStream(new SagaItemObserver(config, executor, streamBlockingStub, this::subscribeToStream));
     }
 
     void subscribeToStream(SagaItemObserver observer) {
         // set up server stream
         var streamStub = ItemStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
         var subscribe = Subscribe.newBuilder()
-                .setEnvironmentId(environmentId)
+                .setEnvironmentId(config.getTitleId())
                 .build();
 
         streamStub.itemStatusStream(subscribe, observer);
@@ -63,7 +49,7 @@ public class SagaItemClient extends AbstractSagaClient {
 
     public Optional<SagaItem> getItem(String gameInventoryId, boolean history) throws SagaException {
         var request = GetItemRequest.newBuilder()
-                .setEnvironmentId(environmentId)
+                .setEnvironmentId(config.getTitleId())
                 .setGameInventoryId(gameInventoryId)
                 .setHistory(history)
                 .build();
@@ -88,7 +74,7 @@ public class SagaItemClient extends AbstractSagaClient {
                           String orderId,
                           String requestIp) throws SagaException {
         var builder = IssueItemRequest.newBuilder()
-                .setEnvironmentId(environmentId)
+                .setEnvironmentId(config.getTitleId())
                 .setGameInventoryId(gameInventoryId)
                 .setOauthId(oauthId)
                 .setGameItemTypeId(gameItemTypeId)
@@ -122,7 +108,7 @@ public class SagaItemClient extends AbstractSagaClient {
                              String destOauthId,
                              String storeId) throws SagaException {
         var builder = TransferItemRequest.newBuilder()
-                .setEnvironmentId(environmentId)
+                .setEnvironmentId(config.getTitleId())
                 .setGameInventoryId(gameInventoryId)
                 .setSourceOauthId(sourceOauthId)
                 .setDestinationOauthId(destOauthId);
@@ -144,7 +130,7 @@ public class SagaItemClient extends AbstractSagaClient {
 
     public void burnItem(String gameInventoryId) throws SagaException {
         var request = BurnItemRequest.newBuilder()
-                .setEnvironmentId(environmentId)
+                .setEnvironmentId(config.getTitleId())
                 .setGameInventoryId(gameInventoryId)
                 .build();
 
@@ -168,22 +154,10 @@ public class SagaItemClient extends AbstractSagaClient {
         _updateItemMetadata(List.of(updateItem));
     }
 
-    public void updateItemsMetadata(List<SagaItemMetadataUpdate> updateItems) throws SagaException {
-        var _updateItems = new ArrayList<UpdateItemMetadata>();
-        for (var update : updateItems) {
-            _updateItems.add(UpdateItemMetadata.newBuilder()
-                    .setGameInventoryId(update.getGameInventoryId())
-                    .setMetadata(SagaMetadata.toProto(update.getMetadata()))
-                    .build());
-        }
-
-        _updateItemMetadata(_updateItems);
-    }
-
     private void _updateItemMetadata(List<UpdateItemMetadata> updateItems) throws SagaException {
         try {
             var request = UpdateItemsMetadataRequest.newBuilder()
-                    .setEnvironmentId(environmentId)
+                    .setEnvironmentId(config.getTitleId())
                     .addAllUpdateItems(updateItems)
                     .build();
 

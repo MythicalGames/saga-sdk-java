@@ -1,52 +1,27 @@
 package games.mythical.saga.sdk.client;
 
-import games.mythical.saga.sdk.config.SagaConfiguration;
-import games.mythical.saga.sdk.exception.SagaErrorCode;
+import games.mythical.saga.sdk.config.Constants;
+import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.security.CredentialsFactory;
 import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
-import java.util.concurrent.atomic.AtomicReference;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public abstract class AbstractSagaClient {
-    // IVI settings
-    protected final String host;
-    protected final int port;
-    protected final String environmentId;
-    protected final String apiKey;
-    protected final CredentialsFactory credentialsFactory = CredentialsFactory.getInstance();
-
-    // gRPC settings
-    protected final int keepAlive;
+    protected final SagaSdkConfig config;
+    protected final CredentialsFactory credentialsFactory;
     protected ManagedChannel channel;
 
-    protected AbstractSagaClient() throws SagaException {
-        if (StringUtils.isEmpty(SagaConfiguration.getEnvironmentId())) {
-            throw new SagaException("Environment Id not set!", SagaErrorCode.ENVIRONMENT_ID_NOT_SET);
-        }
-        environmentId = SagaConfiguration.getEnvironmentId();
-
-        if (StringUtils.isEmpty(SagaConfiguration.getApiKey())) {
-            throw new SagaException("API Key not set!", SagaErrorCode.APIKEY_NOT_SET);
-        }
-        apiKey = SagaConfiguration.getApiKey();
-
-        if (StringUtils.isEmpty(SagaConfiguration.getHost())) {
-            throw new SagaException("Host not set!", SagaErrorCode.HOST_NOT_SET);
-        }
-        host = SagaConfiguration.getHost();
-
-        if (SagaConfiguration.getPort() == null) {
-            throw new SagaException("Port not set!", SagaErrorCode.PORT_NOT_SET);
-        }
-        port = SagaConfiguration.getPort();
-        keepAlive = SagaConfiguration.getKeepAlive();
+    protected AbstractSagaClient(SagaSdkConfig config) throws SagaException {
+        this.config = config;
+        this.channel = buildChannel(config);
+        this.credentialsFactory = CredentialsFactory.getInstance();
     }
 
     abstract void initStub();
@@ -56,8 +31,8 @@ public abstract class AbstractSagaClient {
             @Override
             public void applyRequestMetadata(RequestInfo requestInfo, Executor appExecutor, MetadataApplier applier) {
                 var metadata = new Metadata();
-                metadata.put(Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER), "Bearer " + credentialsFactory.getToken());
-                // metadata.put(Metadata.Key.of("API-KEY", Metadata.ASCII_STRING_MARSHALLER), SagaConfiguration.getApiKey());
+                metadata.put(Metadata.Key.of(Constants.AUTHORIZATION_HEADER, Metadata.ASCII_STRING_MARSHALLER),
+                        Constants.AUTH_TYPE + " " + credentialsFactory.getToken());
                 applier.apply(metadata);
             }
 
@@ -65,5 +40,14 @@ public abstract class AbstractSagaClient {
             public void thisUsesUnstableApi() {
             }
         };
+    }
+
+    private static ManagedChannel buildChannel(SagaSdkConfig config) {
+        final var builder = ManagedChannelBuilder.forAddress(config.getHost(), config.getPort())
+                .keepAliveTime(config.getKeepAlive(), TimeUnit.SECONDS);
+        if (config.isPlainText() && "localhost".equals(config.getHost())) {
+            builder.usePlaintext();
+        }
+        return builder.build();
     }
 }

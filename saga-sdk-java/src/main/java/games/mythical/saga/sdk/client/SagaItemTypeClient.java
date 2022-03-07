@@ -4,6 +4,7 @@ import games.mythical.saga.sdk.client.executor.SagaItemTypeExecutor;
 import games.mythical.saga.sdk.client.model.SagaItemType;
 import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.client.observer.SagaItemTypeObserver;
+import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.itemtype.*;
@@ -15,26 +16,15 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class SagaItemTypeClient extends AbstractSagaClient {
     private final SagaItemTypeExecutor executor;
     private ItemTypeServiceGrpc.ItemTypeServiceBlockingStub serviceBlockingStub;
 
-    public SagaItemTypeClient(SagaItemTypeExecutor executor) throws SagaException {
-        super();
-
+    SagaItemTypeClient(SagaSdkConfig config, SagaItemTypeExecutor executor) throws SagaException {
+        super(config);
         this.executor = executor;
-        this.channel = ManagedChannelBuilder.forAddress(host, port)
-                .keepAliveTime(keepAlive, TimeUnit.SECONDS)
-                .build();
-        initStub();
-    }
-
-    SagaItemTypeClient(SagaItemTypeExecutor executor, ManagedChannel channel) throws SagaException {
-        this.executor = executor;
-        this.channel = channel;
         initStub();
     }
 
@@ -43,14 +33,14 @@ public class SagaItemTypeClient extends AbstractSagaClient {
         serviceBlockingStub = ItemTypeServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
         var streamBlockingStub = ItemTypeStreamGrpc.newBlockingStub(channel)
                 .withCallCredentials(addAuthentication());
-        subscribeToStream(new SagaItemTypeObserver(executor, streamBlockingStub, this::subscribeToStream));
+        subscribeToStream(new SagaItemTypeObserver(config, executor, streamBlockingStub, this::subscribeToStream));
     }
 
     void subscribeToStream(SagaItemTypeObserver observer) {
         // set up server stream
         var streamStub = ItemTypeStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
         var subscribe = Subscribe.newBuilder()
-                .setEnvironmentId(environmentId)
+                .setEnvironmentId(config.getTitleId())
                 .build();
 
         streamStub.itemTypeStatusStream(subscribe, observer);
@@ -58,7 +48,7 @@ public class SagaItemTypeClient extends AbstractSagaClient {
 
     public Optional<SagaItemType> getItemType(String gameItemTypeId) throws SagaException {
         var request = GetItemTypeRequest.newBuilder()
-                .setEnvironmentId(environmentId)
+                .setEnvironmentId(config.getTitleId())
                 .setGameItemTypeId(gameItemTypeId)
                 .build();
 
@@ -80,7 +70,7 @@ public class SagaItemTypeClient extends AbstractSagaClient {
 
     public List<SagaItemType> getItemTypes(Collection<String> gameItemTypeIds) throws SagaException {
         var builder = GetItemTypesRequest.newBuilder()
-                .setEnvironmentId(environmentId);
+                .setEnvironmentId(config.getTitleId());
 
         if (!gameItemTypeIds.isEmpty()) {
             builder.addAllGameItemTypeIds(gameItemTypeIds);
@@ -100,7 +90,7 @@ public class SagaItemTypeClient extends AbstractSagaClient {
         try {
             log.trace("ItemTypeClient.createItemType called for game item type id: {}", gameItemTypeId);
             var request = CreateItemTypeRequest.newBuilder()
-                    .setTitleId(environmentId)
+                    .setTitleId(config.getTitleId())
                     .setGameItemTypeId(gameItemTypeId)
                     .setWithdrawable(withdrawable)
                     .setMetadata(SagaMetadata.toProto(metadata))
@@ -124,7 +114,7 @@ public class SagaItemTypeClient extends AbstractSagaClient {
         try {
             log.trace("ItemTypeClient.updateItemType called for {}", gameItemTypeId);
             var request = UpdateItemTypePayload.newBuilder()
-                    .setEnvironmentId(environmentId)
+                    .setEnvironmentId(config.getTitleId())
                     .setGameItemTypeId(gameItemTypeId)
                     .setWithdrawable(withdrawable)
                     .build();
@@ -140,7 +130,7 @@ public class SagaItemTypeClient extends AbstractSagaClient {
         log.trace("ItemTypeClient.updateItemTypeMetadata called for {}", gameItemTypeId);
         try {
             var request = UpdateItemTypeMetadataPayload.newBuilder()
-                    .setEnvironmentId(environmentId)
+                    .setEnvironmentId(config.getTitleId())
                     .setGameItemTypeId(gameItemTypeId)
                     .setMetadata(SagaMetadata.toProto(metadata))
                     .build();

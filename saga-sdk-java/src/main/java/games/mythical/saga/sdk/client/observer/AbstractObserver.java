@@ -8,10 +8,10 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public abstract class AbstractObserver<V> implements StreamObserver<V> {
+    private final static int MAX_COUNT = 16;
     // retry settings
     private boolean retry = false;
     private int requestCount = 1;
-    private final int maxCount = 16;
 
     protected void sleepBetweenReconnects() {
         if (!retry) {
@@ -24,7 +24,7 @@ public abstract class AbstractObserver<V> implements StreamObserver<V> {
             log.trace("Sleeping {} milliseconds before reconnect", sleepTimeMillis);
             TimeUnit.MILLISECONDS.sleep(sleepTimeMillis);
 
-            if (requestCount < maxCount) {
+            if (requestCount < MAX_COUNT) {
                 requestCount++;
             }
         } catch (InterruptedException e) {

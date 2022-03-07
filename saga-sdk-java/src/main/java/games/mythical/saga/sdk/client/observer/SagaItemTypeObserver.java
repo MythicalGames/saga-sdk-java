@@ -1,7 +1,7 @@
 package games.mythical.saga.sdk.client.observer;
 
 import games.mythical.saga.sdk.client.executor.SagaItemTypeExecutor;
-import games.mythical.saga.sdk.config.SagaConfiguration;
+import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStatusUpdate;
@@ -12,13 +12,16 @@ import java.util.function.Consumer;
 
 @Slf4j
 public class SagaItemTypeObserver extends AbstractObserver<ItemTypeStatusUpdate> {
+    private final SagaSdkConfig config;
     private final SagaItemTypeExecutor sagaItemTypeExecutor;
     private final ItemTypeStreamGrpc.ItemTypeStreamBlockingStub streamBlockingStub;
     private final Consumer<SagaItemTypeObserver> resubscribe;
 
-    public SagaItemTypeObserver(SagaItemTypeExecutor sagaItemTypeExecutor,
+    public SagaItemTypeObserver(SagaSdkConfig config,
+                                SagaItemTypeExecutor sagaItemTypeExecutor,
                                 ItemTypeStreamGrpc.ItemTypeStreamBlockingStub streamBlockingStub,
                                 Consumer<SagaItemTypeObserver> resubscribe) {
+        this.config = config;
         this.sagaItemTypeExecutor = sagaItemTypeExecutor;
         this.streamBlockingStub = streamBlockingStub;
         this.resubscribe = resubscribe;
@@ -56,7 +59,7 @@ public class SagaItemTypeObserver extends AbstractObserver<ItemTypeStatusUpdate>
 
     private void updateItemTypeConfirmation(String gameItemTypeId, String traceId, ItemTypeState itemTypeState) {
         var request = ItemTypeStatusConfirmRequest.newBuilder()
-                .setEnvironmentId(SagaConfiguration.getEnvironmentId())
+                .setEnvironmentId(config.getTitleId())
                 .setGameItemTypeId(gameItemTypeId)
                 .setTraceId(traceId)
                 .setItemTypeState(itemTypeState)
