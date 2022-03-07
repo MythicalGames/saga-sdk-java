@@ -3,7 +3,6 @@ package games.mythical.saga.sdk.client;
 import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaException;
-import io.grpc.ManagedChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -23,9 +22,7 @@ public abstract class AbstractClientTest {
     protected static final String titleSecret = "MOCK_TITLE_SECRET";
     protected static final String titleId = "MOCK_TITLE_ID";
 
-    protected SagaSdkConfig config;
     protected int port;
-    protected ManagedChannel channel;
 
     protected SagaClientFactory setUpFactory() throws SagaException {
         return SagaClientFactory.initialize(setUpConfig());
