@@ -12,11 +12,11 @@ import org.apache.commons.lang3.StringUtils;
 import static games.mythical.saga.sdk.config.Constants.*;
 
 @Slf4j
-public class ClientFactory {
+public class SagaClientFactory {
     private final SagaSdkConfig config;
-    private static ClientFactory instance;
+    private static SagaClientFactory instance;
 
-    public static ClientFactory getInstance() throws SagaException {
+    public static SagaClientFactory getInstance() throws SagaException {
         if (instance == null) {
             log.error("Tried to get uninitialized Client Factory instance");
             throw new SagaException(SagaErrorCode.FACTORY_NOT_INITIALIZED);
@@ -24,7 +24,7 @@ public class ClientFactory {
         return instance;
     }
 
-    public static ClientFactory initialize(SagaSdkConfig config) throws SagaException {
+    public static SagaClientFactory initialize(SagaSdkConfig config) throws SagaException {
         if (config.isAuthenticated() && instance != null) {
             /*
              * If we are using authentication, re-initializing will mess up existing streams. If authentication is
@@ -34,7 +34,7 @@ public class ClientFactory {
             throw new SagaException(SagaErrorCode.REINITIALIZATION_ATTEMPTED);
         }
         validateConfig(config);
-        instance = new ClientFactory(config);
+        instance = new SagaClientFactory(config);
         return instance;
     }
 
@@ -54,9 +54,9 @@ public class ClientFactory {
         return new SagaUserClient(config, executor);
     }
 
-    private ClientFactory(SagaSdkConfig config) throws SagaException {
+    private SagaClientFactory(SagaSdkConfig config) throws SagaException {
         this.config = config;
-        CredentialsFactory.initialize(config);
+        SagaCredentialsFactory.initialize(config);
     }
 
     private static void validateConfig(SagaSdkConfig config) throws SagaException {

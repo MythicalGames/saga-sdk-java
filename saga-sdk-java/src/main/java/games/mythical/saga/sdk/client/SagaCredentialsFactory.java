@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class CredentialsFactory {
+public class SagaCredentialsFactory {
   private final static String ACCESS_TOKEN_KEY = "access_token";
   private final static int HTTP_OK = 200;
   private final URI authUrl;
@@ -26,9 +26,9 @@ public class CredentialsFactory {
   private final HttpRequest.BodyPublisher bodyPublisher;
   private final AtomicReference<String> accessToken = new AtomicReference<>();
 
-  private static CredentialsFactory instance;
+  private static SagaCredentialsFactory instance;
 
-  static CredentialsFactory getInstance() throws SagaException {
+  static SagaCredentialsFactory getInstance() throws SagaException {
     if (instance == null) {
       log.error("Tried to get uninitialized Credentials Factory instance");
       throw new SagaException(SagaErrorCode.CREDENTIALS_NOT_INITIALIZED);
@@ -45,10 +45,10 @@ public class CredentialsFactory {
       log.error("Tried to re-initialize Credentials.");
       throw new SagaException(SagaErrorCode.REINITIALIZATION_ATTEMPTED);
     }
-    instance = new CredentialsFactory(config);
+    instance = new SagaCredentialsFactory(config);
   }
 
-  private CredentialsFactory(SagaSdkConfig config) {
+  private SagaCredentialsFactory(SagaSdkConfig config) {
     this.authUrl = URI.create(config.getAuthUrl());
     this.bodyPublisher = buildClientCredentialsRequestBody(config.getTitleId(), config.getTitleSecret());
     if (config.isAuthenticated()) {

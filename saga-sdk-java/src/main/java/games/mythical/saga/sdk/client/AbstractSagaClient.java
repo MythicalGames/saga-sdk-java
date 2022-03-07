@@ -15,13 +15,13 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public abstract class AbstractSagaClient {
     protected final SagaSdkConfig config;
-    protected final CredentialsFactory credentialsFactory;
+    protected final SagaCredentialsFactory sagaCredentialsFactory;
     protected ManagedChannel channel;
 
     protected AbstractSagaClient(SagaSdkConfig config) throws SagaException {
         this.config = config;
         this.channel = buildChannel(config);
-        this.credentialsFactory = CredentialsFactory.getInstance();
+        this.sagaCredentialsFactory = SagaCredentialsFactory.getInstance();
     }
 
     abstract void initStub();
@@ -32,7 +32,7 @@ public abstract class AbstractSagaClient {
             public void applyRequestMetadata(RequestInfo requestInfo, Executor appExecutor, MetadataApplier applier) {
                 var metadata = new Metadata();
                 metadata.put(Metadata.Key.of(Constants.AUTHORIZATION_HEADER, Metadata.ASCII_STRING_MARSHALLER),
-                        Constants.AUTH_TYPE + " " + credentialsFactory.getToken());
+                        Constants.AUTH_TYPE + " " + sagaCredentialsFactory.getToken());
                 applier.apply(metadata);
             }
 

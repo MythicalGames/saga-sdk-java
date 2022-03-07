@@ -27,8 +27,8 @@ public abstract class AbstractClientTest {
     protected int port;
     protected ManagedChannel channel;
 
-    protected ClientFactory setUpFactory() throws SagaException {
-        return ClientFactory.initialize(setUpConfig());
+    protected SagaClientFactory setUpFactory() throws SagaException {
+        return SagaClientFactory.initialize(setUpConfig());
     }
 
     protected SagaSdkConfig setUpConfig() {
