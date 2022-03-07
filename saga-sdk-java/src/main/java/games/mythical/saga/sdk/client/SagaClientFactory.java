@@ -2,6 +2,7 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaItemExecutor;
 import games.mythical.saga.sdk.client.executor.SagaItemTypeExecutor;
+import games.mythical.saga.sdk.client.executor.SagaMythTokenExecutor;
 import games.mythical.saga.sdk.client.executor.SagaUserExecutor;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
@@ -44,6 +45,10 @@ public class SagaClientFactory {
 
     public SagaItemTypeClient createSagaItemTypeClient(SagaItemTypeExecutor executor) throws SagaException {
         return new SagaItemTypeClient(config, executor);
+    }
+
+    public SagaMythTokenClient createSagaMythTokenClient(SagaMythTokenExecutor executor) throws SagaException {
+        return new SagaMythTokenClient(config, executor);
     }
 
     public SagaPaymentClient createSagaPaymentClient() throws SagaException {

@@ -6,39 +6,28 @@ import games.mythical.saga.sdk.client.model.SagaCurrencyExchange;
 import games.mythical.saga.sdk.client.model.SagaGasFee;
 import games.mythical.saga.sdk.client.model.SagaMythToken;
 import games.mythical.saga.sdk.client.observer.SagaMythTokenObserver;
+import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.myth.*;
 import games.mythical.saga.sdk.proto.api.payments.CardPaymentData;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.myth.MythTokenStreamGrpc;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class SagaMythTokenClient extends AbstractSagaClient {
     private final SagaMythTokenExecutor sagaMythTokenExecutor;
     private MythServiceGrpc.MythServiceBlockingStub serviceBlockingStub;
 
-    public SagaMythTokenClient(SagaMythTokenExecutor sagaMythTokenExecutor) throws SagaException {
-        super();
-
+    SagaMythTokenClient(SagaSdkConfig config, SagaMythTokenExecutor sagaMythTokenExecutor) throws SagaException {
+        super(config);
         this.sagaMythTokenExecutor = sagaMythTokenExecutor;
-        this.channel = ManagedChannelBuilder.forAddress(host, port)
-                .keepAliveTime(keepAlive, TimeUnit.SECONDS)
-                .build();
-        initStub();
-    }
-
-    public SagaMythTokenClient(SagaMythTokenExecutor sagaMythTokenExecutor, ManagedChannel channel) throws SagaException {
-        this.sagaMythTokenExecutor = sagaMythTokenExecutor;
-        this.channel = channel;
         initStub();
     }
 
@@ -54,7 +43,7 @@ public class SagaMythTokenClient extends AbstractSagaClient {
         // set up server stream
         var streamStub = MythTokenStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
         var subscribe = Subscribe.newBuilder()
-                .setEnvironmentId(environmentId)
+                .setEnvironmentId(config.getTitleId())
                 .build();
 
         streamStub.mythTokenStatusStream(subscribe, observer);

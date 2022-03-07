@@ -22,6 +22,7 @@ public abstract class AbstractClientTest {
     protected static final String titleSecret = "MOCK_TITLE_SECRET";
     protected static final String titleId = "MOCK_TITLE_ID";
 
+    protected SagaSdkConfig config;
     protected int port;
 
     protected SagaClientFactory setUpFactory() throws SagaException {
@@ -29,7 +30,7 @@ public abstract class AbstractClientTest {
     }
 
     protected SagaSdkConfig setUpConfig() {
-        return SagaSdkConfig.builder()
+        config = SagaSdkConfig.builder()
                 .host(host)
                 .port(port)
                 .titleId(titleId)
@@ -37,6 +38,7 @@ public abstract class AbstractClientTest {
                 .plainText(true)
                 .authenticated(false)
                 .build();
+        return config;
     }
 
     protected SagaMetadata generateItemMetadata() {
