@@ -48,7 +48,7 @@ public class SagaUserClient extends AbstractSagaClient {
 
     public Optional<SagaUser> getUser(String oauthId) throws SagaException {
         var request = GetUserRequest.newBuilder()
-                .setTitleId(config.getTitleId()) // TODO: check AbstractSagaClient for client settings
+                .setTitleId(config.getTitleId())
                 .setOauthId(oauthId)
                 .build();
 

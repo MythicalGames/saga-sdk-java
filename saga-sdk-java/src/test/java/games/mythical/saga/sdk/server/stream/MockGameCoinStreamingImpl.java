@@ -21,7 +21,7 @@ public class MockGameCoinStreamingImpl extends GameCoinStreamGrpc.GameCoinStream
 
     @Override
     public void gameCoinStatusStream(Subscribe request, StreamObserver<GameCoinStatusUpdate> responseObserver) {
-        streamObservers.putIfAbsent(request.getEnvironmentId(), responseObserver);
+        streamObservers.putIfAbsent(request.getTitleId(), responseObserver);
     }
 
     @Override

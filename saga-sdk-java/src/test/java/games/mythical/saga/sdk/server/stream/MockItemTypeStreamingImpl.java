@@ -21,7 +21,7 @@ public class MockItemTypeStreamingImpl extends ItemTypeStreamGrpc.ItemTypeStream
 
     @Override
     public void itemTypeStatusStream(Subscribe request, StreamObserver<ItemTypeStatusUpdate> responseObserver) {
-        streamObservers.putIfAbsent(request.getEnvironmentId(), responseObserver);
+        streamObservers.putIfAbsent(request.getTitleId(), responseObserver);
     }
 
     @Override

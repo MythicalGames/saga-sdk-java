@@ -21,7 +21,7 @@ public class MockUserStreamingImpl extends UserStreamGrpc.UserStreamImplBase imp
 
     @Override
     public void userStatusStream(Subscribe request, StreamObserver<UserStatusUpdate> responseObserver) {
-        streamObservers.putIfAbsent(request.getEnvironmentId(), responseObserver);
+        streamObservers.putIfAbsent(request.getTitleId(), responseObserver);
     }
 
     @Override

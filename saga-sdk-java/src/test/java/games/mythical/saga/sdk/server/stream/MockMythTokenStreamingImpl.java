@@ -20,7 +20,7 @@ public class MockMythTokenStreamingImpl extends MythTokenStreamGrpc.MythTokenStr
 
     @Override
     public void mythTokenStatusStream(Subscribe request, StreamObserver<MythTokenStatusUpdate> responseObserver) {
-        streamObserverMap.putIfAbsent(request.getEnvironmentId(), responseObserver);
+        streamObserverMap.putIfAbsent(request.getTitleId(), responseObserver);
     }
 
     @Override
