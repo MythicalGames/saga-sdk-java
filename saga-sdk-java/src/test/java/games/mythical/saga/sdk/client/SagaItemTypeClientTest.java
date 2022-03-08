@@ -6,7 +6,8 @@ import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.proto.api.itemtype.*;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
-import games.mythical.saga.sdk.server.itemtype.MockItemTypeServer;
+import games.mythical.saga.sdk.server.MockServer;
+import games.mythical.saga.sdk.server.stream.MockItemTypeStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -33,7 +34,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
     private static final String GAME_ITEM_TYPE_ID = RandomStringUtils.randomAlphanumeric(30);
 
     private final MockItemTypeExecutor executor = MockItemTypeExecutor.builder().build();
-    private MockItemTypeServer itemTypeServer;
+    private MockServer itemTypeServer;
     private SagaItemTypeClient itemTypeClient;
 
     @Mock
@@ -41,7 +42,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        itemTypeServer = new MockItemTypeServer();
+        itemTypeServer = new MockServer(new MockItemTypeStreamingImpl());
         itemTypeServer.start();
         port = itemTypeServer.getPort();
 
@@ -67,7 +68,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 .setSecRevShareSettings(SecRevShareSettings.newBuilder().build())
                 .setWithdrawable(true)
                 .setPriceMap(PriceMap.newBuilder().build())
-                .setItemTypeState(ItemTypeState.forNumber(RandomUtils.nextInt(0, ItemTypeState.values().length)))
+                .setItemTypeState(ItemTypeState.forNumber(RandomUtils.nextInt(0, ItemTypeState.values().length - 1)))
                 .setMetadata(SagaMetadata.toProto(generateItemMetadata()))
                 .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
                 .setUpdatedTimestamp(Instant.now().toEpochMilli())

@@ -6,6 +6,8 @@ import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.shared.util.JsonUtil;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -17,9 +19,6 @@ import java.util.Map;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-
-import io.netty.handler.codec.http.HttpContent;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SagaCredentialsFactory {
@@ -62,8 +61,7 @@ public class SagaCredentialsFactory {
             final var executor = new ScheduledThreadPoolExecutor(1);
             executor.scheduleAtFixedRate(
                     new RefreshToken(), config.getTokenRefresh(), config.getTokenRefresh(), TimeUnit.SECONDS);
-        }
-        else {
+        } else {
             accessToken.set("");
         }
     }

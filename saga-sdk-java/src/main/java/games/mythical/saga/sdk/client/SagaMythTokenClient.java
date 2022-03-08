@@ -13,7 +13,6 @@ import games.mythical.saga.sdk.proto.api.myth.*;
 import games.mythical.saga.sdk.proto.api.payments.CardPaymentData;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.myth.MythTokenStreamGrpc;
-
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,7 +42,7 @@ public class SagaMythTokenClient extends AbstractSagaClient {
         // set up server stream
         var streamStub = MythTokenStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
         var subscribe = Subscribe.newBuilder()
-                .setEnvironmentId(config.getTitleId())
+                .setTitleId(config.getTitleId())
                 .build();
 
         streamStub.mythTokenStatusStream(subscribe, observer);
@@ -73,9 +72,9 @@ public class SagaMythTokenClient extends AbstractSagaClient {
                 .build();
         var mythToken = serviceBlockingStub.quoteBuyingMythToken(request);
         return Optional.of(SagaMythToken.builder()
-                        .quoteId(mythToken.getUpholdQuoteId())
-                        .originSubAccount(mythToken.getOriginSubAccount())
-                        .build());
+                .quoteId(mythToken.getUpholdQuoteId())
+                .originSubAccount(mythToken.getOriginSubAccount())
+                .build());
     }
 
     public void confirmBuyingMythToken(String quoteId,
@@ -106,9 +105,9 @@ public class SagaMythTokenClient extends AbstractSagaClient {
                 .build();
         var mythToken = serviceBlockingStub.quoteMythTokenWithdrawal(request);
         return Optional.of(SagaMythToken.builder()
-                        .totalAmount(new BigDecimal(mythToken.getTotalAmount()))
-                        .gasFee(new BigDecimal(mythToken.getGasFee()))
-                        .build());
+                .totalAmount(new BigDecimal(mythToken.getTotalAmount()))
+                .gasFee(new BigDecimal(mythToken.getGasFee()))
+                .build());
     }
 
     public void confirmMythTokenWithdrawal(String quoteId) throws SagaException {
@@ -127,7 +126,6 @@ public class SagaMythTokenClient extends AbstractSagaClient {
         }
 
     }
-
 
 
 }

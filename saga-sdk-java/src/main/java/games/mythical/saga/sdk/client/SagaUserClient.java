@@ -40,7 +40,7 @@ public class SagaUserClient extends AbstractSagaClient {
         // set up server stream
         var streamStub = UserStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
         var subscribe = Subscribe.newBuilder()
-                .setEnvironmentId(config.getTitleId())
+                .setTitleId(config.getTitleId())
                 .build();
 
         streamStub.userStatusStream(subscribe, observer);
@@ -48,7 +48,7 @@ public class SagaUserClient extends AbstractSagaClient {
 
     public Optional<SagaUser> getUser(String oauthId) throws SagaException {
         var request = GetUserRequest.newBuilder()
-                .setTitleId(config.getTitleId()) // TODO: check AbstractSagaClient for client settings
+                .setTitleId(config.getTitleId())
                 .setOauthId(oauthId)
                 .build();
 

@@ -1,8 +1,6 @@
 package games.mythical.saga.sdk.exception;
 
 public enum SagaErrorCode {
-    ENVIRONMENT_ID_NOT_SET,
-    APIKEY_NOT_SET,
     HOST_NOT_SET,
     PORT_NOT_SET,
     NOT_FOUND,
