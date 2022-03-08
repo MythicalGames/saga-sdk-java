@@ -42,7 +42,7 @@ public class SagaMythTokenClient extends AbstractSagaClient {
         // set up server stream
         var streamStub = MythTokenStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
         var subscribe = Subscribe.newBuilder()
-                .setEnvironmentId(config.getTitleId())
+                .setTitleId(config.getTitleId())
                 .build();
 
         streamStub.mythTokenStatusStream(subscribe, observer);

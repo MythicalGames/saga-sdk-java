@@ -61,7 +61,7 @@ public class SagaGameCoinObserver extends AbstractObserver<GameCoinStatusUpdate>
 
     private void updateGameCoinConfirmation(String currencyId, String traceId, GameCoinState gameCoinState) {
         var request = GameCoinStatusConfirmRequest.newBuilder()
-                .setEnvironmentId(config.getTitleId())
+                .setTitleId(config.getTitleId())
                 .setCurrencyId(currencyId)
                 .setTraceId(traceId)
                 .setGameCoinState(gameCoinState)

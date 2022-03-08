@@ -63,7 +63,7 @@ public class SagaItemObserver extends AbstractObserver<ItemStatusUpdate> {
 
     private void updateItemConfirmation(String gameInventoryId, String traceId, ItemState itemState) {
         var request = ItemStatusConfirmRequest.newBuilder()
-                .setEnvironmentId(config.getTitleId())
+                .setTitleId(config.getTitleId())
                 .setGameInventoryId(gameInventoryId)
                 .setTraceId(traceId)
                 .setItemState(itemState)

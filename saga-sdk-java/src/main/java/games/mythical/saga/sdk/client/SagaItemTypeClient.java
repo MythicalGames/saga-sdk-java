@@ -42,7 +42,7 @@ public class SagaItemTypeClient extends AbstractSagaClient {
         // set up server stream
         var streamStub = ItemTypeStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
         var subscribe = Subscribe.newBuilder()
-                .setEnvironmentId(config.getTitleId())
+                .setTitleId(config.getTitleId())
                 .build();
 
         streamStub.itemTypeStatusStream(subscribe, observer);
@@ -50,7 +50,7 @@ public class SagaItemTypeClient extends AbstractSagaClient {
 
     public Optional<SagaItemType> getItemType(String gameItemTypeId) throws SagaException {
         var request = GetItemTypeRequest.newBuilder()
-                .setEnvironmentId(config.getTitleId())
+                .setTitleId(config.getTitleId())
                 .setGameItemTypeId(gameItemTypeId)
                 .build();
 
@@ -72,7 +72,7 @@ public class SagaItemTypeClient extends AbstractSagaClient {
 
     public List<SagaItemType> getItemTypes(Collection<String> gameItemTypeIds) throws SagaException {
         var builder = GetItemTypesRequest.newBuilder()
-                .setEnvironmentId(config.getTitleId());
+                .setTitleId(config.getTitleId());
 
         if (!gameItemTypeIds.isEmpty()) {
             builder.addAllGameItemTypeIds(gameItemTypeIds);
@@ -116,7 +116,7 @@ public class SagaItemTypeClient extends AbstractSagaClient {
         try {
             log.trace("ItemTypeClient.updateItemType called for {}", gameItemTypeId);
             var request = UpdateItemTypePayload.newBuilder()
-                    .setEnvironmentId(config.getTitleId())
+                    .setTitleId(config.getTitleId())
                     .setGameItemTypeId(gameItemTypeId)
                     .setWithdrawable(withdrawable)
                     .build();
@@ -132,7 +132,7 @@ public class SagaItemTypeClient extends AbstractSagaClient {
         log.trace("ItemTypeClient.updateItemTypeMetadata called for {}", gameItemTypeId);
         try {
             var request = UpdateItemTypeMetadataPayload.newBuilder()
-                    .setEnvironmentId(config.getTitleId())
+                    .setTitleId(config.getTitleId())
                     .setGameItemTypeId(gameItemTypeId)
                     .setMetadata(SagaMetadata.toProto(metadata))
                     .build();
