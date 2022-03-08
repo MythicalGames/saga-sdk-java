@@ -93,14 +93,18 @@ subprojects {
         }
         publications {
             // Publish internally until ready to go public
-            maven(MavenPublication) {
-                groupId = "games.mythical"
-                artifactId = "sava-sdk-java"
-                version = "${project.version}"
-                from components.java
+            mavenJava(MavenPublication) {
                 pom {
-                    name = "Mythos Java Shared"
-                    description = "Shared Java Code for Mythos"
+                    name = "Saga SDK"
+                    description = "The Saga integration SDK for Java game servers"
+                    url = 'https://mythical.games'
+                    from components.java
+
+                    scm {
+                        connection = 'https://github.com/MythicalGames/saga-sdk-java.git'
+                        developerConnection = 'https://github.com/MythicalGames/saga-sdk-java.git'
+                        url = 'https://github.com/MythicalGames/saga-sdk-java.git'
+                    }
                 }
             }
             /*
