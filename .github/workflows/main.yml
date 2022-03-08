@@ -2,7 +2,7 @@ name: Saga SDK Java CI
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, actions ]
   pull_request:
     branches: [ develop ]
   workflow_dispatch:
