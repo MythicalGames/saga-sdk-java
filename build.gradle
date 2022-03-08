@@ -63,6 +63,11 @@ subprojects {
 
     publishing {
         repositories {
+            // Publish internally until repo is ready to go public
+            maven {
+                url "artifactregistry://us-maven.pkg.dev/mythical-games/mythical-central"
+            }
+            /*
             maven {
                 name = 'GitHubPackages'
                 url = uri('https://maven.pkg.github.com/MythicalGames/saga-sdk-java')
@@ -79,8 +84,23 @@ subprojects {
                     password = project.findProperty('ossrhPassword')
                 }
             }
+            */
         }
         publications {
+            // Publish internally until ready to go public
+            publications {
+                maven(MavenPublication) {
+                    groupId = "games.mythical"
+                    artifactId = "mythos-java-shared"
+                    version = "${project.version}"
+                    from components.java
+                    pom {
+                        name = "Mythos Java Shared"
+                        description = "Shared Java Code for Mythos"
+                    }
+                }
+            }
+            /*
             mavenJava(MavenPublication) {
                 pom {
                     name = 'SAGA SDK'
@@ -111,9 +131,11 @@ subprojects {
                     }
                 }
             }
+            */
         }
     }
 
+    /*
     tasks.withType(Sign) {
         onlyIf { project.hasProperty('signingKey') && project.hasProperty('signingPassword') }
     }
@@ -124,6 +146,7 @@ subprojects {
         useInMemoryPgpKeys(project.findProperty('signingKey'), findProperty('signingPassword'))
         sign publishing.publications.mavenJava
     }
+    */
 }
 
 task printVersionToFile {
