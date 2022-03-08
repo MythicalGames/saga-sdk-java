@@ -1,19 +1,22 @@
-package games.mythical.saga.sdk.server.item;
+package games.mythical.saga.sdk.server.stream;
 
 import com.google.protobuf.Empty;
+import com.google.protobuf.GeneratedMessageV3;
+import com.google.protobuf.ProtocolMessageEnum;
 import games.mythical.saga.sdk.proto.api.item.ItemProto;
 import games.mythical.saga.sdk.proto.common.item.ItemState;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.item.ItemStatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.item.ItemStatusUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemStreamGrpc;
+import games.mythical.saga.sdk.server.StreamingService;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import io.grpc.stub.StreamObserver;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MockItemStreamingImpl extends ItemStreamGrpc.ItemStreamImplBase {
+public class MockItemStreamingImpl extends ItemStreamGrpc.ItemStreamImplBase implements StreamingService {
     private final Map<String, StreamObserver<ItemStatusUpdate>> streamObservers = new ConcurrentHashMap<>();
 
     @Override
@@ -29,9 +32,12 @@ public class MockItemStreamingImpl extends ItemStreamGrpc.ItemStreamImplBase {
         ConcurrentFinisher.finish(request.getTraceId());
     }
 
-    public void sendStatus(String environmentId, ItemProto proto, ItemState state) {
-        if (streamObservers.containsKey(environmentId)) {
-            var observer = streamObservers.get(environmentId);
+    @Override
+    public void sendStatus(String titleId, GeneratedMessageV3 genericProto, ProtocolMessageEnum genericState) {
+        var proto = (ItemProto) genericProto;
+        var state = (ItemState) genericState;
+        if (streamObservers.containsKey(titleId)) {
+            var observer = streamObservers.get(titleId);
             var itemStatus = ItemStatusUpdate.newBuilder()
                     .setGameInventoryId(proto.getGameInventoryId())
                     .setOauthId(proto.getOauthId())
@@ -45,11 +51,9 @@ public class MockItemStreamingImpl extends ItemStreamGrpc.ItemStreamImplBase {
         }
     }
 
+    @Override
     public void reset() {
-        for (var observer : streamObservers.values()) {
-            observer.onCompleted();
-        }
-
+        streamObservers.values().forEach(StreamObserver::onCompleted);
         streamObservers.clear();
     }
 }

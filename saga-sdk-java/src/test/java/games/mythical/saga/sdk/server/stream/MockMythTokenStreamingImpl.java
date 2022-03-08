@@ -1,18 +1,21 @@
-package games.mythical.saga.sdk.server.myth;
+package games.mythical.saga.sdk.server.stream;
 
 import com.google.protobuf.Empty;
+import com.google.protobuf.GeneratedMessageV3;
+import com.google.protobuf.ProtocolMessageEnum;
 import games.mythical.saga.sdk.proto.common.myth.MythTokenState;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.myth.MythTokenStatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.myth.MythTokenStatusUpdate;
 import games.mythical.saga.sdk.proto.streams.myth.MythTokenStreamGrpc;
+import games.mythical.saga.sdk.server.StreamingService;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import io.grpc.stub.StreamObserver;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MockMythTokenStreamingImpl extends MythTokenStreamGrpc.MythTokenStreamImplBase {
+public class MockMythTokenStreamingImpl extends MythTokenStreamGrpc.MythTokenStreamImplBase implements StreamingService {
     private final Map<String, StreamObserver<MythTokenStatusUpdate>> streamObserverMap = new ConcurrentHashMap<>();
 
     @Override
@@ -28,17 +31,22 @@ public class MockMythTokenStreamingImpl extends MythTokenStreamGrpc.MythTokenStr
         ConcurrentFinisher.finish(request.getTraceId());
     }
 
-    public void sendStatus(String environmentId, String traceId, MythTokenState tokenState) {
+    @Override
+    public void sendStatus(String environmentId, GeneratedMessageV3 genericProto, ProtocolMessageEnum genericState) {
+        // in the words of Bob Ross, "That'll be our little secret"
+        var proto = (MythTokenStatusUpdate) genericProto;
+        var tokenState = (MythTokenState) genericState;
         if (streamObserverMap.containsKey(environmentId)) {
             var observer = streamObserverMap.get(environmentId);
             var tokenStatus = MythTokenStatusUpdate.newBuilder()
                     .setTokenState(tokenState)
-                    .setTraceId(traceId)
+                    .setTraceId(proto.getTraceId())
                     .build();
             observer.onNext(tokenStatus);
         }
     }
 
+    @Override
     public void reset() {
         streamObserverMap.values().forEach(StreamObserver::onCompleted);
         streamObserverMap.clear();

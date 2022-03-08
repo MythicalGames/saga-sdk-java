@@ -6,7 +6,9 @@ import games.mythical.saga.sdk.proto.api.payments.CardPaymentData;
 import games.mythical.saga.sdk.proto.api.payments.CybersourcePaymentData;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.myth.MythTokenState;
-import games.mythical.saga.sdk.server.myth.MockMythTokenServer;
+import games.mythical.saga.sdk.proto.streams.myth.MythTokenStatusUpdate;
+import games.mythical.saga.sdk.server.MockServer;
+import games.mythical.saga.sdk.server.stream.MockMythTokenStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -28,28 +30,25 @@ import static org.mockito.Mockito.when;
 public class SagaMythTokenClientTest extends AbstractClientTest {
 
     private final MockMythTokenExecutor executor = MockMythTokenExecutor.builder().build();
-    private SagaMythTokenClient mythTokenClient;
-    private MockMythTokenServer mythTokenServer;
-
-
     private final CybersourcePaymentData CYBERSOURCE_DATA = CybersourcePaymentData.newBuilder()
             .setCardType("VISA")
             .build();
     private final CardPaymentData CARD_PAYMENT_DATA = CardPaymentData.newBuilder()
             .setCybersource(CYBERSOURCE_DATA)
             .build();
-
     private final String QUOTE_ID = "my-quote=1234";
     private final String USER_ID = "user-1234";
-
+    private SagaMythTokenClient mythTokenClient;
+    private MockServer mythTokenServer;
     @Mock
     private MythServiceGrpc.MythServiceBlockingStub mockServiceBlockingStub;
 
     @BeforeEach
     void setup() throws Exception {
-        mythTokenServer = new MockMythTokenServer();
+        mythTokenServer = new MockServer(new MockMythTokenStreamingImpl());
         mythTokenServer.start();
         port = mythTokenServer.getPort();
+
         mythTokenClient = setUpFactory().createSagaMythTokenClient(executor);
         // mocking the service blocking stub clients are connected to
         FieldUtils.writeField(mythTokenClient, "serviceBlockingStub", mockServiceBlockingStub, true);
@@ -121,7 +120,9 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        mythTokenServer.getMythTokenStream().sendStatus(config.getTitleId(), executor.getTraceId(), MythTokenState.TRANSFERRED);
+        mythTokenServer.getMythTokenStream().sendStatus(config.getTitleId(), MythTokenStatusUpdate.newBuilder()
+                .setTraceId(executor.getTraceId())
+                .build(), MythTokenState.TRANSFERRED);
 
         ConcurrentFinisher.wait(executor.getTraceId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
@@ -161,7 +162,9 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        mythTokenServer.getMythTokenStream().sendStatus(config.getTitleId(), executor.getTraceId(), MythTokenState.WITHDRAWN);
+        mythTokenServer.getMythTokenStream().sendStatus(config.getTitleId(), MythTokenStatusUpdate.newBuilder()
+                .setTraceId(executor.getTraceId())
+                .build(), MythTokenState.WITHDRAWN);
 
         ConcurrentFinisher.wait(executor.getTraceId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());

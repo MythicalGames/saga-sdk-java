@@ -7,7 +7,8 @@ import games.mythical.saga.sdk.proto.api.item.ItemServiceGrpc;
 import games.mythical.saga.sdk.proto.api.item.UpdateItemsMetadataResponse;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.item.ItemState;
-import games.mythical.saga.sdk.server.item.MockItemServer;
+import games.mythical.saga.sdk.server.MockServer;
+import games.mythical.saga.sdk.server.stream.MockItemStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -34,7 +35,7 @@ class SagaItemClientTest extends AbstractClientTest {
     private static final String GAME_INVENTORY_ID = RandomStringUtils.randomAlphanumeric(30);
 
     private final MockItemExecutor executor = MockItemExecutor.builder().build();
-    private MockItemServer itemServer;
+    private MockServer itemServer;
     private SagaItemClient itemClient;
 
     @Mock
@@ -42,9 +43,10 @@ class SagaItemClientTest extends AbstractClientTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        itemServer = new MockItemServer();
+        itemServer = new MockServer(new MockItemStreamingImpl());
         itemServer.start();
         port = itemServer.getPort();
+
         itemClient = setUpFactory().createSagaItemClient(executor);
         // mocking the service blocking stub clients are connected to
         FieldUtils.writeField(itemClient, "serviceBlockingStub", mockServiceBlockingStub, true);

@@ -4,7 +4,8 @@ import games.mythical.saga.sdk.client.executor.MockUserExecutor;
 import games.mythical.saga.sdk.proto.api.user.UserProto;
 import games.mythical.saga.sdk.proto.api.user.UserServiceGrpc;
 import games.mythical.saga.sdk.proto.common.user.UserState;
-import games.mythical.saga.sdk.server.user.MockUserServer;
+import games.mythical.saga.sdk.server.MockServer;
+import games.mythical.saga.sdk.server.stream.MockUserStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -30,7 +31,7 @@ class SagaUserClientTest extends AbstractClientTest {
     private static final String OAUTH_ID = UUID.randomUUID().toString();
 
     private final MockUserExecutor executor = MockUserExecutor.builder().build();
-    private MockUserServer userServer;
+    private MockServer userServer;
     private SagaUserClient userClient;
 
     @Mock
@@ -38,7 +39,7 @@ class SagaUserClientTest extends AbstractClientTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        userServer = new MockUserServer();
+        userServer = new MockServer(new MockUserStreamingImpl());
         userServer.start();
         port = userServer.getPort();
 

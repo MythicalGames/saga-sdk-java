@@ -1,19 +1,22 @@
-package games.mythical.saga.sdk.server.itemtype;
+package games.mythical.saga.sdk.server.stream;
 
 import com.google.protobuf.Empty;
+import com.google.protobuf.GeneratedMessageV3;
+import com.google.protobuf.ProtocolMessageEnum;
 import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeProto;
 import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStatusUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStreamGrpc;
+import games.mythical.saga.sdk.server.StreamingService;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import io.grpc.stub.StreamObserver;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MockItemTypeStreamingImpl extends ItemTypeStreamGrpc.ItemTypeStreamImplBase {
+public class MockItemTypeStreamingImpl extends ItemTypeStreamGrpc.ItemTypeStreamImplBase implements StreamingService {
     private final Map<String, StreamObserver<ItemTypeStatusUpdate>> streamObservers = new ConcurrentHashMap<>();
 
     @Override
@@ -29,7 +32,10 @@ public class MockItemTypeStreamingImpl extends ItemTypeStreamGrpc.ItemTypeStream
         ConcurrentFinisher.finish(request.getTraceId());
     }
 
-    public void sendStatus(String environmentId, ItemTypeProto proto, ItemTypeState state) {
+    @Override
+    public void sendStatus(String environmentId, GeneratedMessageV3 genericProto, ProtocolMessageEnum genericState) {
+        var proto = (ItemTypeProto) genericProto;
+        var state = (ItemTypeState) genericState;
         if (streamObservers.containsKey(environmentId)) {
             var observer = streamObservers.get(environmentId);
             var itemStatus = ItemTypeStatusUpdate.newBuilder()
@@ -41,11 +47,9 @@ public class MockItemTypeStreamingImpl extends ItemTypeStreamGrpc.ItemTypeStream
         }
     }
 
+    @Override
     public void reset() {
-        for (var observer : streamObservers.values()) {
-            observer.onCompleted();
-        }
-
+        streamObservers.values().forEach(StreamObserver::onCompleted);
         streamObservers.clear();
     }
 }
