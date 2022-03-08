@@ -2,7 +2,7 @@ name: Saga SDK Java CI
 
 on:
   push:
-    branches: [ develop, actions ]
+    branches: [ develop ]
   pull_request:
     branches: [ develop ]
   workflow_dispatch:
@@ -65,7 +65,7 @@ jobs:
         ./gradlew build -x test
 
     - name: Publish with Gradle
-      if: (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/actions')
+      if: (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
       run: |
         ./gradlew publish
 
