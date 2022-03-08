@@ -39,10 +39,21 @@ jobs:
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
       id: get_branch_name
 
-    - name: Set up JDK 15
-      uses: actions/setup-java@v1
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
       with:
-        java-version: 15
+        java-version: '11'
+        distribution: 'temurin'
+
+    - name: Authenticate GCP
+      uses: 'google-github-actions/auth@v0'
+      with:
+        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+    - name: GCloud Init
+      uses: google-github-actions/setup-gcloud@v0
+      with:
+        project_id: mythical-games
 
     - name: Run unit tests and generate code coverage
       if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/release'
@@ -52,6 +63,11 @@ jobs:
     - name: Build with Gradle
       run: |
         ./gradlew build -x test
+
+    - name: Publish with Gradle
+      if: (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
+      run: |
+        ./gradlew publish
 
     - name: Cleanup Gradle Cache
       run: |
