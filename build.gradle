@@ -9,6 +9,8 @@ buildscript {
     }
 
     dependencies {
+        classpath 'gradle.plugin.com.google.cloud.artifactregistry:artifactregistry-gradle-plugin:2.1.5'
+        classpath 'com.adarshr:gradle-test-logger-plugin:3.2.0'
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.14'
         classpath 'com.github.nbaztec:coveralls-jacoco-gradle-plugin:1.2.6'
     }
@@ -41,6 +43,8 @@ allprojects {
     apply plugin: 'java-library'
     apply plugin: 'idea'
     apply plugin: 'maven-publish'
+    apply plugin: 'com.google.cloud.artifactregistry.gradle-plugin'
+    apply plugin: 'com.adarshr.test-logger'
     apply plugin: 'signing'
 }
 
@@ -52,6 +56,7 @@ subprojects {
     targetCompatibility = JavaVersion.VERSION_11
 
     dependencies {
+
         implementation group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
 
         annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
