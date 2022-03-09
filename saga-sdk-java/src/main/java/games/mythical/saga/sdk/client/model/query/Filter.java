@@ -12,7 +12,7 @@ public class Filter {
     private Queue<FilterValue> filter = new LinkedList<>();
 
     public Filter and() {
-        return addFilterValue(new FilterValue(FilterOperation.AND));
+        return addFilterValue(new Operation(FilterOperation.AND));
     }
 
     public Filter equal(String attribute, Object value) {
@@ -24,20 +24,18 @@ public class Filter {
     }
 
     public Filter simpleOperation(String attribute, Object value, FilterConditional conditional) {
-        filter.add(new FilterValue(attribute));
-        filter.add(new FilterValue(conditional));
-        filter.add(new FilterValue(value));
+        filter.add(new Expression(attribute, conditional, value));
         return this;
     }
 
-    public Filter addFilterValue(FilterValue value) {
+    private Filter addFilterValue(FilterValue value) {
         filter.add(value);
         return this;
     }
 
     public String getFilterAsString() {
         StringBuilder builder = new StringBuilder();
-        filter.forEach(value -> builder.append(value.getValue().toString()).append(" "));
+        filter.forEach(value -> builder.append(value.toString()).append(" "));
 
         return builder.toString();
     }
