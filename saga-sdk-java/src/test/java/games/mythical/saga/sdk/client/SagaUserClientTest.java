@@ -1,8 +1,14 @@
 package games.mythical.saga.sdk.client;
 
+import com.google.protobuf.Value;
 import games.mythical.saga.sdk.client.executor.MockUserExecutor;
+import games.mythical.saga.sdk.client.model.query.Filter;
+import games.mythical.saga.sdk.client.model.query.FilterValue;
+import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.proto.api.user.UserProto;
 import games.mythical.saga.sdk.proto.api.user.UserServiceGrpc;
+import games.mythical.saga.sdk.proto.api.user.UsersProto;
+import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.proto.common.user.UserState;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockUserStreamingImpl;
@@ -19,6 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -73,6 +80,38 @@ class SagaUserClientTest extends AbstractClientTest {
         userResponse = userClient.getUser("INVALID-OAUTH-ID");
 
         assertTrue(userResponse.isEmpty());
+    }
+
+    @Test
+    public void getUsers() throws Exception {
+        Filter filter = new Filter();
+        filter.equal("test", "test value")
+                .and()
+                .equal("test2", "other test value");
+
+        var options = QueryOptions.builder()
+                .filterOptions(filter)
+                .pageSize(100)
+                .sortOrder(SortOrder.ASC)
+                .sortAttribute("test")
+                .build();
+
+        var expectedResponse = UsersProto.newBuilder()
+                .addSagaUsers(UserProto.newBuilder()
+                        .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                        .setOauthId(OAUTH_ID)
+                        .setCreatedTimestamp(0)
+                        .build())
+                .build();
+        when(mockServiceBlockingStub.getUsers(any())).thenReturn(expectedResponse);
+        var usersResponse = userClient.getUsers(options);
+        assertEquals(1, usersResponse.size());
+
+        for (var user : usersResponse) {
+            assertEquals(expectedResponse.getSagaUsers(0).getTraceId(), user.getTraceId());
+            assertEquals(OAUTH_ID, user.getOauthId());
+            assertEquals(expectedResponse.getSagaUsers(0).getChainAddress(), user.getChainAddress());
+        }
     }
 
     @Test
