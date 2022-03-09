@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class SagaUserClient extends AbstractSagaClient {
@@ -76,11 +77,7 @@ public class SagaUserClient extends AbstractSagaClient {
 
         try {
             var users = serviceBlockingStub.getUsers(request);
-            List<SagaUser> usersList = new ArrayList<>();
-            for (var user : users.getSagaUsersList()) {
-                usersList.add(SagaUser.fromProto(user));
-            }
-            return usersList;
+            return users.getSagaUsersList().stream().map(SagaUser::fromProto).collect(Collectors.toList());
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         }

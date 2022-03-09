@@ -13,18 +13,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class QueryOptions {
     private Filter filterOptions;
-    private int pageSize;
+    private Integer pageSize;
     private SortOrder sortOrder;
     private String sortAttribute;
 
     public static QueryOptionsProto toProto(QueryOptions queryOptions) {
         var queryOptionsBuilder = QueryOptionsProto.newBuilder()
-                .setPageSize(queryOptions.getPageSize())
-                .setSortAttribute(queryOptions.getSortAttribute())
-                .setSortOrder(queryOptions.getSortOrder());
+                .setPageSize(queryOptions.getPageSize() != null ? queryOptions.getPageSize() : Integer.MAX_VALUE)
+                .setSortAttribute(queryOptions.getSortAttribute() != null ? queryOptions.getSortAttribute() : null)
+                .setSortOrder(queryOptions.getSortOrder() != null ? queryOptions.getSortOrder() : null);
 
-        for (var filter : queryOptions.getFilterOptions().getFilter()) {
-            queryOptionsBuilder.addFilterOptions(FilterValue.toProto(filter));
+        if (queryOptions.getFilterOptions() != null) {
+            for (var filter : queryOptions.getFilterOptions().getFilter()) {
+                queryOptionsBuilder.addFilterOptions(FilterValue.toProto(filter));
+            }
         }
 
         return queryOptionsBuilder.build();

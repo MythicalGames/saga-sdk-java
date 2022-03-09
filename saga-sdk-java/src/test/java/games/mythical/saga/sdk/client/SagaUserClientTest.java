@@ -107,11 +107,11 @@ class SagaUserClientTest extends AbstractClientTest {
         var usersResponse = userClient.getUsers(options);
         assertEquals(1, usersResponse.size());
 
-        for (var user : usersResponse) {
-            assertEquals(expectedResponse.getSagaUsers(0).getTraceId(), user.getTraceId());
-            assertEquals(OAUTH_ID, user.getOauthId());
-            assertEquals(expectedResponse.getSagaUsers(0).getChainAddress(), user.getChainAddress());
-        }
+        var user = usersResponse.iterator().next();
+        assertEquals(expectedResponse.getSagaUsers(0).getTraceId(), user.getTraceId());
+        assertEquals(OAUTH_ID, user.getOauthId());
+        assertEquals(expectedResponse.getSagaUsers(0).getChainAddress(), user.getChainAddress());
+
     }
 
     @Test
