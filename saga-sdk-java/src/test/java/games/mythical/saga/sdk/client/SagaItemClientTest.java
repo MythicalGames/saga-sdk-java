@@ -67,7 +67,7 @@ class SagaItemClientTest extends AbstractClientTest {
                 .setMetadataUri(RandomStringUtils.randomAlphanumeric(30))
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .setMetadata(SagaMetadata.toProto(generateItemMetadata()))
-                .setItemState(ItemState.forNumber(RandomUtils.nextInt(0, ItemState.values().length)))
+                .setItemState(ItemState.forNumber(RandomUtils.nextInt(0, ItemState.values().length - 1)))
                 .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
                 .setUpdatedTimestamp(Instant.now().toEpochMilli())
                 .build();

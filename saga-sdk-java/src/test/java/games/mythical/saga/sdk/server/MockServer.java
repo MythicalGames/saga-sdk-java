@@ -63,4 +63,13 @@ public class MockServer extends AbstractMockServer {
         }
         throw new RuntimeException("Couldn't find MockGameCoinStreamingImpl!");
     }
+
+    public MockOrderStreamingImpl getOrderStream() {
+        for (var service : super.getServices()) {
+            if (service instanceof MockOrderStreamingImpl) {
+                return (MockOrderStreamingImpl) service;
+            }
+        }
+        throw new RuntimeException("Couldn't find MockOrderStreamingImpl!");
+    }
 }

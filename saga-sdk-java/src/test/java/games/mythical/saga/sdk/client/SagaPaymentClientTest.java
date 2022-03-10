@@ -22,13 +22,13 @@ public class SagaPaymentClientTest extends AbstractClientTest {
 
     private SagaPaymentClient paymentClient;
 
-    private CybersourcePaymentData cybersourcePaymentData = CybersourcePaymentData.newBuilder()
+    private final CybersourcePaymentData cybersourcePaymentData = CybersourcePaymentData.newBuilder()
             .setCardType("VISA")
             .build();
-    private CardPaymentData cardPaymentData = CardPaymentData.newBuilder()
+    private final CardPaymentData cardPaymentData = CardPaymentData.newBuilder()
             .setCybersource(cybersourcePaymentData)
             .build();
-    private Address address = Address.newBuilder()
+    private final Address address = Address.newBuilder()
             .setFirstName("John")
             .setLastName("Smith")
             .setAddressLine1("1234 Road")
