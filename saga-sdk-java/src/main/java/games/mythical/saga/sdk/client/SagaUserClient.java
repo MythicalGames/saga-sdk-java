@@ -2,11 +2,13 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaUserExecutor;
 import games.mythical.saga.sdk.client.model.SagaUser;
+import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.client.observer.SagaUserObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.user.GetUserRequest;
+import games.mythical.saga.sdk.proto.api.user.GetUsersRequest;
 import games.mythical.saga.sdk.proto.api.user.UpdateUserRequest;
 import games.mythical.saga.sdk.proto.api.user.UserServiceGrpc;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
@@ -15,7 +17,11 @@ import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class SagaUserClient extends AbstractSagaClient {
@@ -60,6 +66,19 @@ public class SagaUserClient extends AbstractSagaClient {
                 return Optional.empty();
             }
 
+            throw SagaException.fromGrpcException(e);
+        }
+    }
+
+    public Collection<SagaUser> getUsers(QueryOptions queryOptions) throws SagaException {
+        var request = GetUsersRequest.newBuilder()
+                .setQueryOptions(QueryOptions.toProto(queryOptions))
+                .build();
+
+        try {
+            var users = serviceBlockingStub.getUsers(request);
+            return users.getSagaUsersList().stream().map(SagaUser::fromProto).collect(Collectors.toList());
+        } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         }
     }
