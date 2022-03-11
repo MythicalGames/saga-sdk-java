@@ -3,13 +3,16 @@ package games.mythical.saga.sdk.client;
 import games.mythical.saga.sdk.client.executor.SagaItemExecutor;
 import games.mythical.saga.sdk.client.model.SagaItem;
 import games.mythical.saga.sdk.client.model.SagaMetadata;
+import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.client.observer.SagaItemObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.item.*;
+import games.mythical.saga.sdk.proto.common.Finalized;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.item.ItemStreamGrpc;
+import games.mythical.sga.sdk.proto.common.FilterConditional;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class SagaItemClient extends AbstractSagaClient {
@@ -64,6 +68,36 @@ public class SagaItemClient extends AbstractSagaClient {
 
             throw SagaException.fromGrpcException(e);
         }
+    }
+
+    public List<SagaItem> getItems(Finalized finalized, String token_name, QueryOptions queryOptions) throws SagaException {
+        if (queryOptions == null) {
+            queryOptions = new QueryOptions();
+        }
+
+        // TODO set titleId to constant when defined
+        queryOptions.addExpression("titleId", config.getTitleId(), FilterConditional.EQUALS, true);
+
+        var request = GetItemsRequest.newBuilder()
+                .setQueryOptions(QueryOptions.toProto(queryOptions))
+                .setFinalized(finalized);
+
+        if (StringUtils.isNotBlank(token_name)) {
+            request.setTokenName(token_name);
+        }
+
+        try {
+            var items = serviceBlockingStub.getItems(request.build());
+            return items.getItemsList().stream().map(SagaItem::fromProto).collect(Collectors.toList());
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus() == Status.NOT_FOUND) {
+                return List.of();
+            }
+
+            throw SagaException.fromGrpcException(e);
+        }
+
+
     }
 
     public void issueItem(String gameInventoryId,
