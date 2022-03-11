@@ -3,6 +3,7 @@ package games.mythical.saga.sdk.client;
 import games.mythical.saga.sdk.client.executor.SagaItemTypeExecutor;
 import games.mythical.saga.sdk.client.model.SagaItemType;
 import games.mythical.saga.sdk.client.model.SagaMetadata;
+import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.client.observer.SagaItemTypeObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
@@ -10,6 +11,7 @@ import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.itemtype.*;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStreamGrpc;
+import games.mythical.sga.sdk.proto.common.FilterConditional;
 import io.grpc.Status;
 import io.grpc.StatusException;
 import io.grpc.StatusRuntimeException;
@@ -66,17 +68,16 @@ public class SagaItemTypeClient extends AbstractSagaClient {
         }
     }
 
-    public List<SagaItemType> getItemTypes() throws SagaException {
-        return getItemTypes(List.of());
-    }
-
-    public List<SagaItemType> getItemTypes(Collection<String> gameItemTypeIds) throws SagaException {
-        var builder = GetItemTypesRequest.newBuilder()
-                .setTitleId(config.getTitleId());
-
-        if (!gameItemTypeIds.isEmpty()) {
-            builder.addAllGameItemTypeIds(gameItemTypeIds);
+    public List<SagaItemType> getItemTypes(QueryOptions queryOptions) throws SagaException {
+        if (queryOptions == null) {
+            queryOptions = new QueryOptions();
         }
+
+        // TODO set titleId to constant when defined
+        queryOptions.addExpression("titleId", config.getTitleId(), FilterConditional.EQUALS, true);
+
+        var builder = GetItemTypesRequest.newBuilder()
+                .setQueryOptions(QueryOptions.toProto(queryOptions));
 
         try {
             var result = serviceBlockingStub.getItemTypes(builder.build());
