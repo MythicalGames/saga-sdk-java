@@ -68,6 +68,10 @@ public class SagaClientFactory {
         return new SagaTransactionClient(config);
     }
 
+    public SagaOrderClient createSagaOrderClient(SagaOrderExecutor executor) throws SagaException {
+        return new SagaOrderClient(config, executor);
+    }
+
     private SagaClientFactory(SagaSdkConfig config) throws SagaException {
         this.config = config;
         SagaCredentialsFactory.initialize(config);
