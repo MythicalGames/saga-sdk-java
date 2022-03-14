@@ -43,6 +43,15 @@ public abstract class AbstractSagaClient {
         };
     }
 
+    public void stop(long timeoutInSeconds) throws InterruptedException {
+        log.info("Stopping client: {}", this.getClass().getName());
+        channel.shutdown();
+        if (!channel.awaitTermination(timeoutInSeconds, TimeUnit.SECONDS)) {
+            log.info("Client [{}] did not terminate in time, forcing shutdown.", this.getClass().getName());
+            channel.shutdownNow();
+        }
+    }
+
     private static ManagedChannel buildChannel(SagaSdkConfig config) {
         final var builder = ManagedChannelBuilder.forAddress(config.getHost(), config.getPort())
                 .keepAliveTime(config.getKeepAlive(), TimeUnit.SECONDS);

@@ -52,7 +52,8 @@ class SagaItemTypeClientTest extends AbstractClientTest {
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws Exception {
+        itemTypeClient.stop(0);
         itemTypeServer.stop();
     }
 

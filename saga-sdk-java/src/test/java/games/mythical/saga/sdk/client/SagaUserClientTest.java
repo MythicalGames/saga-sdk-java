@@ -53,7 +53,8 @@ class SagaUserClientTest extends AbstractClientTest {
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws Exception {
+        userClient.stop(0);
         userServer.stop();
     }
 

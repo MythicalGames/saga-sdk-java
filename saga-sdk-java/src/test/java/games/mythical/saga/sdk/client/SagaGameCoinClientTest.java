@@ -52,7 +52,8 @@ class SagaGameCoinClientTest extends AbstractClientTest {
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws Exception {
+        gameCoinClient.stop(0);
         gameCoinServer.stop();
     }
 
