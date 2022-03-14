@@ -43,6 +43,11 @@ public abstract class AbstractSagaClient {
         };
     }
 
+    public void stop() {
+        log.info("Stopping client: {}", this.getClass().getName());
+        channel.shutdownNow();
+    }
+
     private static ManagedChannel buildChannel(SagaSdkConfig config) {
         final var builder = ManagedChannelBuilder.forAddress(config.getHost(), config.getPort())
                 .keepAliveTime(config.getKeepAlive(), TimeUnit.SECONDS);
