@@ -70,7 +70,7 @@ class SagaOrderClientTest extends AbstractClientTest {
                 .setConversionRate(RandomStringUtils.randomAlphanumeric(30))
                 .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
                 .build();
-        when(mockServiceBlockingStub.createQuote(any())).thenReturn(expectedResponse);
+        when(mockServiceBlockingStub.createOrderQuote(any())).thenReturn(expectedResponse);
 
         var paymentProviderData = PaymentProviderData.newBuilder()
                 .setCreditCardData(CreditCardData.newBuilder()
@@ -100,12 +100,12 @@ class SagaOrderClientTest extends AbstractClientTest {
 
     @Test
     @Timeout(value = 1, unit = TimeUnit.MINUTES)
-    public void confirmQuote() throws Exception {
+    public void confirmOrder() throws Exception {
         final var QUOTE_ID = RandomStringUtils.randomAlphanumeric(30);
         final var expectedResponse = ReceivedResponse.newBuilder()
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
-        when(mockServiceBlockingStub.confirmQuote(any())).thenReturn(expectedResponse);
+        when(mockServiceBlockingStub.confirmOrder(any())).thenReturn(expectedResponse);
 
         var paymentProviderData = PaymentProviderData.newBuilder()
                 .setCreditCardData(CreditCardData.newBuilder()
@@ -114,7 +114,7 @@ class SagaOrderClientTest extends AbstractClientTest {
                         .build())
                 .setUpholdCardId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
-        orderClient.confirmQuote(
+        orderClient.confirmOrder(
                 OAUTH_ID,
                 QUOTE_ID,
                 paymentProviderData,

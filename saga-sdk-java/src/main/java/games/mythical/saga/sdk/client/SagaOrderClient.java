@@ -1,13 +1,13 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaOrderExecutor;
-import games.mythical.saga.sdk.client.model.SagaQuote;
+import games.mythical.saga.sdk.client.model.SagaOrderQuote;
 import games.mythical.saga.sdk.client.observer.SagaOrderObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.proto.api.order.ConfirmQuoteRequest;
-import games.mythical.saga.sdk.proto.api.order.CreateQuoteRequest;
+import games.mythical.saga.sdk.proto.api.order.ConfirmOrderRequest;
+import games.mythical.saga.sdk.proto.api.order.CreateOrderQuoteRequest;
 import games.mythical.saga.sdk.proto.api.order.OrderServiceGrpc;
 import games.mythical.saga.sdk.proto.api.order.PaymentProviderData;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
@@ -49,16 +49,16 @@ public class SagaOrderClient extends AbstractSagaClient {
         streamStub.orderStatusStream(subscribe, observer);
     }
 
-    public Optional<SagaQuote> createQuote(String oauthId,
-                                           BigDecimal subtotal,
-                                           PaymentProviderData paymentProviderData,
-                                           String itemTypeAddress,
-                                           String listingAddress,
-                                           boolean buyMythToken,
-                                           boolean withdrawMythToken,
-                                           boolean convertMythToUsd,
-                                           String withdrawItemAddress) throws SagaException {
-        var builder = CreateQuoteRequest.newBuilder()
+    public Optional<SagaOrderQuote> createQuote(String oauthId,
+                                                BigDecimal subtotal,
+                                                PaymentProviderData paymentProviderData,
+                                                String itemTypeAddress,
+                                                String listingAddress,
+                                                boolean buyMythToken,
+                                                boolean withdrawMythToken,
+                                                boolean convertMythToUsd,
+                                                String withdrawItemAddress) throws SagaException {
+        var builder = CreateOrderQuoteRequest.newBuilder()
                 .setTitleId(config.getTitleId())
                 .setOauthId(oauthId)
                 .setSubtotal(subtotal.toPlainString())
@@ -89,8 +89,8 @@ public class SagaOrderClient extends AbstractSagaClient {
         }
 
         try {
-            var quote = serviceBlockingStub.createQuote(builder.build());
-            return Optional.of(SagaQuote.fromProto(quote));
+            var quote = serviceBlockingStub.createOrderQuote(builder.build());
+            return Optional.of(SagaOrderQuote.fromProto(quote));
         } catch (StatusRuntimeException e) {
             if (e.getStatus() == Status.NOT_FOUND) {
                 return Optional.empty();
@@ -100,11 +100,11 @@ public class SagaOrderClient extends AbstractSagaClient {
         }
     }
 
-    public void confirmQuote(String oauthId,
+    public void confirmOrder(String oauthId,
                              String quoteId,
                              PaymentProviderData paymentProviderData,
                              String fraudSessionId) throws SagaException {
-        var request = ConfirmQuoteRequest.newBuilder()
+        var request = ConfirmOrderRequest.newBuilder()
                 .setTitleId(config.getTitleId())
                 .setOauthId(oauthId)
                 .setPaymentProviderData(paymentProviderData)
@@ -112,12 +112,12 @@ public class SagaOrderClient extends AbstractSagaClient {
                 .build();
 
         try {
-            var receivedResponse = serviceBlockingStub.confirmQuote(request);
+            var receivedResponse = serviceBlockingStub.confirmOrder(request);
             executor.emitReceived(quoteId, receivedResponse.getTraceId());
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling emitReceived on confirmQuote, order may be lost!", e);
+            log.error("Exception calling emitReceived on confirmOrder, order may be lost!", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }

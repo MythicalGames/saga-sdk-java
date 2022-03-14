@@ -21,7 +21,7 @@ public class SagaTransactionClientTest extends AbstractClientTest {
     @Mock
     private TransactionServiceGrpc.TransactionServiceBlockingStub mockServiceBlockingStub;
 
-    private SagaTransactionClient transactionClient;;
+    private SagaTransactionClient transactionClient;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -51,7 +51,7 @@ public class SagaTransactionClientTest extends AbstractClientTest {
     }
 
     @Test
-    public void getTransactionsForItemType() throws Exception  {
+    public void getTransactionsForItemType() throws Exception {
         var expectedResponse = TransactionsProto.newBuilder()
                 .addTransactions(TransactionProto.newBuilder()
                         .setTransactionId("id-1234")

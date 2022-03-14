@@ -1,9 +1,7 @@
 package games.mythical.saga.sdk.client;
 
-import com.google.protobuf.Value;
 import games.mythical.saga.sdk.client.executor.MockUserExecutor;
 import games.mythical.saga.sdk.client.model.query.Filter;
-import games.mythical.saga.sdk.client.model.query.FilterValue;
 import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.proto.api.user.UserProto;
 import games.mythical.saga.sdk.proto.api.user.UserServiceGrpc;
@@ -25,7 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
