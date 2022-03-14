@@ -72,6 +72,10 @@ public class SagaClientFactory {
         return new SagaOrderClient(config, executor);
     }
 
+    public SagaBridgeClient createSagaBridgeClient(SagaBridgeExecutor executor) throws SagaException {
+        return new SagaBridgeClient(config, executor);
+    }
+
     private SagaClientFactory(SagaSdkConfig config) throws SagaException {
         this.config = config;
         SagaCredentialsFactory.initialize(config);

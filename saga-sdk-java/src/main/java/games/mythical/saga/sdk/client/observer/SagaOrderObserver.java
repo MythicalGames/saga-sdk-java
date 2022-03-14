@@ -41,7 +41,7 @@ public class SagaOrderObserver extends AbstractObserver<OrderStatusUpdate> {
                     new BigDecimal(message.getTotal()),
                     message.getOrderState()
             );
-            updateOrderConfirmation(message.getOauthId(), message.getTraceId(), message.getOrderState());
+            updateOrderConfirmation(message.getOauthId(), message.getOrderId(), message.getTraceId(), message.getOrderState());
         } catch (Exception e) {
             log.error("Exception calling updateOrder for {}. {}", message.getOauthId(), e);
         }
@@ -61,9 +61,10 @@ public class SagaOrderObserver extends AbstractObserver<OrderStatusUpdate> {
         resubscribe.accept(this);
     }
 
-    private void updateOrderConfirmation(String oauthId, String traceId, OrderState orderState) {
+    private void updateOrderConfirmation(String oauthId, String orderId, String traceId, OrderState orderState) {
         var request = OrderStatusConfirmRequest.newBuilder()
                 .setOauthId(oauthId)
+                .setOrderId(orderId)
                 .setTraceId(traceId)
                 .setOrderState(orderState)
                 .build();

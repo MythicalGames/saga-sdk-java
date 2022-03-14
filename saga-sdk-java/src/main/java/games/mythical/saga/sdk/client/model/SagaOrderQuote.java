@@ -16,7 +16,7 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SagaQuote {
+public class SagaOrderQuote {
     private String traceId;
     private String oauthId;
     private String quoteId;
@@ -31,8 +31,8 @@ public class SagaQuote {
     @DtoExclude
     private Instant createdTimestamp;
 
-    public static SagaQuote fromProto(QuoteProto proto) {
-        var quote = ProtoUtil.toDto(proto, SagaQuote.class);
+    public static SagaOrderQuote fromProto(QuoteProto proto) {
+        var quote = ProtoUtil.toDto(proto, SagaOrderQuote.class);
 
         var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedTimestamp());
         quote.setCreatedTimestamp(createdTimestamp);
