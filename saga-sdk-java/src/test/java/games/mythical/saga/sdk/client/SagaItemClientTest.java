@@ -54,7 +54,9 @@ class SagaItemClientTest extends AbstractClientTest {
 
     @AfterEach
     void tearDown() throws Exception {
-        itemClient.stop(0);
+        itemClient.stop();
+        // client shutdown is not immediate
+        Thread.sleep(500);
         itemServer.stop();
     }
 

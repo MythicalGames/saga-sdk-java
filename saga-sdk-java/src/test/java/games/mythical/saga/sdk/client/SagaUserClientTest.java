@@ -54,7 +54,9 @@ class SagaUserClientTest extends AbstractClientTest {
 
     @AfterEach
     void tearDown() throws Exception {
-        userClient.stop(0);
+        userClient.stop();
+        // client shutdown is not immediate
+        Thread.sleep(500);
         userServer.stop();
     }
 

@@ -53,7 +53,9 @@ class SagaOrderClientTest extends AbstractClientTest {
 
     @AfterEach
     void tearDown() throws Exception {
-        orderClient.stop(0);
+        orderClient.stop();
+        // client shutdown is not immediate
+        Thread.sleep(500);
         orderServer.stop();
     }
 

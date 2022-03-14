@@ -53,7 +53,9 @@ class SagaGameCoinClientTest extends AbstractClientTest {
 
     @AfterEach
     void tearDown() throws Exception {
-        gameCoinClient.stop(0);
+        gameCoinClient.stop();
+        // client shutdown is not immediate
+        Thread.sleep(500);
         gameCoinServer.stop();
     }
 
