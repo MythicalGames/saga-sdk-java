@@ -48,7 +48,11 @@ class SagaBridgeClientTest extends AbstractClientTest {
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws Exception {
+        bridgeClient.stop();
+        // client shutdown is not immediate
+        Thread.sleep(500);
+
         bridgeServer.stop();
     }
 
