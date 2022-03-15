@@ -1,15 +1,14 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaOfferExecutor;
+import games.mythical.saga.sdk.client.model.SagaOffer;
 import games.mythical.saga.sdk.client.model.SagaOfferQuote;
+import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.client.observer.SagaOfferObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.proto.api.offer.CancelOfferRequest;
-import games.mythical.saga.sdk.proto.api.offer.ConfirmOfferRequest;
-import games.mythical.saga.sdk.proto.api.offer.CreateOfferQuoteRequest;
-import games.mythical.saga.sdk.proto.api.offer.OfferServiceGrpc;
+import games.mythical.saga.sdk.proto.api.offer.*;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.offer.OfferStreamGrpc;
 import io.grpc.Status;
@@ -17,7 +16,9 @@ import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class SagaOfferClient extends AbstractSagaClient {
@@ -103,6 +104,32 @@ public class SagaOfferClient extends AbstractSagaClient {
         } catch (Exception e) {
             log.error("Exception calling emitReceived on cancelOffer, offer may be lost!", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
+        }
+    }
+
+    public List<SagaOffer> getOffers(String itemTypeId,
+                                     String token,
+                                     String oauthId,
+                                     QueryOptions queryOptions) throws SagaException {
+        if (queryOptions == null) {
+            queryOptions = new QueryOptions();
+        }
+        var request = GetOffersRequest.newBuilder()
+                .setItemTypeId(itemTypeId)
+                .setToken(token)
+                .setOauthId(oauthId)
+                .setQueryOptions(QueryOptions.toProto(queryOptions))
+                .build();
+
+        try {
+            var receivedResponse = serviceBlockingStub.getOffers(request);
+            return receivedResponse.getOffersList().stream().map(SagaOffer::fromProto).collect(Collectors.toList());
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus() == Status.NOT_FOUND) {
+                return List.of();
+            }
+
+            throw SagaException.fromGrpcException(e);
         }
     }
 }

@@ -1,8 +1,10 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockOfferExecutor;
+import games.mythical.saga.sdk.proto.api.offer.OfferProto;
 import games.mythical.saga.sdk.proto.api.offer.OfferQuoteProto;
 import games.mythical.saga.sdk.proto.api.offer.OfferServiceGrpc;
+import games.mythical.saga.sdk.proto.api.offer.OffersProto;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.offer.OfferState;
 import games.mythical.saga.sdk.server.MockServer;
@@ -176,5 +178,28 @@ class SagaOfferClientTest extends AbstractClientTest {
 
         offerServer.verifyCalls("OfferStatusStream", 1);
         offerServer.verifyCalls("OfferStatusConfirmation", 1);
+    }
+
+    @Test
+    public void getOffers() throws Exception {
+        var expectedResponse = OffersProto.newBuilder()
+                .addOffers(OfferProto.newBuilder()
+                        .setOauthId(OAUTH_ID)
+                        .setCurrency("USD")
+                        .setTotal("100")
+                        .setGameInventoryId("game1")
+                        .setCreatedTimestamp(0)
+                        .build())
+                .build();
+        when(mockServiceBlockingStub.getOffers(any())).thenReturn(expectedResponse);
+        var offersResponse = offerClient.getOffers("item123", "token123", OAUTH_ID, null);
+        assertEquals(1, offersResponse.size());
+
+        var offer = offersResponse.iterator().next();
+        var expectedOffer = expectedResponse.getOffers(0);
+        assertEquals(expectedOffer.getOauthId(), offer.getOauthId());
+        assertEquals(expectedOffer.getCurrency(), offer.getCurrency());
+        assertEquals(expectedOffer.getTotal(), offer.getTotal());
+        assertEquals(expectedOffer.getGameInventoryId(), offer.getGameInventoryId());
     }
 }
