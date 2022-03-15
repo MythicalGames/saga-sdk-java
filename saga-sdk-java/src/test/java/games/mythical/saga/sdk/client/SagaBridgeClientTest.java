@@ -102,15 +102,15 @@ class SagaBridgeClientTest extends AbstractClientTest {
         var statusUpdate = BridgeStatusUpdate.newBuilder()
                 .setTraceId(expectedResponse.getTraceId())
                 .setOauthId(OAUTH_ID)
-                .setItemTypeAddress(RandomStringUtils.randomAlphanumeric(30))
-                .setItemAddress(RandomStringUtils.randomAlphanumeric(30))
+                .setGameItemTypeId(RandomStringUtils.randomAlphanumeric(30))
+                .setGameInventoryId(RandomStringUtils.randomAlphanumeric(30))
                 .setDestinationAddress(RandomStringUtils.randomAlphanumeric(30))
                 .setDestinationChain(RandomStringUtils.randomAlphanumeric(30))
                 .setOriginAddress(RandomStringUtils.randomAlphanumeric(30))
                 .setMythicalTransactionId(RandomStringUtils.randomAlphanumeric(30))
                 .setMainnetTransactionId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
-        bridgeServer.getBridgeStream().sendStatus(titleId, statusUpdate, null);
+        bridgeServer.getBridgeStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
 

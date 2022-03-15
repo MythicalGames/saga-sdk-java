@@ -2,9 +2,6 @@ package games.mythical.saga.sdk.server.stream;
 
 import com.google.protobuf.Empty;
 import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.ProtocolMessageEnum;
-import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeProto;
-import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStatusUpdate;
@@ -33,17 +30,10 @@ public class MockItemTypeStreamingImpl extends ItemTypeStreamGrpc.ItemTypeStream
     }
 
     @Override
-    public void sendStatus(String environmentId, GeneratedMessageV3 genericProto, ProtocolMessageEnum genericState) {
-        var proto = (ItemTypeProto) genericProto;
-        var state = (ItemTypeState) genericState;
+    public void sendStatus(String environmentId, GeneratedMessageV3 genericStatusUpdateProto) {
         if (streamObservers.containsKey(environmentId)) {
             var observer = streamObservers.get(environmentId);
-            var itemStatus = ItemTypeStatusUpdate.newBuilder()
-                    .setGameItemTypeId(proto.getGameItemTypeId())
-                    .setTraceId(proto.getTraceId())
-                    .setItemTypeState(state)
-                    .build();
-            observer.onNext(itemStatus);
+            observer.onNext((ItemTypeStatusUpdate) genericStatusUpdateProto);
         }
     }
 

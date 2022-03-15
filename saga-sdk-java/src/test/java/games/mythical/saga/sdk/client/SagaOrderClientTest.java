@@ -4,6 +4,7 @@ import games.mythical.saga.sdk.client.executor.MockOrderExecutor;
 import games.mythical.saga.sdk.proto.api.order.*;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.order.OrderState;
+import games.mythical.saga.sdk.proto.streams.order.OrderStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockOrderStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -132,19 +133,15 @@ class SagaOrderClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        var statusUpdate = QuoteProto.newBuilder()
-                .setTraceId(expectedResponse.getTraceId())
+        var statusUpdate = OrderStatusUpdate.newBuilder()
                 .setOauthId(OAUTH_ID)
+                .setTraceId(executor.getTraceId())
                 .setQuoteId(QUOTE_ID)
-                .setTax(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setTaxCurrency(CURRENCY)
+                .setOrderId(QUOTE_ID)
                 .setTotal(String.valueOf(RandomUtils.nextInt(1, 1000)))
-                .setCurrency(CURRENCY)
-                .setPaymentProviderId(PaymentProviderId.forNumber(RandomUtils.nextInt(0, PaymentProviderId.values().length - 1)))
-                .setConversionRate(RandomStringUtils.randomAlphanumeric(30))
-                .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
+                .setOrderState(OrderState.COMPLETE)
                 .build();
-        orderServer.getOrderStream().sendStatus(titleId, statusUpdate, OrderState.COMPLETE);
+        orderServer.getOrderStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
 

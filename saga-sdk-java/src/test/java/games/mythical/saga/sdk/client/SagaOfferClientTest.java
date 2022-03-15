@@ -7,6 +7,7 @@ import games.mythical.saga.sdk.proto.api.offer.OfferServiceGrpc;
 import games.mythical.saga.sdk.proto.api.offer.OffersProto;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.offer.OfferState;
+import games.mythical.saga.sdk.proto.streams.offer.OfferStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockOfferStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -111,18 +112,15 @@ class SagaOfferClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        var statusUpdate = OfferQuoteProto.newBuilder()
-                .setTraceId(expectedResponse.getTraceId())
+        var statusUpdate = OfferStatusUpdate.newBuilder()
                 .setOauthId(OAUTH_ID)
+                .setTraceId(executor.getTraceId())
                 .setQuoteId(QUOTE_ID)
-                .setGameInventoryId(RandomStringUtils.randomAlphanumeric(30))
-                .setTax(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setTaxCurrency(CURRENCY)
+                .setOfferId(QUOTE_ID)
                 .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setCurrency(CURRENCY)
-                .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
+                .setOfferState(OfferState.CREATED)
                 .build();
-        offerServer.getOfferStream().sendStatus(titleId, statusUpdate, OfferState.CREATED);
+        offerServer.getOfferStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
 
@@ -155,18 +153,15 @@ class SagaOfferClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        var statusUpdate = OfferQuoteProto.newBuilder()
-                .setTraceId(expectedResponse.getTraceId())
+        var statusUpdate = OfferStatusUpdate.newBuilder()
                 .setOauthId(OAUTH_ID)
+                .setTraceId(executor.getTraceId())
                 .setQuoteId(OFFER_ID)
-                .setGameInventoryId(RandomStringUtils.randomAlphanumeric(30))
-                .setTax(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setTaxCurrency(CURRENCY)
+                .setOfferId(OFFER_ID)
                 .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setCurrency(CURRENCY)
-                .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
+                .setOfferState(OfferState.CANCELLED)
                 .build();
-        offerServer.getOfferStream().sendStatus(titleId, statusUpdate, OfferState.CANCELLED);
+        offerServer.getOfferStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
 

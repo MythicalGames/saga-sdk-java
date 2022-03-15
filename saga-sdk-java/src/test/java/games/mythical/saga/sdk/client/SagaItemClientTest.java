@@ -7,6 +7,7 @@ import games.mythical.saga.sdk.proto.api.item.ItemServiceGrpc;
 import games.mythical.saga.sdk.proto.api.item.UpdateItemsMetadataResponse;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.item.ItemState;
+import games.mythical.saga.sdk.proto.streams.item.ItemStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockItemStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -114,10 +115,12 @@ class SagaItemClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        itemServer.getItemStream().sendStatus(titleId, ItemProto.newBuilder()
+        itemServer.getItemStream().sendStatus(titleId, ItemStatusUpdate.newBuilder()
+                .setGameInventoryId(GAME_INVENTORY_ID)
                 .setOauthId(EXPECTED_OAUTH_ID)
                 .setTraceId(executor.getTraceId())
-                .build(), ItemState.ISSUED);
+                .setItemState(ItemState.ISSUED)
+                .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
 
@@ -150,10 +153,12 @@ class SagaItemClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        itemServer.getItemStream().sendStatus(titleId, ItemProto.newBuilder()
+        itemServer.getItemStream().sendStatus(titleId, ItemStatusUpdate.newBuilder()
+                .setGameInventoryId(GAME_INVENTORY_ID)
                 .setOauthId(DEST)
                 .setTraceId(executor.getTraceId())
-                .build(), ItemState.TRANSFERRED);
+                .setItemState(ItemState.TRANSFERRED)
+                .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
 
@@ -183,10 +188,12 @@ class SagaItemClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        itemServer.getItemStream().sendStatus(titleId, ItemProto.newBuilder()
+        itemServer.getItemStream().sendStatus(titleId, ItemStatusUpdate.newBuilder()
+                .setGameInventoryId(GAME_INVENTORY_ID)
                 .setOauthId(RandomStringUtils.randomAlphanumeric(30))
                 .setTraceId(executor.getTraceId())
-                .build(), ItemState.BURNED);
+                .setItemState(ItemState.BURNED)
+                .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
 

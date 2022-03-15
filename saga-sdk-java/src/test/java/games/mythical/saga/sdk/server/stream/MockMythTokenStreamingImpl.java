@@ -2,8 +2,6 @@ package games.mythical.saga.sdk.server.stream;
 
 import com.google.protobuf.Empty;
 import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.ProtocolMessageEnum;
-import games.mythical.saga.sdk.proto.common.myth.MythTokenState;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.myth.MythTokenStatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.myth.MythTokenStatusUpdate;
@@ -32,17 +30,10 @@ public class MockMythTokenStreamingImpl extends MythTokenStreamGrpc.MythTokenStr
     }
 
     @Override
-    public void sendStatus(String environmentId, GeneratedMessageV3 genericProto, ProtocolMessageEnum genericState) {
-        // in the words of Bob Ross, "That'll be our little secret"
-        var proto = (MythTokenStatusUpdate) genericProto;
-        var tokenState = (MythTokenState) genericState;
+    public void sendStatus(String environmentId, GeneratedMessageV3 genericStatusUpdateProto) {
         if (streamObserverMap.containsKey(environmentId)) {
             var observer = streamObserverMap.get(environmentId);
-            var tokenStatus = MythTokenStatusUpdate.newBuilder()
-                    .setTokenState(tokenState)
-                    .setTraceId(proto.getTraceId())
-                    .build();
-            observer.onNext(tokenStatus);
+            observer.onNext((MythTokenStatusUpdate) genericStatusUpdateProto);
         }
     }
 

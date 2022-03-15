@@ -28,13 +28,13 @@ public class SagaBridgeObserver extends AbstractObserver<BridgeStatusUpdate> {
 
     @Override
     public void onNext(BridgeStatusUpdate message) {
-        log.trace("BridgeObserver.onNext for user {} with item {}", message.getOauthId(), message.getItemAddress());
+        log.trace("BridgeObserver.onNext for user {} with item {}", message.getOauthId(), message.getGameInventoryId());
         resetConnectionRetry();
         try {
             sagaBridgeExecutor.updateItem(
                     message.getOauthId(),
-                    message.getItemAddress(),
-                    message.getItemTypeAddress(),
+                    message.getGameInventoryId(),
+                    message.getGameItemTypeId(),
                     message.getDestinationAddress(),
                     message.getDestinationChain(),
                     message.getOriginAddress(),
@@ -44,7 +44,7 @@ public class SagaBridgeObserver extends AbstractObserver<BridgeStatusUpdate> {
             );
             updateBridgeConfirmation(message.getOauthId(), message.getTraceId(), message.getMythicalTransactionId());
         } catch (Exception e) {
-            log.error("Exception calling updateBridgeConfirmation for {}:{}. {}", message.getOauthId(), message.getItemAddress(), e);
+            log.error("Exception calling updateBridgeConfirmation for {}:{}. {}", message.getOauthId(), message.getGameInventoryId(), e);
         }
     }
 

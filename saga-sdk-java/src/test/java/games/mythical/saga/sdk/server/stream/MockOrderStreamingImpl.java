@@ -2,9 +2,6 @@ package games.mythical.saga.sdk.server.stream;
 
 import com.google.protobuf.Empty;
 import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.ProtocolMessageEnum;
-import games.mythical.saga.sdk.proto.api.order.QuoteProto;
-import games.mythical.saga.sdk.proto.common.order.OrderState;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.order.OrderStatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.order.OrderStatusUpdate;
@@ -33,20 +30,10 @@ public class MockOrderStreamingImpl extends OrderStreamGrpc.OrderStreamImplBase 
     }
 
     @Override
-    public void sendStatus(String titleId, GeneratedMessageV3 genericProto, ProtocolMessageEnum genericState) {
-        var proto = (QuoteProto) genericProto;
-        var state = (OrderState) genericState;
+    public void sendStatus(String titleId, GeneratedMessageV3 genericStatusUpdateProto) {
         if (streamObservers.containsKey(titleId)) {
             var observer = streamObservers.get(titleId);
-            var orderStatus = OrderStatusUpdate.newBuilder()
-                    .setOauthId(proto.getOauthId())
-                    .setTraceId(proto.getTraceId())
-                    .setQuoteId(proto.getQuoteId())
-                    .setOrderId(proto.getQuoteId())
-                    .setTotal(proto.getTotal())
-                    .setOrderState(state)
-                    .build();
-            observer.onNext(orderStatus);
+            observer.onNext((OrderStatusUpdate) genericStatusUpdateProto);
         }
     }
 

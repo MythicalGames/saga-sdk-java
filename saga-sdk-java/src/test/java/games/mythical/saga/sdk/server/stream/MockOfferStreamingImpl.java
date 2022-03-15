@@ -2,9 +2,6 @@ package games.mythical.saga.sdk.server.stream;
 
 import com.google.protobuf.Empty;
 import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.ProtocolMessageEnum;
-import games.mythical.saga.sdk.proto.api.offer.OfferQuoteProto;
-import games.mythical.saga.sdk.proto.common.offer.OfferState;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.offer.OfferStatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.offer.OfferStatusUpdate;
@@ -33,20 +30,10 @@ public class MockOfferStreamingImpl extends OfferStreamGrpc.OfferStreamImplBase 
     }
 
     @Override
-    public void sendStatus(String titleId, GeneratedMessageV3 genericProto, ProtocolMessageEnum genericState) {
-        var proto = (OfferQuoteProto) genericProto;
-        var state = (OfferState) genericState;
+    public void sendStatus(String titleId, GeneratedMessageV3 genericStatusUpdateProto) {
         if (streamObservers.containsKey(titleId)) {
             var observer = streamObservers.get(titleId);
-            var offerStatus = OfferStatusUpdate.newBuilder()
-                    .setOauthId(proto.getOauthId())
-                    .setTraceId(proto.getTraceId())
-                    .setQuoteId(proto.getQuoteId())
-                    .setOfferId(proto.getQuoteId())
-                    .setTotal(proto.getTotal())
-                    .setOfferState(state)
-                    .build();
-            observer.onNext(offerStatus);
+            observer.onNext((OfferStatusUpdate) genericStatusUpdateProto);
         }
     }
 

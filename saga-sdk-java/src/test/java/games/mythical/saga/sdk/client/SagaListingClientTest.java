@@ -7,6 +7,7 @@ import games.mythical.saga.sdk.proto.api.listing.ListingServiceGrpc;
 import games.mythical.saga.sdk.proto.api.listing.ListingsProto;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.listing.ListingState;
+import games.mythical.saga.sdk.proto.streams.listing.ListingStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockListingStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -111,18 +112,15 @@ class SagaListingClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        var statusUpdate = ListingQuoteProto.newBuilder()
-                .setTraceId(expectedResponse.getTraceId())
+        var statusUpdate = ListingStatusUpdate.newBuilder()
                 .setOauthId(OAUTH_ID)
+                .setTraceId(executor.getTraceId())
                 .setQuoteId(QUOTE_ID)
-                .setGameInventoryId(RandomStringUtils.randomAlphanumeric(30))
-                .setTax(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setTaxCurrency(CURRENCY)
+                .setListingId(QUOTE_ID)
                 .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setCurrency(CURRENCY)
-                .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
+                .setListingState(ListingState.CREATED)
                 .build();
-        listingServer.getListingStream().sendStatus(titleId, statusUpdate, ListingState.CREATED);
+        listingServer.getListingStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
 
@@ -155,18 +153,15 @@ class SagaListingClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        var statusUpdate = ListingQuoteProto.newBuilder()
-                .setTraceId(expectedResponse.getTraceId())
+        var statusUpdate = ListingStatusUpdate.newBuilder()
                 .setOauthId(OAUTH_ID)
+                .setTraceId(executor.getTraceId())
                 .setQuoteId(LISTING_ID)
-                .setGameInventoryId(RandomStringUtils.randomAlphanumeric(30))
-                .setTax(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setTaxCurrency(CURRENCY)
+                .setListingId(LISTING_ID)
                 .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setCurrency(CURRENCY)
-                .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
+                .setListingState(ListingState.CANCELLED)
                 .build();
-        listingServer.getListingStream().sendStatus(titleId, statusUpdate, ListingState.CANCELLED);
+        listingServer.getListingStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
 

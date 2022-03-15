@@ -6,6 +6,7 @@ import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.proto.api.itemtype.*;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
+import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockItemTypeStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -64,7 +65,6 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         var expectedResponse = ItemTypeProto.newBuilder()
                 .setGameItemTypeId(GAME_ITEM_TYPE_ID)
                 .setName(RandomStringUtils.randomAlphanumeric(30))
-                .setAddress(RandomStringUtils.randomAlphanumeric(30))
                 .setTitleId(RandomStringUtils.randomAlphanumeric(30))
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .setPriRevShareSettings(PriRevShareSettings.newBuilder().build())
@@ -110,10 +110,11 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        itemTypeServer.getItemTypeStream().sendStatus(titleId, ItemTypeProto.newBuilder()
+        itemTypeServer.getItemTypeStream().sendStatus(titleId, ItemTypeStatusUpdate.newBuilder()
                 .setGameItemTypeId(GAME_ITEM_TYPE_ID)
                 .setTraceId(executor.getTraceId())
-                .build(), ItemTypeState.CREATED);
+                .setItemTypeState(ItemTypeState.CREATED)
+                .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
 

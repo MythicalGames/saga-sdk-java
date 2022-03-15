@@ -5,6 +5,7 @@ import games.mythical.saga.sdk.proto.api.gamecoin.GameCoinProto;
 import games.mythical.saga.sdk.proto.api.gamecoin.GameCoinServiceGrpc;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.gamecoin.GameCoinState;
+import games.mythical.saga.sdk.proto.streams.gamecoin.GameCoinStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockGameCoinStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -101,10 +102,12 @@ class SagaGameCoinClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        gameCoinServer.getGameCoinStream().sendStatus(titleId, GameCoinProto.newBuilder()
+        gameCoinServer.getGameCoinStream().sendStatus(titleId, GameCoinStatusUpdate.newBuilder()
                 .setOauthId(OAUTH_ID)
+                .setCurrencyId(CURRENCY_ID)
                 .setTraceId(executor.getTraceId())
-                .build(), GameCoinState.ISSUED);
+                .setGameCoinState(GameCoinState.ISSUED)
+                .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
 
@@ -137,10 +140,12 @@ class SagaGameCoinClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        gameCoinServer.getGameCoinStream().sendStatus(titleId, GameCoinProto.newBuilder()
+        gameCoinServer.getGameCoinStream().sendStatus(titleId, GameCoinStatusUpdate.newBuilder()
                 .setOauthId(DEST)
+                .setCurrencyId(CURRENCY_ID)
                 .setTraceId(executor.getTraceId())
-                .build(), GameCoinState.TRANSFERRED);
+                .setGameCoinState(GameCoinState.TRANSFERRED)
+                .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
 
@@ -170,10 +175,12 @@ class SagaGameCoinClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        gameCoinServer.getGameCoinStream().sendStatus(titleId, GameCoinProto.newBuilder()
-                .setOauthId(RandomStringUtils.randomAlphanumeric(30))
+        gameCoinServer.getGameCoinStream().sendStatus(titleId, GameCoinStatusUpdate.newBuilder()
+                .setOauthId(OAUTH_ID)
+                .setCurrencyId(CURRENCY_ID)
                 .setTraceId(executor.getTraceId())
-                .build(), GameCoinState.BURNED);
+                .setGameCoinState(GameCoinState.ISSUED)
+                .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
 

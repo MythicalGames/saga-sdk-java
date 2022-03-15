@@ -2,9 +2,6 @@ package games.mythical.saga.sdk.server.stream;
 
 import com.google.protobuf.Empty;
 import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.ProtocolMessageEnum;
-import games.mythical.saga.sdk.proto.api.gamecoin.GameCoinProto;
-import games.mythical.saga.sdk.proto.common.gamecoin.GameCoinState;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.gamecoin.GameCoinStatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.gamecoin.GameCoinStatusUpdate;
@@ -33,19 +30,10 @@ public class MockGameCoinStreamingImpl extends GameCoinStreamGrpc.GameCoinStream
     }
 
     @Override
-    public void sendStatus(String environmentId, GeneratedMessageV3 genericProto, ProtocolMessageEnum genericState) {
-        var proto = (GameCoinProto) genericProto;
-        var state = (GameCoinState) genericState;
+    public void sendStatus(String environmentId, GeneratedMessageV3 genericStatusUpdateProto) {
         if (streamObservers.containsKey(environmentId)) {
             var observer = streamObservers.get(environmentId);
-            var itemStatus = GameCoinStatusUpdate.newBuilder()
-                    .setOauthId(proto.getOauthId())
-                    .setCurrencyId(proto.getCurrencyId())
-                    .setCoinCount(proto.getCoinCount())
-                    .setTraceId(proto.getTraceId())
-                    .setGameCoinState(state)
-                    .build();
-            observer.onNext(itemStatus);
+            observer.onNext((GameCoinStatusUpdate) genericStatusUpdateProto);
         }
     }
 

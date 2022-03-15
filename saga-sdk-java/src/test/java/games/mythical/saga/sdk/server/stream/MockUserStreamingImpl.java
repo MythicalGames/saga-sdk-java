@@ -2,9 +2,6 @@ package games.mythical.saga.sdk.server.stream;
 
 import com.google.protobuf.Empty;
 import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.ProtocolMessageEnum;
-import games.mythical.saga.sdk.proto.api.user.UserProto;
-import games.mythical.saga.sdk.proto.common.user.UserState;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.user.UserStatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.user.UserStatusUpdate;
@@ -33,17 +30,10 @@ public class MockUserStreamingImpl extends UserStreamGrpc.UserStreamImplBase imp
     }
 
     @Override
-    public void sendStatus(String environmentId, GeneratedMessageV3 genericProto, ProtocolMessageEnum genericState) {
-        var proto = (UserProto) genericProto;
-        var state = (UserState) genericState;
+    public void sendStatus(String environmentId, GeneratedMessageV3 genericStatusUpdateProto) {
         if (streamObservers.containsKey(environmentId)) {
             var observer = streamObservers.get(environmentId);
-            var userStatus = UserStatusUpdate.newBuilder()
-                    .setOauthId(proto.getOauthId())
-                    .setTraceId(proto.getTraceId())
-                    .setUserState(state)
-                    .build();
-            observer.onNext(userStatus);
+            observer.onNext((UserStatusUpdate) genericStatusUpdateProto);
         }
     }
 

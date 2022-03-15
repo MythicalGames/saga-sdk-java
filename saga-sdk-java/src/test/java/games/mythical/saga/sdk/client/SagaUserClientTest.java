@@ -6,6 +6,7 @@ import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.proto.api.user.*;
 import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.proto.common.user.UserState;
+import games.mythical.saga.sdk.proto.streams.user.UserStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockUserStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -132,10 +133,11 @@ class SagaUserClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        userServer.getUserStream().sendStatus(titleId, UserProto.newBuilder()
+        userServer.getUserStream().sendStatus(titleId, UserStatusUpdate.newBuilder()
                 .setOauthId(executor.getOauthId())
                 .setTraceId(executor.getTraceId())
-                .build(), UserState.FAILED);
+                .setUserState(UserState.FAILED)
+                .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
 

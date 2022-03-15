@@ -47,16 +47,16 @@ public class SagaBridgeClient extends AbstractSagaClient {
     }
 
     public void withdrawItem(String oauthId,
-                             String itemTypeAddress,
-                             String itemAddress,
+                             String gameItemTypeId,
+                             String gameInventoryId,
                              String destinationAddress,
                              String destinationChain,
                              String originChain) throws SagaException {
         var request = WithdrawItemRequest.newBuilder()
                 .setTitleId(config.getTitleId())
                 .setOauthId(oauthId)
-                .setItemTypeAddress(itemTypeAddress)
-                .setItemAddress(itemAddress)
+                .setGameItemTypeId(gameItemTypeId)
+                .setGameInventoryId(gameInventoryId)
                 .setDestinationAddress(destinationAddress)
                 .setDestinationChain(destinationChain)
                 .setOriginAddress(originChain)
@@ -64,7 +64,7 @@ public class SagaBridgeClient extends AbstractSagaClient {
 
         try {
             var receivedResponse = serviceBlockingStub.withdrawItem(request);
-            executor.emitReceived(itemAddress, receivedResponse.getTraceId());
+            executor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {

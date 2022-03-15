@@ -2,9 +2,6 @@ package games.mythical.saga.sdk.server.stream;
 
 import com.google.protobuf.Empty;
 import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.ProtocolMessageEnum;
-import games.mythical.saga.sdk.proto.api.listing.ListingQuoteProto;
-import games.mythical.saga.sdk.proto.common.listing.ListingState;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.listing.ListingStatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.listing.ListingStatusUpdate;
@@ -33,20 +30,10 @@ public class MockListingStreamingImpl extends ListingStreamGrpc.ListingStreamImp
     }
 
     @Override
-    public void sendStatus(String titleId, GeneratedMessageV3 genericProto, ProtocolMessageEnum genericState) {
-        var proto = (ListingQuoteProto) genericProto;
-        var state = (ListingState) genericState;
+    public void sendStatus(String titleId, GeneratedMessageV3 genericStatusUpdateProto) {
         if (streamObservers.containsKey(titleId)) {
             var observer = streamObservers.get(titleId);
-            var listingStatus = ListingStatusUpdate.newBuilder()
-                    .setOauthId(proto.getOauthId())
-                    .setTraceId(proto.getTraceId())
-                    .setQuoteId(proto.getQuoteId())
-                    .setListingId(proto.getQuoteId())
-                    .setTotal(proto.getTotal())
-                    .setListingState(state)
-                    .build();
-            observer.onNext(listingStatus);
+            observer.onNext((ListingStatusUpdate) genericStatusUpdateProto);
         }
     }
 

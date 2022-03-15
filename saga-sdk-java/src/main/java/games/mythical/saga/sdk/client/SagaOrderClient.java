@@ -52,7 +52,7 @@ public class SagaOrderClient extends AbstractSagaClient {
     public Optional<SagaOrderQuote> createQuote(String oauthId,
                                                 BigDecimal subtotal,
                                                 PaymentProviderData paymentProviderData,
-                                                String itemTypeAddress,
+                                                String gameItemTypeId,
                                                 String listingAddress,
                                                 boolean buyMythToken,
                                                 boolean withdrawMythToken,
@@ -64,8 +64,8 @@ public class SagaOrderClient extends AbstractSagaClient {
                 .setSubtotal(subtotal.toPlainString())
                 .setPaymentProviderData(paymentProviderData);
 
-        if (StringUtils.isNotBlank(itemTypeAddress)) {
-            builder.setItemTypeAddress(itemTypeAddress);
+        if (StringUtils.isNotBlank(gameItemTypeId)) {
+            builder.setGameItemTypeId(gameItemTypeId);
         }
 
         if (StringUtils.isNotBlank(listingAddress)) {

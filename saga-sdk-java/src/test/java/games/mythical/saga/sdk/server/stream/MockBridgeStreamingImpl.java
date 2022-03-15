@@ -2,7 +2,6 @@ package games.mythical.saga.sdk.server.stream;
 
 import com.google.protobuf.Empty;
 import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.ProtocolMessageEnum;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.bridge.BridgeStatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.bridge.BridgeStatusUpdate;
@@ -31,22 +30,10 @@ public class MockBridgeStreamingImpl extends BridgeStreamGrpc.BridgeStreamImplBa
     }
 
     @Override
-    public void sendStatus(String titleId, GeneratedMessageV3 genericProto, ProtocolMessageEnum genericState) {
-        var proto = (BridgeStatusUpdate) genericProto;
+    public void sendStatus(String titleId, GeneratedMessageV3 genericStatusUpdateProto) {
         if (streamObservers.containsKey(titleId)) {
             var observer = streamObservers.get(titleId);
-            var orderStatus = BridgeStatusUpdate.newBuilder()
-                    .setOauthId(proto.getOauthId())
-                    .setTraceId(proto.getTraceId())
-                    .setItemTypeAddress(proto.getItemTypeAddress())
-                    .setItemAddress(proto.getItemAddress())
-                    .setDestinationAddress(proto.getDestinationAddress())
-                    .setDestinationChain(proto.getDestinationChain())
-                    .setOriginAddress(proto.getOriginAddress())
-                    .setMythicalTransactionId(proto.getMythicalTransactionId())
-                    .setMainnetTransactionId(proto.getMainnetTransactionId())
-                    .build();
-            observer.onNext(orderStatus);
+            observer.onNext((BridgeStatusUpdate) genericStatusUpdateProto);
         }
     }
 
