@@ -81,4 +81,22 @@ public class MockServer extends AbstractMockServer {
         }
         throw new RuntimeException("Couldn't find MockBridgeStreamingImpl!");
     }
+
+    public MockListingStreamingImpl getListingStream() {
+        for (var service : super.getServices()) {
+            if (service instanceof MockListingStreamingImpl) {
+                return (MockListingStreamingImpl) service;
+            }
+        }
+        throw new RuntimeException("Couldn't find MockListingStreamingImpl!");
+    }
+
+    public MockOfferStreamingImpl getOfferStream() {
+        for (var service : super.getServices()) {
+            if (service instanceof MockOfferStreamingImpl) {
+                return (MockOfferStreamingImpl) service;
+            }
+        }
+        throw new RuntimeException("Couldn't find MockOfferStreamingImpl!");
+    }
 }
