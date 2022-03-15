@@ -1,8 +1,10 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockListingExecutor;
+import games.mythical.saga.sdk.proto.api.listing.ListingProto;
 import games.mythical.saga.sdk.proto.api.listing.ListingQuoteProto;
 import games.mythical.saga.sdk.proto.api.listing.ListingServiceGrpc;
+import games.mythical.saga.sdk.proto.api.listing.ListingsProto;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.listing.ListingState;
 import games.mythical.saga.sdk.server.MockServer;
@@ -176,5 +178,28 @@ class SagaListingClientTest extends AbstractClientTest {
 
         listingServer.verifyCalls("ListingStatusStream", 1);
         listingServer.verifyCalls("ListingStatusConfirmation", 1);
+    }
+
+    @Test
+    public void getListings() throws Exception {
+        var expectedResponse = ListingsProto.newBuilder()
+                .addListings(ListingProto.newBuilder()
+                        .setOauthId(OAUTH_ID)
+                        .setCurrency("USD")
+                        .setTotal("100")
+                        .setGameInventoryId("game1")
+                        .setCreatedTimestamp(0)
+                        .build())
+                .build();
+        when(mockServiceBlockingStub.getListings(any())).thenReturn(expectedResponse);
+        var listingsResponse = listingClient.getListings("item123", "token123", OAUTH_ID, null);
+        assertEquals(1, listingsResponse.size());
+
+        var listing = listingsResponse.iterator().next();
+        var expectedListing = expectedResponse.getListings(0);
+        assertEquals(expectedListing.getOauthId(), listing.getOauthId());
+        assertEquals(expectedListing.getCurrency(), listing.getCurrency());
+        assertEquals(expectedListing.getTotal(), listing.getTotal());
+        assertEquals(expectedListing.getGameInventoryId(), listing.getGameInventoryId());
     }
 }
