@@ -1,11 +1,11 @@
 package games.mythical.saga.sdk.client.model;
 
+import games.mythical.proto_util.ProtoUtil;
+import games.mythical.proto_util.dto.DtoExclude;
+import games.mythical.proto_util.proto.ProtoExclude;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.common.Metadata;
 import games.mythical.saga.sdk.util.ConversionUtils;
-import games.mythical.shared.util.ProtoUtil;
-import games.mythical.shared.util.dto.DtoExclude;
-import games.mythical.shared.util.proto.ProtoExclude;
 import lombok.Builder;
 import lombok.Data;
 

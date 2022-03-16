@@ -1,9 +1,9 @@
 package games.mythical.saga.sdk.client.model;
 
+import games.mythical.proto_util.ProtoUtil;
 import games.mythical.saga.sdk.proto.api.payments.Address;
 import games.mythical.saga.sdk.proto.api.payments.CardPaymentData;
 import games.mythical.saga.sdk.proto.api.payments.PaymentMethodProto;
-import games.mythical.shared.util.ProtoUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

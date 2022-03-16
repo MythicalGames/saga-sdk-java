@@ -1,18 +1,12 @@
 apply plugin: 'jacoco'
 apply plugin: 'com.github.nbaztec.coveralls-jacoco'
 
-repositories {
-    maven {
-        url = "artifactregistry://us-maven.pkg.dev/mythical-games/mythical-central"
-    }
-}
-
 dependencies {
     api project(':saga-sdk-proto')
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${jackson_version}"
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: "${commons_lang_version}"
     implementation group: 'org.slf4j', name: 'slf4j-api', version: "${slf4j_version}"
-    implementation group: 'games.mythical', name: 'mythos-java-shared', version: "${mythos_version}"
+    implementation group: 'games.mythical', name: 'proto-util', version: "0.2.0-alpha2"
 
     testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: "${slf4j_version}"
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: "${mockito_version}"
