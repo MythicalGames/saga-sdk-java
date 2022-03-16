@@ -5,7 +5,8 @@ import games.mythical.saga.sdk.config.Constants;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.shared.util.JsonUtil;
+import games.mythical.saga.sdk.util.ConversionUtils;
+import io.grpc.internal.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -80,7 +81,7 @@ public class SagaCredentialsFactory {
             final var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == HTTP_OK) {
                 log.debug("Refreshing Access Token");
-                final var map = JsonUtil.toStringObjectMap(response.body());
+                final var map = ConversionUtils.toStringObjectMap(response.body());
                 return (String) map.get(ACCESS_TOKEN_KEY);
             }
         } catch (IOException | InterruptedException e) {

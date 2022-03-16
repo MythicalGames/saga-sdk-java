@@ -1,7 +1,7 @@
 package games.mythical.saga.sdk.client.model;
 
+import games.mythical.proto_util.ProtoUtil;
 import games.mythical.saga.sdk.proto.api.myth.GasFeeProto;
-import games.mythical.shared.util.ProtoUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
