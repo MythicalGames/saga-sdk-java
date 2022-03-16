@@ -12,7 +12,7 @@ import games.mythical.saga.sdk.proto.api.item.*;
 import games.mythical.saga.sdk.proto.common.Finalized;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.item.ItemStreamGrpc;
-import games.mythical.sga.sdk.proto.common.FilterConditional;
+import games.mythical.saga.sdk.proto.common.FilterConditional;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;

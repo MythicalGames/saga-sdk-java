@@ -1,8 +1,8 @@
 package games.mythical.saga.sdk.client.model.query;
 
 import games.mythical.saga.sdk.proto.common.SortOrder;
-import games.mythical.sga.sdk.proto.common.FilterConditional;
-import games.mythical.sga.sdk.proto.common.QueryOptionsProto;
+import games.mythical.saga.sdk.proto.common.FilterConditional;
+import games.mythical.saga.sdk.proto.common.QueryOptionsProto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
