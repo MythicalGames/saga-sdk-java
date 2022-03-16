@@ -4,9 +4,10 @@ import games.mythical.saga.sdk.client.executor.MockBridgeExecutor;
 import games.mythical.saga.sdk.proto.api.bridge.BridgeProto;
 import games.mythical.saga.sdk.proto.api.bridge.BridgeServiceGrpc;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
+import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.bridge.BridgeStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
-import games.mythical.saga.sdk.server.stream.MockBridgeStreamingImpl;
+import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -38,7 +39,7 @@ class SagaBridgeClientTest extends AbstractClientTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        bridgeServer = new MockServer(new MockBridgeStreamingImpl());
+        bridgeServer = new MockServer(new MockStatusStreamingImpl());
         bridgeServer.start();
         port = bridgeServer.getPort();
 
@@ -99,18 +100,19 @@ class SagaBridgeClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        var statusUpdate = BridgeStatusUpdate.newBuilder()
-                .setTraceId(expectedResponse.getTraceId())
-                .setOauthId(OAUTH_ID)
-                .setGameItemTypeId(RandomStringUtils.randomAlphanumeric(30))
-                .setGameInventoryId(RandomStringUtils.randomAlphanumeric(30))
-                .setDestinationAddress(RandomStringUtils.randomAlphanumeric(30))
-                .setDestinationChain(RandomStringUtils.randomAlphanumeric(30))
-                .setOriginAddress(RandomStringUtils.randomAlphanumeric(30))
-                .setMythicalTransactionId(RandomStringUtils.randomAlphanumeric(30))
-                .setMainnetTransactionId(RandomStringUtils.randomAlphanumeric(30))
+        var statusUpdate = StatusUpdate.newBuilder()
+                .setTraceId(executor.getTraceId())
+                .setBridgeStatus(BridgeStatusUpdate.newBuilder()
+                        .setOauthId(OAUTH_ID)
+                        .setGameItemTypeId(RandomStringUtils.randomAlphanumeric(30))
+                        .setGameInventoryId(RandomStringUtils.randomAlphanumeric(30))
+                        .setDestinationAddress(RandomStringUtils.randomAlphanumeric(30))
+                        .setDestinationChain(RandomStringUtils.randomAlphanumeric(30))
+                        .setOriginAddress(RandomStringUtils.randomAlphanumeric(30))
+                        .setMythicalTransactionId(RandomStringUtils.randomAlphanumeric(30))
+                        .setMainnetTransactionId(RandomStringUtils.randomAlphanumeric(30)))
                 .build();
-        bridgeServer.getBridgeStream().sendStatus(titleId, statusUpdate);
+        bridgeServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
 
@@ -118,7 +120,7 @@ class SagaBridgeClientTest extends AbstractClientTest {
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        bridgeServer.verifyCalls("BridgeStatusStream", 1);
-        bridgeServer.verifyCalls("BridgeStatusConfirmation", 1);
+        bridgeServer.verifyCalls("StatusStream", 1);
+        bridgeServer.verifyCalls("StatusConfirmation", 1);
     }
 }

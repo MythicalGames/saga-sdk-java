@@ -5,9 +5,10 @@ import games.mythical.saga.sdk.proto.api.gamecoin.GameCoinProto;
 import games.mythical.saga.sdk.proto.api.gamecoin.GameCoinServiceGrpc;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.gamecoin.GameCoinState;
+import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.gamecoin.GameCoinStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
-import games.mythical.saga.sdk.server.stream.MockGameCoinStreamingImpl;
+import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -43,7 +44,7 @@ class SagaGameCoinClientTest extends AbstractClientTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        gameCoinServer = new MockServer(new MockGameCoinStreamingImpl());
+        gameCoinServer = new MockServer(new MockStatusStreamingImpl());
         gameCoinServer.start();
         port = gameCoinServer.getPort();
 
@@ -102,11 +103,12 @@ class SagaGameCoinClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        gameCoinServer.getGameCoinStream().sendStatus(titleId, GameCoinStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
-                .setCurrencyId(CURRENCY_ID)
+        gameCoinServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setGameCoinState(GameCoinState.ISSUED)
+                .setGameCoinStatus(GameCoinStatusUpdate.newBuilder()
+                        .setOauthId(OAUTH_ID)
+                        .setCurrencyId(CURRENCY_ID)
+                        .setGameCoinState(GameCoinState.ISSUED))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -116,8 +118,8 @@ class SagaGameCoinClientTest extends AbstractClientTest {
         assertEquals(GameCoinState.ISSUED, executor.getGameCoinState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        gameCoinServer.verifyCalls("GameCoinStatusStream", 1);
-        gameCoinServer.verifyCalls("GameCoinStatusConfirmation", 1);
+        gameCoinServer.verifyCalls("StatusStream", 1);
+        gameCoinServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -140,11 +142,12 @@ class SagaGameCoinClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        gameCoinServer.getGameCoinStream().sendStatus(titleId, GameCoinStatusUpdate.newBuilder()
-                .setOauthId(DEST)
-                .setCurrencyId(CURRENCY_ID)
+        gameCoinServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setGameCoinState(GameCoinState.TRANSFERRED)
+                .setGameCoinStatus(GameCoinStatusUpdate.newBuilder()
+                        .setOauthId(DEST)
+                        .setCurrencyId(CURRENCY_ID)
+                        .setGameCoinState(GameCoinState.TRANSFERRED))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -154,8 +157,8 @@ class SagaGameCoinClientTest extends AbstractClientTest {
         assertEquals(GameCoinState.TRANSFERRED, executor.getGameCoinState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        gameCoinServer.verifyCalls("GameCoinStatusStream", 1);
-        gameCoinServer.verifyCalls("GameCoinStatusConfirmation", 1);
+        gameCoinServer.verifyCalls("StatusStream", 1);
+        gameCoinServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -175,11 +178,12 @@ class SagaGameCoinClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        gameCoinServer.getGameCoinStream().sendStatus(titleId, GameCoinStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
-                .setCurrencyId(CURRENCY_ID)
+        gameCoinServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setGameCoinState(GameCoinState.ISSUED)
+                .setGameCoinStatus(GameCoinStatusUpdate.newBuilder()
+                        .setOauthId(OAUTH_ID)
+                        .setCurrencyId(CURRENCY_ID)
+                        .setGameCoinState(GameCoinState.BURNED))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -188,7 +192,7 @@ class SagaGameCoinClientTest extends AbstractClientTest {
         assertEquals(GameCoinState.BURNED, executor.getGameCoinState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        gameCoinServer.verifyCalls("GameCoinStatusStream", 1);
-        gameCoinServer.verifyCalls("GameCoinStatusConfirmation", 1);
+        gameCoinServer.verifyCalls("StatusStream", 1);
+        gameCoinServer.verifyCalls("StatusConfirmation", 1);
     }
 }

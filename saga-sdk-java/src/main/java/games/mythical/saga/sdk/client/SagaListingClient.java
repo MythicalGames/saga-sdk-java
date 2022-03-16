@@ -4,13 +4,13 @@ import games.mythical.saga.sdk.client.executor.SagaListingExecutor;
 import games.mythical.saga.sdk.client.model.SagaListing;
 import games.mythical.saga.sdk.client.model.SagaListingQuote;
 import games.mythical.saga.sdk.client.model.query.QueryOptions;
-import games.mythical.saga.sdk.client.observer.SagaListingObserver;
+import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.listing.*;
+import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
-import games.mythical.saga.sdk.proto.streams.listing.ListingStreamGrpc;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -32,21 +32,22 @@ public class SagaListingClient extends AbstractSagaClient {
     }
 
     @Override
-    void initStub() {
+    void initStub() throws SagaException {
         serviceBlockingStub = ListingServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
-        var streamBlockingStub = ListingStreamGrpc.newBlockingStub(channel)
+        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
                 .withCallCredentials(addAuthentication());
-        subscribeToStream(new SagaListingObserver(config, executor, streamBlockingStub, this::subscribeToStream));
+        subscribeToStream(new SagaStatusUpdateObserver(streamBlockingStub, this::subscribeToStream)
+                .with(executor));
     }
 
-    void subscribeToStream(SagaListingObserver observer) {
+    void subscribeToStream(SagaStatusUpdateObserver observer) {
         // set up server stream
-        var streamStub = ListingStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
+        var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
         var subscribe = Subscribe.newBuilder()
                 .setTitleId(config.getTitleId())
                 .build();
 
-        streamStub.listingStatusStream(subscribe, observer);
+        streamStub.statusStream(subscribe, observer);
     }
 
     public Optional<SagaListingQuote> createListingQuote(String oauthId,

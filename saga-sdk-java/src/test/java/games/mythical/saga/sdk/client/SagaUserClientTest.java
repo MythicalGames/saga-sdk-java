@@ -6,9 +6,10 @@ import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.proto.api.user.*;
 import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.proto.common.user.UserState;
+import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.user.UserStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
-import games.mythical.saga.sdk.server.stream.MockUserStreamingImpl;
+import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -42,7 +43,7 @@ class SagaUserClientTest extends AbstractClientTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        userServer = new MockServer(new MockUserStreamingImpl());
+        userServer = new MockServer(new MockStatusStreamingImpl());
         userServer.start();
         port = userServer.getPort();
 
@@ -133,10 +134,11 @@ class SagaUserClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        userServer.getUserStream().sendStatus(titleId, UserStatusUpdate.newBuilder()
-                .setOauthId(executor.getOauthId())
+        userServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setUserState(UserState.FAILED)
+                .setUserStatus(UserStatusUpdate.newBuilder()
+                        .setOauthId(executor.getOauthId())
+                        .setUserState(UserState.FAILED))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -147,8 +149,8 @@ class SagaUserClientTest extends AbstractClientTest {
         assertEquals(expectedResponse.getTraceId(), user.getTraceId());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        userServer.verifyCalls("UserStatusStream", 1);
-        userServer.verifyCalls("UserStatusConfirmation", 1);
+        userServer.verifyCalls("StatusStream", 1);
+        userServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test

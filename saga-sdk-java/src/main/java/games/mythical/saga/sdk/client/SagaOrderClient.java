@@ -2,7 +2,7 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaOrderExecutor;
 import games.mythical.saga.sdk.client.model.SagaOrderQuote;
-import games.mythical.saga.sdk.client.observer.SagaOrderObserver;
+import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
@@ -10,8 +10,8 @@ import games.mythical.saga.sdk.proto.api.order.ConfirmOrderRequest;
 import games.mythical.saga.sdk.proto.api.order.CreateOrderQuoteRequest;
 import games.mythical.saga.sdk.proto.api.order.OrderServiceGrpc;
 import games.mythical.saga.sdk.proto.api.order.PaymentProviderData;
+import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
-import games.mythical.saga.sdk.proto.streams.order.OrderStreamGrpc;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -32,21 +32,22 @@ public class SagaOrderClient extends AbstractSagaClient {
     }
 
     @Override
-    void initStub() {
+    void initStub() throws SagaException {
         serviceBlockingStub = OrderServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
-        var streamBlockingStub = OrderStreamGrpc.newBlockingStub(channel)
+        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
                 .withCallCredentials(addAuthentication());
-        subscribeToStream(new SagaOrderObserver(config, executor, streamBlockingStub, this::subscribeToStream));
+        subscribeToStream(new SagaStatusUpdateObserver(streamBlockingStub, this::subscribeToStream)
+                .with(executor));
     }
 
-    void subscribeToStream(SagaOrderObserver observer) {
+    void subscribeToStream(SagaStatusUpdateObserver observer) {
         // set up server stream
-        var streamStub = OrderStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
+        var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
         var subscribe = Subscribe.newBuilder()
                 .setTitleId(config.getTitleId())
                 .build();
 
-        streamStub.orderStatusStream(subscribe, observer);
+        streamStub.statusStream(subscribe, observer);
     }
 
     public Optional<SagaOrderQuote> createQuote(String oauthId,

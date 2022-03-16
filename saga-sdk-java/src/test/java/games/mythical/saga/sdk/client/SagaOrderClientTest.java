@@ -4,9 +4,10 @@ import games.mythical.saga.sdk.client.executor.MockOrderExecutor;
 import games.mythical.saga.sdk.proto.api.order.*;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.order.OrderState;
+import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.order.OrderStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
-import games.mythical.saga.sdk.server.stream.MockOrderStreamingImpl;
+import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -43,7 +44,7 @@ class SagaOrderClientTest extends AbstractClientTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        orderServer = new MockServer(new MockOrderStreamingImpl());
+        orderServer = new MockServer(new MockStatusStreamingImpl());
         orderServer.start();
         port = orderServer.getPort();
 
@@ -133,15 +134,16 @@ class SagaOrderClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        var statusUpdate = OrderStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
+        var statusUpdate = StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setQuoteId(QUOTE_ID)
-                .setOrderId(QUOTE_ID)
-                .setTotal(String.valueOf(RandomUtils.nextInt(1, 1000)))
-                .setOrderState(OrderState.COMPLETE)
+                .setOrderStatus(OrderStatusUpdate.newBuilder()
+                        .setOauthId(OAUTH_ID)
+                        .setQuoteId(QUOTE_ID)
+                        .setOrderId(QUOTE_ID)
+                        .setTotal(String.valueOf(RandomUtils.nextInt(1, 1000)))
+                        .setOrderState(OrderState.COMPLETE))
                 .build();
-        orderServer.getOrderStream().sendStatus(titleId, statusUpdate);
+        orderServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
 
@@ -151,7 +153,7 @@ class SagaOrderClientTest extends AbstractClientTest {
         assertEquals(OrderState.COMPLETE, executor.getOrderState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        orderServer.verifyCalls("OrderStatusStream", 1);
-        orderServer.verifyCalls("OrderStatusConfirmation", 1);
+        orderServer.verifyCalls("StatusStream", 1);
+        orderServer.verifyCalls("StatusConfirmation", 1);
     }
 }

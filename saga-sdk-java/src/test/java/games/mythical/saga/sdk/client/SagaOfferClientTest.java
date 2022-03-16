@@ -7,9 +7,10 @@ import games.mythical.saga.sdk.proto.api.offer.OfferServiceGrpc;
 import games.mythical.saga.sdk.proto.api.offer.OffersProto;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.offer.OfferState;
+import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.offer.OfferStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
-import games.mythical.saga.sdk.server.stream.MockOfferStreamingImpl;
+import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -46,7 +47,7 @@ class SagaOfferClientTest extends AbstractClientTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        offerServer = new MockServer(new MockOfferStreamingImpl());
+        offerServer = new MockServer(new MockStatusStreamingImpl());
         offerServer.start();
         port = offerServer.getPort();
 
@@ -112,15 +113,16 @@ class SagaOfferClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        var statusUpdate = OfferStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
+        var statusUpdate = StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setQuoteId(QUOTE_ID)
-                .setOfferId(QUOTE_ID)
-                .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setOfferState(OfferState.CREATED)
+                .setOfferStatus(OfferStatusUpdate.newBuilder()
+                        .setOauthId(OAUTH_ID)
+                        .setQuoteId(QUOTE_ID)
+                        .setOfferId(QUOTE_ID)
+                        .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
+                        .setOfferState(OfferState.CREATED))
                 .build();
-        offerServer.getOfferStream().sendStatus(titleId, statusUpdate);
+        offerServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
 
@@ -130,8 +132,8 @@ class SagaOfferClientTest extends AbstractClientTest {
         assertEquals(OfferState.CREATED, executor.getOfferState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        offerServer.verifyCalls("OfferStatusStream", 1);
-        offerServer.verifyCalls("OfferStatusConfirmation", 1);
+        offerServer.verifyCalls("StatusStream", 1);
+        offerServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -153,15 +155,16 @@ class SagaOfferClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        var statusUpdate = OfferStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
+        var statusUpdate = StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setQuoteId(OFFER_ID)
-                .setOfferId(OFFER_ID)
-                .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setOfferState(OfferState.CANCELLED)
+                .setOfferStatus(OfferStatusUpdate.newBuilder()
+                        .setOauthId(OAUTH_ID)
+                        .setQuoteId(OFFER_ID)
+                        .setOfferId(OFFER_ID)
+                        .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
+                        .setOfferState(OfferState.CANCELLED))
                 .build();
-        offerServer.getOfferStream().sendStatus(titleId, statusUpdate);
+        offerServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
 
@@ -171,8 +174,8 @@ class SagaOfferClientTest extends AbstractClientTest {
         assertEquals(OfferState.CANCELLED, executor.getOfferState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        offerServer.verifyCalls("OfferStatusStream", 1);
-        offerServer.verifyCalls("OfferStatusConfirmation", 1);
+        offerServer.verifyCalls("StatusStream", 1);
+        offerServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test

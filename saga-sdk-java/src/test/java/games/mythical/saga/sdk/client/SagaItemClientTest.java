@@ -7,9 +7,10 @@ import games.mythical.saga.sdk.proto.api.item.ItemServiceGrpc;
 import games.mythical.saga.sdk.proto.api.item.UpdateItemsMetadataResponse;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.item.ItemState;
+import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
-import games.mythical.saga.sdk.server.stream.MockItemStreamingImpl;
+import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -44,7 +45,7 @@ class SagaItemClientTest extends AbstractClientTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        itemServer = new MockServer(new MockItemStreamingImpl());
+        itemServer = new MockServer(new MockStatusStreamingImpl());
         itemServer.start();
         port = itemServer.getPort();
 
@@ -115,11 +116,12 @@ class SagaItemClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        itemServer.getItemStream().sendStatus(titleId, ItemStatusUpdate.newBuilder()
-                .setGameInventoryId(GAME_INVENTORY_ID)
-                .setOauthId(EXPECTED_OAUTH_ID)
+        itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setItemState(ItemState.ISSUED)
+                .setItemStatus(ItemStatusUpdate.newBuilder()
+                        .setGameInventoryId(GAME_INVENTORY_ID)
+                        .setOauthId(EXPECTED_OAUTH_ID)
+                        .setItemState(ItemState.ISSUED))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -129,8 +131,8 @@ class SagaItemClientTest extends AbstractClientTest {
         assertEquals(ItemState.ISSUED, executor.getItemState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        itemServer.verifyCalls("ItemStatusStream", 1);
-        itemServer.verifyCalls("ItemStatusConfirmation", 1);
+        itemServer.verifyCalls("StatusStream", 1);
+        itemServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -153,11 +155,12 @@ class SagaItemClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        itemServer.getItemStream().sendStatus(titleId, ItemStatusUpdate.newBuilder()
-                .setGameInventoryId(GAME_INVENTORY_ID)
-                .setOauthId(DEST)
+        itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setItemState(ItemState.TRANSFERRED)
+                .setItemStatus(ItemStatusUpdate.newBuilder()
+                        .setGameInventoryId(GAME_INVENTORY_ID)
+                        .setOauthId(DEST)
+                        .setItemState(ItemState.TRANSFERRED))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -167,8 +170,8 @@ class SagaItemClientTest extends AbstractClientTest {
         assertEquals(ItemState.TRANSFERRED, executor.getItemState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        itemServer.verifyCalls("ItemStatusStream", 1);
-        itemServer.verifyCalls("ItemStatusConfirmation", 1);
+        itemServer.verifyCalls("StatusStream", 1);
+        itemServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -188,11 +191,12 @@ class SagaItemClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        itemServer.getItemStream().sendStatus(titleId, ItemStatusUpdate.newBuilder()
-                .setGameInventoryId(GAME_INVENTORY_ID)
-                .setOauthId(RandomStringUtils.randomAlphanumeric(30))
+        itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setItemState(ItemState.BURNED)
+                .setItemStatus(ItemStatusUpdate.newBuilder()
+                        .setGameInventoryId(GAME_INVENTORY_ID)
+                        .setOauthId(RandomStringUtils.randomAlphanumeric(30))
+                        .setItemState(ItemState.BURNED))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -201,8 +205,8 @@ class SagaItemClientTest extends AbstractClientTest {
         assertEquals(ItemState.BURNED, executor.getItemState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        itemServer.verifyCalls("ItemStatusStream", 1);
-        itemServer.verifyCalls("ItemStatusConfirmation", 1);
+        itemServer.verifyCalls("StatusStream", 1);
+        itemServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test

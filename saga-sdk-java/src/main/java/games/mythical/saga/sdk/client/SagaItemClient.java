@@ -4,15 +4,15 @@ import games.mythical.saga.sdk.client.executor.SagaItemExecutor;
 import games.mythical.saga.sdk.client.model.SagaItem;
 import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.client.model.query.QueryOptions;
-import games.mythical.saga.sdk.client.observer.SagaItemObserver;
+import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.item.*;
-import games.mythical.saga.sdk.proto.common.Finalized;
-import games.mythical.saga.sdk.proto.streams.Subscribe;
-import games.mythical.saga.sdk.proto.streams.item.ItemStreamGrpc;
 import games.mythical.saga.sdk.proto.common.FilterConditional;
+import games.mythical.saga.sdk.proto.common.Finalized;
+import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
+import games.mythical.saga.sdk.proto.streams.Subscribe;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -34,21 +34,22 @@ public class SagaItemClient extends AbstractSagaClient {
     }
 
     @Override
-    void initStub() {
+    void initStub() throws SagaException {
         serviceBlockingStub = ItemServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
-        var streamBlockingStub = ItemStreamGrpc.newBlockingStub(channel)
+        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
                 .withCallCredentials(addAuthentication());
-        subscribeToStream(new SagaItemObserver(config, executor, streamBlockingStub, this::subscribeToStream));
+        subscribeToStream(new SagaStatusUpdateObserver(streamBlockingStub, this::subscribeToStream)
+                .with(executor));
     }
 
-    void subscribeToStream(SagaItemObserver observer) {
+    void subscribeToStream(SagaStatusUpdateObserver observer) {
         // set up server stream
-        var streamStub = ItemStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
+        var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
         var subscribe = Subscribe.newBuilder()
                 .setTitleId(config.getTitleId())
                 .build();
 
-        streamStub.itemStatusStream(subscribe, observer);
+        streamStub.statusStream(subscribe, observer);
     }
 
     public Optional<SagaItem> getItem(String gameInventoryId, boolean history) throws SagaException {
