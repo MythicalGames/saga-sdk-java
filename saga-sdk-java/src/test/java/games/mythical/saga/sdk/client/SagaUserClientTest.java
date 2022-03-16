@@ -3,9 +3,7 @@ package games.mythical.saga.sdk.client;
 import games.mythical.saga.sdk.client.executor.MockUserExecutor;
 import games.mythical.saga.sdk.client.model.query.Filter;
 import games.mythical.saga.sdk.client.model.query.QueryOptions;
-import games.mythical.saga.sdk.proto.api.user.UserProto;
-import games.mythical.saga.sdk.proto.api.user.UserServiceGrpc;
-import games.mythical.saga.sdk.proto.api.user.UsersProto;
+import games.mythical.saga.sdk.proto.api.user.*;
 import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.proto.common.user.UserState;
 import games.mythical.saga.sdk.server.MockServer;
@@ -149,5 +147,27 @@ class SagaUserClientTest extends AbstractClientTest {
 
         userServer.verifyCalls("UserStatusStream", 1);
         userServer.verifyCalls("UserStatusConfirmation", 1);
+    }
+
+    @Test
+    public void getWalletAssets() throws Exception {
+        var expectedResponse = WalletAsset.newBuilder()
+                .setAusdToken("AUSD")
+                .setAusdTokenQuantity("100")
+                .setNmythToken("MYTH")
+                .setNmythTokenQuantity("200")
+                .addNftItems(NftItem.newBuilder()
+                        .setContractAddress("player1")
+                        .build())
+                .addFungibleTokens(FungibleToken.newBuilder()
+                        .setContractAddress("player1")
+                        .build())
+                .build();
+        when(mockServiceBlockingStub.getWalletAssets((any()))).thenReturn(expectedResponse);
+        var response = userClient.getWalletAssets(OAUTH_ID, "1234", "asdf", titleId);
+
+        assertTrue(response.isPresent());
+        var walletAsset = response.get();
+        compareObjectsByReflection(expectedResponse, walletAsset, null);
     }
 }

@@ -1,7 +1,7 @@
 package games.mythical.saga.sdk.client.model.query;
 
-import games.mythical.sga.sdk.proto.common.FilterConditional;
-import games.mythical.sga.sdk.proto.common.FilterOperation;
+import games.mythical.saga.sdk.proto.common.FilterConditional;
+import games.mythical.saga.sdk.proto.common.FilterOperation;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

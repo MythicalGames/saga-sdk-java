@@ -1,7 +1,7 @@
 package games.mythical.saga.sdk.client.model.query;
 
-import games.mythical.sga.sdk.proto.common.ExpressionProto;
-import games.mythical.sga.sdk.proto.common.FilterConditional;
+import games.mythical.saga.sdk.proto.common.ExpressionProto;
+import games.mythical.saga.sdk.proto.common.FilterConditional;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 

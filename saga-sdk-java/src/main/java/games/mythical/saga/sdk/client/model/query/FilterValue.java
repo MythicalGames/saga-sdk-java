@@ -1,6 +1,6 @@
 package games.mythical.saga.sdk.client.model.query;
 
-import games.mythical.sga.sdk.proto.common.FilterValueProto;
+import games.mythical.saga.sdk.proto.common.FilterValueProto;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

@@ -2,15 +2,13 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaUserExecutor;
 import games.mythical.saga.sdk.client.model.SagaUser;
+import games.mythical.saga.sdk.client.model.SagaWalletAsset;
 import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.client.observer.SagaUserObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.proto.api.user.GetUserRequest;
-import games.mythical.saga.sdk.proto.api.user.GetUsersRequest;
-import games.mythical.saga.sdk.proto.api.user.UpdateUserRequest;
-import games.mythical.saga.sdk.proto.api.user.UserServiceGrpc;
+import games.mythical.saga.sdk.proto.api.user.*;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.user.UserStreamGrpc;
 import io.grpc.Status;
@@ -100,6 +98,29 @@ public class SagaUserClient extends AbstractSagaClient {
         } catch (Exception e) {
             log.error("Exception calling updateItemState on issueItem, item will be in an invalid state!", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
+        }
+    }
+
+    public Optional<SagaWalletAsset> getWalletAssets(String oauthId,
+                                                     String publisherId,
+                                                     String partnerId,
+                                                     String titleId) throws SagaException {
+        var request = GetWalletAssetsRequest.newBuilder()
+                .setOauthId(oauthId)
+                .setPublisherId(publisherId)
+                .setPartnerId(partnerId)
+                .setTitleId(titleId)
+                .build();
+
+        try {
+            var response = serviceBlockingStub.getWalletAssets(request);
+            return Optional.of(SagaWalletAsset.fromProto(response));
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus() == Status.NOT_FOUND) {
+                return Optional.empty();
+            }
+
+            throw SagaException.fromGrpcException(e);
         }
     }
 }

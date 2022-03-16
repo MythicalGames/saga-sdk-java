@@ -11,7 +11,7 @@ import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.itemtype.*;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStreamGrpc;
-import games.mythical.sga.sdk.proto.common.FilterConditional;
+import games.mythical.saga.sdk.proto.common.FilterConditional;
 import io.grpc.Status;
 import io.grpc.StatusException;
 import io.grpc.StatusRuntimeException;

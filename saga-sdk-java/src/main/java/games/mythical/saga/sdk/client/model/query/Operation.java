@@ -1,6 +1,6 @@
 package games.mythical.saga.sdk.client.model.query;
 
-import games.mythical.sga.sdk.proto.common.FilterOperation;
+import games.mythical.saga.sdk.proto.common.FilterOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
