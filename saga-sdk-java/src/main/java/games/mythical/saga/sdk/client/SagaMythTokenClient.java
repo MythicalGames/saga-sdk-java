@@ -5,14 +5,14 @@ import games.mythical.saga.sdk.client.executor.SagaMythTokenExecutor;
 import games.mythical.saga.sdk.client.model.SagaCurrencyExchange;
 import games.mythical.saga.sdk.client.model.SagaGasFee;
 import games.mythical.saga.sdk.client.model.SagaMythToken;
-import games.mythical.saga.sdk.client.observer.SagaMythTokenObserver;
+import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.myth.*;
 import games.mythical.saga.sdk.proto.api.payments.CardPaymentData;
+import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
-import games.mythical.saga.sdk.proto.streams.myth.MythTokenStreamGrpc;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,31 +21,35 @@ import java.util.Optional;
 
 @Slf4j
 public class SagaMythTokenClient extends AbstractSagaClient {
-    private final SagaMythTokenExecutor sagaMythTokenExecutor;
+    private final SagaMythTokenExecutor executor;
     private MythServiceGrpc.MythServiceBlockingStub serviceBlockingStub;
 
-    SagaMythTokenClient(SagaSdkConfig config, SagaMythTokenExecutor sagaMythTokenExecutor) throws SagaException {
+    SagaMythTokenClient(SagaSdkConfig config, SagaMythTokenExecutor executor) throws SagaException {
         super(config);
-        this.sagaMythTokenExecutor = sagaMythTokenExecutor;
+        this.executor = executor;
         initStub();
     }
 
     @Override
     void initStub() {
         serviceBlockingStub = MythServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
-        var streamBlockingStub = MythTokenStreamGrpc.newBlockingStub(channel)
+        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
                 .withCallCredentials(addAuthentication());
-        subscribeToStream(new SagaMythTokenObserver(sagaMythTokenExecutor, streamBlockingStub, this::subscribeToStream));
+
+        if (SagaStatusUpdateObserver.getInstance() == null) {
+            subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
+        }
+        SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    void subscribeToStream(SagaMythTokenObserver observer) {
+    void subscribeToStream(SagaStatusUpdateObserver observer) {
         // set up server stream
-        var streamStub = MythTokenStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
+        var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
         var subscribe = Subscribe.newBuilder()
                 .setTitleId(config.getTitleId())
                 .build();
 
-        streamStub.mythTokenStatusStream(subscribe, observer);
+        streamStub.statusStream(subscribe, observer);
     }
 
     public Optional<SagaGasFee> getGasFee() {
@@ -88,7 +92,7 @@ public class SagaMythTokenClient extends AbstractSagaClient {
 
         try {
             var receivedResponse = serviceBlockingStub.confirmBuyingMythToken(request);
-            sagaMythTokenExecutor.emitReceived(receivedResponse.getTraceId());
+            executor.emitReceived(receivedResponse.getTraceId());
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
@@ -117,7 +121,7 @@ public class SagaMythTokenClient extends AbstractSagaClient {
 
         try {
             var receivedResponse = serviceBlockingStub.confirmMythTokenWithdrawal(request);
-            sagaMythTokenExecutor.emitReceived(receivedResponse.getTraceId());
+            executor.emitReceived(receivedResponse.getTraceId());
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {

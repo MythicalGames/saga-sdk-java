@@ -1,6 +1,7 @@
 package games.mythical.saga.sdk.client;
 
 import com.google.common.net.HttpHeaders;
+import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.Constants;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaException;
@@ -45,6 +46,7 @@ public abstract class AbstractSagaClient {
 
     public void stop() {
         log.info("Stopping client: {}", this.getClass().getName());
+        SagaStatusUpdateObserver.clear();
         channel.shutdownNow();
     }
 

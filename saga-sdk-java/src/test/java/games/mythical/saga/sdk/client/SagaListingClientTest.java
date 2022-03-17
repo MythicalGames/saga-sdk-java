@@ -7,8 +7,10 @@ import games.mythical.saga.sdk.proto.api.listing.ListingServiceGrpc;
 import games.mythical.saga.sdk.proto.api.listing.ListingsProto;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.listing.ListingState;
+import games.mythical.saga.sdk.proto.streams.StatusUpdate;
+import games.mythical.saga.sdk.proto.streams.listing.ListingStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
-import games.mythical.saga.sdk.server.stream.MockListingStreamingImpl;
+import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -45,7 +47,7 @@ class SagaListingClientTest extends AbstractClientTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        listingServer = new MockServer(new MockListingStreamingImpl());
+        listingServer = new MockServer(new MockStatusStreamingImpl());
         listingServer.start();
         port = listingServer.getPort();
 
@@ -111,18 +113,16 @@ class SagaListingClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        var statusUpdate = ListingQuoteProto.newBuilder()
-                .setTraceId(expectedResponse.getTraceId())
-                .setOauthId(OAUTH_ID)
-                .setQuoteId(QUOTE_ID)
-                .setGameInventoryId(RandomStringUtils.randomAlphanumeric(30))
-                .setTax(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setTaxCurrency(CURRENCY)
-                .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setCurrency(CURRENCY)
-                .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
+        var statusUpdate = StatusUpdate.newBuilder()
+                .setTraceId(executor.getTraceId())
+                .setListingStatus(ListingStatusUpdate.newBuilder()
+                        .setOauthId(OAUTH_ID)
+                        .setQuoteId(QUOTE_ID)
+                        .setListingId(QUOTE_ID)
+                        .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
+                        .setListingState(ListingState.CREATED))
                 .build();
-        listingServer.getListingStream().sendStatus(titleId, statusUpdate, ListingState.CREATED);
+        listingServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
 
@@ -132,8 +132,8 @@ class SagaListingClientTest extends AbstractClientTest {
         assertEquals(ListingState.CREATED, executor.getListingState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        listingServer.verifyCalls("ListingStatusStream", 1);
-        listingServer.verifyCalls("ListingStatusConfirmation", 1);
+        listingServer.verifyCalls("StatusStream", 1);
+        listingServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -155,18 +155,17 @@ class SagaListingClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        var statusUpdate = ListingQuoteProto.newBuilder()
-                .setTraceId(expectedResponse.getTraceId())
-                .setOauthId(OAUTH_ID)
-                .setQuoteId(LISTING_ID)
-                .setGameInventoryId(RandomStringUtils.randomAlphanumeric(30))
-                .setTax(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setTaxCurrency(CURRENCY)
-                .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setCurrency(CURRENCY)
-                .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
+        var statusUpdate = StatusUpdate.newBuilder()
+                .setTraceId(executor.getTraceId())
+                .setListingStatus(ListingStatusUpdate.newBuilder()
+                        .setOauthId(OAUTH_ID)
+                        .setTraceId(executor.getTraceId())
+                        .setQuoteId(LISTING_ID)
+                        .setListingId(LISTING_ID)
+                        .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
+                        .setListingState(ListingState.CANCELLED))
                 .build();
-        listingServer.getListingStream().sendStatus(titleId, statusUpdate, ListingState.CANCELLED);
+        listingServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
 
@@ -176,8 +175,8 @@ class SagaListingClientTest extends AbstractClientTest {
         assertEquals(ListingState.CANCELLED, executor.getListingState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        listingServer.verifyCalls("ListingStatusStream", 1);
-        listingServer.verifyCalls("ListingStatusConfirmation", 1);
+        listingServer.verifyCalls("StatusStream", 1);
+        listingServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test

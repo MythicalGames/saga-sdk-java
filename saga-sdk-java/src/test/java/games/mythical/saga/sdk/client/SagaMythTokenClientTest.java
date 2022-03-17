@@ -6,12 +6,14 @@ import games.mythical.saga.sdk.proto.api.payments.CardPaymentData;
 import games.mythical.saga.sdk.proto.api.payments.CybersourcePaymentData;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.myth.MythTokenState;
+import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.myth.MythTokenStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
-import games.mythical.saga.sdk.server.stream.MockMythTokenStreamingImpl;
+import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -45,13 +47,22 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
 
     @BeforeEach
     void setup() throws Exception {
-        mythTokenServer = new MockServer(new MockMythTokenStreamingImpl());
+        mythTokenServer = new MockServer(new MockStatusStreamingImpl());
         mythTokenServer.start();
         port = mythTokenServer.getPort();
 
         mythTokenClient = setUpFactory().createSagaMythTokenClient(executor);
         // mocking the service blocking stub clients are connected to
         FieldUtils.writeField(mythTokenClient, "serviceBlockingStub", mockServiceBlockingStub, true);
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        mythTokenClient.stop();
+        // client shutdown is not immediate
+        Thread.sleep(500);
+
+        mythTokenServer.stop();
     }
 
     @Test
@@ -120,17 +131,19 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        mythTokenServer.getMythTokenStream().sendStatus(config.getTitleId(), MythTokenStatusUpdate.newBuilder()
+        mythTokenServer.getStatusStream().sendStatus(config.getTitleId(), StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .build(), MythTokenState.TRANSFERRED);
+                .setMythTokenStatus(MythTokenStatusUpdate.newBuilder()
+                        .setTokenState(MythTokenState.TRANSFERRED))
+                .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertEquals(MythTokenState.TRANSFERRED, executor.getTokenState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        mythTokenServer.verifyCalls("MythTokenStatusStream", 1);
-        mythTokenServer.verifyCalls("MythTokenStatusConfirmation", 1);
+        mythTokenServer.verifyCalls("StatusStream", 1);
+        mythTokenServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -162,16 +175,18 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        mythTokenServer.getMythTokenStream().sendStatus(config.getTitleId(), MythTokenStatusUpdate.newBuilder()
+        mythTokenServer.getStatusStream().sendStatus(config.getTitleId(), StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .build(), MythTokenState.WITHDRAWN);
+                .setMythTokenStatus(MythTokenStatusUpdate.newBuilder()
+                        .setTokenState(MythTokenState.WITHDRAWN))
+                .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertEquals(MythTokenState.WITHDRAWN, executor.getTokenState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        mythTokenServer.verifyCalls("MythTokenStatusStream", 1);
-        mythTokenServer.verifyCalls("MythTokenStatusConfirmation", 1);
+        mythTokenServer.verifyCalls("StatusStream", 1);
+        mythTokenServer.verifyCalls("StatusConfirmation", 1);
     }
 }

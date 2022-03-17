@@ -6,8 +6,10 @@ import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.proto.api.itemtype.*;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
+import games.mythical.saga.sdk.proto.streams.StatusUpdate;
+import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStatusUpdate;
 import games.mythical.saga.sdk.server.MockServer;
-import games.mythical.saga.sdk.server.stream.MockItemTypeStreamingImpl;
+import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -42,7 +44,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        itemTypeServer = new MockServer(new MockItemTypeStreamingImpl());
+        itemTypeServer = new MockServer(new MockStatusStreamingImpl());
         itemTypeServer.start();
         port = itemTypeServer.getPort();
 
@@ -64,7 +66,6 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         var expectedResponse = ItemTypeProto.newBuilder()
                 .setGameItemTypeId(GAME_ITEM_TYPE_ID)
                 .setName(RandomStringUtils.randomAlphanumeric(30))
-                .setAddress(RandomStringUtils.randomAlphanumeric(30))
                 .setTitleId(RandomStringUtils.randomAlphanumeric(30))
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .setPriRevShareSettings(PriRevShareSettings.newBuilder().build())
@@ -110,10 +111,12 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
-        itemTypeServer.getItemTypeStream().sendStatus(titleId, ItemTypeProto.newBuilder()
-                .setGameItemTypeId(GAME_ITEM_TYPE_ID)
+        itemTypeServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .build(), ItemTypeState.CREATED);
+                .setItemTypeStatus(ItemTypeStatusUpdate.newBuilder()
+                        .setGameItemTypeId(GAME_ITEM_TYPE_ID)
+                        .setItemTypeState(ItemTypeState.CREATED))
+                .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
 
@@ -122,8 +125,8 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         assertEquals(ItemTypeState.CREATED, executor.getItemTypeState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
-        itemTypeServer.verifyCalls("ItemTypeStatusStream", 1);
-        itemTypeServer.verifyCalls("ItemTypeStatusConfirmation", 1);
+        itemTypeServer.verifyCalls("StatusStream", 1);
+        itemTypeServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test

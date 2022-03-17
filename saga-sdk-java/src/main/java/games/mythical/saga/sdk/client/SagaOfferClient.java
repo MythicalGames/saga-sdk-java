@@ -4,13 +4,13 @@ import games.mythical.saga.sdk.client.executor.SagaOfferExecutor;
 import games.mythical.saga.sdk.client.model.SagaOffer;
 import games.mythical.saga.sdk.client.model.SagaOfferQuote;
 import games.mythical.saga.sdk.client.model.query.QueryOptions;
-import games.mythical.saga.sdk.client.observer.SagaOfferObserver;
+import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.offer.*;
+import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
-import games.mythical.saga.sdk.proto.streams.offer.OfferStreamGrpc;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -34,19 +34,23 @@ public class SagaOfferClient extends AbstractSagaClient {
     @Override
     void initStub() {
         serviceBlockingStub = OfferServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
-        var streamBlockingStub = OfferStreamGrpc.newBlockingStub(channel)
+        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
                 .withCallCredentials(addAuthentication());
-        subscribeToStream(new SagaOfferObserver(config, executor, streamBlockingStub, this::subscribeToStream));
+
+        if (SagaStatusUpdateObserver.getInstance() == null) {
+            subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
+        }
+        SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    void subscribeToStream(SagaOfferObserver observer) {
+    void subscribeToStream(SagaStatusUpdateObserver observer) {
         // set up server stream
-        var streamStub = OfferStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
+        var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
         var subscribe = Subscribe.newBuilder()
                 .setTitleId(config.getTitleId())
                 .build();
 
-        streamStub.offerStatusStream(subscribe, observer);
+        streamStub.statusStream(subscribe, observer);
     }
 
     public Optional<SagaOfferQuote> createOfferQuote(String oauthId,

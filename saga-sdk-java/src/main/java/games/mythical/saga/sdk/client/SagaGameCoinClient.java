@@ -2,14 +2,14 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaGameCoinExecutor;
 import games.mythical.saga.sdk.client.model.SagaGameCoin;
-import games.mythical.saga.sdk.client.observer.SagaGameCoinObserver;
+import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.gamecoin.*;
 import games.mythical.saga.sdk.proto.common.SortOrder;
+import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
-import games.mythical.saga.sdk.proto.streams.gamecoin.GameCoinStreamGrpc;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -33,19 +33,23 @@ public class SagaGameCoinClient extends AbstractSagaClient {
     @Override
     void initStub() {
         serviceBlockingStub = GameCoinServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
-        var streamBlockingStub = GameCoinStreamGrpc.newBlockingStub(channel)
+        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
                 .withCallCredentials(addAuthentication());
-        subscribeToStream(new SagaGameCoinObserver(config, executor, streamBlockingStub, this::subscribeToStream));
+
+        if (SagaStatusUpdateObserver.getInstance() == null) {
+            subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
+        }
+        SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    void subscribeToStream(SagaGameCoinObserver observer) {
+    void subscribeToStream(SagaStatusUpdateObserver observer) {
         // set up server stream
-        var streamStub = GameCoinStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
+        var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
         var subscribe = Subscribe.newBuilder()
                 .setTitleId(config.getTitleId())
                 .build();
 
-        streamStub.gameCoinStatusStream(subscribe, observer);
+        streamStub.statusStream(subscribe, observer);
     }
 
     public Optional<SagaGameCoin> getGameCoin(String currencyId, String oauthId) throws SagaException {
