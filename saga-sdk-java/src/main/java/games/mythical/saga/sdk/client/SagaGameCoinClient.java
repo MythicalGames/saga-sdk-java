@@ -35,8 +35,11 @@ public class SagaGameCoinClient extends AbstractSagaClient {
         serviceBlockingStub = GameCoinServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
         var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
                 .withCallCredentials(addAuthentication());
-        subscribeToStream(new SagaStatusUpdateObserver(streamBlockingStub, this::subscribeToStream)
-                .with(executor));
+
+        if (SagaStatusUpdateObserver.getInstance() == null) {
+            subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
+        }
+        SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
     void subscribeToStream(SagaStatusUpdateObserver observer) {

@@ -36,8 +36,11 @@ public class SagaListingClient extends AbstractSagaClient {
         serviceBlockingStub = ListingServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
         var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
                 .withCallCredentials(addAuthentication());
-        subscribeToStream(new SagaStatusUpdateObserver(streamBlockingStub, this::subscribeToStream)
-                .with(executor));
+
+        if (SagaStatusUpdateObserver.getInstance() == null) {
+            subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
+        }
+        SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
     void subscribeToStream(SagaStatusUpdateObserver observer) {

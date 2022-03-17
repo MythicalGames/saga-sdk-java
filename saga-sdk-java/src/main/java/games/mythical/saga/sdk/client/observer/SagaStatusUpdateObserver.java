@@ -42,6 +42,20 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         this.resubscribe = resubscribe;
     }
 
+    public static SagaStatusUpdateObserver getInstance() {
+        return instance;
+    }
+
+    public static SagaStatusUpdateObserver initialize(StatusStreamGrpc.StatusStreamBlockingStub streamBlockingStub,
+                                                      Consumer<SagaStatusUpdateObserver> resubscribe) {
+        instance = new SagaStatusUpdateObserver(streamBlockingStub, resubscribe);
+        return instance;
+    }
+
+    public static void clear() {
+        instance = null;
+    }
+
     public SagaStatusUpdateObserver with(SagaBridgeExecutor sagaBridgeExecutor) {
         this.sagaBridgeExecutor = sagaBridgeExecutor;
         return this;

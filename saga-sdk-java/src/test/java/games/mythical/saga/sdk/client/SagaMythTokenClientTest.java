@@ -13,6 +13,7 @@ import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -53,6 +54,15 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         mythTokenClient = setUpFactory().createSagaMythTokenClient(executor);
         // mocking the service blocking stub clients are connected to
         FieldUtils.writeField(mythTokenClient, "serviceBlockingStub", mockServiceBlockingStub, true);
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        mythTokenClient.stop();
+        // client shutdown is not immediate
+        Thread.sleep(500);
+
+        mythTokenServer.stop();
     }
 
     @Test
