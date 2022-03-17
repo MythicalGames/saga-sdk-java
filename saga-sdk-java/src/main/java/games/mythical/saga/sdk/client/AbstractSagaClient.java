@@ -26,7 +26,7 @@ public abstract class AbstractSagaClient {
         this.sagaCredentialsFactory = SagaCredentialsFactory.getInstance();
     }
 
-    abstract void initStub() throws SagaException;
+    abstract void initStub();
 
     public CallCredentials addAuthentication() {
         return new CallCredentials() {

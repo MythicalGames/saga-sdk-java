@@ -31,7 +31,7 @@ public class SagaUserClient extends AbstractSagaClient {
     }
 
     @Override
-    void initStub() throws SagaException {
+    void initStub() {
         serviceBlockingStub = UserServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
         var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
                 .withCallCredentials(addAuthentication());

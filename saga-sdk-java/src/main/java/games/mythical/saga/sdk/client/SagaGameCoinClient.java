@@ -31,7 +31,7 @@ public class SagaGameCoinClient extends AbstractSagaClient {
     }
 
     @Override
-    void initStub() throws SagaException {
+    void initStub() {
         serviceBlockingStub = GameCoinServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
         var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
                 .withCallCredentials(addAuthentication());
