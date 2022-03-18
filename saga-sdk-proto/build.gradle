@@ -25,11 +25,18 @@ protobuf {
         grpc {
             artifact = "io.grpc:protoc-gen-grpc-java:${grpc_version}"
         }
+
+        doc {
+            artifact = "io.github.pseudomuto:protoc-gen-doc:1.5.1"
+        }
     }
 
     generateProtoTasks {
         all()*.plugins {
             grpc {}
+            doc {
+                option "${protoDocType},${protoDocFile}"
+            }
         }
     }
 }
