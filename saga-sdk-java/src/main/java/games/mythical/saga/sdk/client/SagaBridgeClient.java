@@ -57,7 +57,6 @@ public class SagaBridgeClient extends AbstractSagaClient {
                              String destinationChain,
                              String originChain) throws SagaException {
         var request = WithdrawItemRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setOauthId(oauthId)
                 .setGameItemTypeId(gameItemTypeId)
                 .setGameInventoryId(gameInventoryId)

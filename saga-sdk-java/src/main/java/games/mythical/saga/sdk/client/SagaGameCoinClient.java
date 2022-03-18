@@ -54,7 +54,6 @@ public class SagaGameCoinClient extends AbstractSagaClient {
 
     public Optional<SagaGameCoin> getGameCoin(String currencyId, String oauthId) throws SagaException {
         var request = GetGameCoinRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setCurrencyId(currencyId)
                 .setOauthId(oauthId)
                 .build();
@@ -76,7 +75,6 @@ public class SagaGameCoinClient extends AbstractSagaClient {
                                            int pageSize,
                                            SortOrder sortOrder) throws SagaException {
         var request = GetGameCoinsRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setOauthId(oauthId)
                 .setCreatedAfterTimestamp(createdAfterTimestamp == null ? -1 : createdAfterTimestamp.toEpochMilli())
                 .setPageSize(pageSize)
@@ -95,7 +93,6 @@ public class SagaGameCoinClient extends AbstractSagaClient {
 
     public void issueGameCoin(String currencyId, String oauthId, int coinCount) throws SagaException {
         var request = IssueGameCoinRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setCurrencyId(currencyId)
                 .setOauthId(oauthId)
                 .setCoinCount(coinCount)
@@ -117,7 +114,6 @@ public class SagaGameCoinClient extends AbstractSagaClient {
                                  String destOauthId,
                                  int coinCount) throws SagaException {
         var request = TransferGameCoinRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setCurrencyId(currencyId)
                 .setSourceOauthId(sourceOauthId)
                 .setDestinationOauthId(destOauthId)
@@ -138,7 +134,6 @@ public class SagaGameCoinClient extends AbstractSagaClient {
 
     public void burnGameCoin(String currencyId, String oauthId, int coinCount) throws SagaException {
         var request = BurnGameCoinRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setCurrencyId(currencyId)
                 .setOauthId(oauthId)
                 .setCoinCount(coinCount)
