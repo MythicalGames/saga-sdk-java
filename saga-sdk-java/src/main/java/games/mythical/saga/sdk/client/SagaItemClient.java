@@ -13,6 +13,7 @@ import games.mythical.saga.sdk.proto.common.FilterConditional;
 import games.mythical.saga.sdk.proto.common.Finalized;
 import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
+import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -96,8 +97,22 @@ public class SagaItemClient extends AbstractSagaClient {
 
             throw SagaException.fromGrpcException(e);
         }
+    }
 
-
+    public List<SagaItem> getItemsForPlayer(String oauthId) throws SagaException {
+        ValidateUtil.notBlank(oauthId, "oauthId is a required value");
+        var request = GetItemsForPlayerRequest.newBuilder()
+            .setOauthId(oauthId)
+            .build();
+        try {
+            var items = serviceBlockingStub.getItemsForPlayer(request);
+            return items.getItemsList().stream().map(SagaItem::fromProto).collect(Collectors.toList());
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus() == Status.NOT_FOUND) {
+                return List.of();
+            }
+            throw SagaException.fromGrpcException(e);
+        }
     }
 
     public void issueItem(String gameInventoryId,
