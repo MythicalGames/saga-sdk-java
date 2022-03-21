@@ -2,9 +2,18 @@ name: Saga SDK Java CI
 
 on:
   push:
-    branches: [ develop ]
+    branches:
+      - develop
+      - master
+    paths-ignore:
+      - "**/README.md"
+      - "doc/**"
   pull_request:
-    branches: [ develop ]
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
   workflow_dispatch:
 
 jobs:
@@ -68,6 +77,26 @@ jobs:
       if: (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
       run: |
         ./gradlew publish
+
+    - name: Generate Proto Docs
+      if: github.event_name == 'push'
+      run: |
+        ./gradlew generateProto -PprotoDocType=html -PprotoDocFile=index.html
+        ./gradlew generateProto -PprotoDocType=markdown -PprotoDocFile=sdk.md
+
+    - name: Checkin Proto Docs
+      if: github.event_name == 'push'
+      env:
+        GITHUB_USER: 'Mythical Buildbot'
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        mkdir -p doc/proto
+        cp saga-sdk-proto/build/generated/source/proto/main/doc/* doc/proto
+        git config user.name "Mythical Buildbot"
+        git config user.email "buildbot@mythical.games"
+        git add doc/proto
+        git commit -m "Updating docs"
+        git push
 
     - name: Cleanup Gradle Cache
       run: |
