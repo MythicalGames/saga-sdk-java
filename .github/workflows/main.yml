@@ -89,6 +89,7 @@ jobs:
       env:
         GITHUB_USER: 'Mythical Buildbot'
         GITHUB_TOKEN: ${{ github.token }}
+      continue-on-error: true
       run: |
         mkdir -p doc/proto
         cp -v saga-sdk-proto/build/generated/source/proto/main/doc/* doc/proto
