@@ -83,7 +83,7 @@ class SagaBridgeClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.withdrawItem(any())).thenReturn(expectedResponse);
 
-        bridgeClient.withdrawItem(
+        final var traceId = bridgeClient.withdrawItem(
                 OAUTH_ID,
                 RandomStringUtils.randomAlphanumeric(30),
                 RandomStringUtils.randomAlphanumeric(30),
@@ -92,6 +92,7 @@ class SagaBridgeClientTest extends AbstractClientTest {
                 RandomStringUtils.randomAlphanumeric(30)
         );
 
+        assertEquals(expectedResponse.getTraceId(), traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 

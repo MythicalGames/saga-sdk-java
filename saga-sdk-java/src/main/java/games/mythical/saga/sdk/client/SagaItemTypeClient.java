@@ -90,7 +90,7 @@ public class SagaItemTypeClient extends AbstractSagaClient {
         }
     }
 
-    public void createItemType(String gameItemTypeId,
+    public String createItemType(String gameItemTypeId,
                                boolean withdrawable,
                                SagaMetadata metadata) throws SagaException {
         try {
@@ -103,6 +103,7 @@ public class SagaItemTypeClient extends AbstractSagaClient {
                     .build();
             var result = serviceBlockingStub.createItemType(request);
             executor.emitReceived(gameItemTypeId, result.getTraceId());
+            return result.getTraceId();
         } catch (SagaException e) {
             log.error("Error parsing metadata!", e);
             throw new SagaException(SagaErrorCode.PARSING_DATA_EXCEPTION);

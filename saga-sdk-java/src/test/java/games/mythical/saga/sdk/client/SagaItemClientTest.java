@@ -100,7 +100,7 @@ class SagaItemClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.issueItem(any())).thenReturn(expectedResponse);
-        itemClient.issueItem(
+        final var traceId = itemClient.issueItem(
                 GAME_INVENTORY_ID,
                 EXPECTED_OAUTH_ID,
                 RandomStringUtils.randomAlphanumeric(30),
@@ -108,6 +108,7 @@ class SagaItemClientTest extends AbstractClientTest {
                 null, null, null
         );
 
+        assertEquals(expectedResponse.getTraceId(), traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
@@ -145,8 +146,9 @@ class SagaItemClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.transferItem(any())).thenReturn(expectedResponse);
-        itemClient.transferItem(GAME_INVENTORY_ID, SOURCE, DEST, null);
+        final var traceId = itemClient.transferItem(GAME_INVENTORY_ID, SOURCE, DEST, null);
 
+        assertEquals(expectedResponse.getTraceId(), traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
@@ -181,8 +183,9 @@ class SagaItemClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.burnItem(any())).thenReturn(expectedResponse);
-        itemClient.burnItem(GAME_INVENTORY_ID);
+        final var traceId = itemClient.burnItem(GAME_INVENTORY_ID);
 
+        assertEquals(expectedResponse.getTraceId(), traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 

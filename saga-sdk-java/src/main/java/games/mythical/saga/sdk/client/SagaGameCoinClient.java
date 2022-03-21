@@ -93,7 +93,7 @@ public class SagaGameCoinClient extends AbstractSagaClient {
         }
     }
 
-    public void issueGameCoin(String currencyId, String oauthId, int coinCount) throws SagaException {
+    public String issueGameCoin(String currencyId, String oauthId, int coinCount) throws SagaException {
         var request = IssueGameCoinRequest.newBuilder()
                 .setTitleId(config.getTitleId())
                 .setCurrencyId(currencyId)
@@ -104,6 +104,7 @@ public class SagaGameCoinClient extends AbstractSagaClient {
         try {
             var receivedResponse = serviceBlockingStub.issueGameCoin(request);
             executor.emitReceived(currencyId, oauthId, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
@@ -112,7 +113,7 @@ public class SagaGameCoinClient extends AbstractSagaClient {
         }
     }
 
-    public void transferGameCoin(String currencyId,
+    public String transferGameCoin(String currencyId,
                                  String sourceOauthId,
                                  String destOauthId,
                                  int coinCount) throws SagaException {
@@ -128,6 +129,7 @@ public class SagaGameCoinClient extends AbstractSagaClient {
             var receivedResponse = serviceBlockingStub.transferGameCoin(request);
             // TODO: destOauthId correct here?
             executor.emitReceived(currencyId, destOauthId, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
@@ -136,7 +138,7 @@ public class SagaGameCoinClient extends AbstractSagaClient {
         }
     }
 
-    public void burnGameCoin(String currencyId, String oauthId, int coinCount) throws SagaException {
+    public String burnGameCoin(String currencyId, String oauthId, int coinCount) throws SagaException {
         var request = BurnGameCoinRequest.newBuilder()
                 .setTitleId(config.getTitleId())
                 .setCurrencyId(currencyId)
@@ -147,6 +149,7 @@ public class SagaGameCoinClient extends AbstractSagaClient {
         try {
             var receivedResponse = serviceBlockingStub.burnGameCoin(request);
             executor.emitReceived(currencyId, oauthId, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {

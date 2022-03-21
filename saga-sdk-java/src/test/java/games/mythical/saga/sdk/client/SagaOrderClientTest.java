@@ -119,13 +119,14 @@ class SagaOrderClientTest extends AbstractClientTest {
                         .build())
                 .setUpholdCardId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
-        orderClient.confirmOrder(
+        final var traceId = orderClient.confirmOrder(
                 OAUTH_ID,
                 QUOTE_ID,
                 paymentProviderData,
                 RandomStringUtils.randomAlphanumeric(30)
         );
 
+        assertEquals(expectedResponse.getTraceId(), traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
