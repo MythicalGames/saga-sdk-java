@@ -91,10 +91,11 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       run: |
         mkdir -p doc/proto
-        cp saga-sdk-proto/build/generated/source/proto/main/doc/* doc/proto
+        cp -v saga-sdk-proto/build/generated/source/proto/main/doc/* doc/proto
         git config user.name "Mythical Buildbot"
         git config user.email "buildbot@mythical.games"
-        git add doc/proto/*
+        git add doc/proto/index.html
+        git add doc/proto/sdk.md
         git commit -m "Updating docs"
         git push
 
