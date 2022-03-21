@@ -4,7 +4,7 @@ import games.mythical.saga.sdk.client.model.SagaPaymentMethod;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.payment.PaymentServiceGrpc;
-import games.mythical.saga.sdk.proto.api.payments.*;
+import games.mythical.saga.sdk.proto.api.payment.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;

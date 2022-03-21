@@ -1,10 +1,10 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.proto.api.payment.PaymentServiceGrpc;
-import games.mythical.saga.sdk.proto.api.payments.Address;
-import games.mythical.saga.sdk.proto.api.payments.CardPaymentData;
-import games.mythical.saga.sdk.proto.api.payments.CybersourcePaymentData;
-import games.mythical.saga.sdk.proto.api.payments.PaymentMethodProto;
+import games.mythical.saga.sdk.proto.api.payment.Address;
+import games.mythical.saga.sdk.proto.api.payment.CardPaymentData;
+import games.mythical.saga.sdk.proto.api.payment.CybersourcePaymentData;
+import games.mythical.saga.sdk.proto.api.payment.PaymentMethodProto;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
