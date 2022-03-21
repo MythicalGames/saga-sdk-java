@@ -37,7 +37,6 @@ public class SagaTransactionClientTest extends AbstractClientTest {
         var expectedResponse = TransactionsProto.newBuilder()
                 .addTransactions(TransactionProto.newBuilder()
                         .setTransactionId("id-1234")
-                        .setTitleId("game1")
                         .build())
                 .build();
 
@@ -61,7 +60,7 @@ public class SagaTransactionClientTest extends AbstractClientTest {
 
         when(mockServiceBlockingStub.getTransactionsForItemType(any())).thenReturn(expectedResponse);
         var transactionsResponse = transactionClient.getTransactionsForItemType(
-                "item-type-1234", "token1234", "game1", null);
+                "item-type-1234", "token1234", null);
         assertEquals(1, transactionsResponse.size());
 
         var transaction = transactionsResponse.iterator().next();

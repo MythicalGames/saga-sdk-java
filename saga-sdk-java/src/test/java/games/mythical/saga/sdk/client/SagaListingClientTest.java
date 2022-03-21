@@ -159,7 +159,6 @@ class SagaListingClientTest extends AbstractClientTest {
                 .setTraceId(executor.getTraceId())
                 .setListingStatus(ListingStatusUpdate.newBuilder()
                         .setOauthId(OAUTH_ID)
-                        .setTraceId(executor.getTraceId())
                         .setQuoteId(LISTING_ID)
                         .setListingId(LISTING_ID)
                         .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))

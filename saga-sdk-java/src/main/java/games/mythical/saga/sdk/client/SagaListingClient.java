@@ -58,7 +58,6 @@ public class SagaListingClient extends AbstractSagaClient {
                                                          BigDecimal subtotal,
                                                          String currency) throws SagaException {
         var request = CreateListingQuoteRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setOauthId(oauthId)
                 .setGameInventoryId(gameInventoryId)
                 .setTotal(subtotal.toPlainString())
@@ -79,7 +78,6 @@ public class SagaListingClient extends AbstractSagaClient {
 
     public void confirmListing(String oauthId, String quoteId) throws SagaException {
         var request = ConfirmListingRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setOauthId(oauthId)
                 .build();
 
@@ -96,7 +94,6 @@ public class SagaListingClient extends AbstractSagaClient {
 
     public void cancelListing(String oauthId, String listingId) throws SagaException {
         var request = CancelListingRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setOauthId(oauthId)
                 .build();
 

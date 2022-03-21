@@ -49,14 +49,13 @@ public class SagaTransactionClient extends AbstractSagaClient {
         }
     }
 
-    public List<SagaTransaction> getTransactionsForItemType(String itemTypeId, String tokenId, String titleId, QueryOptions queryOptions) throws SagaException {
+    public List<SagaTransaction> getTransactionsForItemType(String itemTypeId, String tokenId, QueryOptions queryOptions) throws SagaException {
         if (queryOptions == null) {
             queryOptions = new QueryOptions();
         }
         var request = GetTransactionsForItemTypeRequest.newBuilder()
                 .setItemTypeId(itemTypeId)
                 .setTokenId(tokenId)
-                .setTitleId(titleId)
                 .setQueryOptions(QueryOptions.toProto(queryOptions))
                 .build();
 
