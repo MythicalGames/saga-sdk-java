@@ -57,7 +57,6 @@ public class SagaItemClient extends AbstractSagaClient {
 
     public Optional<SagaItem> getItem(String gameInventoryId, boolean history) throws SagaException {
         var request = GetItemRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setGameInventoryId(gameInventoryId)
                 .setHistory(history)
                 .build();
@@ -78,9 +77,6 @@ public class SagaItemClient extends AbstractSagaClient {
         if (queryOptions == null) {
             queryOptions = new QueryOptions();
         }
-
-        // TODO set titleId to constant when defined
-        queryOptions.addExpression("titleId", config.getTitleId(), FilterConditional.EQUALS, true);
 
         var request = GetItemsRequest.newBuilder()
                 .setQueryOptions(QueryOptions.toProto(queryOptions))
@@ -112,7 +108,6 @@ public class SagaItemClient extends AbstractSagaClient {
                           String orderId,
                           String requestIp) throws SagaException {
         var builder = IssueItemRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setGameInventoryId(gameInventoryId)
                 .setOauthId(oauthId)
                 .setGameItemTypeId(gameItemTypeId)
@@ -146,7 +141,6 @@ public class SagaItemClient extends AbstractSagaClient {
                              String destOauthId,
                              String storeId) throws SagaException {
         var builder = TransferItemRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setGameInventoryId(gameInventoryId)
                 .setSourceOauthId(sourceOauthId)
                 .setDestinationOauthId(destOauthId);
@@ -168,7 +162,6 @@ public class SagaItemClient extends AbstractSagaClient {
 
     public void burnItem(String gameInventoryId) throws SagaException {
         var request = BurnItemRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setGameInventoryId(gameInventoryId)
                 .build();
 
@@ -195,7 +188,6 @@ public class SagaItemClient extends AbstractSagaClient {
     private void _updateItemMetadata(List<UpdateItemMetadata> updateItems) throws SagaException {
         try {
             var request = UpdateItemsMetadataRequest.newBuilder()
-                    .setTitleId(config.getTitleId())
                     .addAllUpdateItems(updateItems)
                     .build();
 
