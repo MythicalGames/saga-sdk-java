@@ -78,9 +78,6 @@ public class SagaItemClient extends AbstractSagaClient {
             queryOptions = new QueryOptions();
         }
 
-        // TODO set titleId to constant when defined
-        queryOptions.addExpression("titleId", config.getTitleId(), FilterConditional.EQUALS, true);
-
         var request = GetItemsRequest.newBuilder()
                 .setQueryOptions(QueryOptions.toProto(queryOptions))
                 .setFinalized(finalized);
