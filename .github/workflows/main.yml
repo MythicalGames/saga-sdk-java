@@ -94,7 +94,7 @@ jobs:
         cp saga-sdk-proto/build/generated/source/proto/main/doc/* doc/proto
         git config user.name "Mythical Buildbot"
         git config user.email "buildbot@mythical.games"
-        git add doc/proto
+        git add doc/proto/*
         git commit -m "Updating docs"
         git push
 
