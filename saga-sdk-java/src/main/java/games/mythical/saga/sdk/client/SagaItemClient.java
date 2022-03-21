@@ -13,7 +13,7 @@ import games.mythical.saga.sdk.proto.common.FilterConditional;
 import games.mythical.saga.sdk.proto.common.Finalized;
 import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
-import games.mythical.saga.sdk.util.Validate;
+import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -104,7 +104,7 @@ public class SagaItemClient extends AbstractSagaClient {
     }
 
     public List<SagaItem> getItemsForPlayer(String oauthId) throws SagaException {
-        Validate.notBlank(oauthId, "oauthId is a required value");
+        ValidateUtil.notBlank(oauthId, "oauthId is a required value");
         var request = GetItemsForPlayerRequest.newBuilder()
             .setTitleId(config.getTitleId())
             .setOauthId(oauthId)
