@@ -2,8 +2,8 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockMythTokenExecutor;
 import games.mythical.saga.sdk.proto.api.myth.*;
-import games.mythical.saga.sdk.proto.api.payments.CardPaymentData;
-import games.mythical.saga.sdk.proto.api.payments.CybersourcePaymentData;
+import games.mythical.saga.sdk.proto.api.payment.CardPaymentData;
+import games.mythical.saga.sdk.proto.api.payment.CybersourcePaymentData;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.myth.MythTokenState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;

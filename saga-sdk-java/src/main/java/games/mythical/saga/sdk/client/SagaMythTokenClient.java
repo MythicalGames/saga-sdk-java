@@ -10,7 +10,7 @@ import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.myth.*;
-import games.mythical.saga.sdk.proto.api.payments.CardPaymentData;
+import games.mythical.saga.sdk.proto.api.payment.CardPaymentData;
 import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.Subscribe;
 import io.grpc.StatusRuntimeException;
