@@ -76,7 +76,7 @@ public class SagaOfferClient extends AbstractSagaClient {
         }
     }
 
-    public void confirmOffer(String oauthId, String quoteId) throws SagaException {
+    public String confirmOffer(String oauthId, String quoteId) throws SagaException {
         var request = ConfirmOfferRequest.newBuilder()
                 .setOauthId(oauthId)
                 .build();
@@ -84,6 +84,7 @@ public class SagaOfferClient extends AbstractSagaClient {
         try {
             var receivedResponse = serviceBlockingStub.confirmOffer(request);
             executor.emitReceived(quoteId, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
@@ -92,7 +93,7 @@ public class SagaOfferClient extends AbstractSagaClient {
         }
     }
 
-    public void cancelOffer(String oauthId, String quoteId) throws SagaException {
+    public String cancelOffer(String oauthId, String quoteId) throws SagaException {
         var request = CancelOfferRequest.newBuilder()
                 .setOauthId(oauthId)
                 .build();
@@ -100,6 +101,7 @@ public class SagaOfferClient extends AbstractSagaClient {
         try {
             var receivedResponse = serviceBlockingStub.cancelOffer(request);
             executor.emitReceived(quoteId, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {

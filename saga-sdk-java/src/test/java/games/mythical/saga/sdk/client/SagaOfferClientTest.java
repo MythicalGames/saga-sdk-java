@@ -103,8 +103,9 @@ class SagaOfferClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.confirmOffer(any())).thenReturn(expectedResponse);
 
-        offerClient.confirmOffer(OAUTH_ID, QUOTE_ID);
+        final var traceId = offerClient.confirmOffer(OAUTH_ID, QUOTE_ID);
 
+        assertEquals(expectedResponse.getTraceId(), traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
@@ -145,8 +146,9 @@ class SagaOfferClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.cancelOffer(any())).thenReturn(expectedResponse);
 
-        offerClient.cancelOffer(OAUTH_ID, OFFER_ID);
+        final var traceId = offerClient.cancelOffer(OAUTH_ID, OFFER_ID);
 
+        assertEquals(expectedResponse.getTraceId(), traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 

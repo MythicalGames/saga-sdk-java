@@ -76,7 +76,7 @@ public class SagaListingClient extends AbstractSagaClient {
         }
     }
 
-    public void confirmListing(String oauthId, String quoteId) throws SagaException {
+    public String confirmListing(String oauthId, String quoteId) throws SagaException {
         var request = ConfirmListingRequest.newBuilder()
                 .setOauthId(oauthId)
                 .build();
@@ -84,6 +84,7 @@ public class SagaListingClient extends AbstractSagaClient {
         try {
             var receivedResponse = serviceBlockingStub.confirmListing(request);
             executor.emitReceived(quoteId, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
@@ -92,7 +93,7 @@ public class SagaListingClient extends AbstractSagaClient {
         }
     }
 
-    public void cancelListing(String oauthId, String listingId) throws SagaException {
+    public String cancelListing(String oauthId, String listingId) throws SagaException {
         var request = CancelListingRequest.newBuilder()
                 .setOauthId(oauthId)
                 .build();
@@ -100,6 +101,7 @@ public class SagaListingClient extends AbstractSagaClient {
         try {
             var receivedResponse = serviceBlockingStub.cancelListing(request);
             executor.emitReceived(listingId, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {

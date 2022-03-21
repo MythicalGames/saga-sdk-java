@@ -93,8 +93,9 @@ class SagaGameCoinClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.issueGameCoin(any())).thenReturn(expectedResponse);
-        gameCoinClient.issueGameCoin(CURRENCY_ID, OAUTH_ID, RandomUtils.nextInt(1, 1000));
+        final var traceId = gameCoinClient.issueGameCoin(CURRENCY_ID, OAUTH_ID, RandomUtils.nextInt(1, 1000));
 
+        assertEquals(expectedResponse.getTraceId(), traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
@@ -132,8 +133,9 @@ class SagaGameCoinClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.transferGameCoin(any())).thenReturn(expectedResponse);
-        gameCoinClient.transferGameCoin(CURRENCY_ID, SOURCE, DEST, RandomUtils.nextInt(1, 1000));
+        final var traceId = gameCoinClient.transferGameCoin(CURRENCY_ID, SOURCE, DEST, RandomUtils.nextInt(1, 1000));
 
+        assertEquals(expectedResponse.getTraceId(), traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
@@ -168,8 +170,9 @@ class SagaGameCoinClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.burnGameCoin(any())).thenReturn(expectedResponse);
-        gameCoinClient.burnGameCoin(CURRENCY_ID, OAUTH_ID, RandomUtils.nextInt(1, 1000));
+        final var traceId = gameCoinClient.burnGameCoin(CURRENCY_ID, OAUTH_ID, RandomUtils.nextInt(1, 1000));
 
+        assertEquals(expectedResponse.getTraceId(), traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 

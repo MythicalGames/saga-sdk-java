@@ -104,7 +104,7 @@ public class SagaOrderClient extends AbstractSagaClient {
         }
     }
 
-    public void confirmOrder(String oauthId,
+    public String confirmOrder(String oauthId,
                              String quoteId,
                              PaymentProviderData paymentProviderData,
                              String fraudSessionId) throws SagaException {
@@ -118,6 +118,7 @@ public class SagaOrderClient extends AbstractSagaClient {
         try {
             var receivedResponse = serviceBlockingStub.confirmOrder(request);
             executor.emitReceived(quoteId, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {

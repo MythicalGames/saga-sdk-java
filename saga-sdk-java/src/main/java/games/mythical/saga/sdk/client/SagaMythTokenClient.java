@@ -81,7 +81,7 @@ public class SagaMythTokenClient extends AbstractSagaClient {
                 .build());
     }
 
-    public void confirmBuyingMythToken(String quoteId,
+    public String confirmBuyingMythToken(String quoteId,
                                        String userId,
                                        CardPaymentData creditCardInfo) throws SagaException {
         var request = ConfirmBuyingMythTokenRequest.newBuilder()
@@ -93,6 +93,7 @@ public class SagaMythTokenClient extends AbstractSagaClient {
         try {
             var receivedResponse = serviceBlockingStub.confirmBuyingMythToken(request);
             executor.emitReceived(receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
@@ -114,7 +115,7 @@ public class SagaMythTokenClient extends AbstractSagaClient {
                 .build());
     }
 
-    public void confirmMythTokenWithdrawal(String quoteId) throws SagaException {
+    public String confirmMythTokenWithdrawal(String quoteId) throws SagaException {
         var request = ConfirmMythTokenWithdrawalRequest.newBuilder()
                 .setQuoteId(quoteId)
                 .build();
@@ -122,6 +123,7 @@ public class SagaMythTokenClient extends AbstractSagaClient {
         try {
             var receivedResponse = serviceBlockingStub.confirmMythTokenWithdrawal(request);
             executor.emitReceived(receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {

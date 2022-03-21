@@ -101,8 +101,9 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.createItemType(any())).thenReturn(expectedResponse);
-        itemTypeClient.createItemType(GAME_ITEM_TYPE_ID, false, EXPECTED_METADATA);
+        final var traceId = itemTypeClient.createItemType(GAME_ITEM_TYPE_ID, false, EXPECTED_METADATA);
 
+        assertEquals(expectedResponse.getTraceId(), traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 

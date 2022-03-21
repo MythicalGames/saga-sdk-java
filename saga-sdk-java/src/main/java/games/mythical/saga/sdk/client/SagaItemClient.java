@@ -115,7 +115,7 @@ public class SagaItemClient extends AbstractSagaClient {
         }
     }
 
-    public void issueItem(String gameInventoryId,
+    public String issueItem(String gameInventoryId,
                           String oauthId,
                           String gameItemTypeId,
                           SagaMetadata metadata,
@@ -143,6 +143,7 @@ public class SagaItemClient extends AbstractSagaClient {
         try {
             var receivedResponse = serviceBlockingStub.issueItem(builder.build());
             executor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
@@ -151,7 +152,7 @@ public class SagaItemClient extends AbstractSagaClient {
         }
     }
 
-    public void transferItem(String gameInventoryId,
+    public String transferItem(String gameInventoryId,
                              String sourceOauthId,
                              String destOauthId,
                              String storeId) throws SagaException {
@@ -167,6 +168,7 @@ public class SagaItemClient extends AbstractSagaClient {
         try {
             var receivedResponse = serviceBlockingStub.transferItem(builder.build());
             executor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
@@ -175,7 +177,7 @@ public class SagaItemClient extends AbstractSagaClient {
         }
     }
 
-    public void burnItem(String gameInventoryId) throws SagaException {
+    public String burnItem(String gameInventoryId) throws SagaException {
         var request = BurnItemRequest.newBuilder()
                 .setGameInventoryId(gameInventoryId)
                 .build();
@@ -183,6 +185,7 @@ public class SagaItemClient extends AbstractSagaClient {
         try {
             var receivedResponse = serviceBlockingStub.burnItem(request);
             executor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {

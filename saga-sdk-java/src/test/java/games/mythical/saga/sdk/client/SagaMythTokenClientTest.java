@@ -121,8 +121,9 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.confirmBuyingMythToken(any())).thenReturn(expectedResponse);
-        mythTokenClient.confirmBuyingMythToken(QUOTE_ID, USER_ID, CARD_PAYMENT_DATA);
+        final var traceId = mythTokenClient.confirmBuyingMythToken(QUOTE_ID, USER_ID, CARD_PAYMENT_DATA);
 
+        assertEquals(expectedResponse.getTraceId(), traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
@@ -165,8 +166,9 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.confirmMythTokenWithdrawal(any())).thenReturn(expectedResponse);
-        mythTokenClient.confirmMythTokenWithdrawal(QUOTE_ID);
+        final var traceId = mythTokenClient.confirmMythTokenWithdrawal(QUOTE_ID);
 
+        assertEquals(expectedResponse.getTraceId(), traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 

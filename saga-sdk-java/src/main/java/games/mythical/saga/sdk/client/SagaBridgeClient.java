@@ -50,7 +50,7 @@ public class SagaBridgeClient extends AbstractSagaClient {
         streamStub.statusStream(subscribe, observer);
     }
 
-    public void withdrawItem(String oauthId,
+    public String withdrawItem(String oauthId,
                              String gameItemTypeId,
                              String gameInventoryId,
                              String destinationAddress,
@@ -68,6 +68,7 @@ public class SagaBridgeClient extends AbstractSagaClient {
         try {
             var receivedResponse = serviceBlockingStub.withdrawItem(request);
             executor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
