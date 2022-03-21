@@ -102,7 +102,6 @@ public class SagaItemClient extends AbstractSagaClient {
     public List<SagaItem> getItemsForPlayer(String oauthId) throws SagaException {
         ValidateUtil.notBlank(oauthId, "oauthId is a required value");
         var request = GetItemsForPlayerRequest.newBuilder()
-            .setTitleId(config.getTitleId())
             .setOauthId(oauthId)
             .build();
         try {
