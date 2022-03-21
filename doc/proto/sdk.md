@@ -245,15 +245,15 @@
 <a name="saga-proto-api-bridge-BridgeProto"></a>
 
 ### BridgeProto
-Bridge definitions
+
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
-| mythical_address | [string](#string) |  | ??? |
-| mainnet_address | [string](#string) |  |  |
-| chain_name | [string](#string) |  |  |
+| mythical_address | [string](#string) |  |  |
+| mainnet_address | [string](#string) |  | Address on Mainnet |
+| chain_name | [string](#string) |  | Name of the chain |
 
 
 
@@ -263,7 +263,7 @@ Bridge definitions
 <a name="saga-proto-api-bridge-GetBridgeRequest"></a>
 
 ### GetBridgeRequest
-get bridge call
+Get Bridge Call
 
 
 
@@ -273,18 +273,17 @@ get bridge call
 <a name="saga-proto-api-bridge-WithdrawItemRequest"></a>
 
 ### WithdrawItemRequest
-withdraw item call
+Withdraw Call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
-| destination_address | [string](#string) |  |  |
-| destination_chain | [string](#string) |  |  |
-| origin_address | [string](#string) |  |  |
+| game_item_type_id | [string](#string) |  | Id of the ItemType this Item belongs to |
+| game_inventory_id | [string](#string) |  | Id of the GameInventory this Item belongs to |
+| destination_address | [string](#string) |  | Address of where this Item is going to |
+| destination_chain | [string](#string) |  | Chain of where this Item is going to |
+| origin_address | [string](#string) |  | Address that this Item is being withdrawn from |
 
 
 
@@ -320,8 +319,8 @@ withdraw item call
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| WithdrawItem | [.saga.proto.api.bridge.WithdrawItemRequest](#saga-proto-api-bridge-WithdrawItemRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
-| GetBridge | [.saga.proto.api.bridge.GetBridgeRequest](#saga-proto-api-bridge-GetBridgeRequest) | [.saga.proto.api.bridge.BridgeProto](#saga-proto-api-bridge-BridgeProto) |  |
+| WithdrawItem | [.saga.proto.api.bridge.WithdrawItemRequest](#saga-proto-api-bridge-WithdrawItemRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Withdraw an Item |
+| GetBridge | [.saga.proto.api.bridge.GetBridgeRequest](#saga-proto-api-bridge-GetBridgeRequest) | [.saga.proto.api.bridge.BridgeProto](#saga-proto-api-bridge-BridgeProto) | Get Bridge |
 
  
 
@@ -342,10 +341,9 @@ Burn coins call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | User to burn coins from |
 | currency_id | [string](#string) |  |  |
-| coin_count | [int32](#int32) |  |  |
+| coin_count | [int32](#int32) |  | Amount of coins to burn |
 
 
 
@@ -355,16 +353,16 @@ Burn coins call
 <a name="saga-proto-api-gamecoin-GameCoinProto"></a>
 
 ### GameCoinProto
-GameCoin definitions
+
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
-| coin_count | [int32](#int32) |  |  |
+| coin_count | [int32](#int32) |  | Amount of coins |
 | currency_id | [string](#string) |  |  |
 | name | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | User the coins belong to |
 | created_timestamp | [int64](#int64) |  |  |
 | updated_timestamp | [int64](#int64) |  |  |
 
@@ -391,13 +389,12 @@ GameCoin definitions
 <a name="saga-proto-api-gamecoin-GetGameCoinRequest"></a>
 
 ### GetGameCoinRequest
-Get coins call
+Get coin call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | User to get coins for |
 | currency_id | [string](#string) |  |  |
 
 
@@ -408,13 +405,12 @@ Get coins call
 <a name="saga-proto-api-gamecoin-GetGameCoinsRequest"></a>
 
 ### GetGameCoinsRequest
-
+Get coins call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | User to get coins for |
 | created_after_timestamp | [uint64](#uint64) |  |  |
 | page_size | [int32](#int32) |  |  |
 | sort_order | [saga.proto.common.sort.SortOrder](#saga-proto-common-sort-SortOrder) |  |  |
@@ -432,10 +428,9 @@ Issue coins call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
 | currency_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
-| coin_count | [int32](#int32) |  |  |
+| oauth_id | [string](#string) |  | User to issue coins to |
+| coin_count | [int32](#int32) |  | Amount of coins to issue |
 
 
 
@@ -450,11 +445,10 @@ Transfer coins call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| source_oauth_id | [string](#string) |  |  |
-| destination_oauth_id | [string](#string) |  |  |
+| source_oauth_id | [string](#string) |  | User to transfer coins from |
+| destination_oauth_id | [string](#string) |  | User to transfer coins to |
 | currency_id | [string](#string) |  |  |
-| coin_count | [int32](#int32) |  |  |
+| coin_count | [int32](#int32) |  | Amount of coins to transfer |
 
 
 
@@ -490,11 +484,11 @@ Transfer coins call
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetGameCoin | [.saga.proto.api.gamecoin.GetGameCoinRequest](#saga-proto-api-gamecoin-GetGameCoinRequest) | [.saga.proto.api.gamecoin.GameCoinProto](#saga-proto-api-gamecoin-GameCoinProto) |  |
+| GetGameCoin | [.saga.proto.api.gamecoin.GetGameCoinRequest](#saga-proto-api-gamecoin-GetGameCoinRequest) | [.saga.proto.api.gamecoin.GameCoinProto](#saga-proto-api-gamecoin-GameCoinProto) | Get a GameCoin for a user |
 | GetGameCoins | [.saga.proto.api.gamecoin.GetGameCoinsRequest](#saga-proto-api-gamecoin-GetGameCoinsRequest) | [.saga.proto.api.gamecoin.GameCoinsProto](#saga-proto-api-gamecoin-GameCoinsProto) |  |
-| IssueGameCoin | [.saga.proto.api.gamecoin.IssueGameCoinRequest](#saga-proto-api-gamecoin-IssueGameCoinRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
-| TransferGameCoin | [.saga.proto.api.gamecoin.TransferGameCoinRequest](#saga-proto-api-gamecoin-TransferGameCoinRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
-| BurnGameCoin | [.saga.proto.api.gamecoin.BurnGameCoinRequest](#saga-proto-api-gamecoin-BurnGameCoinRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
+| IssueGameCoin | [.saga.proto.api.gamecoin.IssueGameCoinRequest](#saga-proto-api-gamecoin-IssueGameCoinRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Issue game coins to a user |
+| TransferGameCoin | [.saga.proto.api.gamecoin.TransferGameCoinRequest](#saga-proto-api-gamecoin-TransferGameCoinRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Transfer can coins between users |
+| BurnGameCoin | [.saga.proto.api.gamecoin.BurnGameCoinRequest](#saga-proto-api-gamecoin-BurnGameCoinRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Burn game coins for a user |
 
  
 
@@ -515,8 +509,7 @@ Burn item call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
+| game_inventory_id | [string](#string) |  | Game&#39;s id for the Item to burn |
 
 
 
@@ -526,14 +519,13 @@ Burn item call
 <a name="saga-proto-api-item-GetItemRequest"></a>
 
 ### GetItemRequest
-Get item calls
+Get Item call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
-| history | [bool](#bool) |  |  |
+| game_inventory_id | [string](#string) |  | Game&#39;s id for the Item to retrieve |
+| history | [bool](#bool) |  | Include history of the Item? |
 
 
 
@@ -543,13 +535,12 @@ Get item calls
 <a name="saga-proto-api-item-GetItemsForPlayerRequest"></a>
 
 ### GetItemsForPlayerRequest
-
+Get Items for Player call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | Player to get Items for |
 
 
 
@@ -559,12 +550,12 @@ Get item calls
 <a name="saga-proto-api-item-GetItemsRequest"></a>
 
 ### GetItemsRequest
-
+Get Items call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  |  |
+| query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  | Sort/filter options |
 | finalized | [saga.proto.common.finalization.Finalized](#saga-proto-common-finalization-Finalized) |  |  |
 | token_name | [string](#string) |  |  |
 
@@ -581,12 +572,11 @@ Issue item call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  |  |
-| metadata | [saga.proto.common.Metadata](#saga-proto-common-Metadata) |  |  |
-| store_id | [string](#string) |  | optional |
+| game_inventory_id | [string](#string) |  | GameInventory Id of Item being issued |
+| oauth_id | [string](#string) |  | User that is issuing Item |
+| game_item_type_id | [string](#string) |  | Unique id set for your game of the Item being issued |
+| metadata | [saga.proto.common.Metadata](#saga-proto-common-Metadata) |  | Metadata associated to Item being issued |
+| store_id | [string](#string) |  | (optional) Id of store |
 | order_id | [string](#string) |  |  |
 | request_ip | [string](#string) |  |  |
 
@@ -598,21 +588,21 @@ Issue item call
 <a name="saga-proto-api-item-ItemProto"></a>
 
 ### ItemProto
-Item definitions
+
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
+| game_inventory_id | [string](#string) |  | The game&#39;s unique id for this Item |
+| game_item_type_id | [string](#string) |  | The game&#39;s ItemType id associated to this Item |
+| oauth_id | [string](#string) |  | User for this Item |
 | serial_number | [int32](#int32) |  |  |
-| metadata_uri | [string](#string) |  |  |
-| metadata | [saga.proto.common.Metadata](#saga-proto-common-Metadata) |  |  |
-| item_state | [saga.proto.common.item.ItemState](#saga-proto-common-item-ItemState) |  |  |
-| created_timestamp | [int64](#int64) |  |  |
-| updated_timestamp | [int64](#int64) |  |  |
+| metadata_uri | [string](#string) |  | Metadata accessible address |
+| metadata | [saga.proto.common.Metadata](#saga-proto-common-Metadata) |  | Metadata for this Item |
+| item_state | [saga.proto.common.item.ItemState](#saga-proto-common-item-ItemState) |  | State that the Item is in. See ItemState for more information |
+| created_timestamp | [int64](#int64) |  | When was this Item created |
+| updated_timestamp | [int64](#int64) |  | When was this Item last updated |
 
 
 
@@ -642,10 +632,9 @@ Transfer item call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
-| source_oauth_id | [string](#string) |  |  |
-| destination_oauth_id | [string](#string) |  |  |
+| game_inventory_id | [string](#string) |  | Game&#39;s id for the Item to transfer |
+| source_oauth_id | [string](#string) |  | User of Item to transfer from |
+| destination_oauth_id | [string](#string) |  | User of Item to transfer to |
 | store_id | [string](#string) |  |  |
 
 
@@ -656,13 +645,13 @@ Transfer item call
 <a name="saga-proto-api-item-UpdateItemMetadata"></a>
 
 ### UpdateItemMetadata
-Metadata calls
+Update Metadata call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_inventory_id | [string](#string) |  |  |
-| metadata | [saga.proto.common.Metadata](#saga-proto-common-Metadata) |  |  |
+| game_inventory_id | [string](#string) |  | Update Metadata for the Item with this id |
+| metadata | [saga.proto.common.Metadata](#saga-proto-common-Metadata) |  | Metadata to update with |
 
 
 
@@ -672,12 +661,11 @@ Metadata calls
 <a name="saga-proto-api-item-UpdateItemsMetadataRequest"></a>
 
 ### UpdateItemsMetadataRequest
-
+Update Metadata on Item call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
 | update_items | [UpdateItemMetadata](#saga-proto-api-item-UpdateItemMetadata) | repeated |  |
 
 
@@ -688,8 +676,7 @@ Metadata calls
 <a name="saga-proto-api-item-UpdateItemsMetadataResponse"></a>
 
 ### UpdateItemsMetadataResponse
-TODO: maybe at the minimum return the number successful of updated?
-int32 count = 1;
+
 
 
 
@@ -725,13 +712,13 @@ int32 count = 1;
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetItem | [.saga.proto.api.item.GetItemRequest](#saga-proto-api-item-GetItemRequest) | [.saga.proto.api.item.ItemProto](#saga-proto-api-item-ItemProto) |  |
-| GetItems | [.saga.proto.api.item.GetItemsRequest](#saga-proto-api-item-GetItemsRequest) | [.saga.proto.api.item.ItemsProto](#saga-proto-api-item-ItemsProto) |  |
-| GetItemsForPlayer | [.saga.proto.api.item.GetItemsForPlayerRequest](#saga-proto-api-item-GetItemsForPlayerRequest) | [.saga.proto.api.item.ItemsProto](#saga-proto-api-item-ItemsProto) |  |
-| IssueItem | [.saga.proto.api.item.IssueItemRequest](#saga-proto-api-item-IssueItemRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
-| TransferItem | [.saga.proto.api.item.TransferItemRequest](#saga-proto-api-item-TransferItemRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
-| BurnItem | [.saga.proto.api.item.BurnItemRequest](#saga-proto-api-item-BurnItemRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
-| UpdateItemsMetadata | [.saga.proto.api.item.UpdateItemsMetadataRequest](#saga-proto-api-item-UpdateItemsMetadataRequest) | [.saga.proto.api.item.UpdateItemsMetadataResponse](#saga-proto-api-item-UpdateItemsMetadataResponse) |  |
+| GetItem | [.saga.proto.api.item.GetItemRequest](#saga-proto-api-item-GetItemRequest) | [.saga.proto.api.item.ItemProto](#saga-proto-api-item-ItemProto) | Get an item |
+| GetItems | [.saga.proto.api.item.GetItemsRequest](#saga-proto-api-item-GetItemsRequest) | [.saga.proto.api.item.ItemsProto](#saga-proto-api-item-ItemsProto) | Get items based on filters |
+| GetItemsForPlayer | [.saga.proto.api.item.GetItemsForPlayerRequest](#saga-proto-api-item-GetItemsForPlayerRequest) | [.saga.proto.api.item.ItemsProto](#saga-proto-api-item-ItemsProto) | Get all Items for a player |
+| IssueItem | [.saga.proto.api.item.IssueItemRequest](#saga-proto-api-item-IssueItemRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Issue an Item |
+| TransferItem | [.saga.proto.api.item.TransferItemRequest](#saga-proto-api-item-TransferItemRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Transfer Item between users |
+| BurnItem | [.saga.proto.api.item.BurnItemRequest](#saga-proto-api-item-BurnItemRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Burn an Item |
+| UpdateItemsMetadata | [.saga.proto.api.item.UpdateItemsMetadataRequest](#saga-proto-api-item-UpdateItemsMetadataRequest) | [.saga.proto.api.item.UpdateItemsMetadataResponse](#saga-proto-api-item-UpdateItemsMetadataResponse) | Update the Metadata for an Item |
 
  
 
@@ -752,14 +739,13 @@ Create item type call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
 | publisher_address | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  |  |
+| game_item_type_id | [string](#string) |  | The game&#39;s unique id for this ItemType |
 | name | [string](#string) |  |  |
-| pri_rev_share_settings | [PriRevShareSettings](#saga-proto-api-itemtype-PriRevShareSettings) |  | optional |
+| pri_rev_share_settings | [PriRevShareSettings](#saga-proto-api-itemtype-PriRevShareSettings) |  | (optional) |
 | sec_rev_share_settings | [SecRevShareSettings](#saga-proto-api-itemtype-SecRevShareSettings) |  |  |
 | metadata | [saga.proto.common.Metadata](#saga-proto-common-Metadata) |  |  |
-| withdrawable | [bool](#bool) |  |  |
+| withdrawable | [bool](#bool) |  | Is this ItemType withdrawable? |
 
 
 
@@ -769,12 +755,11 @@ Create item type call
 <a name="saga-proto-api-itemtype-GetItemTypeRequest"></a>
 
 ### GetItemTypeRequest
-Get item type calls
+Get ItemType call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
 | game_item_type_id | [string](#string) |  |  |
 
 
@@ -785,12 +770,11 @@ Get item type calls
 <a name="saga-proto-api-itemtype-GetItemTypesRequest"></a>
 
 ### GetItemTypesRequest
-
+Get ItemTypes call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
 | query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  |  |
 
 
@@ -801,23 +785,23 @@ Get item type calls
 <a name="saga-proto-api-itemtype-ItemTypeProto"></a>
 
 ### ItemTypeProto
-Item type definitions
+
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  |  |
-| name | [string](#string) |  |  |
-| title_id | [string](#string) |  |  |
+| game_item_type_id | [string](#string) |  | The game&#39;s unique id for this ItemType |
+| name | [string](#string) |  | Name of this ItemType |
+| title_id | [string](#string) |  | Title this ItemType is associated with |
 | pri_rev_share_settings | [PriRevShareSettings](#saga-proto-api-itemtype-PriRevShareSettings) |  |  |
 | sec_rev_share_settings | [SecRevShareSettings](#saga-proto-api-itemtype-SecRevShareSettings) |  |  |
-| withdrawable | [bool](#bool) |  |  |
+| withdrawable | [bool](#bool) |  | Is this iten withdrawable? |
 | price_map | [PriceMap](#saga-proto-api-itemtype-PriceMap) |  |  |
 | item_type_state | [saga.proto.common.itemtype.ItemTypeState](#saga-proto-common-itemtype-ItemTypeState) |  |  |
-| created_timestamp | [int64](#int64) |  |  |
-| updated_timestamp | [int64](#int64) |  |  |
-| metadata | [saga.proto.common.Metadata](#saga-proto-common-Metadata) |  |  |
+| created_timestamp | [int64](#int64) |  | When this ItemType was created |
+| updated_timestamp | [int64](#int64) |  | When this ItemType was last updated |
+| metadata | [saga.proto.common.Metadata](#saga-proto-common-Metadata) |  | Metadata associated w ith this ItemType |
 
 
 
@@ -872,14 +856,13 @@ Item type definitions
 <a name="saga-proto-api-itemtype-UpdateItemTypeMetadataPayload"></a>
 
 ### UpdateItemTypeMetadataPayload
-Update item type metadata
+Update Metadata on ItemType call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  |  |
-| metadata | [saga.proto.common.Metadata](#saga-proto-common-Metadata) |  |  |
+| game_item_type_id | [string](#string) |  | Game&#39;s ItemTypeId for the Metadata to update |
+| metadata | [saga.proto.common.Metadata](#saga-proto-common-Metadata) |  | Metadata to update the ItemType with |
 
 
 
@@ -889,14 +872,13 @@ Update item type metadata
 <a name="saga-proto-api-itemtype-UpdateItemTypePayload"></a>
 
 ### UpdateItemTypePayload
-
+Update ItemType call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  |  |
-| withdrawable | [bool](#bool) |  |  |
+| game_item_type_id | [string](#string) |  | Game&#39;s ItemTypeId for the ItemType to update |
+| withdrawable | [bool](#bool) |  | withdrawable state to udpate to |
 
 
 
@@ -932,11 +914,11 @@ Update item type metadata
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetItemType | [.saga.proto.api.itemtype.GetItemTypeRequest](#saga-proto-api-itemtype-GetItemTypeRequest) | [.saga.proto.api.itemtype.ItemTypeProto](#saga-proto-api-itemtype-ItemTypeProto) |  |
-| GetItemTypes | [.saga.proto.api.itemtype.GetItemTypesRequest](#saga-proto-api-itemtype-GetItemTypesRequest) | [.saga.proto.api.itemtype.ItemTypesProto](#saga-proto-api-itemtype-ItemTypesProto) |  |
-| CreateItemType | [.saga.proto.api.itemtype.CreateItemTypeRequest](#saga-proto-api-itemtype-CreateItemTypeRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
-| UpdateItemTypeMetadata | [.saga.proto.api.itemtype.UpdateItemTypeMetadataPayload](#saga-proto-api-itemtype-UpdateItemTypeMetadataPayload) | [.google.protobuf.Empty](#google-protobuf-Empty) |  |
-| UpdateItemType | [.saga.proto.api.itemtype.UpdateItemTypePayload](#saga-proto-api-itemtype-UpdateItemTypePayload) | [.google.protobuf.Empty](#google-protobuf-Empty) |  |
+| GetItemType | [.saga.proto.api.itemtype.GetItemTypeRequest](#saga-proto-api-itemtype-GetItemTypeRequest) | [.saga.proto.api.itemtype.ItemTypeProto](#saga-proto-api-itemtype-ItemTypeProto) | Get an ItemType by Id |
+| GetItemTypes | [.saga.proto.api.itemtype.GetItemTypesRequest](#saga-proto-api-itemtype-GetItemTypesRequest) | [.saga.proto.api.itemtype.ItemTypesProto](#saga-proto-api-itemtype-ItemTypesProto) | Get ItemTypes based on filters |
+| CreateItemType | [.saga.proto.api.itemtype.CreateItemTypeRequest](#saga-proto-api-itemtype-CreateItemTypeRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Create an ItemType |
+| UpdateItemTypeMetadata | [.saga.proto.api.itemtype.UpdateItemTypeMetadataPayload](#saga-proto-api-itemtype-UpdateItemTypeMetadataPayload) | [.google.protobuf.Empty](#google-protobuf-Empty) | Update the Metadata on the ItemType |
+| UpdateItemType | [.saga.proto.api.itemtype.UpdateItemTypePayload](#saga-proto-api-itemtype-UpdateItemTypePayload) | [.google.protobuf.Empty](#google-protobuf-Empty) | Update the ItemType |
 
  
 
@@ -952,14 +934,13 @@ Update item type metadata
 <a name="saga-proto-api-listing-CancelListingRequest"></a>
 
 ### CancelListingRequest
-
+Cancel the Listing call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
-| listing_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | User of listing to cancel |
+| listing_id | [string](#string) |  | Id of Listing to cancel |
 
 
 
@@ -969,14 +950,13 @@ Update item type metadata
 <a name="saga-proto-api-listing-ConfirmListingRequest"></a>
 
 ### ConfirmListingRequest
-
+Confirm the Listing call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
-| quote_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | User of this Listing |
+| quote_id | [string](#string) |  | Quote Id of this Listing |
 
 
 
@@ -986,16 +966,15 @@ Update item type metadata
 <a name="saga-proto-api-listing-CreateListingQuoteRequest"></a>
 
 ### CreateListingQuoteRequest
-
+Create Quote for a Listing call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
-| total | [string](#string) |  |  |
-| currency | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | User of this Listing Quote |
+| game_inventory_id | [string](#string) |  | Id of GameInventory for this Listing |
+| total | [string](#string) |  | Total cost amount for the Listing |
+| currency | [string](#string) |  | Currency that the total is in |
 
 
 
@@ -1005,15 +984,15 @@ Update item type metadata
 <a name="saga-proto-api-listing-GetListingsRequest"></a>
 
 ### GetListingsRequest
-
+Get Listings call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  |  |
-| item_type_id | [string](#string) |  |  |
+| query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  | Filter/Sorting options for the call |
+| item_type_id | [string](#string) |  | Id of ItemType to get Listings for |
 | token | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | User to get Listings for |
 
 
 
@@ -1028,12 +1007,11 @@ Update item type metadata
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| title_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
-| currency | [string](#string) |  |  |
-| total | [string](#string) |  |  |
-| created_timestamp | [uint64](#uint64) |  |  |
+| oauth_id | [string](#string) |  | User of this Listing |
+| game_inventory_id | [string](#string) |  | Item associated with this Listing |
+| currency | [string](#string) |  | Type of currency the total is in |
+| total | [string](#string) |  | Total price of Listing |
+| created_timestamp | [uint64](#uint64) |  | When the Listing was created |
 
 
 
@@ -1043,20 +1021,20 @@ Update item type metadata
 <a name="saga-proto-api-listing-ListingQuoteProto"></a>
 
 ### ListingQuoteProto
-Listing definitions
+
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
-| quote_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
-| tax | [string](#string) |  | and fees? |
-| tax_currency | [string](#string) |  |  |
-| total | [string](#string) |  |  |
-| currency | [string](#string) |  |  |
-| created_timestamp | [uint64](#uint64) |  |  |
+| oauth_id | [string](#string) |  | User of this Listing |
+| quote_id | [string](#string) |  | unique QuoteId for this Listing |
+| game_inventory_id | [string](#string) |  | Item associated with this Listing |
+| tax | [string](#string) |  |  |
+| tax_currency | [string](#string) |  | Currency the tax is in |
+| total | [string](#string) |  | Total price of Listing |
+| currency | [string](#string) |  | Type of currency the total is in |
+| created_timestamp | [uint64](#uint64) |  | When the Listing was created |
 
 
 
@@ -1107,10 +1085,10 @@ Listing definitions
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreateListingQuote | [.saga.proto.api.listing.CreateListingQuoteRequest](#saga-proto-api-listing-CreateListingQuoteRequest) | [.saga.proto.api.listing.ListingQuoteProto](#saga-proto-api-listing-ListingQuoteProto) |  |
-| ConfirmListing | [.saga.proto.api.listing.ConfirmListingRequest](#saga-proto-api-listing-ConfirmListingRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
-| CancelListing | [.saga.proto.api.listing.CancelListingRequest](#saga-proto-api-listing-CancelListingRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
-| GetListings | [.saga.proto.api.listing.GetListingsRequest](#saga-proto-api-listing-GetListingsRequest) | [.saga.proto.api.listing.ListingsProto](#saga-proto-api-listing-ListingsProto) |  |
+| CreateListingQuote | [.saga.proto.api.listing.CreateListingQuoteRequest](#saga-proto-api-listing-CreateListingQuoteRequest) | [.saga.proto.api.listing.ListingQuoteProto](#saga-proto-api-listing-ListingQuoteProto) | Get a quote for a Listing |
+| ConfirmListing | [.saga.proto.api.listing.ConfirmListingRequest](#saga-proto-api-listing-ConfirmListingRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Confirm the Listing |
+| CancelListing | [.saga.proto.api.listing.CancelListingRequest](#saga-proto-api-listing-CancelListingRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Cancel the Listing |
+| GetListings | [.saga.proto.api.listing.GetListingsRequest](#saga-proto-api-listing-GetListingsRequest) | [.saga.proto.api.listing.ListingsProto](#saga-proto-api-listing-ListingsProto) | Get Listings based on filters |
 
  
 
@@ -1148,7 +1126,7 @@ Listing definitions
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| quote_id | [string](#string) |  |  |
+| quote_id | [string](#string) |  | Quote Id for this withdrawal |
 
 
 
@@ -1163,8 +1141,8 @@ Listing definitions
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| bid | [string](#string) |  |  |
-| ask | [string](#string) |  |  |
+| bid | [string](#string) |  | bid amount from Uphold |
+| ask | [string](#string) |  | ask amount from Uphold |
 
 
 
@@ -1174,15 +1152,15 @@ Listing definitions
 <a name="saga-proto-api-myth-GasFeeProto"></a>
 
 ### GasFeeProto
-
+Proto of converted units from gwei/eth
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| gwei_amount | [string](#string) |  |  |
-| eth_amount | [string](#string) |  |  |
-| converted_amount | [string](#string) |  |  |
-| converted_currency | [string](#string) |  |  |
+| gwei_amount | [string](#string) |  | GWEI amount to convert |
+| eth_amount | [string](#string) |  | ETH amount to convert |
+| converted_amount | [string](#string) |  | Amount after conversion |
+| converted_currency | [string](#string) |  | Currency to convert GWEI/ETH to |
 
 
 
@@ -1197,11 +1175,11 @@ Listing definitions
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| quantity | [string](#string) |  |  |
-| credit_card_info | [saga.proto.api.payment.CardPaymentData](#saga-proto-api-payment-CardPaymentData) |  |  |
+| quantity | [string](#string) |  | Amount of MYTH Tokens to buy |
+| credit_card_info | [saga.proto.api.payment.CardPaymentData](#saga-proto-api-payment-CardPaymentData) |  | Credit card payment |
 | denomination_currency | [string](#string) |  |  |
 | origin_sub_account | [string](#string) |  |  |
-| user_id | [string](#string) |  |  |
+| user_id | [string](#string) |  | User that is buying MYTH Tokens |
 
 
 
@@ -1248,8 +1226,8 @@ Listing definitions
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| total_amount | [string](#string) |  |  |
-| gas_fee | [string](#string) |  |  |
+| total_amount | [string](#string) |  | Amount of MYTH Tokens to withdraw |
+| gas_fee | [string](#string) |  | Gas cost of withdrawal |
 
 
 
@@ -1285,12 +1263,12 @@ Listing definitions
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetGasFee | [.google.protobuf.Empty](#google-protobuf-Empty) | [.saga.proto.api.myth.GasFeeProto](#saga-proto-api-myth-GasFeeProto) |  |
-| GetCurrencyExchange | [.google.protobuf.Empty](#google-protobuf-Empty) | [.saga.proto.api.myth.CurrencyExchangeProto](#saga-proto-api-myth-CurrencyExchangeProto) |  |
-| QuoteBuyingMythToken | [.saga.proto.api.myth.QuoteBuyingMythTokenRequest](#saga-proto-api-myth-QuoteBuyingMythTokenRequest) | [.saga.proto.api.myth.QuoteBuyingMythTokenResponse](#saga-proto-api-myth-QuoteBuyingMythTokenResponse) |  |
-| ConfirmBuyingMythToken | [.saga.proto.api.myth.ConfirmBuyingMythTokenRequest](#saga-proto-api-myth-ConfirmBuyingMythTokenRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
-| QuoteMythTokenWithdrawal | [.saga.proto.api.myth.QuoteMythTokenWithdrawalRequest](#saga-proto-api-myth-QuoteMythTokenWithdrawalRequest) | [.saga.proto.api.myth.QuoteMythTokenWithdrawalResponse](#saga-proto-api-myth-QuoteMythTokenWithdrawalResponse) |  |
-| ConfirmMythTokenWithdrawal | [.saga.proto.api.myth.ConfirmMythTokenWithdrawalRequest](#saga-proto-api-myth-ConfirmMythTokenWithdrawalRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
+| GetGasFee | [.google.protobuf.Empty](#google-protobuf-Empty) | [.saga.proto.api.myth.GasFeeProto](#saga-proto-api-myth-GasFeeProto) | Get the current MYTH price of 1 gas unit |
+| GetCurrencyExchange | [.google.protobuf.Empty](#google-protobuf-Empty) | [.saga.proto.api.myth.CurrencyExchangeProto](#saga-proto-api-myth-CurrencyExchangeProto) | Get the exchange rate of MYTH Token |
+| QuoteBuyingMythToken | [.saga.proto.api.myth.QuoteBuyingMythTokenRequest](#saga-proto-api-myth-QuoteBuyingMythTokenRequest) | [.saga.proto.api.myth.QuoteBuyingMythTokenResponse](#saga-proto-api-myth-QuoteBuyingMythTokenResponse) | Quote buying MYTH Tokens |
+| ConfirmBuyingMythToken | [.saga.proto.api.myth.ConfirmBuyingMythTokenRequest](#saga-proto-api-myth-ConfirmBuyingMythTokenRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Confirm buying of MYTH Tokens |
+| QuoteMythTokenWithdrawal | [.saga.proto.api.myth.QuoteMythTokenWithdrawalRequest](#saga-proto-api-myth-QuoteMythTokenWithdrawalRequest) | [.saga.proto.api.myth.QuoteMythTokenWithdrawalResponse](#saga-proto-api-myth-QuoteMythTokenWithdrawalResponse) | Quote withdrawing MYTH Tokens |
+| ConfirmMythTokenWithdrawal | [.saga.proto.api.myth.ConfirmMythTokenWithdrawalRequest](#saga-proto-api-myth-ConfirmMythTokenWithdrawalRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Confirm withdrawing MYTH Tokens |
 
  
 
@@ -1306,14 +1284,13 @@ Listing definitions
 <a name="saga-proto-api-offer-CancelOfferRequest"></a>
 
 ### CancelOfferRequest
-
+Cancel Offer call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
-| offer_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | User that the Offer belongs to |
+| offer_id | [string](#string) |  | Id of the Offer to Cancel |
 
 
 
@@ -1323,14 +1300,15 @@ Listing definitions
 <a name="saga-proto-api-offer-ConfirmOfferRequest"></a>
 
 ### ConfirmOfferRequest
-
+Confirm Offer call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  |  |
-| quote_id | [string](#string) |  | TODO: where&#39;s the payment data? Also are offers fronted payment or we somehow storing it (securely) then charging when needed |
+| quote_id | [string](#string) |  | Quote Id of the Offer
+
+@exclude TODO: where&#39;s the payment data? Also are offers fronted payment or we somehow storing it (securely) then charging when needed |
 
 
 
@@ -1340,16 +1318,15 @@ Listing definitions
 <a name="saga-proto-api-offer-CreateOfferQuoteRequest"></a>
 
 ### CreateOfferQuoteRequest
-offer-related
+Create Offer Quote call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
-| total | [string](#string) |  |  |
-| currency | [string](#string) |  |  |
+| game_inventory_id | [string](#string) |  | GameInventory Id of the Offer |
+| total | [string](#string) |  | Total quoted for the Offer |
+| currency | [string](#string) |  | Currency the total is in |
 
 
 
@@ -1359,15 +1336,15 @@ offer-related
 <a name="saga-proto-api-offer-GetOffersRequest"></a>
 
 ### GetOffersRequest
-
+Get Offers call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  |  |
-| item_type_id | [string](#string) |  |  |
-| token | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
+| query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  | Filter/Sort options for the call |
+| item_type_id | [string](#string) |  | Id of ItemType to get Offers for |
+| token | [string](#string) |  | Token to get Offers for |
+| oauth_id | [string](#string) |  | User to get Offers for |
 
 
 
@@ -1382,12 +1359,11 @@ offer-related
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| title_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
-| currency | [string](#string) |  |  |
-| total | [string](#string) |  |  |
-| created_timestamp | [uint64](#uint64) |  |  |
+| oauth_id | [string](#string) |  | User of the Offer |
+| game_inventory_id | [string](#string) |  | GameInventory Id of the Offer |
+| currency | [string](#string) |  | Currency of the total |
+| total | [string](#string) |  | Total cost of the offer |
+| created_timestamp | [uint64](#uint64) |  | When the offer was created |
 
 
 
@@ -1397,20 +1373,22 @@ offer-related
 <a name="saga-proto-api-offer-OfferQuoteProto"></a>
 
 ### OfferQuoteProto
-Offer definitions
+
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
-| quote_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
-| tax | [string](#string) |  | and fees? |
-| tax_currency | [string](#string) |  |  |
-| total | [string](#string) |  |  |
-| currency | [string](#string) |  |  |
-| created_timestamp | [uint64](#uint64) |  |  |
+| oauth_id | [string](#string) |  | User of this Offer Quote |
+| quote_id | [string](#string) |  | Id of this Offer Quote |
+| game_inventory_id | [string](#string) |  | GameInventory Id for this Offer Quote |
+| tax | [string](#string) |  | Amount of tax
+
+@exclude and fees? |
+| tax_currency | [string](#string) |  | Currency that Tax is in |
+| total | [string](#string) |  | Total cost of the offer |
+| currency | [string](#string) |  | Currency the total is in |
+| created_timestamp | [uint64](#uint64) |  | When the Offer was created |
 
 
 
@@ -1461,10 +1439,10 @@ Offer definitions
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreateOfferQuote | [.saga.proto.api.offer.CreateOfferQuoteRequest](#saga-proto-api-offer-CreateOfferQuoteRequest) | [.saga.proto.api.offer.OfferQuoteProto](#saga-proto-api-offer-OfferQuoteProto) |  |
-| ConfirmOffer | [.saga.proto.api.offer.ConfirmOfferRequest](#saga-proto-api-offer-ConfirmOfferRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
-| CancelOffer | [.saga.proto.api.offer.CancelOfferRequest](#saga-proto-api-offer-CancelOfferRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
-| GetOffers | [.saga.proto.api.offer.GetOffersRequest](#saga-proto-api-offer-GetOffersRequest) | [.saga.proto.api.offer.OffersProto](#saga-proto-api-offer-OffersProto) |  |
+| CreateOfferQuote | [.saga.proto.api.offer.CreateOfferQuoteRequest](#saga-proto-api-offer-CreateOfferQuoteRequest) | [.saga.proto.api.offer.OfferQuoteProto](#saga-proto-api-offer-OfferQuoteProto) | Create an Offer quote |
+| ConfirmOffer | [.saga.proto.api.offer.ConfirmOfferRequest](#saga-proto-api-offer-ConfirmOfferRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Confirm the Offer |
+| CancelOffer | [.saga.proto.api.offer.CancelOfferRequest](#saga-proto-api-offer-CancelOfferRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Cancel the Offer |
+| GetOffers | [.saga.proto.api.offer.GetOffersRequest](#saga-proto-api-offer-GetOffersRequest) | [.saga.proto.api.offer.OffersProto](#saga-proto-api-offer-OffersProto) | Get Offers based on filters |
 
  
 
@@ -1480,7 +1458,7 @@ Offer definitions
 <a name="saga-proto-api-order-ConfirmOrderRequest"></a>
 
 ### ConfirmOrderRequest
-confirm order call
+Confirm Order call
 
 
 | Field | Type | Label | Description |
@@ -1499,14 +1477,14 @@ confirm order call
 <a name="saga-proto-api-order-CreateOrderQuoteRequest"></a>
 
 ### CreateOrderQuoteRequest
-create order quote call
+Create Order Quote call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | title_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  |  |
-| subtotal | [string](#string) |  | TODO: amoir, so we still thinking storing price so it isn&#39;t passed in? |
+| subtotal | [string](#string) |  |  |
 | payment_provider_data | [PaymentProviderData](#saga-proto-api-order-PaymentProviderData) |  |  |
 | game_item_type_id | [string](#string) |  |  |
 | listing_address | [string](#string) |  |  |
@@ -1568,7 +1546,7 @@ create order quote call
 <a name="saga-proto-api-order-QuoteProto"></a>
 
 ### QuoteProto
-Order definitions
+
 
 
 | Field | Type | Label | Description |
@@ -1576,7 +1554,7 @@ Order definitions
 | trace_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  |  |
 | quote_id | [string](#string) |  |  |
-| tax | [string](#string) |  | maybe call it fee? fee for fees in crypto and tax in fiat |
+| tax | [string](#string) |  |  |
 | tax_currency | [string](#string) |  |  |
 | total | [string](#string) |  |  |
 | currency | [string](#string) |  |  |
@@ -1596,7 +1574,7 @@ Order definitions
 <a name="saga-proto-api-order-PaymentProviderId"></a>
 
 ### PaymentProviderId
-TODO: there are duplicate PaymentProviderId in the payments definition
+
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
@@ -1633,8 +1611,8 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreateOrderQuote | [.saga.proto.api.order.CreateOrderQuoteRequest](#saga-proto-api-order-CreateOrderQuoteRequest) | [.saga.proto.api.order.QuoteProto](#saga-proto-api-order-QuoteProto) |  |
-| ConfirmOrder | [.saga.proto.api.order.ConfirmOrderRequest](#saga-proto-api-order-ConfirmOrderRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) |  |
+| CreateOrderQuote | [.saga.proto.api.order.CreateOrderQuoteRequest](#saga-proto-api-order-CreateOrderQuoteRequest) | [.saga.proto.api.order.QuoteProto](#saga-proto-api-order-QuoteProto) | Create an Order |
+| ConfirmOrder | [.saga.proto.api.order.ConfirmOrderRequest](#saga-proto-api-order-ConfirmOrderRequest) | [.saga.proto.common.ReceivedResponse](#saga-proto-common-ReceivedResponse) | Confirm the Order |
 
  
 
@@ -1678,7 +1656,7 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| make_default | [bool](#bool) |  |  |
+| make_default | [bool](#bool) |  | Make this the default payment |
 | cybersource | [CybersourcePaymentData](#saga-proto-api-payment-CybersourcePaymentData) |  |  |
 
 
@@ -1696,7 +1674,7 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
 | card_payment_data | [CardPaymentData](#saga-proto-api-payment-CardPaymentData) |  |  |
-| address | [Address](#saga-proto-api-payment-Address) |  | Uphold linking info? |
+| address | [Address](#saga-proto-api-payment-Address) |  |  |
 
 
 
@@ -1761,9 +1739,9 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
-| card_payment_data | [CardPaymentData](#saga-proto-api-payment-CardPaymentData) |  |  |
-| address | [Address](#saga-proto-api-payment-Address) |  |  |
+| oauth_id | [string](#string) |  | User of this Payment Method |
+| card_payment_data | [CardPaymentData](#saga-proto-api-payment-CardPaymentData) |  | Card data |
+| address | [Address](#saga-proto-api-payment-Address) |  | Address of this Payment Method |
 
 
 
@@ -1780,7 +1758,7 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
 | card_payment_data | [CardPaymentData](#saga-proto-api-payment-CardPaymentData) |  |  |
-| address | [Address](#saga-proto-api-payment-Address) |  | Uphold linking info |
+| address | [Address](#saga-proto-api-payment-Address) |  |  |
 
 
 
@@ -1816,10 +1794,10 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreatePaymentMethod | [.saga.proto.api.payment.CreatePaymentMethodRequest](#saga-proto-api-payment-CreatePaymentMethodRequest) | [.saga.proto.api.payment.PaymentMethodProto](#saga-proto-api-payment-PaymentMethodProto) |  |
-| GetPaymentMethod | [.saga.proto.api.payment.GetPaymentMethodRequest](#saga-proto-api-payment-GetPaymentMethodRequest) | [.saga.proto.api.payment.PaymentMethodProto](#saga-proto-api-payment-PaymentMethodProto) |  |
-| UpdatePaymentMethod | [.saga.proto.api.payment.UpdatePaymentMethodRequest](#saga-proto-api-payment-UpdatePaymentMethodRequest) | [.saga.proto.api.payment.PaymentMethodProto](#saga-proto-api-payment-PaymentMethodProto) |  |
-| DeletePaymentMethod | [.saga.proto.api.payment.DeletePaymentMethodRequest](#saga-proto-api-payment-DeletePaymentMethodRequest) | [.saga.proto.api.payment.PaymentMethodProto](#saga-proto-api-payment-PaymentMethodProto) |  |
+| CreatePaymentMethod | [.saga.proto.api.payment.CreatePaymentMethodRequest](#saga-proto-api-payment-CreatePaymentMethodRequest) | [.saga.proto.api.payment.PaymentMethodProto](#saga-proto-api-payment-PaymentMethodProto) | Create a Payment Method |
+| GetPaymentMethod | [.saga.proto.api.payment.GetPaymentMethodRequest](#saga-proto-api-payment-GetPaymentMethodRequest) | [.saga.proto.api.payment.PaymentMethodProto](#saga-proto-api-payment-PaymentMethodProto) | Get Payment Method for a user |
+| UpdatePaymentMethod | [.saga.proto.api.payment.UpdatePaymentMethodRequest](#saga-proto-api-payment-UpdatePaymentMethodRequest) | [.saga.proto.api.payment.PaymentMethodProto](#saga-proto-api-payment-PaymentMethodProto) | Update the Payment Method for a User |
+| DeletePaymentMethod | [.saga.proto.api.payment.DeletePaymentMethodRequest](#saga-proto-api-payment-DeletePaymentMethodRequest) | [.saga.proto.api.payment.PaymentMethodProto](#saga-proto-api-payment-PaymentMethodProto) | Delete a Payment Method for a User |
 
  
 
@@ -1835,12 +1813,12 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 <a name="saga-proto-api-title-GetTitlesRequest"></a>
 
 ### GetTitlesRequest
-
+Get Titles call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  |  |
+| query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  | Sort/Filter options |
 
 
 
@@ -1855,9 +1833,9 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| name | [string](#string) |  |  |
-| created_timestamp | [int64](#int64) |  |  |
+| title_id | [string](#string) |  | Unique id |
+| name | [string](#string) |  | Name for this Title |
+| created_timestamp | [int64](#int64) |  | When this Title was created |
 
 
 
@@ -1908,7 +1886,7 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetTitles | [.saga.proto.api.title.GetTitlesRequest](#saga-proto-api-title-GetTitlesRequest) | [.saga.proto.api.title.TitlesProto](#saga-proto-api-title-TitlesProto) |  |
+| GetTitles | [.saga.proto.api.title.GetTitlesRequest](#saga-proto-api-title-GetTitlesRequest) | [.saga.proto.api.title.TitlesProto](#saga-proto-api-title-TitlesProto) | Get all titles from a filter |
 
  
 
@@ -1924,15 +1902,14 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 <a name="saga-proto-api-transaction-GetTransactionsForItemTypeRequest"></a>
 
 ### GetTransactionsForItemTypeRequest
-
+Get Transactions for an ItemType
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| item_type_id | [string](#string) |  |  |
-| token_id | [string](#string) |  |  |
-| title_id | [string](#string) |  |  |
-| query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  |  |
+| item_type_id | [string](#string) |  | Id of ItemType to query on |
+| token_id | [string](#string) |  | Token Id |
+| query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  | Sort/Filter options |
 
 
 
@@ -1942,13 +1919,13 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 <a name="saga-proto-api-transaction-GetTransactionsForPlayerRequest"></a>
 
 ### GetTransactionsForPlayerRequest
-
+Get Transactions for a Player call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  |  |
+| oauth_id | [string](#string) |  | Player to get Transactions for |
+| query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  | Sort/Filter options |
 
 
 
@@ -1963,9 +1940,9 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| transaction_id | [string](#string) |  |  |
-| title_id | [string](#string) |  |  |
-| created_timestamp | [int64](#int64) |  |  |
+| transaction_id | [string](#string) |  | Unique Id |
+| title_id | [string](#string) |  | title that this transaction is from |
+| created_timestamp | [int64](#int64) |  | When this Transaction was created |
 
 
 
@@ -2016,8 +1993,8 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetTransactionsForPlayer | [.saga.proto.api.transaction.GetTransactionsForPlayerRequest](#saga-proto-api-transaction-GetTransactionsForPlayerRequest) | [.saga.proto.api.transaction.TransactionsProto](#saga-proto-api-transaction-TransactionsProto) |  |
-| GetTransactionsForItemType | [.saga.proto.api.transaction.GetTransactionsForItemTypeRequest](#saga-proto-api-transaction-GetTransactionsForItemTypeRequest) | [.saga.proto.api.transaction.TransactionsProto](#saga-proto-api-transaction-TransactionsProto) |  |
+| GetTransactionsForPlayer | [.saga.proto.api.transaction.GetTransactionsForPlayerRequest](#saga-proto-api-transaction-GetTransactionsForPlayerRequest) | [.saga.proto.api.transaction.TransactionsProto](#saga-proto-api-transaction-TransactionsProto) | Get all Transactions for a Player |
+| GetTransactionsForItemType | [.saga.proto.api.transaction.GetTransactionsForItemTypeRequest](#saga-proto-api-transaction-GetTransactionsForItemTypeRequest) | [.saga.proto.api.transaction.TransactionsProto](#saga-proto-api-transaction-TransactionsProto) | Get all Transactions for an ItemType |
 
  
 
@@ -2038,7 +2015,7 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [string](#string) |  | and more? |
+| id | [string](#string) |  |  |
 
 
 
@@ -2053,10 +2030,10 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  |  |
-| game_id | [string](#string) |  |  |
-| quantity | [string](#string) |  |  |
-| contract_address | [string](#string) |  |  |
+| name | [string](#string) |  | Name for this Fungible Token |
+| game_id | [string](#string) |  | Id of game this is part of |
+| quantity | [string](#string) |  | Amount of token available |
+| contract_address | [string](#string) |  | Contract address of this Fungible Token |
 
 
 
@@ -2066,13 +2043,12 @@ TODO: there are duplicate PaymentProviderId in the payments definition
 <a name="saga-proto-api-user-GetUserRequest"></a>
 
 ### GetUserRequest
-Get user calls
+Get User call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | Get the user of this Id |
 
 
 
@@ -2082,12 +2058,12 @@ Get user calls
 <a name="saga-proto-api-user-GetUsersRequest"></a>
 
 ### GetUsersRequest
-
+Get Users call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  |  |
+| query_options | [saga.proto.common.query.QueryOptionsProto](#saga-proto-common-query-QueryOptionsProto) |  | Sort/Filter options |
 
 
 
@@ -2102,10 +2078,9 @@ Get wallet assets call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| publisher_id | [string](#string) |  |  |
-| partner_id | [string](#string) |  |  |
-| title_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | (optional) User to get Wallet for |
+| publisher_id | [string](#string) |  | (optional) Get related Mythical chain wallet for this Publisher Id |
+| partner_id | [string](#string) |  | (optional) Get related Mythical chain wallet for this Partner Id |
 
 
 
@@ -2120,9 +2095,9 @@ Get wallet assets call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| item_type_name | [string](#string) |  |  |
-| item_type_id | [string](#string) |  |  |
-| contract_address | [string](#string) |  |  |
+| item_type_name | [string](#string) |  | Name of the ItemType |
+| item_type_id | [string](#string) |  | Id of the ItemType |
+| contract_address | [string](#string) |  | Contract address of the NFT |
 | token_id | [string](#string) |  |  |
 
 
@@ -2133,13 +2108,13 @@ Get wallet assets call
 <a name="saga-proto-api-user-UpdateUserRequest"></a>
 
 ### UpdateUserRequest
-Update user call
+Update User call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | title_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  | TODO: what is being updated here |
+| oauth_id | [string](#string) |  |  |
 
 
 
@@ -2154,7 +2129,7 @@ Update user call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [string](#string) |  | and more? |
+| id | [string](#string) |  |  |
 
 
 
@@ -2164,18 +2139,18 @@ Update user call
 <a name="saga-proto-api-user-UserProto"></a>
 
 ### UserProto
-User definitions
+
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
-| chain_address | [string](#string) |  |  |
-| user_state | [saga.proto.common.user.UserState](#saga-proto-common-user-UserState) |  |  |
-| uphold_accounts | [UpholdAccount](#saga-proto-api-user-UpholdAccount) | repeated |  |
-| cybersource_account | [CybersourceAccount](#saga-proto-api-user-CybersourceAccount) |  |  |
-| created_timestamp | [uint64](#uint64) |  |  |
+| oauth_id | [string](#string) |  | Unique Id (oauth) for this User |
+| chain_address | [string](#string) |  | Address on the chain |
+| user_state | [saga.proto.common.user.UserState](#saga-proto-common-user-UserState) |  | What state the User is in |
+| uphold_accounts | [UpholdAccount](#saga-proto-api-user-UpholdAccount) | repeated | Linked Uphold account |
+| cybersource_account | [CybersourceAccount](#saga-proto-api-user-CybersourceAccount) |  | Linked Cybersource account |
+| created_timestamp | [uint64](#uint64) |  | When this User was created |
 
 
 
@@ -2206,11 +2181,11 @@ User definitions
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | nmyth_token | [string](#string) |  |  |
-| nmyth_token_quantity | [string](#string) |  |  |
+| nmyth_token_quantity | [string](#string) |  | Quantity of nMYTH tokens |
 | ausd_token | [string](#string) |  |  |
-| ausd_token_quantity | [string](#string) |  |  |
-| nft_items | [NftItem](#saga-proto-api-user-NftItem) | repeated |  |
-| fungible_tokens | [FungibleToken](#saga-proto-api-user-FungibleToken) | repeated |  |
+| ausd_token_quantity | [string](#string) |  | Quantity of aUSD tokens |
+| nft_items | [NftItem](#saga-proto-api-user-NftItem) | repeated | List of NFT Items |
+| fungible_tokens | [FungibleToken](#saga-proto-api-user-FungibleToken) | repeated | List of Fungible Tokens |
 
 
 
@@ -2246,10 +2221,10 @@ User definitions
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetUser | [.saga.proto.api.user.GetUserRequest](#saga-proto-api-user-GetUserRequest) | [.saga.proto.api.user.UserProto](#saga-proto-api-user-UserProto) |  |
-| GetUsers | [.saga.proto.api.user.GetUsersRequest](#saga-proto-api-user-GetUsersRequest) | [.saga.proto.api.user.UsersProto](#saga-proto-api-user-UsersProto) |  |
-| UpdateUser | [.saga.proto.api.user.UpdateUserRequest](#saga-proto-api-user-UpdateUserRequest) | [.saga.proto.api.user.UserProto](#saga-proto-api-user-UserProto) |  |
-| GetWalletAssets | [.saga.proto.api.user.GetWalletAssetsRequest](#saga-proto-api-user-GetWalletAssetsRequest) | [.saga.proto.api.user.WalletAsset](#saga-proto-api-user-WalletAsset) |  |
+| GetUser | [.saga.proto.api.user.GetUserRequest](#saga-proto-api-user-GetUserRequest) | [.saga.proto.api.user.UserProto](#saga-proto-api-user-UserProto) | Get a User given their oauth Id |
+| GetUsers | [.saga.proto.api.user.GetUsersRequest](#saga-proto-api-user-GetUsersRequest) | [.saga.proto.api.user.UsersProto](#saga-proto-api-user-UsersProto) | Get a list of Users based on query parameters |
+| UpdateUser | [.saga.proto.api.user.UpdateUserRequest](#saga-proto-api-user-UpdateUserRequest) | [.saga.proto.api.user.UserProto](#saga-proto-api-user-UserProto) | Update a User |
+| GetWalletAssets | [.saga.proto.api.user.GetWalletAssetsRequest](#saga-proto-api-user-GetWalletAssetsRequest) | [.saga.proto.api.user.WalletAsset](#saga-proto-api-user-WalletAsset) | Get assets for a User/publisher/partner |
 
  
 
@@ -2265,15 +2240,15 @@ User definitions
 <a name="saga-proto-common-Metadata"></a>
 
 ### Metadata
-
+Metadata properties of Item
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  |  |
-| description | [string](#string) |  |  |
-| image | [string](#string) |  |  |
-| properties | [google.protobuf.Struct](#google-protobuf-Struct) |  |  |
+| name | [string](#string) |  | Name of item |
+| description | [string](#string) |  | Description of the item |
+| image | [string](#string) |  | URL to the image of the item |
+| properties | [google.protobuf.Struct](#google-protobuf-Struct) |  | Additional properties about the Item in a &lt;Key,Value&gt; structure |
 
 
 
@@ -2349,10 +2324,10 @@ User definitions
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| FAILED | 0 |  |
-| ISSUED | 1 |  |
-| TRANSFERRED | 2 |  |
-| BURNED | 3 |  |
+| FAILED | 0 | Failed to issue/transfer/burn Game Coin |
+| ISSUED | 1 | Game Coin issued successfully |
+| TRANSFERRED | 2 | Game Coin transferred successfully |
+| BURNED | 3 | Game Coin burned successfully |
 
 
  
@@ -2379,14 +2354,14 @@ User definitions
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| FAILED | 0 |  |
-| ISSUED | 1 |  |
-| LISTED | 2 |  |
-| TRANSFERRED | 3 |  |
+| FAILED | 0 | Failed to perform current Item action |
+| ISSUED | 1 | Item issued successfully |
+| LISTED | 2 | Item listed successfully |
+| TRANSFERRED | 3 | Item transferred successfully |
 | BURNED | 4 | item no longer exists on the blockchain so the API will have to keep track through transaction history |
-| LISTING_CLOSED | 5 |  |
-| WITHDRAWN | 6 |  |
-| DEPOSITED | 7 |  |
+| LISTING_CLOSED | 5 | Listing for Item is closed |
+| WITHDRAWN | 6 | Item withdrawn successfully |
+| DEPOSITED | 7 | Item deposited successfully |
 
 
  
@@ -2413,11 +2388,11 @@ User definitions
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| FAILED | 0 |  |
-| CREATED | 1 |  |
-| FROZEN | 2 |  |
-| SOLD_OUT | 3 |  |
-| EXPIRED | 4 |  |
+| FAILED | 0 | ItemType failed to perform current action |
+| CREATED | 1 | ItemType created successfully |
+| FROZEN | 2 | ItemType is Frozen |
+| SOLD_OUT | 3 | ItemType is Sold Out |
+| EXPIRED | 4 | ItemType has been expired |
 
 
  
@@ -2444,10 +2419,10 @@ User definitions
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| FAILED | 0 |  |
-| CREATED | 1 |  |
-| SOLD | 2 |  |
-| CANCELLED | 3 |  |
+| FAILED | 0 | Listing has failed current action |
+| CREATED | 1 | Listing created successfully |
+| SOLD | 2 | Listing sold successfully |
+| CANCELLED | 3 | Listing cancelled successfully |
 
 
  
@@ -2474,9 +2449,9 @@ User definitions
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| FAILED | 0 |  |
-| TRANSFERRED | 1 |  |
-| WITHDRAWN | 2 |  |
+| FAILED | 0 | MYTH Token failed to be transferred/withdrawn |
+| TRANSFERRED | 1 | MYTH Token transferred successfully |
+| WITHDRAWN | 2 | MYTH Token withdrawn successfully |
 
 
  
@@ -2503,10 +2478,10 @@ User definitions
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| FAILED | 0 |  |
-| CREATED | 1 |  |
-| CONFIRMED | 2 |  |
-| CANCELLED | 3 |  |
+| FAILED | 0 | Offer failed current action |
+| CREATED | 1 | Offer created successfully |
+| CONFIRMED | 2 | Offer confirmed successfully |
+| CANCELLED | 3 | Offer canceled |
 
 
  
@@ -2533,12 +2508,12 @@ User definitions
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| FAILED | 0 |  |
-| STARTED | 1 |  |
-| COMPLETE | 2 |  |
-| PAID | 3 |  |
-| EXPIRED | 4 |  |
-| REFUNDED | 5 |  |
+| FAILED | 0 | Order failed current action |
+| STARTED | 1 | Order started |
+| COMPLETE | 2 | Order completed successfully |
+| PAID | 3 | Order paid successfully |
+| EXPIRED | 4 | Order has expired |
+| REFUNDED | 5 | Order refunded successfully |
 
 
  
@@ -2561,7 +2536,7 @@ User definitions
 <a name="saga-proto-common-payment-PaymentProviderId"></a>
 
 ### PaymentProviderId
-Payment definitions
+Types of Payments
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
@@ -2589,13 +2564,13 @@ Payment definitions
 <a name="saga-proto-common-query-ExpressionProto"></a>
 
 ### ExpressionProto
-
+Allowed expression in a query. Expression is a combination of [attribute_name | conditional | value]
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| attribute_name | [string](#string) |  |  |
-| conditional | [FilterConditional](#saga-proto-common-query-FilterConditional) |  |  |
+| attribute_name | [string](#string) |  | name of the attribute to filter on |
+| conditional | [FilterConditional](#saga-proto-common-query-FilterConditional) |  | how to filter on the attribute (See FilterConditional) |
 | double_value | [double](#double) |  |  |
 | string_value | [string](#string) |  |  |
 | bool_value | [bool](#bool) |  |  |
@@ -2608,7 +2583,7 @@ Payment definitions
 <a name="saga-proto-common-query-FilterValueProto"></a>
 
 ### FilterValueProto
-
+container to allow building out a full filter of Expressions and FilterOperations
 
 
 | Field | Type | Label | Description |
@@ -2624,15 +2599,15 @@ Payment definitions
 <a name="saga-proto-common-query-QueryOptionsProto"></a>
 
 ### QueryOptionsProto
-
+Options allowed when querying
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| filter_options | [FilterValueProto](#saga-proto-common-query-FilterValueProto) | repeated |  |
-| page_size | [int32](#int32) |  |  |
-| sort_order | [saga.proto.common.sort.SortOrder](#saga-proto-common-sort-SortOrder) |  |  |
-| sort_attribute | [string](#string) |  |  |
+| filter_options | [FilterValueProto](#saga-proto-common-query-FilterValueProto) | repeated | Complete filter chain of attributes to filter on |
+| page_size | [int32](#int32) |  | Size of the page of results |
+| sort_order | [saga.proto.common.sort.SortOrder](#saga-proto-common-sort-SortOrder) |  | Which order to sort |
+| sort_attribute | [string](#string) |  | Which attribute to sort on |
 
 
 
@@ -2644,30 +2619,30 @@ Payment definitions
 <a name="saga-proto-common-query-FilterConditional"></a>
 
 ### FilterConditional
-
+Allowed compare operations when filtering
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| EQUALS | 0 |  |
-| EQUALS_LESS_THAN | 1 |  |
-| LESS_THAN | 2 |  |
-| EQUALS_GREATER_THAN | 3 |  |
-| GREATER_THAN | 4 |  |
-| NOT_EQUALS | 5 |  |
-| CONTAINS | 6 |  |
-| NOT_CONTAINS | 7 |  |
+| EQUALS | 0 | ObjectA = ObjectB |
+| EQUALS_LESS_THAN | 1 | ObjectA &lt;= ObjectB |
+| LESS_THAN | 2 | ObjectA &lt; ObjectB |
+| EQUALS_GREATER_THAN | 3 | ObjectA &gt;= ObjectB |
+| GREATER_THAN | 4 | ObjectA &gt; ObjectB |
+| NOT_EQUALS | 5 | ObjectA != ObjectB |
+| CONTAINS | 6 | ObjectA is in ListB |
+| NOT_CONTAINS | 7 | ObjectA is not in ListB |
 
 
 
 <a name="saga-proto-common-query-FilterOperation"></a>
 
 ### FilterOperation
-
+Alloed operations when chaining filters
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| AND | 0 |  |
-| OR | 1 |  |
+| AND | 0 | FilterA &amp;&amp; FilterB |
+| OR | 1 | FilterA || FilterB |
 
 
  
@@ -2694,8 +2669,8 @@ Payment definitions
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| ASC | 0 |  |
-| DESC | 1 |  |
+| ASC | 0 | Sort ascending |
+| DESC | 1 | Sort descending |
 
 
  
@@ -2722,8 +2697,8 @@ Payment definitions
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| FAILED | 0 |  |
-| LINKED | 1 |  |
+| FAILED | 0 | User failed current action |
+| LINKED | 1 | User linked successfully |
 
 
  
@@ -2744,13 +2719,12 @@ Payment definitions
 <a name="saga-rpc-streams-bridge-BridgeStatusUpdate"></a>
 
 ### BridgeStatusUpdate
-
+Results from a Bridge status update gRPC stream call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
-| trace_id | [string](#string) |  |  |
 | game_item_type_id | [string](#string) |  |  |
 | game_inventory_id | [string](#string) |  |  |
 | destination_address | [string](#string) |  |  |
@@ -2814,7 +2788,7 @@ Payment definitions
 <a name="saga-rpc-streams-gamecoin-GameCoinStatusConfirmRequest"></a>
 
 ### GameCoinStatusConfirmRequest
-
+GameCoin information sent on a confirm request
 
 
 | Field | Type | Label | Description |
@@ -2832,16 +2806,15 @@ Payment definitions
 <a name="saga-rpc-streams-gamecoin-GameCoinStatusUpdate"></a>
 
 ### GameCoinStatusUpdate
-
+Results from a GameCoin status update gRPC stream call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| trace_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | User of GameCoin |
 | currency_id | [string](#string) |  |  |
-| coin_count | [int32](#int32) |  |  |
-| game_coin_state | [saga.proto.common.gamecoin.GameCoinState](#saga-proto-common-gamecoin-GameCoinState) |  |  |
+| coin_count | [int32](#int32) |  | Amount of coins |
+| game_coin_state | [saga.proto.common.gamecoin.GameCoinState](#saga-proto-common-gamecoin-GameCoinState) |  | State of the GameCoin, see GameCoinState |
 
 
 
@@ -2867,18 +2840,17 @@ Payment definitions
 <a name="saga-rpc-streams-item-ItemStatusUpdate"></a>
 
 ### ItemStatusUpdate
-
+Results from an Item status update gRPC stream call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| trace_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
+| game_inventory_id | [string](#string) |  | Game&#39;s unique Id for the Item |
+| game_item_type_id | [string](#string) |  | Game&#39;s ItemTypeId for the ItemType for this Item |
+| oauth_id | [string](#string) |  | User for this Item |
 | serial_number | [int32](#int32) |  |  |
-| metadata_uri | [string](#string) |  |  |
-| item_state | [saga.proto.common.item.ItemState](#saga-proto-common-item-ItemState) |  |  |
+| metadata_uri | [string](#string) |  | Metadata address |
+| item_state | [saga.proto.common.item.ItemState](#saga-proto-common-item-ItemState) |  | State of the Item, see ItemState |
 
 
 
@@ -2904,14 +2876,13 @@ Payment definitions
 <a name="saga-rpc-streams-itemtype-ItemTypeStatusUpdate"></a>
 
 ### ItemTypeStatusUpdate
-
+Results from a ItemType status update gRPC stream call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| trace_id | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  |  |
-| item_type_state | [saga.proto.common.itemtype.ItemTypeState](#saga-proto-common-itemtype-ItemTypeState) |  |  |
+| game_item_type_id | [string](#string) |  | Game&#39;s unique id for this ItemType |
+| item_type_state | [saga.proto.common.itemtype.ItemTypeState](#saga-proto-common-itemtype-ItemTypeState) |  | State of the ItemType, see ItemTypeState |
 
 
 
@@ -2937,17 +2908,16 @@ Payment definitions
 <a name="saga-rpc-streams-listing-ListingStatusUpdate"></a>
 
 ### ListingStatusUpdate
-
+Results from a Listing status update gRPC stream call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| trace_id | [string](#string) |  |  |
-| quote_id | [string](#string) |  |  |
-| listing_id | [string](#string) |  |  |
-| total | [string](#string) |  |  |
-| listing_state | [saga.proto.common.listing.ListingState](#saga-proto-common-listing-ListingState) |  |  |
+| oauth_id | [string](#string) |  | User of this Listing |
+| quote_id | [string](#string) |  | Quote id associated to this Listing |
+| listing_id | [string](#string) |  | Unique id for this listing |
+| total | [string](#string) |  | total cose on listing |
+| listing_state | [saga.proto.common.listing.ListingState](#saga-proto-common-listing-ListingState) |  | State of the Listing, see ListingState |
 
 
 
@@ -2973,13 +2943,12 @@ Payment definitions
 <a name="saga-rpc-streams-myth-MythTokenStatusUpdate"></a>
 
 ### MythTokenStatusUpdate
-
+Results from a MYTH Token status update gRPC stream call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| trace_id | [string](#string) |  |  |
-| token_state | [saga.proto.common.myth.MythTokenState](#saga-proto-common-myth-MythTokenState) |  |  |
+| token_state | [saga.proto.common.myth.MythTokenState](#saga-proto-common-myth-MythTokenState) |  | State of the MYTH Token, see MythTokenState |
 
 
 
@@ -3005,18 +2974,17 @@ Payment definitions
 <a name="saga-rpc-streams-offer-OfferStatusUpdate"></a>
 
 ### OfferStatusUpdate
-
+Results from a Offer status update gRPC stream call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| trace_id | [string](#string) |  |  |
-| quote_id | [string](#string) |  |  |
-| offer_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
-| total | [string](#string) |  |  |
-| offer_state | [saga.proto.common.offer.OfferState](#saga-proto-common-offer-OfferState) |  |  |
+| oauth_id | [string](#string) |  | User of this Offer |
+| quote_id | [string](#string) |  | Quote associated to this Offer |
+| offer_id | [string](#string) |  | Unique id for this Offer |
+| game_inventory_id | [string](#string) |  | Game&#39;s id for the Item associated with this Offer |
+| total | [string](#string) |  | Total price for the offer |
+| offer_state | [saga.proto.common.offer.OfferState](#saga-proto-common-offer-OfferState) |  | State of the Offer, see OfferState |
 
 
 
@@ -3042,17 +3010,16 @@ Payment definitions
 <a name="saga-rpc-streams-order-OrderStatusUpdate"></a>
 
 ### OrderStatusUpdate
-
+Results from an Order status update gRPC stream call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| trace_id | [string](#string) |  |  |
-| quote_id | [string](#string) |  | TODO: quote == order? |
+| oauth_id | [string](#string) |  | User of the Order |
+| quote_id | [string](#string) |  |  |
 | order_id | [string](#string) |  |  |
-| total | [string](#string) |  |  |
-| order_state | [saga.proto.common.order.OrderState](#saga-proto-common-order-OrderState) |  |  |
+| total | [string](#string) |  | Total price of the Order |
+| order_state | [saga.proto.common.order.OrderState](#saga-proto-common-order-OrderState) |  | State of the Order, see OrderState |
 
 
 
@@ -3083,7 +3050,7 @@ Payment definitions
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| trace_id | [string](#string) |  | TODO: what else to confirm with? |
+| trace_id | [string](#string) |  |  |
 
 
 
@@ -3093,7 +3060,7 @@ Payment definitions
 <a name="saga-rpc-streams-StatusUpdate"></a>
 
 ### StatusUpdate
-
+Returned results on sending a Status stream call
 
 
 | Field | Type | Label | Description |
@@ -3128,8 +3095,8 @@ Payment definitions
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| StatusStream | [Subscribe](#saga-rpc-streams-Subscribe) | [StatusUpdate](#saga-rpc-streams-StatusUpdate) stream |  |
-| StatusConfirmation | [StatusConfirmRequest](#saga-rpc-streams-StatusConfirmRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) |  |
+| StatusStream | [Subscribe](#saga-rpc-streams-Subscribe) | [StatusUpdate](#saga-rpc-streams-StatusUpdate) stream | Send a call to update the status |
+| StatusConfirmation | [StatusConfirmRequest](#saga-rpc-streams-StatusConfirmRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | Get verification of status |
 
  
 
@@ -3145,14 +3112,13 @@ Payment definitions
 <a name="saga-rpc-streams-user-UserStatusUpdate"></a>
 
 ### UserStatusUpdate
-
+Results from a User status update gRPC stream call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| trace_id | [string](#string) |  |  |
-| user_state | [saga.proto.common.user.UserState](#saga-proto-common-user-UserState) |  |  |
+| oauth_id | [string](#string) |  | Unique id for the user |
+| user_state | [saga.proto.common.user.UserState](#saga-proto-common-user-UserState) |  | State of the User, see UserState |
 
 
 
