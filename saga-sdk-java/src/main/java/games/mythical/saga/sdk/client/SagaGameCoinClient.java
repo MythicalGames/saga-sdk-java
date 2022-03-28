@@ -8,8 +8,6 @@ import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.gamecoin.*;
 import games.mythical.saga.sdk.proto.common.SortOrder;
-import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
-import games.mythical.saga.sdk.proto.streams.Subscribe;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class SagaGameCoinClient extends AbstractSagaClient {
+public class SagaGameCoinClient extends AbstractSagaStreamClient {
     private final SagaGameCoinExecutor executor;
     private GameCoinServiceGrpc.GameCoinServiceBlockingStub serviceBlockingStub;
 
@@ -33,23 +31,8 @@ public class SagaGameCoinClient extends AbstractSagaClient {
     @Override
     void initStub() {
         serviceBlockingStub = GameCoinServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
-        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
-                .withCallCredentials(addAuthentication());
-
-        if (SagaStatusUpdateObserver.getInstance() == null) {
-            subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
-        }
+        initStreamStub();
         SagaStatusUpdateObserver.getInstance().with(executor);
-    }
-
-    void subscribeToStream(SagaStatusUpdateObserver observer) {
-        // set up server stream
-        var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
-        var subscribe = Subscribe.newBuilder()
-                .setTitleId(config.getTitleId())
-                .build();
-
-        streamStub.statusStream(subscribe, observer);
     }
 
     public Optional<SagaGameCoin> getGameCoin(String currencyId, String oauthId) throws SagaException {

@@ -48,8 +48,8 @@ public class SagaClientFactory {
         return new SagaMythTokenClient(config, executor);
     }
 
-    public SagaPaymentClient createSagaPaymentClient() throws SagaException {
-        return new SagaPaymentClient(config);
+    public SagaPaymentClient createSagaPaymentClient(SagaPaymentExecutor executor) throws SagaException {
+        return new SagaPaymentClient(config, executor);
     }
 
     public SagaUserClient createSagaUserClient(SagaUserExecutor executor) throws SagaException {

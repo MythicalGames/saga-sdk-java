@@ -4,11 +4,11 @@ import games.mythical.saga.sdk.client.executor.MockItemExecutor;
 import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.proto.api.item.ItemProto;
 import games.mythical.saga.sdk.proto.api.item.ItemServiceGrpc;
-import games.mythical.saga.sdk.proto.api.item.UpdateItemsMetadataResponse;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.item.ItemState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemStatusUpdate;
+import games.mythical.saga.sdk.proto.streams.item.ItemUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -117,12 +117,13 @@ class SagaItemClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
+        final var update = ItemStatusUpdate.newBuilder()
+                .setGameInventoryId(GAME_INVENTORY_ID)
+                .setOauthId(EXPECTED_OAUTH_ID)
+                .setItemState(ItemState.ISSUED);
         itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setItemStatus(ItemStatusUpdate.newBuilder()
-                        .setGameInventoryId(GAME_INVENTORY_ID)
-                        .setOauthId(EXPECTED_OAUTH_ID)
-                        .setItemState(ItemState.ISSUED))
+                .setItemUpdate(ItemUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -157,12 +158,13 @@ class SagaItemClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
+        final var update = ItemStatusUpdate.newBuilder()
+            .setGameInventoryId(GAME_INVENTORY_ID)
+            .setOauthId(DEST)
+            .setItemState(ItemState.TRANSFERRED);
         itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setItemStatus(ItemStatusUpdate.newBuilder()
-                        .setGameInventoryId(GAME_INVENTORY_ID)
-                        .setOauthId(DEST)
-                        .setItemState(ItemState.TRANSFERRED))
+                .setItemUpdate(ItemUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -194,12 +196,13 @@ class SagaItemClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
+        final var update = ItemStatusUpdate.newBuilder()
+                .setGameInventoryId(GAME_INVENTORY_ID)
+                .setOauthId(RandomStringUtils.randomAlphanumeric(30))
+                .setItemState(ItemState.BURNED);
         itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setItemStatus(ItemStatusUpdate.newBuilder()
-                        .setGameInventoryId(GAME_INVENTORY_ID)
-                        .setOauthId(RandomStringUtils.randomAlphanumeric(30))
-                        .setItemState(ItemState.BURNED))
+                .setItemUpdate(ItemUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -216,7 +219,10 @@ class SagaItemClientTest extends AbstractClientTest {
     public void updateItemMetadata() throws Exception {
         final var EXPECTED_METADATA = generateItemMetadata();
 
-        when(mockServiceBlockingStub.updateItemsMetadata(any())).thenReturn(UpdateItemsMetadataResponse.newBuilder().build());
+        final var expectedResponse = ReceivedResponse.newBuilder()
+            .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+            .build();
+        when(mockServiceBlockingStub.updateItemsMetadata(any())).thenReturn(expectedResponse);
         itemClient.updateItemMetadata(GAME_INVENTORY_ID, EXPECTED_METADATA);
     }
 }

@@ -6,12 +6,12 @@ import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.order.OrderState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.order.OrderStatusUpdate;
+import games.mythical.saga.sdk.proto.streams.order.OrderUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +22,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +32,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class SagaOrderClientTest extends AbstractClientTest {
     private static final String OAUTH_ID = UUID.randomUUID().toString();
-    private static final String CURRENCY = "USD";
 
     private final MockOrderExecutor executor = MockOrderExecutor.builder().build();
     private MockServer orderServer;
@@ -63,44 +61,52 @@ class SagaOrderClientTest extends AbstractClientTest {
 
     @Test
     public void createQuote() throws Exception {
-        var expectedResponse = QuoteProto.newBuilder()
-                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
-                .setOauthId(OAUTH_ID)
-                .setQuoteId(RandomStringUtils.randomAlphanumeric(30))
-                .setTax(String.valueOf(RandomUtils.nextInt(1, 100)))
-                .setTaxCurrency(CURRENCY)
-                .setTotal(String.valueOf(RandomUtils.nextInt(1, 1000)))
-                .setCurrency(CURRENCY)
-                .setPaymentProviderId(PaymentProviderId.forNumber(RandomUtils.nextInt(0, PaymentProviderId.values().length - 1)))
-                .setConversionRate(RandomStringUtils.randomAlphanumeric(30))
-                .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
-                .build();
+        final var QUOTE_ID = RandomStringUtils.randomAlphanumeric(30);
+        final var expectedResponse = genReceived();
         when(mockServiceBlockingStub.createOrderQuote(any())).thenReturn(expectedResponse);
 
-        var paymentProviderData = PaymentProviderData.newBuilder()
-                .setCreditCardData(CreditCardData.newBuilder()
-                        .setAddressLine1(RandomStringUtils.randomAlphanumeric(30))
-                        .setPostalCode(RandomStringUtils.randomAlphanumeric(30))
-                        .build())
-                .setUpholdCardId(RandomStringUtils.randomAlphanumeric(30))
-                .build();
-        var quoteResponse = orderClient.createQuote(
-                OAUTH_ID,
-                BigDecimal.TEN,
-                paymentProviderData,
-                RandomStringUtils.randomAlphanumeric(30),
-                null,
-                false,
-                false,
-                false,
-                null
+        final var paymentProviderData = PaymentProviderData.newBuilder()
+            .setCreditCardData(CreditCardData.newBuilder()
+                                   .setAddressLine1(RandomStringUtils.randomAlphanumeric(30))
+                                   .setPostalCode(RandomStringUtils.randomAlphanumeric(30))
+                                   .build())
+            .setUpholdCardId(RandomStringUtils.randomAlphanumeric(30))
+            .build();
+        final var trace = orderClient.createQuote(
+            OAUTH_ID,
+            BigDecimal.TEN,
+            paymentProviderData,
+            RandomStringUtils.randomAlphanumeric(30),
+            null,
+            false,
+            false,
+            false,
+            null
         );
+        checkTraceAndStart(expectedResponse, executor, trace);
 
-        assertTrue(quoteResponse.isPresent());
-        var quote = quoteResponse.get();
-        assertEquals(expectedResponse.getTraceId(), quote.getTraceId());
-        assertEquals(OAUTH_ID, quote.getOauthId());
-        assertTrue(StringUtils.isNotBlank(expectedResponse.getQuoteId()));
+        final var update = OrderStatusUpdate.newBuilder()
+            .setOauthId(OAUTH_ID)
+            .setQuoteId(QUOTE_ID)
+            .setOrderId(QUOTE_ID)
+            .setTotal(String.valueOf(RandomUtils.nextInt(1, 1000)))
+            .setOrderState(OrderState.COMPLETE);
+        var statusUpdate = StatusUpdate.newBuilder()
+            .setTraceId(executor.getTraceId())
+            .setOrderUpdate(OrderUpdate.newBuilder().setStatusUpdate(update))
+            .build();
+        orderServer.getStatusStream().sendStatus(titleId, statusUpdate);
+
+        ConcurrentFinisher.wait(executor.getTraceId());
+
+        assertEquals(OAUTH_ID, executor.getOauthId());
+        assertEquals(QUOTE_ID, executor.getQuoteId());
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertEquals(OrderState.COMPLETE, executor.getOrderState());
+        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        orderServer.verifyCalls("StatusStream", 1);
+        orderServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -135,14 +141,15 @@ class SagaOrderClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
+        final var update = OrderStatusUpdate.newBuilder()
+            .setOauthId(OAUTH_ID)
+            .setQuoteId(QUOTE_ID)
+            .setOrderId(QUOTE_ID)
+            .setTotal(String.valueOf(RandomUtils.nextInt(1, 1000)))
+            .setOrderState(OrderState.COMPLETE);
         var statusUpdate = StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setOrderStatus(OrderStatusUpdate.newBuilder()
-                        .setOauthId(OAUTH_ID)
-                        .setQuoteId(QUOTE_ID)
-                        .setOrderId(QUOTE_ID)
-                        .setTotal(String.valueOf(RandomUtils.nextInt(1, 1000)))
-                        .setOrderState(OrderState.COMPLETE))
+                .setOrderUpdate(OrderUpdate.newBuilder().setStatusUpdate(update))
                 .build();
         orderServer.getStatusStream().sendStatus(titleId, statusUpdate);
 

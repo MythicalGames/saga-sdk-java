@@ -2,26 +2,22 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaOfferExecutor;
 import games.mythical.saga.sdk.client.model.SagaOffer;
-import games.mythical.saga.sdk.client.model.SagaOfferQuote;
 import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.offer.*;
-import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
-import games.mythical.saga.sdk.proto.streams.Subscribe;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class SagaOfferClient extends AbstractSagaClient {
+public class SagaOfferClient extends AbstractSagaStreamClient {
     private final SagaOfferExecutor executor;
     private OfferServiceGrpc.OfferServiceBlockingStub serviceBlockingStub;
 
@@ -34,26 +30,11 @@ public class SagaOfferClient extends AbstractSagaClient {
     @Override
     void initStub() {
         serviceBlockingStub = OfferServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
-        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
-                .withCallCredentials(addAuthentication());
-
-        if (SagaStatusUpdateObserver.getInstance() == null) {
-            subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
-        }
+        initStreamStub();
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    void subscribeToStream(SagaStatusUpdateObserver observer) {
-        // set up server stream
-        var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
-        var subscribe = Subscribe.newBuilder()
-                .setTitleId(config.getTitleId())
-                .build();
-
-        streamStub.statusStream(subscribe, observer);
-    }
-
-    public Optional<SagaOfferQuote> createOfferQuote(String oauthId,
+    public String createOfferQuote(String oauthId,
                                                      String gameInventoryId,
                                                      BigDecimal subtotal,
                                                      String currency) throws SagaException {
@@ -65,14 +46,14 @@ public class SagaOfferClient extends AbstractSagaClient {
                 .build();
 
         try {
-            var quote = serviceBlockingStub.createOfferQuote(request);
-            return Optional.of(SagaOfferQuote.fromProto(quote));
+            var receivedResponse = serviceBlockingStub.createOfferQuote(request);
+            executor.emitReceived(SagaOfferExecutor.UNKOWN_QUOTE, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
-            if (e.getStatus() == Status.NOT_FOUND) {
-                return Optional.empty();
-            }
-
             throw SagaException.fromGrpcException(e);
+        } catch (Exception e) {
+            log.error("Exception calling emitReceived on createOffer, offer may be lost!", e);
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
 

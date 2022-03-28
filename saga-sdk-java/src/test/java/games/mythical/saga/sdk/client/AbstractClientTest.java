@@ -1,8 +1,11 @@
 package games.mythical.saga.sdk.client;
 
+import games.mythical.saga.sdk.client.executor.MockBaseExecutor;
 import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaException;
+import games.mythical.saga.sdk.proto.common.ReceivedResponse;
+import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -15,6 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @Slf4j
 public abstract class AbstractClientTest {
@@ -57,6 +61,26 @@ public abstract class AbstractClientTest {
                 "list_field", List.of("one", "two"),
                 "obj_field", new Object()
         );
+    }
+
+    protected ReceivedResponse genReceived() {
+        return ReceivedResponse.newBuilder()
+            .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+            .build();
+    }
+
+    protected void checkTraceAndStart(ReceivedResponse expectedResponse,
+                                      MockBaseExecutor executor,
+                                      String trace) throws Exception {
+
+        assertEquals(expectedResponse.getTraceId(), trace);
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        // a short wait is needed so the status stream can be hooked up
+        // before the emitting the event from the sendStatus method
+        Thread.sleep(500);
+        ConcurrentFinisher.start(executor.getTraceId());
     }
 
     /**

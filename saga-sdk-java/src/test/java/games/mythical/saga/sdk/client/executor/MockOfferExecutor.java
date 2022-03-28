@@ -5,10 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
-public class MockOfferExecutor implements SagaOfferExecutor {
+public class MockOfferExecutor extends MockBaseExecutor implements SagaOfferExecutor {
     private String oauthId;
     private String traceId;
     private String quoteId;

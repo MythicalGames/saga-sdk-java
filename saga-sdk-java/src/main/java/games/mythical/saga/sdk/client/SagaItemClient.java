@@ -9,10 +9,7 @@ import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.item.*;
-import games.mythical.saga.sdk.proto.common.FilterConditional;
 import games.mythical.saga.sdk.proto.common.Finalized;
-import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
-import games.mythical.saga.sdk.proto.streams.Subscribe;
 import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -24,7 +21,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class SagaItemClient extends AbstractSagaClient {
+public class SagaItemClient extends AbstractSagaStreamClient {
     private final SagaItemExecutor executor;
     private ItemServiceGrpc.ItemServiceBlockingStub serviceBlockingStub;
 
@@ -37,23 +34,8 @@ public class SagaItemClient extends AbstractSagaClient {
     @Override
     void initStub() {
         serviceBlockingStub = ItemServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
-        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
-                .withCallCredentials(addAuthentication());
-
-        if (SagaStatusUpdateObserver.getInstance() == null) {
-            subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
-        }
+        initStreamStub();
         SagaStatusUpdateObserver.getInstance().with(executor);
-    }
-
-    void subscribeToStream(SagaStatusUpdateObserver observer) {
-        // set up server stream
-        var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
-        var subscribe = Subscribe.newBuilder()
-                .setTitleId(config.getTitleId())
-                .build();
-
-        streamStub.statusStream(subscribe, observer);
     }
 
     public Optional<SagaItem> getItem(String gameInventoryId, boolean history) throws SagaException {

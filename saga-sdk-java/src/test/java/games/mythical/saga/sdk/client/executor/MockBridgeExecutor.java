@@ -1,11 +1,11 @@
 package games.mythical.saga.sdk.client.executor;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
-public class MockBridgeExecutor implements SagaBridgeExecutor {
+public class MockBridgeExecutor extends MockBaseExecutor implements SagaBridgeExecutor {
     private String oauthId;
     private String gameInventoryId;
     private String gameItemTypeId;
@@ -14,7 +14,6 @@ public class MockBridgeExecutor implements SagaBridgeExecutor {
     private String originAddress;
     private String mythicalTransactionId;
     private String mainnetTransactionId;
-    private String traceId;
 
     @Override
     public void updateItem(String oauthId,
@@ -25,7 +24,7 @@ public class MockBridgeExecutor implements SagaBridgeExecutor {
                            String originAddress,
                            String mythicalTransactionId,
                            String mainnetTransactionId,
-                           String traceId) throws Exception {
+                           String traceId) {
         this.oauthId = oauthId;
         this.gameInventoryId = gameInventoryId;
         this.gameItemTypeId = gameItemTypeId;
@@ -38,7 +37,7 @@ public class MockBridgeExecutor implements SagaBridgeExecutor {
     }
 
     @Override
-    public void emitReceived(String gameInventoryId, String traceId) throws Exception {
+    public void emitReceived(String gameInventoryId, String traceId) {
         this.gameInventoryId = gameInventoryId;
         this.traceId = traceId;
     }

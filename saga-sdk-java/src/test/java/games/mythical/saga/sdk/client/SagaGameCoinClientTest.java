@@ -7,6 +7,7 @@ import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.gamecoin.GameCoinState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.gamecoin.GameCoinStatusUpdate;
+import games.mythical.saga.sdk.proto.streams.gamecoin.GameCoinUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -104,12 +105,13 @@ class SagaGameCoinClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
+        final var update = GameCoinStatusUpdate.newBuilder()
+                .setOauthId(OAUTH_ID)
+                .setCurrencyId(CURRENCY_ID)
+                .setGameCoinState(GameCoinState.ISSUED);
         gameCoinServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setGameCoinStatus(GameCoinStatusUpdate.newBuilder()
-                        .setOauthId(OAUTH_ID)
-                        .setCurrencyId(CURRENCY_ID)
-                        .setGameCoinState(GameCoinState.ISSUED))
+                .setGameCoinUpdate(GameCoinUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -144,12 +146,13 @@ class SagaGameCoinClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
+        final var update = GameCoinStatusUpdate.newBuilder()
+                .setOauthId(DEST)
+                .setCurrencyId(CURRENCY_ID)
+                .setGameCoinState(GameCoinState.TRANSFERRED);
         gameCoinServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setGameCoinStatus(GameCoinStatusUpdate.newBuilder()
-                        .setOauthId(DEST)
-                        .setCurrencyId(CURRENCY_ID)
-                        .setGameCoinState(GameCoinState.TRANSFERRED))
+                .setGameCoinUpdate(GameCoinUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -181,12 +184,13 @@ class SagaGameCoinClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
+        final var update = GameCoinStatusUpdate.newBuilder()
+                .setOauthId(OAUTH_ID)
+                .setCurrencyId(CURRENCY_ID)
+                .setGameCoinState(GameCoinState.BURNED);
         gameCoinServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setGameCoinStatus(GameCoinStatusUpdate.newBuilder()
-                        .setOauthId(OAUTH_ID)
-                        .setCurrencyId(CURRENCY_ID)
-                        .setGameCoinState(GameCoinState.BURNED))
+                .setGameCoinUpdate(GameCoinUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());

@@ -9,8 +9,6 @@ import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.bridge.BridgeServiceGrpc;
 import games.mythical.saga.sdk.proto.api.bridge.GetBridgeRequest;
 import games.mythical.saga.sdk.proto.api.bridge.WithdrawItemRequest;
-import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
-import games.mythical.saga.sdk.proto.streams.Subscribe;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Optional;
 
 @Slf4j
-public class SagaBridgeClient extends AbstractSagaClient {
+public class SagaBridgeClient extends AbstractSagaStreamClient {
+
     private final SagaBridgeExecutor executor;
     private BridgeServiceGrpc.BridgeServiceBlockingStub serviceBlockingStub;
 
@@ -30,40 +29,26 @@ public class SagaBridgeClient extends AbstractSagaClient {
 
     @Override
     void initStub() {
-        serviceBlockingStub = BridgeServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
-        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
-                .withCallCredentials(addAuthentication());
-
-        if (SagaStatusUpdateObserver.getInstance() == null) {
-            subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
-        }
+        serviceBlockingStub = BridgeServiceGrpc.newBlockingStub(channel)
+            .withCallCredentials(addAuthentication());
+        initStreamStub();
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    void subscribeToStream(SagaStatusUpdateObserver observer) {
-        // set up server stream
-        var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
-        var subscribe = Subscribe.newBuilder()
-                .setTitleId(config.getTitleId())
-                .build();
-
-        streamStub.statusStream(subscribe, observer);
-    }
-
     public String withdrawItem(String oauthId,
-                             String gameItemTypeId,
-                             String gameInventoryId,
-                             String destinationAddress,
-                             String destinationChain,
-                             String originChain) throws SagaException {
+                               String gameItemTypeId,
+                               String gameInventoryId,
+                               String destinationAddress,
+                               String destinationChain,
+                               String originChain) throws SagaException {
         var request = WithdrawItemRequest.newBuilder()
-                .setOauthId(oauthId)
-                .setGameItemTypeId(gameItemTypeId)
-                .setGameInventoryId(gameInventoryId)
-                .setDestinationAddress(destinationAddress)
-                .setDestinationChain(destinationChain)
-                .setOriginAddress(originChain)
-                .build();
+            .setOauthId(oauthId)
+            .setGameItemTypeId(gameItemTypeId)
+            .setGameInventoryId(gameInventoryId)
+            .setDestinationAddress(destinationAddress)
+            .setDestinationChain(destinationChain)
+            .setOriginAddress(originChain)
+            .build();
 
         try {
             var receivedResponse = serviceBlockingStub.withdrawItem(request);

@@ -3,10 +3,11 @@ package games.mythical.saga.sdk.client.executor;
 import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
-public class MockItemTypeExecutor implements SagaItemTypeExecutor {
+public class MockItemTypeExecutor extends MockBaseExecutor implements SagaItemTypeExecutor {
     private String gameItemTypeId;
     private String traceId;
     private ItemTypeState itemTypeState;
