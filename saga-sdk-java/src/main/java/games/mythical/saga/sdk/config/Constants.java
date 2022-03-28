@@ -20,4 +20,7 @@ public class Constants {
     public final static int MAX_PORT = 65535;
     public final static int MIN_KEEP_ALIVE = 0;
     public final static int MIN_TOKEN_REFRESH = 5;
+
+    // Values
+    public final static String UNKNOWN_ID = "";
 }

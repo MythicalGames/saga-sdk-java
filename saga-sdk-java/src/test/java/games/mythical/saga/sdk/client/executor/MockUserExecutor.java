@@ -2,10 +2,11 @@ package games.mythical.saga.sdk.client.executor;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
-public class MockUserExecutor implements SagaUserExecutor {
+public class MockUserExecutor extends MockBaseExecutor implements SagaUserExecutor {
     private String oauthId;
     private String traceId;
 

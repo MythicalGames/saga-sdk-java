@@ -9,9 +9,6 @@ import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.itemtype.*;
-import games.mythical.saga.sdk.proto.common.FilterConditional;
-import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
-import games.mythical.saga.sdk.proto.streams.Subscribe;
 import io.grpc.Status;
 import io.grpc.StatusException;
 import io.grpc.StatusRuntimeException;
@@ -21,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public class SagaItemTypeClient extends AbstractSagaClient {
+public class SagaItemTypeClient extends AbstractSagaStreamClient {
     private final SagaItemTypeExecutor executor;
     private ItemTypeServiceGrpc.ItemTypeServiceBlockingStub serviceBlockingStub;
 
@@ -34,23 +31,8 @@ public class SagaItemTypeClient extends AbstractSagaClient {
     @Override
     void initStub() {
         serviceBlockingStub = ItemTypeServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
-        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
-                .withCallCredentials(addAuthentication());
-
-        if (SagaStatusUpdateObserver.getInstance() == null) {
-            subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
-        }
+        initStreamStub();
         SagaStatusUpdateObserver.getInstance().with(executor);
-    }
-
-    void subscribeToStream(SagaStatusUpdateObserver observer) {
-        // set up server stream
-        var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
-        var subscribe = Subscribe.newBuilder()
-                .setTitleId(config.getTitleId())
-                .build();
-
-        streamStub.statusStream(subscribe, observer);
     }
 
     public Optional<SagaItemType> getItemType(String gameItemTypeId) throws SagaException {
@@ -70,10 +52,10 @@ public class SagaItemTypeClient extends AbstractSagaClient {
         }
     }
 
-    public List<SagaItemType> getItemTypes(QueryOptions queryOptions) throws SagaException {
-        if (queryOptions == null) {
-            queryOptions = new QueryOptions();
-        }
+    public List<SagaItemType> getItemTypes(QueryOptions providedQueryOptions) throws SagaException {
+        final var queryOptions = providedQueryOptions != null
+            ? providedQueryOptions
+            : new QueryOptions();
 
         var builder = GetItemTypesRequest.newBuilder()
                 .setQueryOptions(QueryOptions.toProto(queryOptions));
@@ -112,34 +94,21 @@ public class SagaItemTypeClient extends AbstractSagaClient {
         }
     }
 
-    public void updateItemType(String gameItemTypeId, boolean withdrawable) throws SagaException {
+    public String updateItemType(String gameItemTypeId, boolean withdrawable) throws SagaException {
         try {
             log.trace("ItemTypeClient.updateItemType called for {}", gameItemTypeId);
             var request = UpdateItemTypePayload.newBuilder()
                     .setGameItemTypeId(gameItemTypeId)
                     .setWithdrawable(withdrawable)
                     .build();
-            serviceBlockingStub.updateItemType(request);
+            var result = serviceBlockingStub.updateItemType(request);
+            executor.emitReceived(gameItemTypeId, result.getTraceId());
+            return result.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling updateItemType ", e);
-        }
-    }
-
-    public void updateItemTypeMetadata(String gameItemTypeId, SagaMetadata metadata) throws SagaException {
-        log.trace("ItemTypeClient.updateItemTypeMetadata called for {}", gameItemTypeId);
-        try {
-            var request = UpdateItemTypeMetadataPayload.newBuilder()
-                    .setGameItemTypeId(gameItemTypeId)
-                    .setMetadata(SagaMetadata.toProto(metadata))
-                    .build();
-            serviceBlockingStub.updateItemTypeMetadata(request);
-        } catch (StatusRuntimeException e) {
-            throw SagaException.fromGrpcException(e);
-        } catch (SagaException e) {
-            log.error("Error parsing metadata!", e);
-            throw new SagaException(SagaErrorCode.PARSING_DATA_EXCEPTION);
+            log.error("Exception calling emitReceived on updateItemType, item type may be lost!", e);
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
 }

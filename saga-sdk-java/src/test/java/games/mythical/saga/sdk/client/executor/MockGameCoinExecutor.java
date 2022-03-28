@@ -2,11 +2,11 @@ package games.mythical.saga.sdk.client.executor;
 
 import games.mythical.saga.sdk.proto.common.gamecoin.GameCoinState;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
-public class MockGameCoinExecutor implements SagaGameCoinExecutor {
+public class MockGameCoinExecutor extends MockBaseExecutor implements SagaGameCoinExecutor {
     private String currencyId;
     private int coinCount;
     private String oauthId;
@@ -18,7 +18,7 @@ public class MockGameCoinExecutor implements SagaGameCoinExecutor {
                                int coinCount,
                                String oauthId,
                                String traceId,
-                               GameCoinState gameCoinState) throws Exception {
+                               GameCoinState gameCoinState) {
         this.currencyId = currencyId;
         this.coinCount = coinCount;
         this.oauthId = oauthId;
@@ -27,7 +27,7 @@ public class MockGameCoinExecutor implements SagaGameCoinExecutor {
     }
 
     @Override
-    public void emitReceived(String currencyId, String oauthId, String traceId) throws Exception {
+    public void emitReceived(String currencyId, String oauthId, String traceId) {
         this.currencyId = currencyId;
         this.oauthId = oauthId;
         this.traceId = traceId;

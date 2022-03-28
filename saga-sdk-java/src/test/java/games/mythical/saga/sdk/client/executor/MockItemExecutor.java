@@ -2,11 +2,11 @@ package games.mythical.saga.sdk.client.executor;
 
 import games.mythical.saga.sdk.proto.common.item.ItemState;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
-public class MockItemExecutor implements SagaItemExecutor {
+public class MockItemExecutor extends MockBaseExecutor implements SagaItemExecutor {
     private String gameInventoryId;
     private String gameItemTypeId;
     private String oauthId;

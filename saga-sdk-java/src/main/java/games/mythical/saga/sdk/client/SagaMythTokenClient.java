@@ -11,8 +11,6 @@ import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.myth.*;
 import games.mythical.saga.sdk.proto.api.payment.CardPaymentData;
-import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
-import games.mythical.saga.sdk.proto.streams.Subscribe;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 @Slf4j
-public class SagaMythTokenClient extends AbstractSagaClient {
+public class SagaMythTokenClient extends AbstractSagaStreamClient {
     private final SagaMythTokenExecutor executor;
     private MythServiceGrpc.MythServiceBlockingStub serviceBlockingStub;
 
@@ -33,23 +31,8 @@ public class SagaMythTokenClient extends AbstractSagaClient {
     @Override
     void initStub() {
         serviceBlockingStub = MythServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
-        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
-                .withCallCredentials(addAuthentication());
-
-        if (SagaStatusUpdateObserver.getInstance() == null) {
-            subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
-        }
+        initStreamStub();
         SagaStatusUpdateObserver.getInstance().with(executor);
-    }
-
-    void subscribeToStream(SagaStatusUpdateObserver observer) {
-        // set up server stream
-        var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
-        var subscribe = Subscribe.newBuilder()
-                .setTitleId(config.getTitleId())
-                .build();
-
-        streamStub.statusStream(subscribe, observer);
     }
 
     public Optional<SagaGasFee> getGasFee() {

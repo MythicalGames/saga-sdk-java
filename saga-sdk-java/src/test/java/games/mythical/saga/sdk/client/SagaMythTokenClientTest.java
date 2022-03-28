@@ -8,6 +8,7 @@ import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.myth.MythTokenState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.myth.MythTokenStatusUpdate;
+import games.mythical.saga.sdk.proto.streams.myth.MythTokenUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -132,10 +133,11 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
+        final var update = MythTokenStatusUpdate.newBuilder()
+                .setTokenState(MythTokenState.TRANSFERRED);
         mythTokenServer.getStatusStream().sendStatus(config.getTitleId(), StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setMythTokenStatus(MythTokenStatusUpdate.newBuilder()
-                        .setTokenState(MythTokenState.TRANSFERRED))
+                .setMythTokenUpdate(MythTokenUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -177,10 +179,11 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
+        final var update = MythTokenStatusUpdate.newBuilder()
+                .setTokenState(MythTokenState.WITHDRAWN);
         mythTokenServer.getStatusStream().sendStatus(config.getTitleId(), StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setMythTokenStatus(MythTokenStatusUpdate.newBuilder()
-                        .setTokenState(MythTokenState.WITHDRAWN))
+                .setMythTokenUpdate(MythTokenUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());

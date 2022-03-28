@@ -6,7 +6,9 @@ import games.mythical.saga.sdk.proto.api.bridge.BridgeServiceGrpc;
 import games.mythical.saga.sdk.proto.api.gamecoin.GameCoinServiceGrpc;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.bridge.BridgeStatusUpdate;
+import games.mythical.saga.sdk.proto.streams.bridge.BridgeUpdate;
 import games.mythical.saga.sdk.proto.streams.gamecoin.GameCoinStatusUpdate;
+import games.mythical.saga.sdk.proto.streams.gamecoin.GameCoinUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -80,11 +82,12 @@ class SagaMultiClientTest extends AbstractClientTest {
         ConcurrentFinisher.start(TRACE_ID_2);
 
         // firing a bridge event so bridge executor should catch it
+        final var update = BridgeStatusUpdate.newBuilder()
+            .setOauthId(OAUTH_ID)
+            .setGameItemTypeId(RandomStringUtils.randomAlphanumeric(30));
         var statusUpdate = StatusUpdate.newBuilder()
                 .setTraceId(TRACE_ID_2)
-                .setBridgeStatus(BridgeStatusUpdate.newBuilder()
-                        .setOauthId(OAUTH_ID)
-                        .setGameItemTypeId(RandomStringUtils.randomAlphanumeric(30)))
+                .setBridgeUpdate(BridgeUpdate.newBuilder().setStatusUpdate(update))
                 .build();
         mockServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
@@ -100,11 +103,12 @@ class SagaMultiClientTest extends AbstractClientTest {
         mockServer.verifyCalls("StatusConfirmation", 1);
 
         // make sure no other stream is catching this game coin event
+        final var update2 = GameCoinStatusUpdate.newBuilder()
+            .setOauthId(OAUTH_ID)
+            .setCurrencyId(RandomStringUtils.randomAlphanumeric(30));
         var statusUpdate2 = StatusUpdate.newBuilder()
                 .setTraceId(TRACE_ID_1)
-                .setGameCoinStatus(GameCoinStatusUpdate.newBuilder()
-                        .setOauthId(OAUTH_ID)
-                        .setCurrencyId(RandomStringUtils.randomAlphanumeric(30)))
+                .setGameCoinUpdate(GameCoinUpdate.newBuilder().setStatusUpdate(update2))
                 .build();
         mockServer.getStatusStream().sendStatus(titleId, statusUpdate2);
 

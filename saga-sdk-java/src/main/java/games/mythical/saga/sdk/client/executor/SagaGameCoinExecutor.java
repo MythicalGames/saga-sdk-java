@@ -2,7 +2,7 @@ package games.mythical.saga.sdk.client.executor;
 
 import games.mythical.saga.sdk.proto.common.gamecoin.GameCoinState;
 
-public interface SagaGameCoinExecutor {
+public interface SagaGameCoinExecutor extends BaseSagaExecutor {
     // TODO: should there be a List<String> gameCoinIds?
     void updateGameCoin(String currencyId,
                         int coinCount,

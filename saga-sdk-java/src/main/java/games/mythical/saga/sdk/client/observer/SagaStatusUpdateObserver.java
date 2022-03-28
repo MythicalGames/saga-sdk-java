@@ -6,15 +6,16 @@ import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.streams.StatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
-import games.mythical.saga.sdk.proto.streams.bridge.BridgeStatusUpdate;
-import games.mythical.saga.sdk.proto.streams.gamecoin.GameCoinStatusUpdate;
-import games.mythical.saga.sdk.proto.streams.item.ItemStatusUpdate;
-import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStatusUpdate;
-import games.mythical.saga.sdk.proto.streams.listing.ListingStatusUpdate;
-import games.mythical.saga.sdk.proto.streams.myth.MythTokenStatusUpdate;
-import games.mythical.saga.sdk.proto.streams.offer.OfferStatusUpdate;
-import games.mythical.saga.sdk.proto.streams.order.OrderStatusUpdate;
-import games.mythical.saga.sdk.proto.streams.user.UserStatusUpdate;
+import games.mythical.saga.sdk.proto.streams.bridge.BridgeUpdate;
+import games.mythical.saga.sdk.proto.streams.gamecoin.GameCoinUpdate;
+import games.mythical.saga.sdk.proto.streams.item.ItemUpdate;
+import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeUpdate;
+import games.mythical.saga.sdk.proto.streams.listing.ListingUpdate;
+import games.mythical.saga.sdk.proto.streams.myth.MythTokenUpdate;
+import games.mythical.saga.sdk.proto.streams.offer.OfferUpdate;
+import games.mythical.saga.sdk.proto.streams.order.OrderUpdate;
+import games.mythical.saga.sdk.proto.streams.payment.PaymentUpdate;
+import games.mythical.saga.sdk.proto.streams.user.UserUpdate;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -34,6 +35,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private SagaMythTokenExecutor sagaMythTokenExecutor;
     private SagaOfferExecutor sagaOfferExecutor;
     private SagaOrderExecutor sagaOrderExecutor;
+    private SagaPaymentExecutor sagaPaymentExecutor;
     private SagaUserExecutor sagaUserExecutor;
 
     public SagaStatusUpdateObserver(StatusStreamGrpc.StatusStreamBlockingStub streamBlockingStub,
@@ -96,6 +98,11 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         return this;
     }
 
+    public SagaStatusUpdateObserver with(SagaPaymentExecutor sagaPaymentExecutor) {
+        this.sagaPaymentExecutor = sagaPaymentExecutor;
+        return this;
+    }
+
     public SagaStatusUpdateObserver with(SagaUserExecutor sagaUserExecutor) {
         this.sagaUserExecutor = sagaUserExecutor;
         return this;
@@ -107,32 +114,35 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         resetConnectionRetry();
         try {
             switch (message.getStatusUpdateCase()) {
-                case BRIDGE_STATUS:
-                    handleBridgeUpdate(message.getBridgeStatus(), message.getTraceId());
+                case BRIDGE_UPDATE:
+                    handleBridgeUpdate(message.getBridgeUpdate(), message.getTraceId());
                     break;
-                case GAME_COIN_STATUS:
-                    handleGameCoinUpdate(message.getGameCoinStatus(), message.getTraceId());
+                case GAME_COIN_UPDATE:
+                    handleGameCoinUpdate(message.getGameCoinUpdate(), message.getTraceId());
                     break;
-                case ITEM_STATUS:
-                    handleItemUpdate(message.getItemStatus(), message.getTraceId());
+                case ITEM_UPDATE:
+                    handleItemUpdate(message.getItemUpdate(), message.getTraceId());
                     break;
-                case ITEM_TYPE_STATUS:
-                    handleItemTypeUpdate(message.getItemTypeStatus(), message.getTraceId());
+                case ITEM_TYPE_UPDATE:
+                    handleItemTypeUpdate(message.getItemTypeUpdate(), message.getTraceId());
                     break;
-                case LISTING_STATUS:
-                    handleListingUpdate(message.getListingStatus(), message.getTraceId());
+                case LISTING_UPDATE:
+                    handleListingUpdate(message.getListingUpdate(), message.getTraceId());
                     break;
-                case MYTH_TOKEN_STATUS:
-                    handleMythTokenUpdate(message.getMythTokenStatus(), message.getTraceId());
+                case MYTH_TOKEN_UPDATE:
+                    handleMythTokenUpdate(message.getMythTokenUpdate(), message.getTraceId());
                     break;
-                case OFFER_STATUS:
-                    handleOfferUpdate(message.getOfferStatus(), message.getTraceId());
+                case OFFER_UPDATE:
+                    handleOfferUpdate(message.getOfferUpdate(), message.getTraceId());
                     break;
-                case ORDER_STATUS:
-                    handleOrderUpdate(message.getOrderStatus(), message.getTraceId());
+                case ORDER_UPDATE:
+                    handleOrderUpdate(message.getOrderUpdate(), message.getTraceId());
                     break;
-                case USER_STATUS:
-                    handleUserUpdate(message.getUserStatus(), message.getTraceId());
+                case PAYMENT_UPDATE:
+                    handlePaymentUpdate(message.getPaymentUpdate(), message.getTraceId());
+                    break;
+                case USER_UPDATE:
+                    handleUserUpdate(message.getUserUpdate(), message.getTraceId());
                     break;
                 default: {
                     log.error("Unrecognized event {}", message.getStatusUpdateCase());
@@ -159,8 +169,17 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         resubscribe.accept(this);
     }
 
-    private void handleBridgeUpdate(BridgeStatusUpdate message, String traceId) throws Exception {
-        sagaBridgeExecutor.updateItem(
+    private void handleBridgeUpdate(BridgeUpdate update, String traceId) throws Exception {
+        if (update.hasError()) {
+            sagaBridgeExecutor.onError(
+                update.getError().getErrorCode(),
+                update.getError().getMsg(),
+                traceId
+            );
+        }
+        else {
+            final var message = update.getStatusUpdate();
+            sagaBridgeExecutor.updateItem(
                 message.getOauthId(),
                 message.getGameInventoryId(),
                 message.getGameItemTypeId(),
@@ -170,21 +189,41 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                 message.getMythicalTransactionId(),
                 message.getMainnetTransactionId(),
                 traceId
-        );
+            );
+        }
     }
 
-    private void handleGameCoinUpdate(GameCoinStatusUpdate message, String traceId) throws Exception {
-        sagaGameCoinExecutor.updateGameCoin(
+    private void handleGameCoinUpdate(GameCoinUpdate update, String traceId) throws Exception {
+        if (update.hasError()) {
+            sagaBridgeExecutor.onError(
+                update.getError().getErrorCode(),
+                update.getError().getMsg(),
+                traceId
+            );
+        }
+        else {
+            final var message = update.getStatusUpdate();
+            sagaGameCoinExecutor.updateGameCoin(
                 message.getCurrencyId(),
                 message.getCoinCount(),
                 message.getOauthId(),
                 traceId,
                 message.getGameCoinState()
-        );
+            );
+        }
     }
 
-    private void handleItemUpdate(ItemStatusUpdate message, String traceId) throws Exception {
-        sagaItemExecutor.updateItem(
+    private void handleItemUpdate(ItemUpdate update, String traceId) throws Exception {
+        if (update.hasError()) {
+            sagaBridgeExecutor.onError(
+                update.getError().getErrorCode(),
+                update.getError().getMsg(),
+                traceId
+            );
+        }
+        else {
+            final var message = update.getStatusUpdate();
+            sagaItemExecutor.updateItem(
                 message.getGameInventoryId(),
                 message.getGameItemTypeId(),
                 message.getOauthId(),
@@ -192,59 +231,137 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                 message.getMetadataUri(),
                 traceId,
                 message.getItemState()
-        );
+            );
+        }
     }
 
-    private void handleItemTypeUpdate(ItemTypeStatusUpdate message, String traceId) throws Exception {
-        sagaItemTypeExecutor.updateItemType(
+    private void handleItemTypeUpdate(ItemTypeUpdate update, String traceId) throws Exception {
+        if (update.hasError()) {
+            sagaBridgeExecutor.onError(
+                update.getError().getErrorCode(),
+                update.getError().getMsg(),
+                traceId
+            );
+        }
+        else {
+            final var message = update.getStatusUpdate();
+            sagaItemTypeExecutor.updateItemType(
                 message.getGameItemTypeId(),
                 traceId,
                 message.getItemTypeState()
-        );
+            );
+        }
     }
 
-    private void handleListingUpdate(ListingStatusUpdate message, String traceId) throws Exception {
-        sagaListingExecutor.updateListing(
+    private void handleListingUpdate(ListingUpdate update, String traceId) throws Exception {
+        if (update.hasError()) {
+            sagaBridgeExecutor.onError(
+                update.getError().getErrorCode(),
+                update.getError().getMsg(),
+                traceId
+            );
+        }
+        else {
+            final var message = update.getStatusUpdate();
+            sagaListingExecutor.updateListing(
                 message.getOauthId(),
                 traceId,
                 message.getQuoteId(),
                 message.getListingId(),
                 new BigDecimal(message.getTotal()),
                 message.getListingState()
-        );
+            );
+        }
     }
 
-    private void handleMythTokenUpdate(MythTokenStatusUpdate message, String traceId) throws Exception {
-        sagaMythTokenExecutor.updateMythToken(
+    private void handleMythTokenUpdate(MythTokenUpdate update, String traceId) throws Exception {
+        if (update.hasError()) {
+            sagaBridgeExecutor.onError(
+                update.getError().getErrorCode(),
+                update.getError().getMsg(),
+                traceId
+            );
+        }
+        else {
+            final var message = update.getStatusUpdate();
+            sagaMythTokenExecutor.updateMythToken(
                 traceId,
                 message.getTokenState()
-        );
+            );
+        }
     }
 
-    private void handleOfferUpdate(OfferStatusUpdate message, String traceId) throws Exception {
-        sagaOfferExecutor.updateOffer(
+    private void handleOfferUpdate(OfferUpdate update, String traceId) throws Exception {
+        if (update.hasError()) {
+            sagaBridgeExecutor.onError(
+                update.getError().getErrorCode(),
+                update.getError().getMsg(),
+                traceId
+            );
+        }
+        else {
+            final var message = update.getStatusUpdate();
+            sagaOfferExecutor.updateOffer(
                 message.getOauthId(),
                 traceId,
                 message.getQuoteId(),
                 message.getOfferId(),
                 new BigDecimal(message.getTotal()),
                 message.getOfferState()
-        );
+            );
+        }
     }
 
-    private void handleOrderUpdate(OrderStatusUpdate message, String traceId) throws Exception {
-        sagaOrderExecutor.updateOrder(
+    private void handleOrderUpdate(OrderUpdate update, String traceId) throws Exception {
+        if (update.hasError()) {
+            sagaBridgeExecutor.onError(
+                update.getError().getErrorCode(),
+                update.getError().getMsg(),
+                traceId
+            );
+        }
+        else {
+            final var message = update.getStatusUpdate();
+            sagaOrderExecutor.updateOrder(
                 message.getOauthId(),
                 traceId,
                 message.getQuoteId(),
                 message.getOrderId(),
                 new BigDecimal(message.getTotal()),
                 message.getOrderState()
-        );
+            );
+        }
     }
 
-    private void handleUserUpdate(UserStatusUpdate message, String traceId) throws Exception {
-        sagaUserExecutor.updateUser(message.getOauthId(), traceId);
+    private void handlePaymentUpdate(PaymentUpdate update, String traceId) throws Exception {
+        if (update.hasError()) {
+            sagaPaymentExecutor.onError(
+                update.getError().getErrorCode(),
+                update.getError().getMsg(),
+                traceId
+            );
+        }
+        else {
+            final var message = update.getStatusUpdate();
+            sagaPaymentExecutor.updatePaymentMethod(
+                message.getOauthId(),
+                message.getDefault(),
+                message.getPaymentMethodStatus()
+            );
+        }
+    }
+
+    private void handleUserUpdate(UserUpdate update, String traceId) throws Exception {
+        if (update.hasError()) {
+            sagaBridgeExecutor.onError(
+                update.getError().getErrorCode(),
+                update.getError().getMsg(),
+                traceId
+            );
+        }
+        else {
+            sagaUserExecutor.updateUser(update.getStatusUpdate().getOauthId(), traceId);
+        }
     }
 
     private void updateStatusConfirmation(String traceId) {

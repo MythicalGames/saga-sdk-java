@@ -2,26 +2,22 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaListingExecutor;
 import games.mythical.saga.sdk.client.model.SagaListing;
-import games.mythical.saga.sdk.client.model.SagaListingQuote;
 import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.listing.*;
-import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
-import games.mythical.saga.sdk.proto.streams.Subscribe;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class SagaListingClient extends AbstractSagaClient {
+public class SagaListingClient extends AbstractSagaStreamClient {
     private final SagaListingExecutor executor;
     private ListingServiceGrpc.ListingServiceBlockingStub serviceBlockingStub;
 
@@ -34,29 +30,14 @@ public class SagaListingClient extends AbstractSagaClient {
     @Override
     void initStub() {
         serviceBlockingStub = ListingServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
-        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
-                .withCallCredentials(addAuthentication());
-
-        if (SagaStatusUpdateObserver.getInstance() == null) {
-            subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
-        }
+        initStreamStub();
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    void subscribeToStream(SagaStatusUpdateObserver observer) {
-        // set up server stream
-        var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
-        var subscribe = Subscribe.newBuilder()
-                .setTitleId(config.getTitleId())
-                .build();
-
-        streamStub.statusStream(subscribe, observer);
-    }
-
-    public Optional<SagaListingQuote> createListingQuote(String oauthId,
-                                                         String gameInventoryId,
-                                                         BigDecimal subtotal,
-                                                         String currency) throws SagaException {
+    public String createListingQuote(String oauthId,
+                                     String gameInventoryId,
+                                     BigDecimal subtotal,
+                                     String currency) throws SagaException {
         var request = CreateListingQuoteRequest.newBuilder()
                 .setOauthId(oauthId)
                 .setGameInventoryId(gameInventoryId)
@@ -65,14 +46,14 @@ public class SagaListingClient extends AbstractSagaClient {
                 .build();
 
         try {
-            var quote = serviceBlockingStub.createListingQuote(request);
-            return Optional.of(SagaListingQuote.fromProto(quote));
+            var receivedResponse = serviceBlockingStub.createListingQuote(request);
+            executor.emitReceived(SagaListingExecutor.UNKNOWN_LISTING, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
-            if (e.getStatus() == Status.NOT_FOUND) {
-                return Optional.empty();
-            }
-
             throw SagaException.fromGrpcException(e);
+        } catch (Exception e) {
+            log.error("Exception calling emitReceived on cancelListing, listing may be lost!", e);
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
 

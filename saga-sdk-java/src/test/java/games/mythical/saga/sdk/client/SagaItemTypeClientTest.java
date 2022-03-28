@@ -8,6 +8,7 @@ import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStatusUpdate;
+import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -112,11 +113,12 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
+        final var update = ItemTypeStatusUpdate.newBuilder()
+                .setGameItemTypeId(GAME_ITEM_TYPE_ID)
+                .setItemTypeState(ItemTypeState.CREATED);
         itemTypeServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setItemTypeStatus(ItemTypeStatusUpdate.newBuilder()
-                        .setGameItemTypeId(GAME_ITEM_TYPE_ID)
-                        .setItemTypeState(ItemTypeState.CREATED))
+                .setItemTypeUpdate(ItemTypeUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -132,15 +134,11 @@ class SagaItemTypeClientTest extends AbstractClientTest {
 
     @Test
     public void updateItemType() throws Exception {
-        when(mockServiceBlockingStub.updateItemType(any())).thenReturn(Empty.getDefaultInstance());
-        itemTypeClient.updateItemType(GAME_ITEM_TYPE_ID, true);
-    }
+        final var expectedResponse = ReceivedResponse.newBuilder()
+            .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+            .build();
+        when(mockServiceBlockingStub.updateItemType(any())).thenReturn(expectedResponse);
+        final var traceId = itemTypeClient.updateItemType(GAME_ITEM_TYPE_ID, true);
 
-    @Test
-    public void updateItemTypeMetadata() throws Exception {
-        final var EXPECTED_METADATA = generateItemMetadata();
-
-        when(mockServiceBlockingStub.updateItemTypeMetadata(any())).thenReturn(Empty.getDefaultInstance());
-        itemTypeClient.updateItemTypeMetadata(GAME_ITEM_TYPE_ID, EXPECTED_METADATA);
     }
 }

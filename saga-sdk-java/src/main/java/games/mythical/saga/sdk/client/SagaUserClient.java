@@ -9,8 +9,6 @@ import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.user.*;
-import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
-import games.mythical.saga.sdk.proto.streams.Subscribe;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class SagaUserClient extends AbstractSagaClient {
+public class SagaUserClient extends AbstractSagaStreamClient {
     private final SagaUserExecutor executor;
     private UserServiceGrpc.UserServiceBlockingStub serviceBlockingStub;
 
@@ -33,23 +31,8 @@ public class SagaUserClient extends AbstractSagaClient {
     @Override
     void initStub() {
         serviceBlockingStub = UserServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
-        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
-                .withCallCredentials(addAuthentication());
-
-        if (SagaStatusUpdateObserver.getInstance() == null) {
-            subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
-        }
+        initStreamStub();
         SagaStatusUpdateObserver.getInstance().with(executor);
-    }
-
-    void subscribeToStream(SagaStatusUpdateObserver observer) {
-        // set up server stream
-        var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
-        var subscribe = Subscribe.newBuilder()
-                .setTitleId(config.getTitleId())
-                .build();
-
-        streamStub.statusStream(subscribe, observer);
     }
 
     public Optional<SagaUser> getUser(String oauthId) throws SagaException {
@@ -82,32 +65,27 @@ public class SagaUserClient extends AbstractSagaClient {
         }
     }
 
-    public Optional<SagaUser> updateUser(String oauthId) throws SagaException {
+    public String updateUser(String oauthId) throws SagaException {
         var request = UpdateUserRequest.newBuilder()
                 .setTitleId(config.getTitleId())
                 .setOauthId(oauthId)
                 .build();
 
         try {
-            var userProto = serviceBlockingStub.updateUser(request);
-            executor.updateUser(userProto.getOauthId(), userProto.getTraceId());
-            return Optional.of(SagaUser.fromProto(userProto));
+            var receivedResponse = serviceBlockingStub.updateUser(request);
+            executor.updateUser(oauthId, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
-            if (e.getStatus() == Status.NOT_FOUND) {
-                return Optional.empty();
-            }
-
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling updateItemState on issueItem, item will be in an invalid state!", e);
+            log.error("Exception calling emitReceived on updateUser, user update may be lost!", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
 
     public Optional<SagaWalletAsset> getWalletAssets(String oauthId,
                                                      String publisherId,
-                                                     String partnerId,
-                                                     String titleId) throws SagaException {
+                                                     String partnerId) throws SagaException {
         var request = GetWalletAssetsRequest.newBuilder()
                 .setOauthId(oauthId)
                 .setPublisherId(publisherId)

@@ -8,6 +8,7 @@ import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.proto.common.user.UserState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.user.UserStatusUpdate;
+import games.mythical.saga.sdk.proto.streams.user.UserUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -117,36 +118,25 @@ class SagaUserClientTest extends AbstractClientTest {
     @Test
     @Timeout(value = 1, unit = TimeUnit.MINUTES)
     public void updateUser() throws Exception {
-        var expectedResponse = UserProto.newBuilder()
-                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
-                .setOauthId(OAUTH_ID)
-                .setChainAddress(RandomStringUtils.randomAlphanumeric(30))
-                .build();
+        final var expectedResponse = genReceived();
         when(mockServiceBlockingStub.updateUser(any())).thenReturn(expectedResponse);
-        var userResponse = userClient.updateUser(OAUTH_ID);
+        final var trace = userClient.updateUser(OAUTH_ID);
+        checkTraceAndStart(expectedResponse, executor, trace);
 
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertEquals(expectedResponse.getOauthId(), executor.getOauthId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
-
-        userServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
+        final var userStatusUpdate = UserStatusUpdate.newBuilder()
+                .setOauthId(OAUTH_ID)
+                .setUserState(UserState.LINKED);
+        final var userUpdate = UserUpdate.newBuilder()
+                .setStatusUpdate(userStatusUpdate);
+        final var statusUpdate = StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setUserStatus(UserStatusUpdate.newBuilder()
-                        .setOauthId(executor.getOauthId())
-                        .setUserState(UserState.FAILED))
-                .build());
+                .setUserUpdate(userUpdate)
+                .build();
+        userServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
 
-        assertTrue(userResponse.isPresent());
-        var user = userResponse.get();
-        assertEquals(OAUTH_ID, user.getOauthId());
-        assertEquals(expectedResponse.getTraceId(), user.getTraceId());
+        assertEquals(OAUTH_ID, executor.getOauthId());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         userServer.verifyCalls("StatusStream", 1);
@@ -168,7 +158,7 @@ class SagaUserClientTest extends AbstractClientTest {
                         .build())
                 .build();
         when(mockServiceBlockingStub.getWalletAssets((any()))).thenReturn(expectedResponse);
-        var response = userClient.getWalletAssets(OAUTH_ID, "1234", "asdf", titleId);
+        var response = userClient.getWalletAssets(OAUTH_ID, "1234", "asdf");
 
         assertTrue(response.isPresent());
         var walletAsset = response.get();

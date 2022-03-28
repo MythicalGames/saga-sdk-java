@@ -6,6 +6,7 @@ import games.mythical.saga.sdk.proto.api.bridge.BridgeServiceGrpc;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.bridge.BridgeStatusUpdate;
+import games.mythical.saga.sdk.proto.streams.bridge.BridgeUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -101,17 +102,21 @@ class SagaBridgeClientTest extends AbstractClientTest {
         Thread.sleep(500);
         ConcurrentFinisher.start(executor.getTraceId());
 
+        final var update = BridgeStatusUpdate.newBuilder()
+            .setOauthId(OAUTH_ID)
+            .setGameItemTypeId(RandomStringUtils.randomAlphanumeric(30))
+            .setGameInventoryId(RandomStringUtils.randomAlphanumeric(30))
+            .setDestinationAddress(RandomStringUtils.randomAlphanumeric(30))
+            .setDestinationChain(RandomStringUtils.randomAlphanumeric(30))
+            .setOriginAddress(RandomStringUtils.randomAlphanumeric(30))
+            .setMythicalTransactionId(RandomStringUtils.randomAlphanumeric(30))
+            .setMainnetTransactionId(RandomStringUtils.randomAlphanumeric(30))
+            .build();
         var statusUpdate = StatusUpdate.newBuilder()
                 .setTraceId(executor.getTraceId())
-                .setBridgeStatus(BridgeStatusUpdate.newBuilder()
-                        .setOauthId(OAUTH_ID)
-                        .setGameItemTypeId(RandomStringUtils.randomAlphanumeric(30))
-                        .setGameInventoryId(RandomStringUtils.randomAlphanumeric(30))
-                        .setDestinationAddress(RandomStringUtils.randomAlphanumeric(30))
-                        .setDestinationChain(RandomStringUtils.randomAlphanumeric(30))
-                        .setOriginAddress(RandomStringUtils.randomAlphanumeric(30))
-                        .setMythicalTransactionId(RandomStringUtils.randomAlphanumeric(30))
-                        .setMainnetTransactionId(RandomStringUtils.randomAlphanumeric(30)))
+                .setBridgeUpdate(BridgeUpdate.newBuilder()
+                            .setStatusUpdate(update)
+                            .build())
                 .build();
         bridgeServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
