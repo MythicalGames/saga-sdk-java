@@ -34,7 +34,6 @@
     - [TransferItemRequest](#saga-api-item-TransferItemRequest)
     - [UpdateItemMetadata](#saga-api-item-UpdateItemMetadata)
     - [UpdateItemsMetadataRequest](#saga-api-item-UpdateItemsMetadataRequest)
-    - [UpdateItemsMetadataResponse](#saga-api-item-UpdateItemsMetadataResponse)
   
 - [api/item/rpc.proto](#api_item_rpc-proto)
     - [ItemService](#saga-api-item-ItemService)
@@ -150,8 +149,11 @@
     - [UserService](#saga-api-user-UserService)
   
 - [common/common.proto](#common_common-proto)
+    - [ErrorResponse](#saga-common-ErrorResponse)
     - [Metadata](#saga-common-Metadata)
     - [ReceivedResponse](#saga-common-ReceivedResponse)
+  
+    - [ErrorCode](#saga-common-ErrorCode)
   
 - [common/finalization.proto](#common_finalization-proto)
     - [Finalized](#saga-common-Finalized)
@@ -178,6 +180,7 @@
     - [OrderState](#saga-proto-common-order-OrderState)
   
 - [common/payment/definition.proto](#common_payment_definition-proto)
+    - [PaymentMethodUpdateStatus](#saga-proto-common-payment-PaymentMethodUpdateStatus)
     - [PaymentProviderId](#saga-proto-common-payment-PaymentProviderId)
   
 - [common/query.proto](#common_query-proto)
@@ -196,6 +199,7 @@
   
 - [streams/bridge/definition.proto](#streams_bridge_definition-proto)
     - [BridgeStatusUpdate](#saga-rpc-streams-bridge-BridgeStatusUpdate)
+    - [BridgeUpdate](#saga-rpc-streams-bridge-BridgeUpdate)
   
 - [streams/common.proto](#streams_common-proto)
     - [Subscribe](#saga-rpc-streams-Subscribe)
@@ -203,24 +207,35 @@
 - [streams/gamecoin/definition.proto](#streams_gamecoin_definition-proto)
     - [GameCoinStatusConfirmRequest](#saga-rpc-streams-gamecoin-GameCoinStatusConfirmRequest)
     - [GameCoinStatusUpdate](#saga-rpc-streams-gamecoin-GameCoinStatusUpdate)
+    - [GameCoinUpdate](#saga-rpc-streams-gamecoin-GameCoinUpdate)
   
 - [streams/item/definition.proto](#streams_item_definition-proto)
     - [ItemStatusUpdate](#saga-rpc-streams-item-ItemStatusUpdate)
+    - [ItemUpdate](#saga-rpc-streams-item-ItemUpdate)
   
 - [streams/itemtype/definition.proto](#streams_itemtype_definition-proto)
     - [ItemTypeStatusUpdate](#saga-rpc-streams-itemtype-ItemTypeStatusUpdate)
+    - [ItemTypeUpdate](#saga-rpc-streams-itemtype-ItemTypeUpdate)
   
 - [streams/listing/definition.proto](#streams_listing_definition-proto)
     - [ListingStatusUpdate](#saga-rpc-streams-listing-ListingStatusUpdate)
+    - [ListingUpdate](#saga-rpc-streams-listing-ListingUpdate)
   
 - [streams/myth/definition.proto](#streams_myth_definition-proto)
     - [MythTokenStatusUpdate](#saga-rpc-streams-myth-MythTokenStatusUpdate)
+    - [MythTokenUpdate](#saga-rpc-streams-myth-MythTokenUpdate)
   
 - [streams/offer/definition.proto](#streams_offer_definition-proto)
     - [OfferStatusUpdate](#saga-rpc-streams-offer-OfferStatusUpdate)
+    - [OfferUpdate](#saga-rpc-streams-offer-OfferUpdate)
   
 - [streams/order/definition.proto](#streams_order_definition-proto)
     - [OrderStatusUpdate](#saga-rpc-streams-order-OrderStatusUpdate)
+    - [OrderUpdate](#saga-rpc-streams-order-OrderUpdate)
+  
+- [streams/payment/definition.proto](#streams_payment_definition-proto)
+    - [PaymentMethodStatusUpdate](#saga-rpc-streams-payment-PaymentMethodStatusUpdate)
+    - [PaymentUpdate](#saga-rpc-streams-payment-PaymentUpdate)
   
 - [streams/stream.proto](#streams_stream-proto)
     - [StatusConfirmRequest](#saga-rpc-streams-StatusConfirmRequest)
@@ -230,6 +245,7 @@
   
 - [streams/user/definition.proto](#streams_user_definition-proto)
     - [UserStatusUpdate](#saga-rpc-streams-user-UserStatusUpdate)
+    - [UserUpdate](#saga-rpc-streams-user-UserUpdate)
   
 - [Scalar Value Types](#scalar-value-types)
 
@@ -672,16 +688,6 @@ Update Metadata on Item call
 
 
 
-
-<a name="saga-api-item-UpdateItemsMetadataResponse"></a>
-
-### UpdateItemsMetadataResponse
-
-
-
-
-
-
  
 
  
@@ -718,7 +724,7 @@ Update Metadata on Item call
 | IssueItem | [IssueItemRequest](#saga-api-item-IssueItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Issue an Item |
 | TransferItem | [TransferItemRequest](#saga-api-item-TransferItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Transfer Item between users |
 | BurnItem | [BurnItemRequest](#saga-api-item-BurnItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Burn an Item |
-| UpdateItemsMetadata | [UpdateItemsMetadataRequest](#saga-api-item-UpdateItemsMetadataRequest) | [UpdateItemsMetadataResponse](#saga-api-item-UpdateItemsMetadataResponse) | Update the Metadata for an Item |
+| UpdateItemsMetadata | [UpdateItemsMetadataRequest](#saga-api-item-UpdateItemsMetadataRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update the Metadata for an Item |
 
  
 
@@ -917,8 +923,7 @@ Update ItemType call
 | GetItemType | [GetItemTypeRequest](#saga-api-itemtype-GetItemTypeRequest) | [ItemTypeProto](#saga-api-itemtype-ItemTypeProto) | Get an ItemType by Id |
 | GetItemTypes | [GetItemTypesRequest](#saga-api-itemtype-GetItemTypesRequest) | [ItemTypesProto](#saga-api-itemtype-ItemTypesProto) | Get ItemTypes based on filters |
 | CreateItemType | [CreateItemTypeRequest](#saga-api-itemtype-CreateItemTypeRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create an ItemType |
-| UpdateItemTypeMetadata | [UpdateItemTypeMetadataPayload](#saga-api-itemtype-UpdateItemTypeMetadataPayload) | [.google.protobuf.Empty](#google-protobuf-Empty) | Update the Metadata on the ItemType |
-| UpdateItemType | [UpdateItemTypePayload](#saga-api-itemtype-UpdateItemTypePayload) | [.google.protobuf.Empty](#google-protobuf-Empty) | Update the ItemType |
+| UpdateItemType | [UpdateItemTypePayload](#saga-api-itemtype-UpdateItemTypePayload) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update the ItemType |
 
  
 
@@ -1085,7 +1090,7 @@ Get Listings call
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreateListingQuote | [CreateListingQuoteRequest](#saga-api-listing-CreateListingQuoteRequest) | [ListingQuoteProto](#saga-api-listing-ListingQuoteProto) | Get a quote for a Listing |
+| CreateListingQuote | [CreateListingQuoteRequest](#saga-api-listing-CreateListingQuoteRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Get a quote for a Listing |
 | ConfirmListing | [ConfirmListingRequest](#saga-api-listing-ConfirmListingRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Confirm the Listing |
 | CancelListing | [CancelListingRequest](#saga-api-listing-CancelListingRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Cancel the Listing |
 | GetListings | [GetListingsRequest](#saga-api-listing-GetListingsRequest) | [ListingsProto](#saga-api-listing-ListingsProto) | Get Listings based on filters |
@@ -1439,7 +1444,7 @@ Get Offers call
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreateOfferQuote | [CreateOfferQuoteRequest](#saga-api-offer-CreateOfferQuoteRequest) | [OfferQuoteProto](#saga-api-offer-OfferQuoteProto) | Create an Offer quote |
+| CreateOfferQuote | [CreateOfferQuoteRequest](#saga-api-offer-CreateOfferQuoteRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create an Offer quote |
 | ConfirmOffer | [ConfirmOfferRequest](#saga-api-offer-ConfirmOfferRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Confirm the Offer |
 | CancelOffer | [CancelOfferRequest](#saga-api-offer-CancelOfferRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Cancel the Offer |
 | GetOffers | [GetOffersRequest](#saga-api-offer-GetOffersRequest) | [OffersProto](#saga-api-offer-OffersProto) | Get Offers based on filters |
@@ -1611,7 +1616,7 @@ Create Order Quote call
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreateOrderQuote | [CreateOrderQuoteRequest](#saga-api-order-CreateOrderQuoteRequest) | [QuoteProto](#saga-api-order-QuoteProto) | Create an Order |
+| CreateOrderQuote | [CreateOrderQuoteRequest](#saga-api-order-CreateOrderQuoteRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create an Order |
 | ConfirmOrder | [ConfirmOrderRequest](#saga-api-order-ConfirmOrderRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Confirm the Order |
 
  
@@ -1794,10 +1799,10 @@ Create Order Quote call
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreatePaymentMethod | [CreatePaymentMethodRequest](#saga-api-payment-CreatePaymentMethodRequest) | [PaymentMethodProto](#saga-api-payment-PaymentMethodProto) | Create a Payment Method |
+| CreatePaymentMethod | [CreatePaymentMethodRequest](#saga-api-payment-CreatePaymentMethodRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create a Payment Method |
 | GetPaymentMethod | [GetPaymentMethodRequest](#saga-api-payment-GetPaymentMethodRequest) | [PaymentMethodProto](#saga-api-payment-PaymentMethodProto) | Get Payment Method for a user |
-| UpdatePaymentMethod | [UpdatePaymentMethodRequest](#saga-api-payment-UpdatePaymentMethodRequest) | [PaymentMethodProto](#saga-api-payment-PaymentMethodProto) | Update the Payment Method for a User |
-| DeletePaymentMethod | [DeletePaymentMethodRequest](#saga-api-payment-DeletePaymentMethodRequest) | [PaymentMethodProto](#saga-api-payment-PaymentMethodProto) | Delete a Payment Method for a User |
+| UpdatePaymentMethod | [UpdatePaymentMethodRequest](#saga-api-payment-UpdatePaymentMethodRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update the Payment Method for a User |
+| DeletePaymentMethod | [DeletePaymentMethodRequest](#saga-api-payment-DeletePaymentMethodRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Delete a Payment Method for a User |
 
  
 
@@ -2225,7 +2230,7 @@ Linked Uphold account |
 | ----------- | ------------ | ------------- | ------------|
 | GetUser | [GetUserRequest](#saga-api-user-GetUserRequest) | [UserProto](#saga-api-user-UserProto) | Get a User given their oauth Id |
 | GetUsers | [GetUsersRequest](#saga-api-user-GetUsersRequest) | [UsersProto](#saga-api-user-UsersProto) | Get a list of Users based on query parameters |
-| UpdateUser | [UpdateUserRequest](#saga-api-user-UpdateUserRequest) | [UserProto](#saga-api-user-UserProto) | Update a User |
+| UpdateUser | [UpdateUserRequest](#saga-api-user-UpdateUserRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update a User |
 | GetWalletAssets | [GetWalletAssetsRequest](#saga-api-user-GetWalletAssetsRequest) | [WalletAsset](#saga-api-user-WalletAsset) | Get assets for a User/publisher/partner |
 
  
@@ -2236,6 +2241,22 @@ Linked Uphold account |
 <p align="right"><a href="#top">Top</a></p>
 
 ## common/common.proto
+
+
+
+<a name="saga-common-ErrorResponse"></a>
+
+### ErrorResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error_code | [ErrorCode](#saga-common-ErrorCode) |  | The type of error that has occurred |
+| msg | [string](#string) |  | Description of error |
+
+
+
 
 
 
@@ -2272,6 +2293,23 @@ Metadata properties of Item
 
 
  
+
+
+<a name="saga-common-ErrorCode"></a>
+
+### ErrorCode
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| UNKNOWN | 0 | Unknown Error |
+| INTERNAL | 1 | Internal System Error |
+| GENERAL | 2 | Generic Error Code |
+| TIMEOUT | 3 | Operation Timed Out |
+| ITEM_NOT_FOUND | 4 | The specified item could not be found |
+| ITEM_TYPE_NOT_FOUND | 5 | The specified itme type could not be found |
+| USER_NOT_FOUND | 6 | The specified user could not be found |
+
 
  
 
@@ -2535,6 +2573,19 @@ Metadata properties of Item
  
 
 
+<a name="saga-proto-common-payment-PaymentMethodUpdateStatus"></a>
+
+### PaymentMethodUpdateStatus
+Payment Update Status
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| UPDATED | 0 |  |
+| CREATED | 1 |  |
+| DELETED | 2 |  |
+
+
+
 <a name="saga-proto-common-payment-PaymentProviderId"></a>
 
 ### PaymentProviderId
@@ -2739,6 +2790,22 @@ Results from a Bridge status update gRPC stream call
 
 
 
+
+<a name="saga-rpc-streams-bridge-BridgeUpdate"></a>
+
+### BridgeUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| status_update | [BridgeStatusUpdate](#saga-rpc-streams-bridge-BridgeStatusUpdate) |  |  |
+
+
+
+
+
  
 
  
@@ -2822,6 +2889,22 @@ Results from a GameCoin status update gRPC stream call
 
 
 
+
+<a name="saga-rpc-streams-gamecoin-GameCoinUpdate"></a>
+
+### GameCoinUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| status_update | [GameCoinStatusUpdate](#saga-rpc-streams-gamecoin-GameCoinStatusUpdate) |  |  |
+
+
+
+
+
  
 
  
@@ -2858,6 +2941,22 @@ Results from an Item status update gRPC stream call
 
 
 
+
+<a name="saga-rpc-streams-item-ItemUpdate"></a>
+
+### ItemUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| status_update | [ItemStatusUpdate](#saga-rpc-streams-item-ItemStatusUpdate) |  |  |
+
+
+
+
+
  
 
  
@@ -2885,6 +2984,22 @@ Results from a ItemType status update gRPC stream call
 | ----- | ---- | ----- | ----------- |
 | game_item_type_id | [string](#string) |  | Game&#39;s unique id for this ItemType |
 | item_type_state | [saga.proto.common.itemtype.ItemTypeState](#saga-proto-common-itemtype-ItemTypeState) |  | State of the ItemType, see ItemTypeState |
+
+
+
+
+
+
+<a name="saga-rpc-streams-itemtype-ItemTypeUpdate"></a>
+
+### ItemTypeUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| status_update | [ItemTypeStatusUpdate](#saga-rpc-streams-itemtype-ItemTypeStatusUpdate) |  |  |
 
 
 
@@ -2925,6 +3040,22 @@ Results from a Listing status update gRPC stream call
 
 
 
+
+<a name="saga-rpc-streams-listing-ListingUpdate"></a>
+
+### ListingUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| status_update | [ListingStatusUpdate](#saga-rpc-streams-listing-ListingStatusUpdate) |  |  |
+
+
+
+
+
  
 
  
@@ -2951,6 +3082,22 @@ Results from a MYTH Token status update gRPC stream call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | token_state | [saga.proto.common.myth.MythTokenState](#saga-proto-common-myth-MythTokenState) |  | State of the MYTH Token, see MythTokenState |
+
+
+
+
+
+
+<a name="saga-rpc-streams-myth-MythTokenUpdate"></a>
+
+### MythTokenUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| status_update | [MythTokenStatusUpdate](#saga-rpc-streams-myth-MythTokenStatusUpdate) |  |  |
 
 
 
@@ -2992,6 +3139,22 @@ Results from a Offer status update gRPC stream call
 
 
 
+
+<a name="saga-rpc-streams-offer-OfferUpdate"></a>
+
+### OfferUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| status_update | [OfferStatusUpdate](#saga-rpc-streams-offer-OfferStatusUpdate) |  |  |
+
+
+
+
+
  
 
  
@@ -3022,6 +3185,71 @@ Results from an Order status update gRPC stream call
 | order_id | [string](#string) |  |  |
 | total | [string](#string) |  | Total price of the Order |
 | order_state | [saga.proto.common.order.OrderState](#saga-proto-common-order-OrderState) |  | State of the Order, see OrderState |
+
+
+
+
+
+
+<a name="saga-rpc-streams-order-OrderUpdate"></a>
+
+### OrderUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| status_update | [OrderStatusUpdate](#saga-rpc-streams-order-OrderStatusUpdate) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="streams_payment_definition-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## streams/payment/definition.proto
+
+
+
+<a name="saga-rpc-streams-payment-PaymentMethodStatusUpdate"></a>
+
+### PaymentMethodStatusUpdate
+Result of payment method creation, update, or deletion
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| oauth_id | [string](#string) |  |  |
+| default | [bool](#bool) |  |  |
+| payment_method_status | [saga.proto.common.payment.PaymentMethodUpdateStatus](#saga-proto-common-payment-PaymentMethodUpdateStatus) |  |  |
+
+
+
+
+
+
+<a name="saga-rpc-streams-payment-PaymentUpdate"></a>
+
+### PaymentUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| status_update | [PaymentMethodStatusUpdate](#saga-rpc-streams-payment-PaymentMethodStatusUpdate) |  |  |
 
 
 
@@ -3068,15 +3296,16 @@ Returned results on sending a Status stream call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
-| bridge_status | [bridge.BridgeStatusUpdate](#saga-rpc-streams-bridge-BridgeStatusUpdate) |  |  |
-| game_coin_status | [gamecoin.GameCoinStatusUpdate](#saga-rpc-streams-gamecoin-GameCoinStatusUpdate) |  |  |
-| item_status | [item.ItemStatusUpdate](#saga-rpc-streams-item-ItemStatusUpdate) |  |  |
-| item_type_status | [itemtype.ItemTypeStatusUpdate](#saga-rpc-streams-itemtype-ItemTypeStatusUpdate) |  |  |
-| listing_status | [listing.ListingStatusUpdate](#saga-rpc-streams-listing-ListingStatusUpdate) |  |  |
-| myth_token_status | [myth.MythTokenStatusUpdate](#saga-rpc-streams-myth-MythTokenStatusUpdate) |  |  |
-| offer_status | [offer.OfferStatusUpdate](#saga-rpc-streams-offer-OfferStatusUpdate) |  |  |
-| order_status | [order.OrderStatusUpdate](#saga-rpc-streams-order-OrderStatusUpdate) |  |  |
-| user_status | [user.UserStatusUpdate](#saga-rpc-streams-user-UserStatusUpdate) |  |  |
+| bridge_update | [bridge.BridgeUpdate](#saga-rpc-streams-bridge-BridgeUpdate) |  |  |
+| game_coin_update | [gamecoin.GameCoinUpdate](#saga-rpc-streams-gamecoin-GameCoinUpdate) |  |  |
+| item_update | [item.ItemUpdate](#saga-rpc-streams-item-ItemUpdate) |  |  |
+| item_type_update | [itemtype.ItemTypeUpdate](#saga-rpc-streams-itemtype-ItemTypeUpdate) |  |  |
+| listing_update | [listing.ListingUpdate](#saga-rpc-streams-listing-ListingUpdate) |  |  |
+| myth_token_update | [myth.MythTokenUpdate](#saga-rpc-streams-myth-MythTokenUpdate) |  |  |
+| offer_update | [offer.OfferUpdate](#saga-rpc-streams-offer-OfferUpdate) |  |  |
+| order_update | [order.OrderUpdate](#saga-rpc-streams-order-OrderUpdate) |  |  |
+| payment_update | [payment.PaymentUpdate](#saga-rpc-streams-payment-PaymentUpdate) |  |  |
+| user_update | [user.UserUpdate](#saga-rpc-streams-user-UserUpdate) |  |  |
 | created_timestamp | [int64](#int64) |  |  |
 
 
@@ -3121,6 +3350,22 @@ Results from a User status update gRPC stream call
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  | Unique id for the user |
 | user_state | [saga.proto.common.user.UserState](#saga-proto-common-user-UserState) |  | State of the User, see UserState |
+
+
+
+
+
+
+<a name="saga-rpc-streams-user-UserUpdate"></a>
+
+### UserUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| status_update | [UserStatusUpdate](#saga-rpc-streams-user-UserStatusUpdate) |  |  |
 
 
 

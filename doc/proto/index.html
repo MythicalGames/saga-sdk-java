@@ -310,10 +310,6 @@
                   <a href="#saga.api.item.UpdateItemsMetadataRequest"><span class="badge">M</span>UpdateItemsMetadataRequest</a>
                 </li>
               
-                <li>
-                  <a href="#saga.api.item.UpdateItemsMetadataResponse"><span class="badge">M</span>UpdateItemsMetadataResponse</a>
-                </li>
-              
               
               
               
@@ -831,6 +827,10 @@
             <ul>
               
                 <li>
+                  <a href="#saga.common.ErrorResponse"><span class="badge">M</span>ErrorResponse</a>
+                </li>
+              
+                <li>
                   <a href="#saga.common.Metadata"><span class="badge">M</span>Metadata</a>
                 </li>
               
@@ -838,6 +838,10 @@
                   <a href="#saga.common.ReceivedResponse"><span class="badge">M</span>ReceivedResponse</a>
                 </li>
               
+              
+                <li>
+                  <a href="#saga.common.ErrorCode"><span class="badge">E</span>ErrorCode</a>
+                </li>
               
               
               
@@ -971,6 +975,10 @@
               
               
                 <li>
+                  <a href="#saga.proto.common.payment.PaymentMethodUpdateStatus"><span class="badge">E</span>PaymentMethodUpdateStatus</a>
+                </li>
+              
+                <li>
                   <a href="#saga.proto.common.payment.PaymentProviderId"><span class="badge">E</span>PaymentProviderId</a>
                 </li>
               
@@ -1049,6 +1057,10 @@
                   <a href="#saga.rpc.streams.bridge.BridgeStatusUpdate"><span class="badge">M</span>BridgeStatusUpdate</a>
                 </li>
               
+                <li>
+                  <a href="#saga.rpc.streams.bridge.BridgeUpdate"><span class="badge">M</span>BridgeUpdate</a>
+                </li>
+              
               
               
               
@@ -1083,6 +1095,10 @@
                   <a href="#saga.rpc.streams.gamecoin.GameCoinStatusUpdate"><span class="badge">M</span>GameCoinStatusUpdate</a>
                 </li>
               
+                <li>
+                  <a href="#saga.rpc.streams.gamecoin.GameCoinUpdate"><span class="badge">M</span>GameCoinUpdate</a>
+                </li>
+              
               
               
               
@@ -1096,6 +1112,10 @@
               
                 <li>
                   <a href="#saga.rpc.streams.item.ItemStatusUpdate"><span class="badge">M</span>ItemStatusUpdate</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.rpc.streams.item.ItemUpdate"><span class="badge">M</span>ItemUpdate</a>
                 </li>
               
               
@@ -1113,6 +1133,10 @@
                   <a href="#saga.rpc.streams.itemtype.ItemTypeStatusUpdate"><span class="badge">M</span>ItemTypeStatusUpdate</a>
                 </li>
               
+                <li>
+                  <a href="#saga.rpc.streams.itemtype.ItemTypeUpdate"><span class="badge">M</span>ItemTypeUpdate</a>
+                </li>
+              
               
               
               
@@ -1126,6 +1150,10 @@
               
                 <li>
                   <a href="#saga.rpc.streams.listing.ListingStatusUpdate"><span class="badge">M</span>ListingStatusUpdate</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.rpc.streams.listing.ListingUpdate"><span class="badge">M</span>ListingUpdate</a>
                 </li>
               
               
@@ -1143,6 +1171,10 @@
                   <a href="#saga.rpc.streams.myth.MythTokenStatusUpdate"><span class="badge">M</span>MythTokenStatusUpdate</a>
                 </li>
               
+                <li>
+                  <a href="#saga.rpc.streams.myth.MythTokenUpdate"><span class="badge">M</span>MythTokenUpdate</a>
+                </li>
+              
               
               
               
@@ -1158,6 +1190,10 @@
                   <a href="#saga.rpc.streams.offer.OfferStatusUpdate"><span class="badge">M</span>OfferStatusUpdate</a>
                 </li>
               
+                <li>
+                  <a href="#saga.rpc.streams.offer.OfferUpdate"><span class="badge">M</span>OfferUpdate</a>
+                </li>
+              
               
               
               
@@ -1171,6 +1207,29 @@
               
                 <li>
                   <a href="#saga.rpc.streams.order.OrderStatusUpdate"><span class="badge">M</span>OrderStatusUpdate</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.rpc.streams.order.OrderUpdate"><span class="badge">M</span>OrderUpdate</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#streams%2fpayment%2fdefinition.proto">streams/payment/definition.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#saga.rpc.streams.payment.PaymentMethodStatusUpdate"><span class="badge">M</span>PaymentMethodStatusUpdate</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.rpc.streams.payment.PaymentUpdate"><span class="badge">M</span>PaymentUpdate</a>
                 </li>
               
               
@@ -1209,6 +1268,10 @@
               
                 <li>
                   <a href="#saga.rpc.streams.user.UserStatusUpdate"><span class="badge">M</span>UserStatusUpdate</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.rpc.streams.user.UserUpdate"><span class="badge">M</span>UserUpdate</a>
                 </li>
               
               
@@ -2150,13 +2213,6 @@
 
         
       
-        <h3 id="saga.api.item.UpdateItemsMetadataResponse">UpdateItemsMetadataResponse</h3>
-        <p></p>
-
-        
-
-        
-      
 
       
 
@@ -2230,7 +2286,7 @@
               <tr>
                 <td>UpdateItemsMetadata</td>
                 <td><a href="#saga.api.item.UpdateItemsMetadataRequest">UpdateItemsMetadataRequest</a></td>
-                <td><a href="#saga.api.item.UpdateItemsMetadataResponse">UpdateItemsMetadataResponse</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Update the Metadata for an Item</p></td>
               </tr>
             
@@ -2618,16 +2674,9 @@
               </tr>
             
               <tr>
-                <td>UpdateItemTypeMetadata</td>
-                <td><a href="#saga.api.itemtype.UpdateItemTypeMetadataPayload">UpdateItemTypeMetadataPayload</a></td>
-                <td><a href="#google.protobuf.Empty">.google.protobuf.Empty</a></td>
-                <td><p>Update the Metadata on the ItemType</p></td>
-              </tr>
-            
-              <tr>
                 <td>UpdateItemType</td>
                 <td><a href="#saga.api.itemtype.UpdateItemTypePayload">UpdateItemTypePayload</a></td>
-                <td><a href="#google.protobuf.Empty">.google.protobuf.Empty</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Update the ItemType</p></td>
               </tr>
             
@@ -2982,7 +3031,7 @@
               <tr>
                 <td>CreateListingQuote</td>
                 <td><a href="#saga.api.listing.CreateListingQuoteRequest">CreateListingQuoteRequest</a></td>
-                <td><a href="#saga.api.listing.ListingQuoteProto">ListingQuoteProto</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Get a quote for a Listing</p></td>
               </tr>
             
@@ -3727,7 +3776,7 @@
               <tr>
                 <td>CreateOfferQuote</td>
                 <td><a href="#saga.api.offer.CreateOfferQuoteRequest">CreateOfferQuoteRequest</a></td>
-                <td><a href="#saga.api.offer.OfferQuoteProto">OfferQuoteProto</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Create an Offer quote</p></td>
               </tr>
             
@@ -4217,7 +4266,7 @@
               <tr>
                 <td>CreateOrderQuote</td>
                 <td><a href="#saga.api.order.CreateOrderQuoteRequest">CreateOrderQuoteRequest</a></td>
-                <td><a href="#saga.api.order.QuoteProto">QuoteProto</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Create an Order</p></td>
               </tr>
             
@@ -4603,7 +4652,7 @@
               <tr>
                 <td>CreatePaymentMethod</td>
                 <td><a href="#saga.api.payment.CreatePaymentMethodRequest">CreatePaymentMethodRequest</a></td>
-                <td><a href="#saga.api.payment.PaymentMethodProto">PaymentMethodProto</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Create a Payment Method</p></td>
               </tr>
             
@@ -4617,14 +4666,14 @@
               <tr>
                 <td>UpdatePaymentMethod</td>
                 <td><a href="#saga.api.payment.UpdatePaymentMethodRequest">UpdatePaymentMethodRequest</a></td>
-                <td><a href="#saga.api.payment.PaymentMethodProto">PaymentMethodProto</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Update the Payment Method for a User</p></td>
               </tr>
             
               <tr>
                 <td>DeletePaymentMethod</td>
                 <td><a href="#saga.api.payment.DeletePaymentMethodRequest">DeletePaymentMethodRequest</a></td>
-                <td><a href="#saga.api.payment.PaymentMethodProto">PaymentMethodProto</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Delete a Payment Method for a User</p></td>
               </tr>
             
@@ -5409,7 +5458,7 @@ Linked Uphold account </p></td>
               <tr>
                 <td>UpdateUser</td>
                 <td><a href="#saga.api.user.UpdateUserRequest">UpdateUserRequest</a></td>
-                <td><a href="#saga.api.user.UserProto">UserProto</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Update a User</p></td>
               </tr>
             
@@ -5431,6 +5480,37 @@ Linked Uphold account </p></td>
       </div>
       <p></p>
 
+      
+        <h3 id="saga.common.ErrorResponse">ErrorResponse</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error_code</td>
+                  <td><a href="#saga.common.ErrorCode">ErrorCode</a></td>
+                  <td></td>
+                  <td><p>The type of error that has occurred </p></td>
+                </tr>
+              
+                <tr>
+                  <td>msg</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Description of error </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
       
         <h3 id="saga.common.Metadata">Metadata</h3>
         <p>Metadata properties of Item</p>
@@ -5502,6 +5582,59 @@ Linked Uphold account </p></td>
         
       
 
+      
+        <h3 id="saga.common.ErrorCode">ErrorCode</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>UNKNOWN</td>
+                <td>0</td>
+                <td><p>Unknown Error</p></td>
+              </tr>
+            
+              <tr>
+                <td>INTERNAL</td>
+                <td>1</td>
+                <td><p>Internal System Error</p></td>
+              </tr>
+            
+              <tr>
+                <td>GENERAL</td>
+                <td>2</td>
+                <td><p>Generic Error Code</p></td>
+              </tr>
+            
+              <tr>
+                <td>TIMEOUT</td>
+                <td>3</td>
+                <td><p>Operation Timed Out</p></td>
+              </tr>
+            
+              <tr>
+                <td>ITEM_NOT_FOUND</td>
+                <td>4</td>
+                <td><p>The specified item could not be found</p></td>
+              </tr>
+            
+              <tr>
+                <td>ITEM_TYPE_NOT_FOUND</td>
+                <td>5</td>
+                <td><p>The specified itme type could not be found</p></td>
+              </tr>
+            
+              <tr>
+                <td>USER_NOT_FOUND</td>
+                <td>6</td>
+                <td><p>The specified user could not be found</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
       
 
       
@@ -5939,6 +6072,35 @@ Linked Uphold account </p></td>
       
 
       
+        <h3 id="saga.proto.common.payment.PaymentMethodUpdateStatus">PaymentMethodUpdateStatus</h3>
+        <p>Payment Update Status</p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>UPDATED</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>CREATED</td>
+                <td>1</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>DELETED</td>
+                <td>2</td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
         <h3 id="saga.proto.common.payment.PaymentProviderId">PaymentProviderId</h3>
         <p>Types of Payments</p>
         <table class="enum-table">
@@ -6357,6 +6519,37 @@ Linked Uphold account </p></td>
 
         
       
+        <h3 id="saga.rpc.streams.bridge.BridgeUpdate">BridgeUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status_update</td>
+                  <td><a href="#saga.rpc.streams.bridge.BridgeStatusUpdate">BridgeStatusUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
 
       
 
@@ -6499,6 +6692,37 @@ Linked Uphold account </p></td>
 
         
       
+        <h3 id="saga.rpc.streams.gamecoin.GameCoinUpdate">GameCoinUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status_update</td>
+                  <td><a href="#saga.rpc.streams.gamecoin.GameCoinStatusUpdate">GameCoinStatusUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
 
       
 
@@ -6572,6 +6796,37 @@ Linked Uphold account </p></td>
 
         
       
+        <h3 id="saga.rpc.streams.item.ItemUpdate">ItemUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status_update</td>
+                  <td><a href="#saga.rpc.streams.item.ItemStatusUpdate">ItemStatusUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
 
       
 
@@ -6608,6 +6863,37 @@ Linked Uphold account </p></td>
                   <td><a href="#saga.proto.common.itemtype.ItemTypeState">saga.proto.common.itemtype.ItemTypeState</a></td>
                   <td></td>
                   <td><p>State of the ItemType, see ItemTypeState </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.rpc.streams.itemtype.ItemTypeUpdate">ItemTypeUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status_update</td>
+                  <td><a href="#saga.rpc.streams.itemtype.ItemTypeStatusUpdate">ItemTypeStatusUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -6683,6 +6969,37 @@ Linked Uphold account </p></td>
 
         
       
+        <h3 id="saga.rpc.streams.listing.ListingUpdate">ListingUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status_update</td>
+                  <td><a href="#saga.rpc.streams.listing.ListingStatusUpdate">ListingStatusUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
 
       
 
@@ -6712,6 +7029,37 @@ Linked Uphold account </p></td>
                   <td><a href="#saga.proto.common.myth.MythTokenState">saga.proto.common.myth.MythTokenState</a></td>
                   <td></td>
                   <td><p>State of the MYTH Token, see MythTokenState </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.rpc.streams.myth.MythTokenUpdate">MythTokenUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status_update</td>
+                  <td><a href="#saga.rpc.streams.myth.MythTokenStatusUpdate">MythTokenStatusUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -6794,6 +7142,37 @@ Linked Uphold account </p></td>
 
         
       
+        <h3 id="saga.rpc.streams.offer.OfferUpdate">OfferUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status_update</td>
+                  <td><a href="#saga.rpc.streams.offer.OfferStatusUpdate">OfferStatusUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
 
       
 
@@ -6860,6 +7239,120 @@ Linked Uphold account </p></td>
 
         
       
+        <h3 id="saga.rpc.streams.order.OrderUpdate">OrderUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status_update</td>
+                  <td><a href="#saga.rpc.streams.order.OrderStatusUpdate">OrderStatusUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+
+      
+
+      
+    
+      
+      <div class="file-heading">
+        <h2 id="streams/payment/definition.proto">streams/payment/definition.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="saga.rpc.streams.payment.PaymentMethodStatusUpdate">PaymentMethodStatusUpdate</h3>
+        <p>Result of payment method creation, update, or deletion</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>oauth_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>default</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>payment_method_status</td>
+                  <td><a href="#saga.proto.common.payment.PaymentMethodUpdateStatus">saga.proto.common.payment.PaymentMethodUpdateStatus</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.rpc.streams.payment.PaymentUpdate">PaymentUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status_update</td>
+                  <td><a href="#saga.rpc.streams.payment.PaymentMethodStatusUpdate">PaymentMethodStatusUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
 
       
 
@@ -6916,64 +7409,71 @@ Linked Uphold account </p></td>
                 </tr>
               
                 <tr>
-                  <td>bridge_status</td>
-                  <td><a href="#saga.rpc.streams.bridge.BridgeStatusUpdate">bridge.BridgeStatusUpdate</a></td>
+                  <td>bridge_update</td>
+                  <td><a href="#saga.rpc.streams.bridge.BridgeUpdate">bridge.BridgeUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>game_coin_status</td>
-                  <td><a href="#saga.rpc.streams.gamecoin.GameCoinStatusUpdate">gamecoin.GameCoinStatusUpdate</a></td>
+                  <td>game_coin_update</td>
+                  <td><a href="#saga.rpc.streams.gamecoin.GameCoinUpdate">gamecoin.GameCoinUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>item_status</td>
-                  <td><a href="#saga.rpc.streams.item.ItemStatusUpdate">item.ItemStatusUpdate</a></td>
+                  <td>item_update</td>
+                  <td><a href="#saga.rpc.streams.item.ItemUpdate">item.ItemUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>item_type_status</td>
-                  <td><a href="#saga.rpc.streams.itemtype.ItemTypeStatusUpdate">itemtype.ItemTypeStatusUpdate</a></td>
+                  <td>item_type_update</td>
+                  <td><a href="#saga.rpc.streams.itemtype.ItemTypeUpdate">itemtype.ItemTypeUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>listing_status</td>
-                  <td><a href="#saga.rpc.streams.listing.ListingStatusUpdate">listing.ListingStatusUpdate</a></td>
+                  <td>listing_update</td>
+                  <td><a href="#saga.rpc.streams.listing.ListingUpdate">listing.ListingUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>myth_token_status</td>
-                  <td><a href="#saga.rpc.streams.myth.MythTokenStatusUpdate">myth.MythTokenStatusUpdate</a></td>
+                  <td>myth_token_update</td>
+                  <td><a href="#saga.rpc.streams.myth.MythTokenUpdate">myth.MythTokenUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>offer_status</td>
-                  <td><a href="#saga.rpc.streams.offer.OfferStatusUpdate">offer.OfferStatusUpdate</a></td>
+                  <td>offer_update</td>
+                  <td><a href="#saga.rpc.streams.offer.OfferUpdate">offer.OfferUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>order_status</td>
-                  <td><a href="#saga.rpc.streams.order.OrderStatusUpdate">order.OrderStatusUpdate</a></td>
+                  <td>order_update</td>
+                  <td><a href="#saga.rpc.streams.order.OrderUpdate">order.OrderUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>user_status</td>
-                  <td><a href="#saga.rpc.streams.user.UserStatusUpdate">user.UserStatusUpdate</a></td>
+                  <td>payment_update</td>
+                  <td><a href="#saga.rpc.streams.payment.PaymentUpdate">payment.PaymentUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>user_update</td>
+                  <td><a href="#saga.rpc.streams.user.UserUpdate">user.UserUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -7054,6 +7554,37 @@ Linked Uphold account </p></td>
                   <td><a href="#saga.proto.common.user.UserState">saga.proto.common.user.UserState</a></td>
                   <td></td>
                   <td><p>State of the User, see UserState </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.rpc.streams.user.UserUpdate">UserUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status_update</td>
+                  <td><a href="#saga.rpc.streams.user.UserStatusUpdate">UserStatusUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
