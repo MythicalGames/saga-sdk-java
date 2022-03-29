@@ -2,8 +2,6 @@ package games.mythical.saga.sdk.client.model;
 
 import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
-import games.mythical.saga.sdk.proto.api.user.CybersourceAccount;
-import games.mythical.saga.sdk.proto.api.user.UpholdAccount;
 import games.mythical.saga.sdk.proto.api.user.UserProto;
 import games.mythical.saga.sdk.proto.common.user.UserState;
 import lombok.AllArgsConstructor;
@@ -23,8 +21,6 @@ public class SagaUser {
     private String oauthId;
     private String chainAddress;
     private UserState userState;
-    private List<UpholdAccount> upholdAccounts;
-    private CybersourceAccount cybersourceAccount;
     @DtoExclude
     private Instant createdTimestamp;
 

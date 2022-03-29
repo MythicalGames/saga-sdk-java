@@ -117,6 +117,34 @@ class SagaUserClientTest extends AbstractClientTest {
 
     @Test
     @Timeout(value = 1, unit = TimeUnit.MINUTES)
+    public void createUser() throws Exception {
+        final var expectedResponse = genReceived();
+        when(mockServiceBlockingStub.createUser(any())).thenReturn(expectedResponse);
+        final var trace = userClient.createUser(OAUTH_ID);
+        checkTraceAndStart(expectedResponse, executor, trace);
+
+        final var userStatusUpdate = UserStatusUpdate.newBuilder()
+                .setOauthId(OAUTH_ID)
+                .setUserState(UserState.LINKED);
+        final var userUpdate = UserUpdate.newBuilder()
+                .setStatusUpdate(userStatusUpdate);
+        final var statusUpdate = StatusUpdate.newBuilder()
+                .setTraceId(executor.getTraceId())
+                .setUserUpdate(userUpdate)
+                .build();
+        userServer.getStatusStream().sendStatus(titleId, statusUpdate);
+
+        ConcurrentFinisher.wait(executor.getTraceId());
+
+        assertEquals(OAUTH_ID, executor.getOauthId());
+        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        userServer.verifyCalls("StatusStream", 1);
+        userServer.verifyCalls("StatusConfirmation", 1);
+    }
+
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.MINUTES)
     public void updateUser() throws Exception {
         final var expectedResponse = genReceived();
         when(mockServiceBlockingStub.updateUser(any())).thenReturn(expectedResponse);
