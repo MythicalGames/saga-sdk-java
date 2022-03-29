@@ -133,14 +133,13 @@
     - [TransactionService](#saga-api-transaction-TransactionService)
   
 - [api/user/definition.proto](#api_user_definition-proto)
-    - [CybersourceAccount](#saga-api-user-CybersourceAccount)
+    - [CreateUserRequest](#saga-api-user-CreateUserRequest)
     - [FungibleToken](#saga-api-user-FungibleToken)
     - [GetUserRequest](#saga-api-user-GetUserRequest)
     - [GetUsersRequest](#saga-api-user-GetUsersRequest)
     - [GetWalletAssetsRequest](#saga-api-user-GetWalletAssetsRequest)
     - [NftItem](#saga-api-user-NftItem)
     - [UpdateUserRequest](#saga-api-user-UpdateUserRequest)
-    - [UpholdAccount](#saga-api-user-UpholdAccount)
     - [UserProto](#saga-api-user-UserProto)
     - [UsersProto](#saga-api-user-UsersProto)
     - [WalletAsset](#saga-api-user-WalletAsset)
@@ -2012,15 +2011,16 @@ Get Transactions for a Player call
 
 
 
-<a name="saga-api-user-CybersourceAccount"></a>
+<a name="saga-api-user-CreateUserRequest"></a>
 
-### CybersourceAccount
-
+### CreateUserRequest
+Create User call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [string](#string) |  |  |
+| title_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  |  |
 
 
 
@@ -2126,21 +2126,6 @@ Update User call
 
 
 
-<a name="saga-api-user-UpholdAccount"></a>
-
-### UpholdAccount
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| id | [string](#string) |  |  |
-
-
-
-
-
-
 <a name="saga-api-user-UserProto"></a>
 
 ### UserProto
@@ -2152,11 +2137,7 @@ Update User call
 | trace_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  | Unique Id (oauth) for this User |
 | chain_address | [string](#string) |  | Address on the chain |
-| user_state | [saga.proto.common.user.UserState](#saga-proto-common-user-UserState) |  | What state the User is in
-
-Linked Uphold account |
-| uphold_accounts | [UpholdAccount](#saga-api-user-UpholdAccount) | repeated |  |
-| cybersource_account | [CybersourceAccount](#saga-api-user-CybersourceAccount) |  | Linked Cybersource account |
+| user_state | [saga.proto.common.user.UserState](#saga-proto-common-user-UserState) |  | What state the User is in |
 | created_timestamp | [uint64](#uint64) |  | When this User was created |
 
 
@@ -2230,6 +2211,7 @@ Linked Uphold account |
 | ----------- | ------------ | ------------- | ------------|
 | GetUser | [GetUserRequest](#saga-api-user-GetUserRequest) | [UserProto](#saga-api-user-UserProto) | Get a User given their oauth Id |
 | GetUsers | [GetUsersRequest](#saga-api-user-GetUsersRequest) | [UsersProto](#saga-api-user-UsersProto) | Get a list of Users based on query parameters |
+| CreateUser | [CreateUserRequest](#saga-api-user-CreateUserRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create a User |
 | UpdateUser | [UpdateUserRequest](#saga-api-user-UpdateUserRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update a User |
 | GetWalletAssets | [GetWalletAssetsRequest](#saga-api-user-GetWalletAssetsRequest) | [WalletAsset](#saga-api-user-WalletAsset) | Get assets for a User/publisher/partner |
 

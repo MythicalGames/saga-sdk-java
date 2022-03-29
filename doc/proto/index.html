@@ -757,7 +757,7 @@
             <ul>
               
                 <li>
-                  <a href="#saga.api.user.CybersourceAccount"><span class="badge">M</span>CybersourceAccount</a>
+                  <a href="#saga.api.user.CreateUserRequest"><span class="badge">M</span>CreateUserRequest</a>
                 </li>
               
                 <li>
@@ -782,10 +782,6 @@
               
                 <li>
                   <a href="#saga.api.user.UpdateUserRequest"><span class="badge">M</span>UpdateUserRequest</a>
-                </li>
-              
-                <li>
-                  <a href="#saga.api.user.UpholdAccount"><span class="badge">M</span>UpholdAccount</a>
                 </li>
               
                 <li>
@@ -5007,8 +5003,8 @@
       <p></p>
 
       
-        <h3 id="saga.api.user.CybersourceAccount">CybersourceAccount</h3>
-        <p></p>
+        <h3 id="saga.api.user.CreateUserRequest">CreateUserRequest</h3>
+        <p>Create User call</p>
 
         
           <table class="field-table">
@@ -5018,7 +5014,14 @@
             <tbody>
               
                 <tr>
-                  <td>id</td>
+                  <td>title_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>oauth_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -5238,30 +5241,6 @@
 
         
       
-        <h3 id="saga.api.user.UpholdAccount">UpholdAccount</h3>
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
         <h3 id="saga.api.user.UserProto">UserProto</h3>
         <p></p>
 
@@ -5297,23 +5276,7 @@
                   <td>user_state</td>
                   <td><a href="#saga.proto.common.user.UserState">saga.proto.common.user.UserState</a></td>
                   <td></td>
-                  <td><p>What state the User is in
-
-Linked Uphold account </p></td>
-                </tr>
-              
-                <tr>
-                  <td>uphold_accounts</td>
-                  <td><a href="#saga.api.user.UpholdAccount">UpholdAccount</a></td>
-                  <td>repeated</td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>cybersource_account</td>
-                  <td><a href="#saga.api.user.CybersourceAccount">CybersourceAccount</a></td>
-                  <td></td>
-                  <td><p>Linked Cybersource account </p></td>
+                  <td><p>What state the User is in </p></td>
                 </tr>
               
                 <tr>
@@ -5453,6 +5416,13 @@ Linked Uphold account </p></td>
                 <td><a href="#saga.api.user.GetUsersRequest">GetUsersRequest</a></td>
                 <td><a href="#saga.api.user.UsersProto">UsersProto</a></td>
                 <td><p>Get a list of Users based on query parameters</p></td>
+              </tr>
+            
+              <tr>
+                <td>CreateUser</td>
+                <td><a href="#saga.api.user.CreateUserRequest">CreateUserRequest</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
+                <td><p>Create a User</p></td>
               </tr>
             
               <tr>
