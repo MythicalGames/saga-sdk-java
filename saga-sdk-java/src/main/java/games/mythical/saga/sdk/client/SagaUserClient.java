@@ -65,6 +65,24 @@ public class SagaUserClient extends AbstractSagaStreamClient {
         }
     }
 
+    public String createUser(String oauthId) throws SagaException {
+        var request = CreateUserRequest.newBuilder()
+                .setTitleId(config.getTitleId())
+                .setOauthId(oauthId)
+                .build();
+
+        try {
+            var receivedResponse = serviceBlockingStub.createUser(request);
+            executor.updateUser(oauthId, receivedResponse.getTraceId());
+            return receivedResponse.getTraceId();
+        } catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
+        } catch (Exception e) {
+            log.error("Exception calling emitReceived on createUser, user create may be lost!", e);
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
+        }
+    }
+
     public String updateUser(String oauthId) throws SagaException {
         var request = UpdateUserRequest.newBuilder()
                 .setTitleId(config.getTitleId())
