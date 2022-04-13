@@ -1,19 +1,15 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockPaymentExecutor;
-import games.mythical.saga.sdk.proto.api.payment.PaymentServiceGrpc;
-import games.mythical.saga.sdk.proto.api.payment.Address;
-import games.mythical.saga.sdk.proto.api.payment.CardPaymentData;
-import games.mythical.saga.sdk.proto.api.payment.CybersourcePaymentData;
-import games.mythical.saga.sdk.proto.api.payment.PaymentMethodProto;
+import games.mythical.saga.sdk.proto.api.payment.*;
 import games.mythical.saga.sdk.proto.common.payment.PaymentMethodUpdateStatus;
+import games.mythical.saga.sdk.proto.common.payment.PaymentProviderId;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.payment.PaymentMethodStatusUpdate;
 import games.mythical.saga.sdk.proto.streams.payment.PaymentUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
-import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -22,6 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,14 +30,10 @@ import static org.mockito.Mockito.when;
 public class SagaPaymentClientTest extends AbstractClientTest {
     private static final String OAUTH_ID = UUID.randomUUID().toString();
     private final MockPaymentExecutor executor = MockPaymentExecutor.builder().build();
-
-    private MockServer paymentServer;
-    private SagaPaymentClient paymentClient;
-
     private final CybersourcePaymentData cybersourcePaymentData = CybersourcePaymentData.newBuilder()
             .setCardType("VISA")
             .build();
-    private final CardPaymentData cardPaymentData = CardPaymentData.newBuilder()
+    private final PaymentMethodData paymentMethodData = PaymentMethodData.newBuilder()
             .setCybersource(cybersourcePaymentData)
             .build();
     private final Address address = Address.newBuilder()
@@ -47,6 +41,8 @@ public class SagaPaymentClientTest extends AbstractClientTest {
             .setLastName("Smith")
             .setAddressLine1("1234 Road")
             .build();
+    private MockServer paymentServer;
+    private SagaPaymentClient paymentClient;
     @Mock
     private PaymentServiceGrpc.PaymentServiceBlockingStub mockServiceBlockingStub;
 
@@ -74,7 +70,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
         final var expectedResponse = genReceived();
         when(mockServiceBlockingStub.createPaymentMethod(any())).thenReturn(expectedResponse);
 
-        final var trace = paymentClient.createPaymentMethod(OAUTH_ID, cardPaymentData, address);
+        final var trace = paymentClient.createPaymentMethod(OAUTH_ID, paymentMethodData, address);
         checkTraceAndStart(expectedResponse, executor, trace);
 
         final var pmtStatusUpdate = PaymentMethodStatusUpdate.newBuilder()
@@ -104,20 +100,20 @@ public class SagaPaymentClientTest extends AbstractClientTest {
     public void updatePaymentMethod() throws Exception {
         final var expectedResponse = genReceived();
         when(mockServiceBlockingStub.updatePaymentMethod(any())).thenReturn(expectedResponse);
-        final var trace = paymentClient.updatePaymentMethod(OAUTH_ID, cardPaymentData, address);
+        final var trace = paymentClient.updatePaymentMethod(OAUTH_ID, paymentMethodData, address);
         checkTraceAndStart(expectedResponse, executor, trace);
 
         final var pmtStatusUpdate = PaymentMethodStatusUpdate.newBuilder()
-            .setOauthId(OAUTH_ID)
-            .setDefault(true)
-            .setPaymentMethodStatus(PaymentMethodUpdateStatus.UPDATED)
-            .build();
+                .setOauthId(OAUTH_ID)
+                .setDefault(true)
+                .setPaymentMethodStatus(PaymentMethodUpdateStatus.UPDATED)
+                .build();
         final var pmtUpdate = PaymentUpdate.newBuilder()
-            .setStatusUpdate(pmtStatusUpdate);
+                .setStatusUpdate(pmtStatusUpdate);
         final var statusUpdate = StatusUpdate.newBuilder()
-            .setTraceId(executor.getTraceId())
-            .setPaymentUpdate(pmtUpdate)
-            .build();
+                .setTraceId(executor.getTraceId())
+                .setPaymentUpdate(pmtUpdate)
+                .build();
         paymentServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -134,20 +130,20 @@ public class SagaPaymentClientTest extends AbstractClientTest {
     public void deletePaymentMethod() throws Exception {
         final var expectedResponse = genReceived();
         when(mockServiceBlockingStub.deletePaymentMethod(any())).thenReturn(expectedResponse);
-        final var trace = paymentClient.deletePaymentMethod(OAUTH_ID, cardPaymentData);
+        final var trace = paymentClient.deletePaymentMethod(OAUTH_ID, paymentMethodData);
         checkTraceAndStart(expectedResponse, executor, trace);
 
         final var pmtStatusUpdate = PaymentMethodStatusUpdate.newBuilder()
-            .setOauthId(OAUTH_ID)
-            .setDefault(true)
-            .setPaymentMethodStatus(PaymentMethodUpdateStatus.UPDATED)
-            .build();
+                .setOauthId(OAUTH_ID)
+                .setDefault(true)
+                .setPaymentMethodStatus(PaymentMethodUpdateStatus.UPDATED)
+                .build();
         final var pmtUpdate = PaymentUpdate.newBuilder()
-            .setStatusUpdate(pmtStatusUpdate);
+                .setStatusUpdate(pmtStatusUpdate);
         final var statusUpdate = StatusUpdate.newBuilder()
-            .setTraceId(executor.getTraceId())
-            .setPaymentUpdate(pmtUpdate)
-            .build();
+                .setTraceId(executor.getTraceId())
+                .setPaymentUpdate(pmtUpdate)
+                .build();
         paymentServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
         ConcurrentFinisher.wait(executor.getTraceId());
@@ -169,7 +165,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
                 .setOauthId(oauthId)
                 .build();
         when(mockServiceBlockingStub.getPaymentMethod(any())).thenReturn(expectedResponse);
-        var paymentResponse = paymentClient.getPaymentMethod(oauthId);
+        var paymentResponse = paymentClient.getPaymentMethod(oauthId, PaymentProviderId.CREDIT_CARD);
 
         assertTrue(paymentResponse.isPresent());
         var payment = paymentResponse.get();

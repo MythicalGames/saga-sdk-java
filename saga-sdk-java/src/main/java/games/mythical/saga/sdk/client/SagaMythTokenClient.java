@@ -10,7 +10,7 @@ import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.myth.*;
-import games.mythical.saga.sdk.proto.api.payment.CardPaymentData;
+import games.mythical.saga.sdk.proto.api.order.PaymentProviderData;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,13 +46,13 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
     }
 
     public Optional<SagaMythToken> quoteBuyingMythToken(BigDecimal quantity,
-                                                        CardPaymentData creditCardInfo,
+                                                        PaymentProviderData paymentProviderData,
                                                         String denominationCurrency,
                                                         String originSubAccount,
                                                         String userId) {
         var request = QuoteBuyingMythTokenRequest.newBuilder()
                 .setQuantity(quantity.toString())
-                .setCreditCardInfo(creditCardInfo)
+                .setPaymentProviderData(paymentProviderData)
                 .setDenominationCurrency(denominationCurrency)
                 .setOriginSubAccount(originSubAccount)
                 .setUserId(userId)
@@ -65,12 +65,12 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
     }
 
     public String confirmBuyingMythToken(String quoteId,
-                                       String userId,
-                                       CardPaymentData creditCardInfo) throws SagaException {
+                                         String userId,
+                                         PaymentProviderData paymentProviderData) throws SagaException {
         var request = ConfirmBuyingMythTokenRequest.newBuilder()
                 .setQuoteId(quoteId)
                 .setUserId(userId)
-                .setCreditCardInfo(creditCardInfo)
+                .setPaymentProviderData(paymentProviderData)
                 .build();
 
         try {
