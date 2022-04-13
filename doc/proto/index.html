@@ -589,10 +589,6 @@
                 </li>
               
               
-                <li>
-                  <a href="#saga.api.order.PaymentProviderId"><span class="badge">E</span>PaymentProviderId</a>
-                </li>
-              
               
               
             </ul>
@@ -623,10 +619,6 @@
                 </li>
               
                 <li>
-                  <a href="#saga.api.payment.CardPaymentData"><span class="badge">M</span>CardPaymentData</a>
-                </li>
-              
-                <li>
                   <a href="#saga.api.payment.CreatePaymentMethodRequest"><span class="badge">M</span>CreatePaymentMethodRequest</a>
                 </li>
               
@@ -643,11 +635,23 @@
                 </li>
               
                 <li>
+                  <a href="#saga.api.payment.PaymentMethodData"><span class="badge">M</span>PaymentMethodData</a>
+                </li>
+              
+                <li>
                   <a href="#saga.api.payment.PaymentMethodProto"><span class="badge">M</span>PaymentMethodProto</a>
                 </li>
               
                 <li>
                   <a href="#saga.api.payment.UpdatePaymentMethodRequest"><span class="badge">M</span>UpdatePaymentMethodRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.api.payment.UpholdCardProto"><span class="badge">M</span>UpholdCardProto</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.api.payment.UpholdPaymentData"><span class="badge">M</span>UpholdPaymentData</a>
                 </li>
               
               
@@ -3089,8 +3093,8 @@
                 </tr>
               
                 <tr>
-                  <td>credit_card_info</td>
-                  <td><a href="#saga.api.payment.CardPaymentData">saga.api.payment.CardPaymentData</a></td>
+                  <td>payment_provider_data</td>
+                  <td><a href="#saga.api.order.PaymentProviderData">saga.api.order.PaymentProviderData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -3220,10 +3224,10 @@
                 </tr>
               
                 <tr>
-                  <td>credit_card_info</td>
-                  <td><a href="#saga.api.payment.CardPaymentData">saga.api.payment.CardPaymentData</a></td>
+                  <td>payment_provider_data</td>
+                  <td><a href="#saga.api.order.PaymentProviderData">saga.api.order.PaymentProviderData</a></td>
                   <td></td>
-                  <td><p>Credit card payment </p></td>
+                  <td><p>Payment provider data </p></td>
                 </tr>
               
                 <tr>
@@ -4162,7 +4166,7 @@
               
                 <tr>
                   <td>payment_provider_id</td>
-                  <td><a href="#saga.api.order.PaymentProviderId">PaymentProviderId</a></td>
+                  <td><a href="#saga.proto.common.payment.PaymentProviderId">saga.proto.common.payment.PaymentProviderId</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -4203,35 +4207,6 @@
         
       
 
-      
-        <h3 id="saga.api.order.PaymentProviderId">PaymentProviderId</h3>
-        <p></p>
-        <table class="enum-table">
-          <thead>
-            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
-          </thead>
-          <tbody>
-            
-              <tr>
-                <td>CREDIT_CARD</td>
-                <td>0</td>
-                <td><p></p></td>
-              </tr>
-            
-              <tr>
-                <td>UPHOLD</td>
-                <td>1</td>
-                <td><p></p></td>
-              </tr>
-            
-              <tr>
-                <td>MYTHICAL</td>
-                <td>2</td>
-                <td><p></p></td>
-              </tr>
-            
-          </tbody>
-        </table>
       
 
       
@@ -4365,37 +4340,6 @@
 
         
       
-        <h3 id="saga.api.payment.CardPaymentData">CardPaymentData</h3>
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>make_default</td>
-                  <td><a href="#bool">bool</a></td>
-                  <td></td>
-                  <td><p>Make this the default payment </p></td>
-                </tr>
-              
-                <tr>
-                  <td>cybersource</td>
-                  <td><a href="#saga.api.payment.CybersourcePaymentData">CybersourcePaymentData</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
         <h3 id="saga.api.payment.CreatePaymentMethodRequest">CreatePaymentMethodRequest</h3>
         <p></p>
 
@@ -4414,8 +4358,8 @@
                 </tr>
               
                 <tr>
-                  <td>card_payment_data</td>
-                  <td><a href="#saga.api.payment.CardPaymentData">CardPaymentData</a></td>
+                  <td>payment_method_data</td>
+                  <td><a href="#saga.api.payment.PaymentMethodData">PaymentMethodData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -4497,8 +4441,8 @@
                 </tr>
               
                 <tr>
-                  <td>card_payment_data</td>
-                  <td><a href="#saga.api.payment.CardPaymentData">CardPaymentData</a></td>
+                  <td>payment_method_data</td>
+                  <td><a href="#saga.api.payment.PaymentMethodData">PaymentMethodData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -4523,6 +4467,51 @@
                 <tr>
                   <td>oauth_id</td>
                   <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>payment_provider_id</td>
+                  <td><a href="#saga.proto.common.payment.PaymentProviderId">saga.proto.common.payment.PaymentProviderId</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.payment.PaymentMethodData">PaymentMethodData</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>make_default</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p>Make this the default payment </p></td>
+                </tr>
+              
+                <tr>
+                  <td>cybersource</td>
+                  <td><a href="#saga.api.payment.CybersourcePaymentData">CybersourcePaymentData</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>uphold</td>
+                  <td><a href="#saga.api.payment.UpholdPaymentData">UpholdPaymentData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -4559,10 +4548,10 @@
                 </tr>
               
                 <tr>
-                  <td>card_payment_data</td>
-                  <td><a href="#saga.api.payment.CardPaymentData">CardPaymentData</a></td>
+                  <td>payment_method_data</td>
+                  <td><a href="#saga.api.payment.PaymentMethodData">PaymentMethodData</a></td>
                   <td></td>
-                  <td><p>Card data </p></td>
+                  <td><p>Payment method data </p></td>
                 </tr>
               
                 <tr>
@@ -4597,8 +4586,8 @@
                 </tr>
               
                 <tr>
-                  <td>card_payment_data</td>
-                  <td><a href="#saga.api.payment.CardPaymentData">CardPaymentData</a></td>
+                  <td>payment_method_data</td>
+                  <td><a href="#saga.api.payment.PaymentMethodData">PaymentMethodData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -4607,6 +4596,124 @@
                   <td>address</td>
                   <td><a href="#saga.api.payment.Address">Address</a></td>
                   <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.payment.UpholdCardProto">UpholdCardProto</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>uphold_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>balance</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>normalized_currency</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>normalized_balance</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>label</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.payment.UpholdPaymentData">UpholdPaymentData</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>temp_state_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>email</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>verifications</td>
+                  <td><a href="#google.protobuf.Struct">google.protobuf.Struct</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>birth_date</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>cards</td>
+                  <td><a href="#saga.api.payment.UpholdCardProto">UpholdCardProto</a></td>
+                  <td>repeated</td>
                   <td><p> </p></td>
                 </tr>
               
@@ -6080,26 +6187,20 @@
           <tbody>
             
               <tr>
-                <td>BRAINTREE</td>
+                <td>CREDIT_CARD</td>
                 <td>0</td>
                 <td><p></p></td>
               </tr>
             
               <tr>
-                <td>BITPAY</td>
+                <td>UPHOLD</td>
                 <td>1</td>
                 <td><p></p></td>
               </tr>
             
               <tr>
-                <td>CYBERSOURCE</td>
+                <td>MYTHICAL</td>
                 <td>2</td>
-                <td><p></p></td>
-              </tr>
-            
-              <tr>
-                <td>UPHOLD</td>
-                <td>3</td>
                 <td><p></p></td>
               </tr>
             

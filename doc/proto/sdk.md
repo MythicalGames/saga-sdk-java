@@ -97,20 +97,20 @@
     - [PaymentProviderData](#saga-api-order-PaymentProviderData)
     - [QuoteProto](#saga-api-order-QuoteProto)
   
-    - [PaymentProviderId](#saga-api-order-PaymentProviderId)
-  
 - [api/order/rpc.proto](#api_order_rpc-proto)
     - [OrderService](#saga-api-order-OrderService)
   
 - [api/payment/definition.proto](#api_payment_definition-proto)
     - [Address](#saga-api-payment-Address)
-    - [CardPaymentData](#saga-api-payment-CardPaymentData)
     - [CreatePaymentMethodRequest](#saga-api-payment-CreatePaymentMethodRequest)
     - [CybersourcePaymentData](#saga-api-payment-CybersourcePaymentData)
     - [DeletePaymentMethodRequest](#saga-api-payment-DeletePaymentMethodRequest)
     - [GetPaymentMethodRequest](#saga-api-payment-GetPaymentMethodRequest)
+    - [PaymentMethodData](#saga-api-payment-PaymentMethodData)
     - [PaymentMethodProto](#saga-api-payment-PaymentMethodProto)
     - [UpdatePaymentMethodRequest](#saga-api-payment-UpdatePaymentMethodRequest)
+    - [UpholdCardProto](#saga-api-payment-UpholdCardProto)
+    - [UpholdPaymentData](#saga-api-payment-UpholdPaymentData)
   
 - [api/payment/rpc.proto](#api_payment_rpc-proto)
     - [PaymentService](#saga-api-payment-PaymentService)
@@ -1115,7 +1115,7 @@ Get Listings call
 | ----- | ---- | ----- | ----------- |
 | quote_id | [string](#string) |  |  |
 | user_id | [string](#string) |  |  |
-| credit_card_info | [saga.api.payment.CardPaymentData](#saga-api-payment-CardPaymentData) |  |  |
+| payment_provider_data | [saga.api.order.PaymentProviderData](#saga-api-order-PaymentProviderData) |  |  |
 
 
 
@@ -1180,7 +1180,7 @@ Proto of converted units from gwei/eth
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | quantity | [string](#string) |  | Amount of MYTH Tokens to buy |
-| credit_card_info | [saga.api.payment.CardPaymentData](#saga-api-payment-CardPaymentData) |  | Credit card payment |
+| payment_provider_data | [saga.api.order.PaymentProviderData](#saga-api-order-PaymentProviderData) |  | Payment provider data |
 | denomination_currency | [string](#string) |  |  |
 | origin_sub_account | [string](#string) |  |  |
 | user_id | [string](#string) |  | User that is buying MYTH Tokens |
@@ -1562,7 +1562,7 @@ Create Order Quote call
 | tax_currency | [string](#string) |  |  |
 | total | [string](#string) |  |  |
 | currency | [string](#string) |  |  |
-| payment_provider_id | [PaymentProviderId](#saga-api-order-PaymentProviderId) |  |  |
+| payment_provider_id | [saga.proto.common.payment.PaymentProviderId](#saga-proto-common-payment-PaymentProviderId) |  |  |
 | buyer_oauth_id | [string](#string) |  |  |
 | seller_oauth_id | [string](#string) |  |  |
 | conversion_rate | [string](#string) |  |  |
@@ -1573,19 +1573,6 @@ Create Order Quote call
 
 
  
-
-
-<a name="saga-api-order-PaymentProviderId"></a>
-
-### PaymentProviderId
-
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| CREDIT_CARD | 0 |  |
-| UPHOLD | 1 |  |
-| MYTHICAL | 2 |  |
-
 
  
 
@@ -1652,22 +1639,6 @@ Create Order Quote call
 
 
 
-<a name="saga-api-payment-CardPaymentData"></a>
-
-### CardPaymentData
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| make_default | [bool](#bool) |  | Make this the default payment |
-| cybersource | [CybersourcePaymentData](#saga-api-payment-CybersourcePaymentData) |  |  |
-
-
-
-
-
-
 <a name="saga-api-payment-CreatePaymentMethodRequest"></a>
 
 ### CreatePaymentMethodRequest
@@ -1677,7 +1648,7 @@ Create Order Quote call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
-| card_payment_data | [CardPaymentData](#saga-api-payment-CardPaymentData) |  |  |
+| payment_method_data | [PaymentMethodData](#saga-api-payment-PaymentMethodData) |  |  |
 | address | [Address](#saga-api-payment-Address) |  |  |
 
 
@@ -1712,7 +1683,7 @@ Create Order Quote call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
-| card_payment_data | [CardPaymentData](#saga-api-payment-CardPaymentData) |  |  |
+| payment_method_data | [PaymentMethodData](#saga-api-payment-PaymentMethodData) |  |  |
 
 
 
@@ -1728,6 +1699,24 @@ Create Order Quote call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
+| payment_provider_id | [saga.proto.common.payment.PaymentProviderId](#saga-proto-common-payment-PaymentProviderId) |  |  |
+
+
+
+
+
+
+<a name="saga-api-payment-PaymentMethodData"></a>
+
+### PaymentMethodData
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| make_default | [bool](#bool) |  | Make this the default payment |
+| cybersource | [CybersourcePaymentData](#saga-api-payment-CybersourcePaymentData) |  |  |
+| uphold | [UpholdPaymentData](#saga-api-payment-UpholdPaymentData) |  |  |
 
 
 
@@ -1744,7 +1733,7 @@ Create Order Quote call
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  | User of this Payment Method |
-| card_payment_data | [CardPaymentData](#saga-api-payment-CardPaymentData) |  | Card data |
+| payment_method_data | [PaymentMethodData](#saga-api-payment-PaymentMethodData) |  | Payment method data |
 | address | [Address](#saga-api-payment-Address) |  | Address of this Payment Method |
 
 
@@ -1761,8 +1750,48 @@ Create Order Quote call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
-| card_payment_data | [CardPaymentData](#saga-api-payment-CardPaymentData) |  |  |
+| payment_method_data | [PaymentMethodData](#saga-api-payment-PaymentMethodData) |  |  |
 | address | [Address](#saga-api-payment-Address) |  |  |
+
+
+
+
+
+
+<a name="saga-api-payment-UpholdCardProto"></a>
+
+### UpholdCardProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| uphold_id | [string](#string) |  |  |
+| currency | [string](#string) |  |  |
+| balance | [string](#string) |  |  |
+| normalized_currency | [string](#string) |  |  |
+| normalized_balance | [string](#string) |  |  |
+| label | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="saga-api-payment-UpholdPaymentData"></a>
+
+### UpholdPaymentData
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| temp_state_code | [string](#string) |  |  |
+| email | [string](#string) |  |  |
+| status | [string](#string) |  |  |
+| verifications | [google.protobuf.Struct](#google-protobuf-Struct) |  |  |
+| birth_date | [string](#string) |  |  |
+| cards | [UpholdCardProto](#saga-api-payment-UpholdCardProto) | repeated |  |
 
 
 
@@ -2575,10 +2604,9 @@ Types of Payments
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| BRAINTREE | 0 |  |
-| BITPAY | 1 |  |
-| CYBERSOURCE | 2 |  |
-| UPHOLD | 3 |  |
+| CREDIT_CARD | 0 |  |
+| UPHOLD | 1 |  |
+| MYTHICAL | 2 |  |
 
 
  
