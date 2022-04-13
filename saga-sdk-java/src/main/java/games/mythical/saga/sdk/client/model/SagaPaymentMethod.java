@@ -2,7 +2,7 @@ package games.mythical.saga.sdk.client.model;
 
 import games.mythical.proto_util.ProtoUtil;
 import games.mythical.saga.sdk.proto.api.payment.Address;
-import games.mythical.saga.sdk.proto.api.payment.CardPaymentData;
+import games.mythical.saga.sdk.proto.api.payment.PaymentMethodData;
 import games.mythical.saga.sdk.proto.api.payment.PaymentMethodProto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class SagaPaymentMethod {
     private String traceId;
     private String oauthId;
-    private CardPaymentData cardPaymentData;
+    private PaymentMethodData paymentMethodData;
     private Address address;
 
     public static SagaPaymentMethod fromProto(PaymentMethodProto proto) {

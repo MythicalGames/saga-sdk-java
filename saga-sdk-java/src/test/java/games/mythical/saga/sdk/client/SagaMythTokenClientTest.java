@@ -2,8 +2,8 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockMythTokenExecutor;
 import games.mythical.saga.sdk.proto.api.myth.*;
-import games.mythical.saga.sdk.proto.api.payment.CardPaymentData;
-import games.mythical.saga.sdk.proto.api.payment.CybersourcePaymentData;
+import games.mythical.saga.sdk.proto.api.order.CreditCardData;
+import games.mythical.saga.sdk.proto.api.order.PaymentProviderData;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.myth.MythTokenState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
@@ -33,11 +33,11 @@ import static org.mockito.Mockito.when;
 public class SagaMythTokenClientTest extends AbstractClientTest {
 
     private final MockMythTokenExecutor executor = MockMythTokenExecutor.builder().build();
-    private final CybersourcePaymentData CYBERSOURCE_DATA = CybersourcePaymentData.newBuilder()
+    private final CreditCardData CREDIT_CARD_DATA = CreditCardData.newBuilder()
             .setCardType("VISA")
             .build();
-    private final CardPaymentData CARD_PAYMENT_DATA = CardPaymentData.newBuilder()
-            .setCybersource(CYBERSOURCE_DATA)
+    private final PaymentProviderData PAYMENT_PROVIDER_DATA = PaymentProviderData.newBuilder()
+            .setCreditCardData(CREDIT_CARD_DATA)
             .build();
     private final String QUOTE_ID = "my-quote=1234";
     private final String USER_ID = "user-1234";
@@ -107,7 +107,7 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         when(mockServiceBlockingStub.quoteBuyingMythToken(any())).thenReturn(expectedResponse);
         var quoteBuyingMythTokenResponse = mythTokenClient.quoteBuyingMythToken(
                 new BigDecimal("1.1234"),
-                CARD_PAYMENT_DATA,
+                PAYMENT_PROVIDER_DATA,
                 "USD",
                 "this_account",
                 USER_ID);
@@ -122,7 +122,7 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.confirmBuyingMythToken(any())).thenReturn(expectedResponse);
-        final var traceId = mythTokenClient.confirmBuyingMythToken(QUOTE_ID, USER_ID, CARD_PAYMENT_DATA);
+        final var traceId = mythTokenClient.confirmBuyingMythToken(QUOTE_ID, USER_ID, PAYMENT_PROVIDER_DATA);
 
         assertEquals(expectedResponse.getTraceId(), traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());

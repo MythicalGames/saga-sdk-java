@@ -8,6 +8,7 @@ import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.payment.PaymentServiceGrpc;
 import games.mythical.saga.sdk.proto.api.payment.*;
+import games.mythical.saga.sdk.proto.common.payment.PaymentProviderId;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,12 +33,12 @@ public class SagaPaymentClient extends AbstractSagaStreamClient {
     }
 
     public String createPaymentMethod(String oauthId,
-                                      CardPaymentData cardPaymentData,
+                                      PaymentMethodData paymentMethodData,
                                       Address address) throws SagaException {
         try {
             var request = CreatePaymentMethodRequest.newBuilder()
                     .setOauthId(oauthId)
-                    .setCardPaymentData(cardPaymentData)
+                    .setPaymentMethodData(paymentMethodData)
                     .setAddress(address)
                     .build();
 
@@ -53,12 +54,12 @@ public class SagaPaymentClient extends AbstractSagaStreamClient {
     }
 
     public String updatePaymentMethod(String oauthId,
-                                      CardPaymentData cardPaymentData,
+                                      PaymentMethodData paymentMethodData,
                                       Address address) throws SagaException {
         try {
             var request = UpdatePaymentMethodRequest.newBuilder()
                     .setOauthId(oauthId)
-                    .setCardPaymentData(cardPaymentData)
+                    .setPaymentMethodData(paymentMethodData)
                     .setAddress(address)
                     .build();
 
@@ -73,12 +74,11 @@ public class SagaPaymentClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String deletePaymentMethod(String oauthId,
-                                      CardPaymentData cardPaymentData) throws SagaException {
+    public String deletePaymentMethod(String oauthId, PaymentMethodData paymentMethodData) throws SagaException {
         try {
             var request = DeletePaymentMethodRequest.newBuilder()
                     .setOauthId(oauthId)
-                    .setCardPaymentData(cardPaymentData)
+                    .setPaymentMethodData(paymentMethodData)
                     .build();
 
             var receivedResponse = serviceBlockingStub.deletePaymentMethod(request);
@@ -93,9 +93,10 @@ public class SagaPaymentClient extends AbstractSagaStreamClient {
         }
     }
 
-    public Optional<SagaPaymentMethod> getPaymentMethod(String oauthId) {
+    public Optional<SagaPaymentMethod> getPaymentMethod(String oauthId, PaymentProviderId paymentProviderId) {
         var request = GetPaymentMethodRequest.newBuilder()
                 .setOauthId(oauthId)
+                .setPaymentProviderId(paymentProviderId)
                 .build();
 
         var paymentMethodProto = serviceBlockingStub.getPaymentMethod(request);
