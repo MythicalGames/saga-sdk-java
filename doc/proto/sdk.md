@@ -2604,7 +2604,7 @@ Types of Payments
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| CREDIT_CARD | 0 |  |
+| CYBERSOURCE | 0 |  |
 | UPHOLD | 1 |  |
 | MYTHICAL | 2 |  |
 
