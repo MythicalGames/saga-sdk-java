@@ -165,7 +165,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
                 .setOauthId(oauthId)
                 .build();
         when(mockServiceBlockingStub.getPaymentMethod(any())).thenReturn(expectedResponse);
-        var paymentResponse = paymentClient.getPaymentMethod(oauthId, PaymentProviderId.CREDIT_CARD);
+        var paymentResponse = paymentClient.getPaymentMethod(oauthId, PaymentProviderId.CYBERSOURCE);
 
         assertTrue(paymentResponse.isPresent());
         var payment = paymentResponse.get();
