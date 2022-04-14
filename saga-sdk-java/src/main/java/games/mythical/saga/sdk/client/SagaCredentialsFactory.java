@@ -83,7 +83,7 @@ public class SagaCredentialsFactory {
                 final var map = ConversionUtils.toStringObjectMap(response.body());
                 return (String) map.get(ACCESS_TOKEN_KEY);
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (SagaException | IOException | InterruptedException e) {
             log.error("Error while trying to retrieve client credentials.", e);
         }
         return "";

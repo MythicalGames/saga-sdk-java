@@ -1,10 +1,9 @@
 package games.mythical.saga.sdk.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Struct;
 import com.google.protobuf.util.JsonFormat;
@@ -12,18 +11,20 @@ import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Type;
 import java.util.Map;
 
 @Slf4j
 public class ConversionUtils {
+    private final static ObjectMapper objectMapper = new ObjectMapper()
+        .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+
     public static Struct convertProperties(Map<String, Object> properties) throws SagaException {
         try {
-            var metadata = (JsonObject) new Gson().toJsonTree(properties);
-            var structBuilder = Struct.newBuilder();
-            JsonFormat.parser().merge(metadata.toString(), structBuilder);
+            final var metadataJson = objectMapper.writeValueAsString(properties);
+            final var structBuilder = Struct.newBuilder();
+            JsonFormat.parser().merge(metadataJson, structBuilder);
             return structBuilder.build();
-        } catch (InvalidProtocolBufferException e) {
+        } catch (InvalidProtocolBufferException | JsonProcessingException e) {
             log.error("ConversionUtils: couldn't convert properties map!", e);
             throw new SagaException(SagaErrorCode.PARSING_DATA_EXCEPTION);
         }
@@ -31,8 +32,7 @@ public class ConversionUtils {
 
     public static Map<String, Object> convertProperties(Struct properties) throws SagaException {
         try {
-            var objectMapper = new ObjectMapper();
-            var propertiesString = JsonFormat.printer().print(properties);
+            final var propertiesString = JsonFormat.printer().print(properties);
             return objectMapper.readValue(propertiesString, new TypeReference<>() {
             });
         } catch (Exception e) {
@@ -41,9 +41,12 @@ public class ConversionUtils {
         }
     }
 
-    public static Map<String, Object> toStringObjectMap(String stringObjectJson) {
-        Gson gson = new Gson();
-        Type mapType = new TypeToken<Map<String, Object>>(){}.getType();
-        return gson.fromJson(stringObjectJson, mapType);
+    public static Map<String, Object> toStringObjectMap(String stringObjectJson) throws SagaException {
+        try {
+            return objectMapper.readValue(stringObjectJson, new TypeReference<>() {});
+        } catch (JsonProcessingException e) {
+            log.error("ConversionUtils: couldn't convert JSON into String, Object map", e);
+            throw new SagaException(SagaErrorCode.PARSING_DATA_EXCEPTION);
+        }
     }
 }
