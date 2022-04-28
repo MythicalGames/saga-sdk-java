@@ -102,15 +102,19 @@
   
 - [api/payment/definition.proto](#api_payment_definition-proto)
     - [Address](#saga-api-payment-Address)
+    - [CreateCybersourceCardProto](#saga-api-payment-CreateCybersourceCardProto)
     - [CreatePaymentMethodRequest](#saga-api-payment-CreatePaymentMethodRequest)
     - [CybersourcePaymentData](#saga-api-payment-CybersourcePaymentData)
     - [DeletePaymentMethodRequest](#saga-api-payment-DeletePaymentMethodRequest)
     - [GetPaymentMethodRequest](#saga-api-payment-GetPaymentMethodRequest)
     - [PaymentMethodData](#saga-api-payment-PaymentMethodData)
     - [PaymentMethodProto](#saga-api-payment-PaymentMethodProto)
+    - [UpdateCybersourceCardProto](#saga-api-payment-UpdateCybersourceCardProto)
     - [UpdatePaymentMethodRequest](#saga-api-payment-UpdatePaymentMethodRequest)
     - [UpholdCardProto](#saga-api-payment-UpholdCardProto)
+    - [UpholdFinishLinkProto](#saga-api-payment-UpholdFinishLinkProto)
     - [UpholdPaymentData](#saga-api-payment-UpholdPaymentData)
+    - [UpholdStartLinkProto](#saga-api-payment-UpholdStartLinkProto)
   
 - [api/payment/rpc.proto](#api_payment_rpc-proto)
     - [PaymentService](#saga-api-payment-PaymentService)
@@ -1639,6 +1643,26 @@ Create Order Quote call
 
 
 
+<a name="saga-api-payment-CreateCybersourceCardProto"></a>
+
+### CreateCybersourceCardProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| exp_month | [string](#string) |  |  |
+| exp_year | [string](#string) |  |  |
+| card_type | [string](#string) |  |  |
+| instrument_id | [string](#string) |  |  |
+| billing_address | [Address](#saga-api-payment-Address) |  |  |
+| make_default | [bool](#bool) |  |  |
+
+
+
+
+
+
 <a name="saga-api-payment-CreatePaymentMethodRequest"></a>
 
 ### CreatePaymentMethodRequest
@@ -1648,8 +1672,8 @@ Create Order Quote call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
-| payment_method_data | [PaymentMethodData](#saga-api-payment-PaymentMethodData) |  |  |
-| address | [Address](#saga-api-payment-Address) |  |  |
+| cybersource | [CreateCybersourceCardProto](#saga-api-payment-CreateCybersourceCardProto) |  |  |
+| uphold | [UpholdStartLinkProto](#saga-api-payment-UpholdStartLinkProto) |  |  |
 
 
 
@@ -1683,7 +1707,8 @@ Create Order Quote call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
-| payment_method_data | [PaymentMethodData](#saga-api-payment-PaymentMethodData) |  |  |
+| payment_provider_id | [saga.proto.common.payment.PaymentProviderId](#saga-proto-common-payment-PaymentProviderId) |  |  |
+| payment_method_token | [string](#string) |  |  |
 
 
 
@@ -1741,6 +1766,27 @@ Create Order Quote call
 
 
 
+<a name="saga-api-payment-UpdateCybersourceCardProto"></a>
+
+### UpdateCybersourceCardProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| payment_method_token | [string](#string) |  |  |
+| exp_month | [string](#string) |  |  |
+| exp_year | [string](#string) |  |  |
+| card_type | [string](#string) |  |  |
+| instrument_id | [string](#string) |  |  |
+| billing_address | [Address](#saga-api-payment-Address) |  |  |
+| make_default | [bool](#bool) |  |  |
+
+
+
+
+
+
 <a name="saga-api-payment-UpdatePaymentMethodRequest"></a>
 
 ### UpdatePaymentMethodRequest
@@ -1750,8 +1796,8 @@ Create Order Quote call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
-| payment_method_data | [PaymentMethodData](#saga-api-payment-PaymentMethodData) |  |  |
-| address | [Address](#saga-api-payment-Address) |  |  |
+| cybersource | [UpdateCybersourceCardProto](#saga-api-payment-UpdateCybersourceCardProto) |  |  |
+| uphold | [UpholdFinishLinkProto](#saga-api-payment-UpholdFinishLinkProto) |  |  |
 
 
 
@@ -1778,6 +1824,22 @@ Create Order Quote call
 
 
 
+<a name="saga-api-payment-UpholdFinishLinkProto"></a>
+
+### UpholdFinishLinkProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| state_code | [string](#string) |  |  |
+| generated_temporary_code | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="saga-api-payment-UpholdPaymentData"></a>
 
 ### UpholdPaymentData
@@ -1792,6 +1854,16 @@ Create Order Quote call
 | verifications | [google.protobuf.Struct](#google-protobuf-Struct) |  |  |
 | birth_date | [string](#string) |  |  |
 | cards | [UpholdCardProto](#saga-api-payment-UpholdCardProto) | repeated |  |
+
+
+
+
+
+
+<a name="saga-api-payment-UpholdStartLinkProto"></a>
+
+### UpholdStartLinkProto
+
 
 
 
