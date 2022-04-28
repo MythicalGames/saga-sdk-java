@@ -1,12 +1,12 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaPaymentExecutor;
+import games.mythical.saga.sdk.client.model.SagaAddress;
 import games.mythical.saga.sdk.client.model.SagaPaymentMethod;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.proto.api.payment.PaymentServiceGrpc;
 import games.mythical.saga.sdk.proto.api.payment.*;
 import games.mythical.saga.sdk.proto.common.payment.PaymentProviderId;
 import io.grpc.StatusRuntimeException;
@@ -32,60 +32,105 @@ public class SagaPaymentClient extends AbstractSagaStreamClient {
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    public String createPaymentMethod(String oauthId,
-                                      PaymentMethodData paymentMethodData,
-                                      Address address) throws SagaException {
-        try {
-            var request = CreatePaymentMethodRequest.newBuilder()
-                    .setOauthId(oauthId)
-                    .setPaymentMethodData(paymentMethodData)
-                    .setAddress(address)
-                    .build();
+    public String createCybersourcePaymentMethod(String oauthId,
+                                                 String cardType,
+                                                 String expirationMonth,
+                                                 String expirationYear,
+                                                 String instrumentId,
+                                                 SagaAddress address) throws SagaException {
+        var request = CreatePaymentMethodRequest.newBuilder()
+                .setOauthId(oauthId)
+                .setCybersource(CreateCybersourceCardProto.newBuilder()
+                        .setCardType(cardType)
+                        .setExpMonth(expirationMonth)
+                        .setExpYear(expirationYear)
+                        .setInstrumentId(instrumentId)
+                        .setBillingAddress(SagaAddress.toProto(address))
+                        .build())
+                .build();
+        return createPaymentMethod(request);
+    }
 
+    public String startUpholdPaymentMethodLink(String oauthId) throws SagaException {
+        var request = CreatePaymentMethodRequest.newBuilder()
+                .setOauthId(oauthId)
+                .setUphold(UpholdStartLinkProto.newBuilder().build())
+                .build();
+        return createPaymentMethod(request);
+    }
+
+    private String createPaymentMethod(CreatePaymentMethodRequest request) throws SagaException {
+        try {
             var receivedResponse = serviceBlockingStub.createPaymentMethod(request);
-            executor.emitReceived(oauthId, receivedResponse.getTraceId());
+            executor.emitReceived(request.getOauthId(), receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling emitReceived on createOrder, order may be lost!", e);
+            log.error("Exception calling emitReceived on createPaymentMethod, payment method may be lost!", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
 
-    public String updatePaymentMethod(String oauthId,
-                                      PaymentMethodData paymentMethodData,
-                                      Address address) throws SagaException {
+    public String updateCybersourcePaymentMethod(String oauthId,
+                                                 String paymentMethodToken,
+                                                 String cardType,
+                                                 String expirationMonth,
+                                                 String expirationYear,
+                                                 String instrumentId,
+                                                 SagaAddress address) throws SagaException {
+        var request = UpdatePaymentMethodRequest.newBuilder()
+                .setOauthId(oauthId)
+                .setCybersource(UpdateCybersourceCardProto.newBuilder()
+                        .setPaymentMethodToken(paymentMethodToken)
+                        .setCardType(cardType)
+                        .setExpMonth(expirationMonth)
+                        .setExpYear(expirationYear)
+                        .setInstrumentId(instrumentId)
+                        .setBillingAddress(SagaAddress.toProto(address))
+                        .build())
+                .build();
+        return updatePaymentMethod(request);
+    }
+
+    public String finishUpholdPaymentMethodLink(String oauthId,
+                                                String stateCode,
+                                                String generatedTemporaryCode) throws SagaException {
+        var request = UpdatePaymentMethodRequest.newBuilder()
+                .setOauthId(oauthId)
+                .setUphold(UpholdFinishLinkProto.newBuilder()
+                        .setStateCode(stateCode)
+                        .setGeneratedTemporaryCode(generatedTemporaryCode)
+                        .build())
+                .build();
+        return updatePaymentMethod(request);
+    }
+
+    private String updatePaymentMethod(UpdatePaymentMethodRequest request) throws SagaException {
         try {
-            var request = UpdatePaymentMethodRequest.newBuilder()
-                    .setOauthId(oauthId)
-                    .setPaymentMethodData(paymentMethodData)
-                    .setAddress(address)
-                    .build();
-
             var receivedResponse = serviceBlockingStub.updatePaymentMethod(request);
-            executor.emitReceived(oauthId, receivedResponse.getTraceId());
+            executor.emitReceived(request.getOauthId(), receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling emitReceived on createOrder, order may be lost!", e);
+            log.error("Exception calling emitReceived on updatePaymentMethod, update may be lost!", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
 
-    public String deletePaymentMethod(String oauthId, PaymentMethodData paymentMethodData) throws SagaException {
+    public String deletePaymentMethod(String oauthId, String paymentMethodToken, PaymentProviderId providerId) throws SagaException {
         try {
             var request = DeletePaymentMethodRequest.newBuilder()
                     .setOauthId(oauthId)
-                    .setPaymentMethodData(paymentMethodData)
+                    .setPaymentMethodToken(paymentMethodToken)
+                    .setPaymentProviderId(providerId)
                     .build();
 
             var receivedResponse = serviceBlockingStub.deletePaymentMethod(request);
             executor.emitReceived(oauthId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
-        } catch (
-        StatusRuntimeException e) {
+        } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
             log.error("Exception calling emitReceived on createOrder, order may be lost!", e);
