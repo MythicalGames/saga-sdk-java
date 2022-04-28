@@ -92,6 +92,7 @@ public abstract class AbstractClientTest {
      * @param alternateMapping map of expected method name to actual method name in lowercase.
      * @throws Exception
      */
+    // TODO: bug if the proto object and java object are both null for a field, proto toString is empty compared to java null
     public void compareObjectsByReflection(Object expected, Object actual, Map<String, String> alternateMapping) throws Exception {
         var expectedGetters = getMapOfGetterMethods(expected);
         var actualGetters = getMapOfGetterMethods(actual);
