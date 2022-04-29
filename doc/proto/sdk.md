@@ -106,9 +106,10 @@
     - [CreatePaymentMethodRequest](#saga-api-payment-CreatePaymentMethodRequest)
     - [CybersourcePaymentData](#saga-api-payment-CybersourcePaymentData)
     - [DeletePaymentMethodRequest](#saga-api-payment-DeletePaymentMethodRequest)
-    - [GetPaymentMethodRequest](#saga-api-payment-GetPaymentMethodRequest)
+    - [GetPaymentMethodsRequest](#saga-api-payment-GetPaymentMethodsRequest)
     - [PaymentMethodData](#saga-api-payment-PaymentMethodData)
     - [PaymentMethodProto](#saga-api-payment-PaymentMethodProto)
+    - [PaymentMethodProtos](#saga-api-payment-PaymentMethodProtos)
     - [UpdateCybersourceCardProto](#saga-api-payment-UpdateCybersourceCardProto)
     - [UpdatePaymentMethodRequest](#saga-api-payment-UpdatePaymentMethodRequest)
     - [UpholdCardProto](#saga-api-payment-UpholdCardProto)
@@ -1692,6 +1693,7 @@ Create Order Quote call
 | expiration_year | [string](#string) |  |  |
 | card_type | [string](#string) |  |  |
 | instrument_id | [string](#string) |  |  |
+| payment_method_token_id | [string](#string) |  |  |
 
 
 
@@ -1715,9 +1717,9 @@ Create Order Quote call
 
 
 
-<a name="saga-api-payment-GetPaymentMethodRequest"></a>
+<a name="saga-api-payment-GetPaymentMethodsRequest"></a>
 
-### GetPaymentMethodRequest
+### GetPaymentMethodsRequest
 
 
 
@@ -1760,6 +1762,21 @@ Create Order Quote call
 | oauth_id | [string](#string) |  | User of this Payment Method |
 | payment_method_data | [PaymentMethodData](#saga-api-payment-PaymentMethodData) |  | Payment method data |
 | address | [Address](#saga-api-payment-Address) |  | Address of this Payment Method |
+
+
+
+
+
+
+<a name="saga-api-payment-PaymentMethodProtos"></a>
+
+### PaymentMethodProtos
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| payment_methods | [PaymentMethodProto](#saga-api-payment-PaymentMethodProto) | repeated |  |
 
 
 
@@ -1900,7 +1917,7 @@ Create Order Quote call
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | CreatePaymentMethod | [CreatePaymentMethodRequest](#saga-api-payment-CreatePaymentMethodRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create a Payment Method |
-| GetPaymentMethod | [GetPaymentMethodRequest](#saga-api-payment-GetPaymentMethodRequest) | [PaymentMethodProto](#saga-api-payment-PaymentMethodProto) | Get Payment Method for a user |
+| GetPaymentMethods | [GetPaymentMethodsRequest](#saga-api-payment-GetPaymentMethodsRequest) | [PaymentMethodProtos](#saga-api-payment-PaymentMethodProtos) | Get Payment Methods for a user |
 | UpdatePaymentMethod | [UpdatePaymentMethodRequest](#saga-api-payment-UpdatePaymentMethodRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update the Payment Method for a User |
 | DeletePaymentMethod | [DeletePaymentMethodRequest](#saga-api-payment-DeletePaymentMethodRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Delete a Payment Method for a User |
 

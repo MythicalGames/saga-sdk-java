@@ -635,7 +635,7 @@
                 </li>
               
                 <li>
-                  <a href="#saga.api.payment.GetPaymentMethodRequest"><span class="badge">M</span>GetPaymentMethodRequest</a>
+                  <a href="#saga.api.payment.GetPaymentMethodsRequest"><span class="badge">M</span>GetPaymentMethodsRequest</a>
                 </li>
               
                 <li>
@@ -644,6 +644,10 @@
               
                 <li>
                   <a href="#saga.api.payment.PaymentMethodProto"><span class="badge">M</span>PaymentMethodProto</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.api.payment.PaymentMethodProtos"><span class="badge">M</span>PaymentMethodProtos</a>
                 </li>
               
                 <li>
@@ -4491,6 +4495,13 @@
                   <td><p> </p></td>
                 </tr>
               
+                <tr>
+                  <td>payment_method_token_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -4536,7 +4547,7 @@
 
         
       
-        <h3 id="saga.api.payment.GetPaymentMethodRequest">GetPaymentMethodRequest</h3>
+        <h3 id="saga.api.payment.GetPaymentMethodsRequest">GetPaymentMethodsRequest</h3>
         <p></p>
 
         
@@ -4641,6 +4652,30 @@
                   <td><a href="#saga.api.payment.Address">Address</a></td>
                   <td></td>
                   <td><p>Address of this Payment Method </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.payment.PaymentMethodProtos">PaymentMethodProtos</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>payment_methods</td>
+                  <td><a href="#saga.api.payment.PaymentMethodProto">PaymentMethodProto</a></td>
+                  <td>repeated</td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -4946,10 +4981,10 @@
               </tr>
             
               <tr>
-                <td>GetPaymentMethod</td>
-                <td><a href="#saga.api.payment.GetPaymentMethodRequest">GetPaymentMethodRequest</a></td>
-                <td><a href="#saga.api.payment.PaymentMethodProto">PaymentMethodProto</a></td>
-                <td><p>Get Payment Method for a user</p></td>
+                <td>GetPaymentMethods</td>
+                <td><a href="#saga.api.payment.GetPaymentMethodsRequest">GetPaymentMethodsRequest</a></td>
+                <td><a href="#saga.api.payment.PaymentMethodProtos">PaymentMethodProtos</a></td>
+                <td><p>Get Payment Methods for a user</p></td>
               </tr>
             
               <tr>
