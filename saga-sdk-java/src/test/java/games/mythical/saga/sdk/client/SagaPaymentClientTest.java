@@ -244,7 +244,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
     public void getPaymentMethods() throws Exception {
         var oauthId = RandomStringUtils.randomAlphanumeric(30);
 
-        var expectedResponse = PaymentMethodProtos.newBuilder().addPaymentMethodProtos(
+        var expectedResponse = PaymentMethodProtos.newBuilder().addPaymentMethods(
                 PaymentMethodProto.newBuilder()
                         .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                         .setOauthId(oauthId)
@@ -255,6 +255,6 @@ public class SagaPaymentClientTest extends AbstractClientTest {
 
         assertFalse(paymentResponse.isEmpty());
         var payment = paymentResponse.get(0);
-        assertEquals(expectedResponse.getPaymentMethodProtosList().get(0).getTraceId(), payment.getTraceId());
+        assertEquals(expectedResponse.getPaymentMethodsList().get(0).getTraceId(), payment.getTraceId());
     }
 }

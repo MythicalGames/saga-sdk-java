@@ -35,7 +35,7 @@ public class SagaPaymentMethod {
     }
 
     public static List<SagaPaymentMethod> fromProtos(PaymentMethodProtos protos) {
-        return protos.getPaymentMethodProtosList().stream()
+        return protos.getPaymentMethodsList().stream()
                 .map(SagaPaymentMethod::fromProto)
                 .collect(Collectors.toList());
     }
