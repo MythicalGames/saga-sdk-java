@@ -2,10 +2,7 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockPaymentExecutor;
 import games.mythical.saga.sdk.client.model.SagaAddress;
-import games.mythical.saga.sdk.proto.api.payment.CybersourcePaymentData;
-import games.mythical.saga.sdk.proto.api.payment.PaymentMethodData;
-import games.mythical.saga.sdk.proto.api.payment.PaymentMethodProto;
-import games.mythical.saga.sdk.proto.api.payment.PaymentServiceGrpc;
+import games.mythical.saga.sdk.proto.api.payment.*;
 import games.mythical.saga.sdk.proto.common.payment.PaymentMethodUpdateStatus;
 import games.mythical.saga.sdk.proto.common.payment.PaymentProviderId;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
@@ -244,18 +241,20 @@ public class SagaPaymentClientTest extends AbstractClientTest {
     }
 
     @Test
-    public void getPaymentMethod() throws Exception {
+    public void getPaymentMethods() throws Exception {
         var oauthId = RandomStringUtils.randomAlphanumeric(30);
 
-        var expectedResponse = PaymentMethodProto.newBuilder()
-                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
-                .setOauthId(oauthId)
-                .build();
-        when(mockServiceBlockingStub.getPaymentMethod(any())).thenReturn(expectedResponse);
-        var paymentResponse = paymentClient.getPaymentMethod(oauthId, PaymentProviderId.CYBERSOURCE);
+        var expectedResponse = PaymentMethodProtos.newBuilder().addPaymentMethods(
+                PaymentMethodProto.newBuilder()
+                        .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                        .setOauthId(oauthId)
+                        .build()
+                ).build();
+        when(mockServiceBlockingStub.getPaymentMethods(any())).thenReturn(expectedResponse);
+        var paymentResponse = paymentClient.getPaymentMethods(oauthId, PaymentProviderId.CYBERSOURCE);
 
-        assertTrue(paymentResponse.isPresent());
-        var payment = paymentResponse.get();
-        assertEquals(expectedResponse.getTraceId(), payment.getTraceId());
+        assertFalse(paymentResponse.isEmpty());
+        var payment = paymentResponse.get(0);
+        assertEquals(expectedResponse.getPaymentMethodsList().get(0).getTraceId(), payment.getTraceId());
     }
 }

@@ -4,10 +4,14 @@ import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
 import games.mythical.saga.sdk.proto.api.payment.PaymentMethodData;
 import games.mythical.saga.sdk.proto.api.payment.PaymentMethodProto;
+import games.mythical.saga.sdk.proto.api.payment.PaymentMethodProtos;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -28,5 +32,11 @@ public class SagaPaymentMethod {
         }
 
         return paymentMethod;
+    }
+
+    public static List<SagaPaymentMethod> fromProtos(PaymentMethodProtos protos) {
+        return protos.getPaymentMethodsList().stream()
+                .map(SagaPaymentMethod::fromProto)
+                .collect(Collectors.toList());
     }
 }

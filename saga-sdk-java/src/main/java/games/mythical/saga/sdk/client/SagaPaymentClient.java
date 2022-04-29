@@ -12,7 +12,7 @@ import games.mythical.saga.sdk.proto.common.payment.PaymentProviderId;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Optional;
+import java.util.List;
 
 @Slf4j
 public class SagaPaymentClient extends AbstractSagaStreamClient {
@@ -138,13 +138,13 @@ public class SagaPaymentClient extends AbstractSagaStreamClient {
         }
     }
 
-    public Optional<SagaPaymentMethod> getPaymentMethod(String oauthId, PaymentProviderId paymentProviderId) {
-        var request = GetPaymentMethodRequest.newBuilder()
+    public List<SagaPaymentMethod> getPaymentMethods(String oauthId, PaymentProviderId paymentProviderId) {
+        var request = GetPaymentMethodsRequest.newBuilder()
                 .setOauthId(oauthId)
                 .setPaymentProviderId(paymentProviderId)
                 .build();
 
-        var paymentMethodProto = serviceBlockingStub.getPaymentMethod(request);
-        return Optional.of(SagaPaymentMethod.fromProto(paymentMethodProto));
+        var paymentMethodProtos = serviceBlockingStub.getPaymentMethods(request);
+        return SagaPaymentMethod.fromProtos(paymentMethodProtos);
     }
 }
