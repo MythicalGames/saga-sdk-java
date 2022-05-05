@@ -107,26 +107,18 @@ class SagaItemClientTest extends AbstractClientTest {
                 EXPECTED_METADATA,
                 null, null, null
         );
-
-        assertEquals(expectedResponse.getTraceId(), traceId);
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ItemStatusUpdate.newBuilder()
                 .setGameInventoryId(GAME_INVENTORY_ID)
                 .setOauthId(EXPECTED_OAUTH_ID)
                 .setItemState(ItemState.ISSUED);
         itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(traceId)
                 .setItemUpdate(ItemUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(traceId);
 
         assertEquals(EXPECTED_OAUTH_ID, executor.getOauthId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
@@ -148,26 +140,18 @@ class SagaItemClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.transferItem(any())).thenReturn(expectedResponse);
         final var traceId = itemClient.transferItem(GAME_INVENTORY_ID, SOURCE, DEST, null);
-
-        assertEquals(expectedResponse.getTraceId(), traceId);
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ItemStatusUpdate.newBuilder()
             .setGameInventoryId(GAME_INVENTORY_ID)
             .setOauthId(DEST)
             .setItemState(ItemState.TRANSFERRED);
         itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(traceId)
                 .setItemUpdate(ItemUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(traceId);
 
         assertEquals(DEST, executor.getOauthId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
@@ -186,26 +170,18 @@ class SagaItemClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.burnItem(any())).thenReturn(expectedResponse);
         final var traceId = itemClient.burnItem(GAME_INVENTORY_ID);
-
-        assertEquals(expectedResponse.getTraceId(), traceId);
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ItemStatusUpdate.newBuilder()
                 .setGameInventoryId(GAME_INVENTORY_ID)
                 .setOauthId(RandomStringUtils.randomAlphanumeric(30))
                 .setItemState(ItemState.BURNED);
         itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(traceId)
                 .setItemUpdate(ItemUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(traceId);
 
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertEquals(ItemState.BURNED, executor.getItemState());

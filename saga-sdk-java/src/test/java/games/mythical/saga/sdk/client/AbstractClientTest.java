@@ -69,18 +69,14 @@ public abstract class AbstractClientTest {
             .build();
     }
 
-    protected void checkTraceAndStart(ReceivedResponse expectedResponse,
-                                      MockBaseExecutor executor,
-                                      String trace) throws Exception {
-
+    protected void checkTraceAndStart(ReceivedResponse expectedResponse, String trace) throws Exception {
         assertEquals(expectedResponse.getTraceId(), trace);
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(trace));
 
         // a short wait is needed so the status stream can be hooked up
         // before the emitting the event from the sendStatus method
         Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        ConcurrentFinisher.start(trace);
     }
 
     /**

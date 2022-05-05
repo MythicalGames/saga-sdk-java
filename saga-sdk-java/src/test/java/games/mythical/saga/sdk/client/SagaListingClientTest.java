@@ -74,7 +74,7 @@ class SagaListingClientTest extends AbstractClientTest {
                 BigDecimal.TEN,
                 CURRENCY
         );
-        checkTraceAndStart(expectedResponse, executor, trace);
+        checkTraceAndStart(expectedResponse, trace);
 
         var update = ListingStatusUpdate.newBuilder()
             .setOauthId(OAUTH_ID)
@@ -83,7 +83,7 @@ class SagaListingClientTest extends AbstractClientTest {
             .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
             .setListingState(ListingState.CANCELLED);
         var statusUpdate = StatusUpdate.newBuilder()
-            .setTraceId(executor.getTraceId())
+            .setTraceId(trace)
             .setListingUpdate(ListingUpdate.newBuilder().setStatusUpdate(update))
             .build();
         listingServer.getStatusStream().sendStatus(titleId, statusUpdate);
@@ -109,15 +109,8 @@ class SagaListingClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.confirmListing(any())).thenReturn(expectedResponse);
 
-        listingClient.confirmListing(OAUTH_ID, QUOTE_ID);
-
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        var traceId = listingClient.confirmListing(OAUTH_ID, QUOTE_ID);
+        checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ListingStatusUpdate.newBuilder()
             .setOauthId(OAUTH_ID)
@@ -126,12 +119,12 @@ class SagaListingClientTest extends AbstractClientTest {
             .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
             .setListingState(ListingState.CREATED);
         var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(traceId)
                 .setListingUpdate(ListingUpdate.newBuilder().setStatusUpdate(update))
                 .build();
         listingServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(traceId);
 
         assertEquals(OAUTH_ID, executor.getOauthId());
         assertEquals(QUOTE_ID, executor.getListingId());
@@ -151,7 +144,7 @@ class SagaListingClientTest extends AbstractClientTest {
         when(mockServiceBlockingStub.cancelListing(any())).thenReturn(expectedResponse);
 
         final var trace = listingClient.cancelListing(OAUTH_ID, LISTING_ID);
-        checkTraceAndStart(expectedResponse, executor, trace);
+        checkTraceAndStart(expectedResponse, trace);
 
         var update = ListingStatusUpdate.newBuilder()
             .setOauthId(OAUTH_ID)
@@ -160,7 +153,7 @@ class SagaListingClientTest extends AbstractClientTest {
             .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
             .setListingState(ListingState.CANCELLED);
         var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(trace)
                 .setListingUpdate(ListingUpdate.newBuilder().setStatusUpdate(update))
                 .build();
         listingServer.getStatusStream().sendStatus(titleId, statusUpdate);

@@ -83,7 +83,7 @@ class SagaOrderClientTest extends AbstractClientTest {
             false,
             null
         );
-        checkTraceAndStart(expectedResponse, executor, trace);
+        checkTraceAndStart(expectedResponse, trace);
 
         final var update = OrderStatusUpdate.newBuilder()
             .setOauthId(OAUTH_ID)
@@ -92,12 +92,12 @@ class SagaOrderClientTest extends AbstractClientTest {
             .setTotal(String.valueOf(RandomUtils.nextInt(1, 1000)))
             .setOrderState(OrderState.COMPLETE);
         var statusUpdate = StatusUpdate.newBuilder()
-            .setTraceId(executor.getTraceId())
+            .setTraceId(trace)
             .setOrderUpdate(OrderUpdate.newBuilder().setStatusUpdate(update))
             .build();
         orderServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(trace);
 
         assertEquals(OAUTH_ID, executor.getOauthId());
         assertEquals(QUOTE_ID, executor.getQuoteId());
@@ -131,15 +131,7 @@ class SagaOrderClientTest extends AbstractClientTest {
                 paymentProviderData,
                 RandomStringUtils.randomAlphanumeric(30)
         );
-
-        assertEquals(expectedResponse.getTraceId(), traceId);
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        checkTraceAndStart(expectedResponse, traceId);
 
         final var update = OrderStatusUpdate.newBuilder()
             .setOauthId(OAUTH_ID)
@@ -148,12 +140,12 @@ class SagaOrderClientTest extends AbstractClientTest {
             .setTotal(String.valueOf(RandomUtils.nextInt(1, 1000)))
             .setOrderState(OrderState.COMPLETE);
         var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(traceId)
                 .setOrderUpdate(OrderUpdate.newBuilder().setStatusUpdate(update))
                 .build();
         orderServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(traceId);
 
         assertEquals(OAUTH_ID, executor.getOauthId());
         assertEquals(QUOTE_ID, executor.getQuoteId());

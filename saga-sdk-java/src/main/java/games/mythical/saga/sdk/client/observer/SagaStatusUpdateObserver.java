@@ -1,6 +1,7 @@
 package games.mythical.saga.sdk.client.observer;
 
 import games.mythical.saga.sdk.client.executor.*;
+import games.mythical.saga.sdk.client.model.SagaPaymentMethod;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.streams.StatusConfirmRequest;
@@ -171,195 +172,155 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
 
     private void handleBridgeUpdate(BridgeUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
-            sagaBridgeExecutor.onError(
-                update.getError().getErrorCode(),
-                update.getError().getMsg(),
-                traceId
-            );
-        }
-        else {
+            final var error = update.getError();
+            sagaBridgeExecutor.onError(error.getErrorCode(), error.getMsg(), traceId);
+        } else {
             final var message = update.getStatusUpdate();
             sagaBridgeExecutor.updateItem(
-                message.getOauthId(),
-                message.getGameInventoryId(),
-                message.getGameItemTypeId(),
-                message.getDestinationAddress(),
-                message.getDestinationChain(),
-                message.getOriginAddress(),
-                message.getMythicalTransactionId(),
-                message.getMainnetTransactionId(),
-                traceId
+                    message.getOauthId(),
+                    message.getGameInventoryId(),
+                    message.getGameItemTypeId(),
+                    message.getDestinationAddress(),
+                    message.getDestinationChain(),
+                    message.getOriginAddress(),
+                    message.getMythicalTransactionId(),
+                    message.getMainnetTransactionId(),
+                    traceId
             );
         }
     }
 
     private void handleGameCoinUpdate(GameCoinUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
-            sagaBridgeExecutor.onError(
-                update.getError().getErrorCode(),
-                update.getError().getMsg(),
-                traceId
-            );
-        }
-        else {
+            final var error = update.getError();
+            sagaGameCoinExecutor.onError(error.getErrorCode(), error.getMsg(), traceId);
+        } else {
             final var message = update.getStatusUpdate();
             sagaGameCoinExecutor.updateGameCoin(
-                message.getCurrencyId(),
-                message.getCoinCount(),
-                message.getOauthId(),
-                traceId,
-                message.getGameCoinState()
+                    message.getCurrencyId(),
+                    message.getCoinCount(),
+                    message.getOauthId(),
+                    traceId,
+                    message.getGameCoinState()
             );
         }
     }
 
     private void handleItemUpdate(ItemUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
-            sagaBridgeExecutor.onError(
-                update.getError().getErrorCode(),
-                update.getError().getMsg(),
-                traceId
-            );
-        }
-        else {
+            final var error = update.getError();
+            sagaItemExecutor.onError(error.getErrorCode(), error.getMsg(), traceId);
+        } else {
             final var message = update.getStatusUpdate();
             sagaItemExecutor.updateItem(
-                message.getGameInventoryId(),
-                message.getGameItemTypeId(),
-                message.getOauthId(),
-                message.getSerialNumber(),
-                message.getMetadataUri(),
-                traceId,
-                message.getItemState()
+                    message.getGameInventoryId(),
+                    message.getGameItemTypeId(),
+                    message.getOauthId(),
+                    message.getSerialNumber(),
+                    message.getMetadataUri(),
+                    traceId,
+                    message.getItemState()
             );
         }
     }
 
     private void handleItemTypeUpdate(ItemTypeUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
-            sagaBridgeExecutor.onError(
-                update.getError().getErrorCode(),
-                update.getError().getMsg(),
-                traceId
-            );
-        }
-        else {
+            final var error = update.getError();
+            sagaItemTypeExecutor.onError(error.getErrorCode(), error.getMsg(), traceId);
+        } else {
             final var message = update.getStatusUpdate();
             sagaItemTypeExecutor.updateItemType(
-                message.getGameItemTypeId(),
-                traceId,
-                message.getItemTypeState()
+                    message.getGameItemTypeId(),
+                    traceId,
+                    message.getItemTypeState()
             );
         }
     }
 
     private void handleListingUpdate(ListingUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
-            sagaBridgeExecutor.onError(
-                update.getError().getErrorCode(),
-                update.getError().getMsg(),
-                traceId
-            );
-        }
-        else {
+            final var error = update.getError();
+            sagaListingExecutor.onError(error.getErrorCode(), error.getMsg(), traceId);
+        } else {
             final var message = update.getStatusUpdate();
             sagaListingExecutor.updateListing(
-                message.getOauthId(),
-                traceId,
-                message.getQuoteId(),
-                message.getListingId(),
-                new BigDecimal(message.getTotal()),
-                message.getListingState()
+                    message.getOauthId(),
+                    traceId,
+                    message.getQuoteId(),
+                    message.getListingId(),
+                    new BigDecimal(message.getTotal()),
+                    message.getListingState()
             );
         }
     }
 
     private void handleMythTokenUpdate(MythTokenUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
-            sagaBridgeExecutor.onError(
-                update.getError().getErrorCode(),
-                update.getError().getMsg(),
-                traceId
-            );
-        }
-        else {
+            final var error = update.getError();
+            sagaMythTokenExecutor.onError(error.getErrorCode(), error.getMsg(), traceId);
+        } else {
             final var message = update.getStatusUpdate();
             sagaMythTokenExecutor.updateMythToken(
-                traceId,
-                message.getTokenState()
+                    traceId,
+                    message.getTokenState()
             );
         }
     }
 
     private void handleOfferUpdate(OfferUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
-            sagaBridgeExecutor.onError(
-                update.getError().getErrorCode(),
-                update.getError().getMsg(),
-                traceId
-            );
-        }
-        else {
+            final var error = update.getError();
+            sagaOfferExecutor.onError(error.getErrorCode(), error.getMsg(), traceId);
+        } else {
             final var message = update.getStatusUpdate();
             sagaOfferExecutor.updateOffer(
-                message.getOauthId(),
-                traceId,
-                message.getQuoteId(),
-                message.getOfferId(),
-                new BigDecimal(message.getTotal()),
-                message.getOfferState()
+                    message.getOauthId(),
+                    traceId,
+                    message.getQuoteId(),
+                    message.getOfferId(),
+                    new BigDecimal(message.getTotal()),
+                    message.getOfferState()
             );
         }
     }
 
     private void handleOrderUpdate(OrderUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
-            sagaBridgeExecutor.onError(
-                update.getError().getErrorCode(),
-                update.getError().getMsg(),
-                traceId
-            );
-        }
-        else {
+            final var error = update.getError();
+            sagaOrderExecutor.onError(error.getErrorCode(), error.getMsg(), traceId);
+        } else {
             final var message = update.getStatusUpdate();
             sagaOrderExecutor.updateOrder(
-                message.getOauthId(),
-                traceId,
-                message.getQuoteId(),
-                message.getOrderId(),
-                new BigDecimal(message.getTotal()),
-                message.getOrderState()
+                    message.getOauthId(),
+                    traceId,
+                    message.getQuoteId(),
+                    message.getOrderId(),
+                    new BigDecimal(message.getTotal()),
+                    message.getOrderState()
             );
         }
     }
 
     private void handlePaymentUpdate(PaymentUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
-            sagaPaymentExecutor.onError(
-                update.getError().getErrorCode(),
-                update.getError().getMsg(),
-                traceId
-            );
-        }
-        else {
+            final var error = update.getError();
+            sagaPaymentExecutor.onError(error.getErrorCode(), error.getMsg(), traceId);
+        } else {
             final var message = update.getStatusUpdate();
             sagaPaymentExecutor.updatePaymentMethod(
-                message.getOauthId(),
-                message.getDefault(),
-                message.getPaymentMethodStatus()
+                    traceId,
+                    SagaPaymentMethod.fromProto(message.getPaymentMethod()),
+                    message.getPaymentMethodStatus()
             );
         }
     }
 
     private void handleUserUpdate(UserUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
-            sagaBridgeExecutor.onError(
-                update.getError().getErrorCode(),
-                update.getError().getMsg(),
-                traceId
-            );
-        }
-        else {
+            final var error = update.getError();
+            sagaUserExecutor.onError(error.getErrorCode(), error.getMsg(), traceId);
+        } else {
             sagaUserExecutor.updateUser(update.getStatusUpdate().getOauthId(), traceId);
         }
     }

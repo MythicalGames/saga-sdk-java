@@ -34,6 +34,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
             .setCardType("VISA")
             .build();
     private final PaymentMethodData paymentMethodData = PaymentMethodData.newBuilder()
+            .setMakeDefault(true)
             .setCybersource(cybersourcePaymentData)
             .build();
     private final SagaAddress address = SagaAddress.builder()
@@ -78,25 +79,24 @@ public class SagaPaymentClientTest extends AbstractClientTest {
                 RandomStringUtils.randomAlphanumeric(30),
                 address
         );
-        checkTraceAndStart(expectedResponse, executor, trace);
+        checkTraceAndStart(expectedResponse, trace);
 
         final var pmtStatusUpdate = PaymentMethodStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
-                .setDefault(true)
+                .setPaymentMethod(createPaymentMethodProto(OAUTH_ID))
                 .setPaymentMethodStatus(PaymentMethodUpdateStatus.CREATED)
                 .build();
         final var pmtUpdate = PaymentUpdate.newBuilder()
                 .setStatusUpdate(pmtStatusUpdate);
         final var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(trace)
                 .setPaymentUpdate(pmtUpdate)
                 .build();
         paymentServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(trace);
 
-        assertEquals(OAUTH_ID, executor.getOauthId());
-        assertTrue(executor.isDefault());
+        assertEquals(OAUTH_ID, executor.getPaymentMethod().getOauthId());
+        assertTrue(executor.getPaymentMethod().getPaymentMethodData().getMakeDefault());
         assertEquals(PaymentMethodUpdateStatus.CREATED, executor.getMethodUpdateStatus());
 
         paymentServer.verifyCalls("StatusStream", 1);
@@ -109,25 +109,23 @@ public class SagaPaymentClientTest extends AbstractClientTest {
         when(mockServiceBlockingStub.createPaymentMethod(any())).thenReturn(expectedResponse);
 
         final var trace = paymentClient.startUpholdPaymentMethodLink(OAUTH_ID);
-        checkTraceAndStart(expectedResponse, executor, trace);
+        checkTraceAndStart(expectedResponse, trace);
 
         final var pmtStatusUpdate = PaymentMethodStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
-                .setDefault(false)
+                .setPaymentMethod(createPaymentMethodProto(OAUTH_ID))
                 .setPaymentMethodStatus(PaymentMethodUpdateStatus.CREATED)
                 .build();
         final var pmtUpdate = PaymentUpdate.newBuilder()
                 .setStatusUpdate(pmtStatusUpdate);
         final var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(trace)
                 .setPaymentUpdate(pmtUpdate)
                 .build();
         paymentServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(trace);
 
-        assertEquals(OAUTH_ID, executor.getOauthId());
-        assertFalse(executor.isDefault());
+        assertEquals(OAUTH_ID, executor.getPaymentMethod().getOauthId());
         assertEquals(PaymentMethodUpdateStatus.CREATED, executor.getMethodUpdateStatus());
 
         paymentServer.verifyCalls("StatusStream", 1);
@@ -147,25 +145,24 @@ public class SagaPaymentClientTest extends AbstractClientTest {
                 RandomStringUtils.randomAlphanumeric(30),
                 address
         );
-        checkTraceAndStart(expectedResponse, executor, trace);
+        checkTraceAndStart(expectedResponse, trace);
 
         final var pmtStatusUpdate = PaymentMethodStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
-                .setDefault(true)
+                .setPaymentMethod(createPaymentMethodProto(OAUTH_ID))
                 .setPaymentMethodStatus(PaymentMethodUpdateStatus.UPDATED)
                 .build();
         final var pmtUpdate = PaymentUpdate.newBuilder()
                 .setStatusUpdate(pmtStatusUpdate);
         final var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(trace)
                 .setPaymentUpdate(pmtUpdate)
                 .build();
         paymentServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(trace);
 
-        assertEquals(OAUTH_ID, executor.getOauthId());
-        assertTrue(executor.isDefault());
+        assertEquals(OAUTH_ID, executor.getPaymentMethod().getOauthId());
+        assertTrue(executor.getPaymentMethod().getPaymentMethodData().getMakeDefault());
         assertEquals(PaymentMethodUpdateStatus.UPDATED, executor.getMethodUpdateStatus());
 
         paymentServer.verifyCalls("StatusStream", 1);
@@ -181,25 +178,24 @@ public class SagaPaymentClientTest extends AbstractClientTest {
                 RandomStringUtils.randomAlphanumeric(30),
                 RandomStringUtils.randomAlphanumeric(30)
         );
-        checkTraceAndStart(expectedResponse, executor, trace);
+        checkTraceAndStart(expectedResponse, trace);
 
         final var pmtStatusUpdate = PaymentMethodStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
-                .setDefault(true)
+                .setPaymentMethod(createPaymentMethodProto(OAUTH_ID))
                 .setPaymentMethodStatus(PaymentMethodUpdateStatus.UPDATED)
                 .build();
         final var pmtUpdate = PaymentUpdate.newBuilder()
                 .setStatusUpdate(pmtStatusUpdate);
         final var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(trace)
                 .setPaymentUpdate(pmtUpdate)
                 .build();
         paymentServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(trace);
 
-        assertEquals(OAUTH_ID, executor.getOauthId());
-        assertTrue(executor.isDefault());
+        assertEquals(OAUTH_ID, executor.getPaymentMethod().getOauthId());
+        assertTrue(executor.getPaymentMethod().getPaymentMethodData().getMakeDefault());
         assertEquals(PaymentMethodUpdateStatus.UPDATED, executor.getMethodUpdateStatus());
 
         paymentServer.verifyCalls("StatusStream", 1);
@@ -215,25 +211,24 @@ public class SagaPaymentClientTest extends AbstractClientTest {
                 RandomStringUtils.randomAlphanumeric(30),
                 PaymentProviderId.CYBERSOURCE
         );
-        checkTraceAndStart(expectedResponse, executor, trace);
+        checkTraceAndStart(expectedResponse, trace);
 
         final var pmtStatusUpdate = PaymentMethodStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
-                .setDefault(true)
+                .setPaymentMethod(createPaymentMethodProto(OAUTH_ID))
                 .setPaymentMethodStatus(PaymentMethodUpdateStatus.UPDATED)
                 .build();
         final var pmtUpdate = PaymentUpdate.newBuilder()
                 .setStatusUpdate(pmtStatusUpdate);
         final var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(trace)
                 .setPaymentUpdate(pmtUpdate)
                 .build();
         paymentServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(trace);
 
-        assertEquals(OAUTH_ID, executor.getOauthId());
-        assertTrue(executor.isDefault());
+        assertEquals(OAUTH_ID, executor.getPaymentMethod().getOauthId());
+        assertTrue(executor.getPaymentMethod().getPaymentMethodData().getMakeDefault());
         assertEquals(PaymentMethodUpdateStatus.UPDATED, executor.getMethodUpdateStatus());
 
         paymentServer.verifyCalls("StatusStream", 1);
@@ -241,20 +236,24 @@ public class SagaPaymentClientTest extends AbstractClientTest {
     }
 
     @Test
-    public void getPaymentMethods() throws Exception {
-        var oauthId = RandomStringUtils.randomAlphanumeric(30);
-
-        var expectedResponse = PaymentMethodProtos.newBuilder().addPaymentMethods(
-                PaymentMethodProto.newBuilder()
-                        .setTraceId(RandomStringUtils.randomAlphanumeric(30))
-                        .setOauthId(oauthId)
-                        .build()
-                ).build();
+    public void getPaymentMethods() {
+        var expectedResponse = PaymentMethodProtos.newBuilder()
+                .addPaymentMethods(createPaymentMethodProto(OAUTH_ID))
+                .build();
         when(mockServiceBlockingStub.getPaymentMethods(any())).thenReturn(expectedResponse);
-        var paymentResponse = paymentClient.getPaymentMethods(oauthId, PaymentProviderId.CYBERSOURCE);
+        var paymentResponse = paymentClient.getPaymentMethods(OAUTH_ID, PaymentProviderId.CYBERSOURCE);
 
         assertFalse(paymentResponse.isEmpty());
         var payment = paymentResponse.get(0);
         assertEquals(expectedResponse.getPaymentMethodsList().get(0).getTraceId(), payment.getTraceId());
+        assertTrue(payment.getPaymentMethodData().hasCybersource());
+    }
+
+    private PaymentMethodProto createPaymentMethodProto(String oauthId) {
+        return PaymentMethodProto.newBuilder()
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .setOauthId(oauthId)
+                .setPaymentMethodData(paymentMethodData)
+                .build();
     }
 }

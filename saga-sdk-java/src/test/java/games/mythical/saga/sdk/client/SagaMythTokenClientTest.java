@@ -123,24 +123,16 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.confirmBuyingMythToken(any())).thenReturn(expectedResponse);
         final var traceId = mythTokenClient.confirmBuyingMythToken(QUOTE_ID, USER_ID, PAYMENT_PROVIDER_DATA);
-
-        assertEquals(expectedResponse.getTraceId(), traceId);
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        checkTraceAndStart(expectedResponse, traceId);
 
         final var update = MythTokenStatusUpdate.newBuilder()
                 .setTokenState(MythTokenState.TRANSFERRED);
         mythTokenServer.getStatusStream().sendStatus(config.getTitleId(), StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(traceId)
                 .setMythTokenUpdate(MythTokenUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertEquals(MythTokenState.TRANSFERRED, executor.getTokenState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
@@ -169,24 +161,16 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.confirmMythTokenWithdrawal(any())).thenReturn(expectedResponse);
         final var traceId = mythTokenClient.confirmMythTokenWithdrawal(QUOTE_ID);
-
-        assertEquals(expectedResponse.getTraceId(), traceId);
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        checkTraceAndStart(expectedResponse, traceId);
 
         final var update = MythTokenStatusUpdate.newBuilder()
                 .setTokenState(MythTokenState.WITHDRAWN);
         mythTokenServer.getStatusStream().sendStatus(config.getTitleId(), StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(traceId)
                 .setMythTokenUpdate(MythTokenUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertEquals(MythTokenState.WITHDRAWN, executor.getTokenState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
