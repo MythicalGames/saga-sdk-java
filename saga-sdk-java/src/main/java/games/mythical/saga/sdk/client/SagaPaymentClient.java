@@ -62,12 +62,11 @@ public class SagaPaymentClient extends AbstractSagaStreamClient {
     private String createPaymentMethod(CreatePaymentMethodRequest request) throws SagaException {
         try {
             var receivedResponse = serviceBlockingStub.createPaymentMethod(request);
-            executor.emitReceived(request.getOauthId(), receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling emitReceived on createPaymentMethod, payment method may be lost!", e);
+            log.error("Exception calling createPaymentMethod", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
@@ -109,12 +108,11 @@ public class SagaPaymentClient extends AbstractSagaStreamClient {
     private String updatePaymentMethod(UpdatePaymentMethodRequest request) throws SagaException {
         try {
             var receivedResponse = serviceBlockingStub.updatePaymentMethod(request);
-            executor.emitReceived(request.getOauthId(), receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling emitReceived on updatePaymentMethod, update may be lost!", e);
+            log.error("Exception calling updatePaymentMethod", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
@@ -128,12 +126,11 @@ public class SagaPaymentClient extends AbstractSagaStreamClient {
                     .build();
 
             var receivedResponse = serviceBlockingStub.deletePaymentMethod(request);
-            executor.emitReceived(oauthId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling emitReceived on createOrder, order may be lost!", e);
+            log.error("Exception calling deletePaymentMethod", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }

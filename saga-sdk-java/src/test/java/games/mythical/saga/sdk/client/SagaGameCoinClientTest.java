@@ -95,26 +95,18 @@ class SagaGameCoinClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.issueGameCoin(any())).thenReturn(expectedResponse);
         final var traceId = gameCoinClient.issueGameCoin(CURRENCY_ID, OAUTH_ID, RandomUtils.nextInt(1, 1000));
-
-        assertEquals(expectedResponse.getTraceId(), traceId);
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        checkTraceAndStart(expectedResponse, traceId);
 
         final var update = GameCoinStatusUpdate.newBuilder()
                 .setOauthId(OAUTH_ID)
                 .setCurrencyId(CURRENCY_ID)
                 .setGameCoinState(GameCoinState.ISSUED);
         gameCoinServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(traceId)
                 .setGameCoinUpdate(GameCoinUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(traceId);
 
         assertEquals(OAUTH_ID, executor.getOauthId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
@@ -136,26 +128,18 @@ class SagaGameCoinClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.transferGameCoin(any())).thenReturn(expectedResponse);
         final var traceId = gameCoinClient.transferGameCoin(CURRENCY_ID, SOURCE, DEST, RandomUtils.nextInt(1, 1000));
-
-        assertEquals(expectedResponse.getTraceId(), traceId);
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        checkTraceAndStart(expectedResponse, traceId);
 
         final var update = GameCoinStatusUpdate.newBuilder()
                 .setOauthId(DEST)
                 .setCurrencyId(CURRENCY_ID)
                 .setGameCoinState(GameCoinState.TRANSFERRED);
         gameCoinServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(traceId)
                 .setGameCoinUpdate(GameCoinUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(traceId);
 
         assertEquals(DEST, executor.getOauthId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
@@ -174,26 +158,18 @@ class SagaGameCoinClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.burnGameCoin(any())).thenReturn(expectedResponse);
         final var traceId = gameCoinClient.burnGameCoin(CURRENCY_ID, OAUTH_ID, RandomUtils.nextInt(1, 1000));
-
-        assertEquals(expectedResponse.getTraceId(), traceId);
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        checkTraceAndStart(expectedResponse, traceId);
 
         final var update = GameCoinStatusUpdate.newBuilder()
                 .setOauthId(OAUTH_ID)
                 .setCurrencyId(CURRENCY_ID)
                 .setGameCoinState(GameCoinState.BURNED);
         gameCoinServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(traceId)
                 .setGameCoinUpdate(GameCoinUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(traceId);
 
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertEquals(GameCoinState.BURNED, executor.getGameCoinState());

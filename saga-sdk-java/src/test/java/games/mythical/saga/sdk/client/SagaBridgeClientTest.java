@@ -92,15 +92,7 @@ class SagaBridgeClientTest extends AbstractClientTest {
                 RandomStringUtils.randomAlphanumeric(30),
                 RandomStringUtils.randomAlphanumeric(30)
         );
-
-        assertEquals(expectedResponse.getTraceId(), traceId);
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        checkTraceAndStart(expectedResponse, traceId);
 
         final var update = BridgeStatusUpdate.newBuilder()
             .setOauthId(OAUTH_ID)
@@ -113,14 +105,14 @@ class SagaBridgeClientTest extends AbstractClientTest {
             .setMainnetTransactionId(RandomStringUtils.randomAlphanumeric(30))
             .build();
         var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(traceId)
                 .setBridgeUpdate(BridgeUpdate.newBuilder()
                             .setStatusUpdate(update)
                             .build())
                 .build();
         bridgeServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(traceId);
 
         assertEquals(OAUTH_ID, executor.getOauthId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());

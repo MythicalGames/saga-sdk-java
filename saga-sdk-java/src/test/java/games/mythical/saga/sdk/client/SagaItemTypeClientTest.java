@@ -103,25 +103,17 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.createItemType(any())).thenReturn(expectedResponse);
         final var traceId = itemTypeClient.createItemType(GAME_ITEM_TYPE_ID, false, EXPECTED_METADATA);
-
-        assertEquals(expectedResponse.getTraceId(), traceId);
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ItemTypeStatusUpdate.newBuilder()
                 .setGameItemTypeId(GAME_ITEM_TYPE_ID)
                 .setItemTypeState(ItemTypeState.CREATED);
         itemTypeServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(traceId)
                 .setItemTypeUpdate(ItemTypeUpdate.newBuilder().setStatusUpdate(update))
                 .build());
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(traceId);
 
         assertEquals(GAME_ITEM_TYPE_ID, executor.getGameItemTypeId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());

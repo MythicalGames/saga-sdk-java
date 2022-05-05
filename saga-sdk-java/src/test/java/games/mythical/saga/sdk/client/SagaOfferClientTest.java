@@ -75,7 +75,7 @@ class SagaOfferClientTest extends AbstractClientTest {
                 BigDecimal.TEN,
                 CURRENCY
         );
-        checkTraceAndStart(expectedResponse, executor, trace);
+        checkTraceAndStart(expectedResponse, trace);
 
         final var update = OfferStatusUpdate.newBuilder()
             .setOauthId(OAUTH_ID)
@@ -84,12 +84,12 @@ class SagaOfferClientTest extends AbstractClientTest {
             .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
             .setOfferState(OfferState.CANCELLED);
         var statusUpdate = StatusUpdate.newBuilder()
-            .setTraceId(executor.getTraceId())
+            .setTraceId(trace)
             .setOfferUpdate(OfferUpdate.newBuilder().setStatusUpdate(update))
             .build();
         offerServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(trace);
 
         assertEquals(OAUTH_ID, executor.getOauthId());
         assertEquals(OFFER_ID, executor.getOfferId());
@@ -111,15 +111,7 @@ class SagaOfferClientTest extends AbstractClientTest {
         when(mockServiceBlockingStub.confirmOffer(any())).thenReturn(expectedResponse);
 
         final var traceId = offerClient.confirmOffer(OAUTH_ID, QUOTE_ID);
-
-        assertEquals(expectedResponse.getTraceId(), traceId);
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        checkTraceAndStart(expectedResponse, traceId);
 
         final var update = OfferStatusUpdate.newBuilder()
             .setOauthId(OAUTH_ID)
@@ -128,12 +120,12 @@ class SagaOfferClientTest extends AbstractClientTest {
             .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
             .setOfferState(OfferState.CREATED);
         var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(traceId)
                 .setOfferUpdate(OfferUpdate.newBuilder().setStatusUpdate(update))
                 .build();
         offerServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(traceId);
 
         assertEquals(OAUTH_ID, executor.getOauthId());
         assertEquals(QUOTE_ID, executor.getOfferId());
@@ -155,15 +147,7 @@ class SagaOfferClientTest extends AbstractClientTest {
         when(mockServiceBlockingStub.cancelOffer(any())).thenReturn(expectedResponse);
 
         final var traceId = offerClient.cancelOffer(OAUTH_ID, OFFER_ID);
-
-        assertEquals(expectedResponse.getTraceId(), traceId);
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertNotEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        // a short wait is needed so the status stream can be hooked up
-        // before the emitting the event from the sendStatus method
-        Thread.sleep(500);
-        ConcurrentFinisher.start(executor.getTraceId());
+        checkTraceAndStart(expectedResponse, traceId);
 
         final var update = OfferStatusUpdate.newBuilder()
             .setOauthId(OAUTH_ID)
@@ -172,12 +156,12 @@ class SagaOfferClientTest extends AbstractClientTest {
             .setTotal(String.valueOf(RandomUtils.nextInt(1, 100)))
             .setOfferState(OfferState.CANCELLED);
         var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(traceId)
                 .setOfferUpdate(OfferUpdate.newBuilder().setStatusUpdate(update))
                 .build();
         offerServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(traceId);
 
         assertEquals(OAUTH_ID, executor.getOauthId());
         assertEquals(OFFER_ID, executor.getOfferId());

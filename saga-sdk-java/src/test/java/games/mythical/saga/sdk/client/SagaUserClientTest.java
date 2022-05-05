@@ -121,7 +121,7 @@ class SagaUserClientTest extends AbstractClientTest {
         final var expectedResponse = genReceived();
         when(mockServiceBlockingStub.createUser(any())).thenReturn(expectedResponse);
         final var trace = userClient.createUser(OAUTH_ID);
-        checkTraceAndStart(expectedResponse, executor, trace);
+        checkTraceAndStart(expectedResponse, trace);
 
         final var userStatusUpdate = UserStatusUpdate.newBuilder()
                 .setOauthId(OAUTH_ID)
@@ -129,12 +129,12 @@ class SagaUserClientTest extends AbstractClientTest {
         final var userUpdate = UserUpdate.newBuilder()
                 .setStatusUpdate(userStatusUpdate);
         final var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(trace)
                 .setUserUpdate(userUpdate)
                 .build();
         userServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(trace);
 
         assertEquals(OAUTH_ID, executor.getOauthId());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
@@ -149,7 +149,7 @@ class SagaUserClientTest extends AbstractClientTest {
         final var expectedResponse = genReceived();
         when(mockServiceBlockingStub.updateUser(any())).thenReturn(expectedResponse);
         final var trace = userClient.updateUser(OAUTH_ID);
-        checkTraceAndStart(expectedResponse, executor, trace);
+        checkTraceAndStart(expectedResponse, trace);
 
         final var userStatusUpdate = UserStatusUpdate.newBuilder()
                 .setOauthId(OAUTH_ID)
@@ -157,12 +157,12 @@ class SagaUserClientTest extends AbstractClientTest {
         final var userUpdate = UserUpdate.newBuilder()
                 .setStatusUpdate(userStatusUpdate);
         final var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(executor.getTraceId())
+                .setTraceId(trace)
                 .setUserUpdate(userUpdate)
                 .build();
         userServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(trace);
 
         assertEquals(OAUTH_ID, executor.getOauthId());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
