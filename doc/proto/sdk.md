@@ -806,7 +806,7 @@ Get ItemTypes call
 | title_id | [string](#string) |  | Title this ItemType is associated with |
 | pri_rev_share_settings | [PriRevShareSettings](#saga-api-itemtype-PriRevShareSettings) |  |  |
 | sec_rev_share_settings | [SecRevShareSettings](#saga-api-itemtype-SecRevShareSettings) |  |  |
-| withdrawable | [bool](#bool) |  | Is this iten withdrawable? |
+| withdrawable | [bool](#bool) |  | Is this item withdrawable? |
 | price_map | [PriceMap](#saga-api-itemtype-PriceMap) |  |  |
 | item_type_state | [saga.proto.common.itemtype.ItemTypeState](#saga-proto-common-itemtype-ItemTypeState) |  |  |
 | created_timestamp | [int64](#int64) |  | When this ItemType was created |
@@ -1868,7 +1868,7 @@ Create Order Quote call
 | temp_state_code | [string](#string) |  |  |
 | email | [string](#string) |  |  |
 | status | [string](#string) |  |  |
-| verifications | [google.protobuf.Struct](#google-protobuf-Struct) |  |  |
+| verifications | [string](#string) |  |  |
 | birth_date | [string](#string) |  |  |
 | cards | [UpholdCardProto](#saga-api-payment-UpholdCardProto) | repeated |  |
 
@@ -3330,8 +3330,7 @@ Result of payment method creation, update, or deletion
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| default | [bool](#bool) |  |  |
+| payment_method | [saga.api.payment.PaymentMethodProto](#saga-api-payment-PaymentMethodProto) |  |  |
 | payment_method_status | [saga.proto.common.payment.PaymentMethodUpdateStatus](#saga-proto-common-payment-PaymentMethodUpdateStatus) |  |  |
 
 
