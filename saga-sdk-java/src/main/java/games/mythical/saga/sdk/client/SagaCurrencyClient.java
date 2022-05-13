@@ -53,32 +53,11 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
         }
     }
 
-    public List<SagaCurrency> getCurrencies(String oauthId,
-                                            Instant createdAfterTimestamp,
-                                            int pageSize,
-                                            SortOrder sortOrder) throws SagaException {
-        var request = GetCurrenciesRequest.newBuilder()
-                .setOauthId(oauthId)
-                .setCreatedAfterTimestamp(createdAfterTimestamp == null ? -1 : createdAfterTimestamp.toEpochMilli())
-                .setPageSize(pageSize)
-                .setSortOrder(sortOrder)
-                .build();
-
-        try {
-            var currencies = serviceBlockingStub.getCurrencies(request);
-            return currencies.getCurrenciesList().stream()
-                    .map(SagaCurrency::fromProto)
-                    .collect(Collectors.toList());
-        } catch (StatusRuntimeException e) {
-            throw SagaException.fromGrpcException(e);
-        }
-    }
-
-    public String issueCurrency(String currencyId, String oauthId, int coinCount) throws SagaException {
+    public String issueCurrency(String currencyId, String oauthId, String quantity) throws SagaException {
         var request = IssueCurrencyRequest.newBuilder()
                 .setCurrencyId(currencyId)
                 .setOauthId(oauthId)
-                .setCoinCount(coinCount)
+                .setQuantity(quantity)
                 .build();
 
         try {
@@ -96,12 +75,12 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
     public String transferCurrency(String currencyId,
                                    String sourceOauthId,
                                    String destOauthId,
-                                   int coinCount) throws SagaException {
+                                   String quantity) throws SagaException {
         var request = TransferCurrencyRequest.newBuilder()
                 .setCurrencyId(currencyId)
                 .setSourceOauthId(sourceOauthId)
                 .setDestinationOauthId(destOauthId)
-                .setCoinCount(coinCount)
+                .setQuantity(quantity)
                 .build();
 
         try {
@@ -117,11 +96,11 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String burnCurrency(String currencyId, String oauthId, int coinCount) throws SagaException {
+    public String burnCurrency(String currencyId, String oauthId, String quantity) throws SagaException {
         var request = BurnCurrencyRequest.newBuilder()
                 .setCurrencyId(currencyId)
                 .setOauthId(oauthId)
-                .setCoinCount(coinCount)
+                .setQuantity(quantity)
                 .build();
 
         try {

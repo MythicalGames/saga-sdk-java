@@ -198,7 +198,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
             final var message = update.getStatusUpdate();
             sagaCurrencyExecutor.updateCurrency(
                     message.getCurrencyId(),
-                    message.getCoinCount(),
+                    message.getQuantity(),
                     message.getOauthId(),
                     traceId,
                     message.getCurrencyState()

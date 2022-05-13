@@ -8,19 +8,19 @@ import lombok.Getter;
 @Builder
 public class MockCurrencyExecutor extends MockBaseExecutor implements SagaCurrencyExecutor {
     private String currencyId;
-    private int coinCount;
+    private String quantity;
     private String oauthId;
     private String traceId;
     private CurrencyState currencyState;
 
     @Override
     public void updateCurrency(String currencyId,
-                               int coinCount,
+                               String quantity,
                                String oauthId,
                                String traceId,
                                CurrencyState currencyState) {
         this.currencyId = currencyId;
-        this.coinCount = coinCount;
+        this.quantity = quantity;
         this.oauthId = oauthId;
         this.traceId = traceId;
         this.currencyState = currencyState;

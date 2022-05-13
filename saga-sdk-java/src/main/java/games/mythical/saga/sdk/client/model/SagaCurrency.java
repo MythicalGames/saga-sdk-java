@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Data
@@ -16,8 +17,8 @@ import java.time.Instant;
 @NoArgsConstructor
 public class SagaCurrency {
     private String traceId;
-    private int coinCount;
-    private String currencyId;
+    private BigDecimal quantity;
+    private String gameCurrencyTypeId;
     private String name;
     private String oauthId;
     private String address;

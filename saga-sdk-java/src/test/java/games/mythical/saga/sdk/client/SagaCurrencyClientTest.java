@@ -65,8 +65,8 @@ class SagaCurrencyClientTest extends AbstractClientTest {
     @Test
     public void getCurrency() throws Exception {
         var expectedResponse = CurrencyProto.newBuilder()
-                .setCurrencyId(CURRENCY_ID)
-                .setCoinCount(RandomUtils.nextInt(0, 1000))
+                .setGameCurrencyTypeId(CURRENCY_ID)
+                .setQuantity(Integer.toString(RandomUtils.nextInt(0, 1000)))
                 .setOauthId(OAUTH_ID)
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
@@ -77,9 +77,9 @@ class SagaCurrencyClientTest extends AbstractClientTest {
 
         assertTrue(currencyResponse.isPresent());
         var currency = currencyResponse.get();
-        assertEquals(CURRENCY_ID, currency.getCurrencyId());
+        assertEquals(CURRENCY_ID, currency.getGameCurrencyTypeId());
         assertEquals(expectedResponse.getOauthId(), currency.getOauthId());
-        assertEquals(expectedResponse.getCoinCount(), currency.getCoinCount());
+        assertEquals(expectedResponse.getQuantity(), currency.getQuantity().toString());
 
         when(mockServiceBlockingStub.getCurrencyByPlayer(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
         currencyResponse = currencyClient.getCurrency("INVALID-CURRENCY-ID", "INVALID-USER");
@@ -94,7 +94,7 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.issueCurrency(any())).thenReturn(expectedResponse);
-        final var traceId = currencyClient.issueCurrency(CURRENCY_ID, OAUTH_ID, RandomUtils.nextInt(1, 1000));
+        final var traceId = currencyClient.issueCurrency(CURRENCY_ID, OAUTH_ID, Integer.toString(RandomUtils.nextInt(1, 1000)));
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = CurrencyStatusUpdate.newBuilder()
@@ -127,7 +127,7 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.transferCurrency(any())).thenReturn(expectedResponse);
-        final var traceId = currencyClient.transferCurrency(CURRENCY_ID, SOURCE, DEST, RandomUtils.nextInt(1, 1000));
+        final var traceId = currencyClient.transferCurrency(CURRENCY_ID, SOURCE, DEST, Integer.toString(RandomUtils.nextInt(1, 1000)));
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = CurrencyStatusUpdate.newBuilder()
@@ -157,7 +157,7 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.burnCurrency(any())).thenReturn(expectedResponse);
-        final var traceId = currencyClient.burnCurrency(CURRENCY_ID, OAUTH_ID, RandomUtils.nextInt(1, 1000));
+        final var traceId = currencyClient.burnCurrency(CURRENCY_ID, OAUTH_ID, Integer.toString(RandomUtils.nextInt(1, 1000)));
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = CurrencyStatusUpdate.newBuilder()
