@@ -1,12 +1,12 @@
 package games.mythical.saga.sdk.client;
 
-import games.mythical.saga.sdk.client.executor.SagaGameCoinExecutor;
-import games.mythical.saga.sdk.client.model.SagaGameCoin;
+import games.mythical.saga.sdk.client.executor.SagaCurrencyExecutor;
+import games.mythical.saga.sdk.client.model.SagaCurrency;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.proto.api.gamecoin.*;
+import games.mythical.saga.sdk.proto.api.currency.*;
 import games.mythical.saga.sdk.proto.common.SortOrder;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -18,11 +18,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class SagaGameCoinClient extends AbstractSagaStreamClient {
-    private final SagaGameCoinExecutor executor;
-    private GameCoinServiceGrpc.GameCoinServiceBlockingStub serviceBlockingStub;
+public class SagaCurrencyClient extends AbstractSagaStreamClient {
+    private final SagaCurrencyExecutor executor;
+    private CurrencyServiceGrpc.CurrencyServiceBlockingStub serviceBlockingStub;
 
-    SagaGameCoinClient(SagaSdkConfig config, SagaGameCoinExecutor executor) throws SagaException {
+    SagaCurrencyClient(SagaSdkConfig config, SagaCurrencyExecutor executor) throws SagaException {
         super(config);
         this.executor = executor;
         initStub();
@@ -30,20 +30,20 @@ public class SagaGameCoinClient extends AbstractSagaStreamClient {
 
     @Override
     void initStub() {
-        serviceBlockingStub = GameCoinServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
+        serviceBlockingStub = CurrencyServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
         initStreamStub();
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    public Optional<SagaGameCoin> getGameCoin(String currencyId, String oauthId) throws SagaException {
-        var request = GetGameCoinRequest.newBuilder()
-                .setCurrencyId(currencyId)
-                .setOauthId(oauthId)
+    public Optional<SagaCurrency> getCurrency(String currencyId, String playerWalletId) throws SagaException {
+        var request = GetCurrencyByPlayerRequest.newBuilder()
+                .setGameCurrencyTypeId(currencyId)
+                .setPlayerWalletId(playerWalletId)
                 .build();
 
         try {
-            var gameCoin = serviceBlockingStub.getGameCoin(request);
-            return Optional.of(SagaGameCoin.fromProto(gameCoin));
+            var currency = serviceBlockingStub.getCurrencyByPlayer(request);
+            return Optional.of(SagaCurrency.fromProto(currency));
         } catch (StatusRuntimeException e) {
             if (e.getStatus() == Status.NOT_FOUND) {
                 return Optional.empty();
@@ -53,11 +53,11 @@ public class SagaGameCoinClient extends AbstractSagaStreamClient {
         }
     }
 
-    public List<SagaGameCoin> getGameCoins(String oauthId,
-                                           Instant createdAfterTimestamp,
-                                           int pageSize,
-                                           SortOrder sortOrder) throws SagaException {
-        var request = GetGameCoinsRequest.newBuilder()
+    public List<SagaCurrency> getCurrencies(String oauthId,
+                                            Instant createdAfterTimestamp,
+                                            int pageSize,
+                                            SortOrder sortOrder) throws SagaException {
+        var request = GetCurrenciesRequest.newBuilder()
                 .setOauthId(oauthId)
                 .setCreatedAfterTimestamp(createdAfterTimestamp == null ? -1 : createdAfterTimestamp.toEpochMilli())
                 .setPageSize(pageSize)
@@ -65,39 +65,39 @@ public class SagaGameCoinClient extends AbstractSagaStreamClient {
                 .build();
 
         try {
-            var gameCoins = serviceBlockingStub.getGameCoins(request);
-            return gameCoins.getGameCoinsList().stream()
-                    .map(SagaGameCoin::fromProto)
+            var currencies = serviceBlockingStub.getCurrencies(request);
+            return currencies.getCurrenciesList().stream()
+                    .map(SagaCurrency::fromProto)
                     .collect(Collectors.toList());
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         }
     }
 
-    public String issueGameCoin(String currencyId, String oauthId, int coinCount) throws SagaException {
-        var request = IssueGameCoinRequest.newBuilder()
+    public String issueCurrency(String currencyId, String oauthId, int coinCount) throws SagaException {
+        var request = IssueCurrencyRequest.newBuilder()
                 .setCurrencyId(currencyId)
                 .setOauthId(oauthId)
                 .setCoinCount(coinCount)
                 .build();
 
         try {
-            var receivedResponse = serviceBlockingStub.issueGameCoin(request);
+            var receivedResponse = serviceBlockingStub.issueCurrency(request);
             executor.emitReceived(currencyId, oauthId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling emitReceived on issueGameCoin, coin may be lost!", e);
+            log.error("Exception calling emitReceived on issueCurrency, coin may be lost!", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
 
-    public String transferGameCoin(String currencyId,
-                                 String sourceOauthId,
-                                 String destOauthId,
-                                 int coinCount) throws SagaException {
-        var request = TransferGameCoinRequest.newBuilder()
+    public String transferCurrency(String currencyId,
+                                   String sourceOauthId,
+                                   String destOauthId,
+                                   int coinCount) throws SagaException {
+        var request = TransferCurrencyRequest.newBuilder()
                 .setCurrencyId(currencyId)
                 .setSourceOauthId(sourceOauthId)
                 .setDestinationOauthId(destOauthId)
@@ -105,34 +105,35 @@ public class SagaGameCoinClient extends AbstractSagaStreamClient {
                 .build();
 
         try {
-            var receivedResponse = serviceBlockingStub.transferGameCoin(request);
+            var receivedResponse = serviceBlockingStub.transferCurrency(request);
             // TODO: destOauthId correct here?
             executor.emitReceived(currencyId, destOauthId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling emitReceived on transferGameCoin, coin may be out of sync!", e);
+            log.error("Exception calling emitReceived on transferCurrency, coin may be out of sync!", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
 
-    public String burnGameCoin(String currencyId, String oauthId, int coinCount) throws SagaException {
-        var request = BurnGameCoinRequest.newBuilder()
+    public String burnCurrency(String currencyId, String oauthId, int coinCount) throws SagaException {
+        var request = BurnCurrencyRequest.newBuilder()
                 .setCurrencyId(currencyId)
                 .setOauthId(oauthId)
                 .setCoinCount(coinCount)
                 .build();
 
         try {
-            var receivedResponse = serviceBlockingStub.burnGameCoin(request);
+            var receivedResponse = serviceBlockingStub.burnCurrency(request);
             executor.emitReceived(currencyId, oauthId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling emitReceived on burnGameCoin, coin may be out of sync!", e);
+            log.error("Exception calling emitReceived on burnCurrency, coin may be out of sync!", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
+
 }

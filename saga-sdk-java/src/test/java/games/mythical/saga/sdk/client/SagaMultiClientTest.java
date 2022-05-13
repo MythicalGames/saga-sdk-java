@@ -1,14 +1,14 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockBridgeExecutor;
-import games.mythical.saga.sdk.client.executor.MockGameCoinExecutor;
+import games.mythical.saga.sdk.client.executor.MockCurrencyExecutor;
 import games.mythical.saga.sdk.proto.api.bridge.BridgeServiceGrpc;
-import games.mythical.saga.sdk.proto.api.gamecoin.GameCoinServiceGrpc;
+import games.mythical.saga.sdk.proto.api.currency.CurrencyServiceGrpc;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.bridge.BridgeStatusUpdate;
 import games.mythical.saga.sdk.proto.streams.bridge.BridgeUpdate;
-import games.mythical.saga.sdk.proto.streams.gamecoin.GameCoinStatusUpdate;
-import games.mythical.saga.sdk.proto.streams.gamecoin.GameCoinUpdate;
+import games.mythical.saga.sdk.proto.streams.currency.CurrencyStatusUpdate;
+import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -32,16 +32,16 @@ class SagaMultiClientTest extends AbstractClientTest {
     private static final String OAUTH_ID = UUID.randomUUID().toString();
 
     private final MockBridgeExecutor bridgeExecutor = MockBridgeExecutor.builder().build();
-    private final MockGameCoinExecutor gameCoinExecutor = MockGameCoinExecutor.builder().build();
+    private final MockCurrencyExecutor currencyExecutor = MockCurrencyExecutor.builder().build();
     private MockServer mockServer;
     private SagaBridgeClient bridgeClient;
-    private SagaGameCoinClient gameCoinClient;
+    private SagaCurrencyClient currencyClient;
 
     @Mock
     private BridgeServiceGrpc.BridgeServiceBlockingStub mockBridgeService;
 
     @Mock
-    private GameCoinServiceGrpc.GameCoinServiceBlockingStub mockGameCoinService;
+    private CurrencyServiceGrpc.CurrencyServiceBlockingStub mockCurrencyService;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -50,16 +50,16 @@ class SagaMultiClientTest extends AbstractClientTest {
         port = mockServer.getPort();
 
         bridgeClient = setUpFactory().createSagaBridgeClient(bridgeExecutor);
-        gameCoinClient = setUpFactory().createSagaGameCoinClient(gameCoinExecutor);
+        currencyClient = setUpFactory().createSagaCurrencyClient(currencyExecutor);
 
         FieldUtils.writeField(bridgeClient, "serviceBlockingStub", mockBridgeService, true);
-        FieldUtils.writeField(gameCoinClient, "serviceBlockingStub", mockGameCoinService, true);
+        FieldUtils.writeField(currencyClient, "serviceBlockingStub", mockCurrencyService, true);
     }
 
     @AfterEach
     void tearDown() throws Exception {
         bridgeClient.stop();
-        gameCoinClient.stop();
+        currencyClient.stop();
         // client shutdown is not immediate
         Thread.sleep(500);
 
@@ -96,30 +96,30 @@ class SagaMultiClientTest extends AbstractClientTest {
         assertEquals(OAUTH_ID, bridgeExecutor.getOauthId());
         assertEquals(TRACE_ID_2, bridgeExecutor.getTraceId());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(bridgeExecutor.getTraceId()));
-        assertNull(gameCoinExecutor.getTraceId());
+        assertNull(currencyExecutor.getTraceId());
 
         // make sure the network calls all align
         mockServer.verifyCalls("StatusStream", 1);
         mockServer.verifyCalls("StatusConfirmation", 1);
 
-        // make sure no other stream is catching this game coin event
-        final var update2 = GameCoinStatusUpdate.newBuilder()
+        // make sure no other stream is catching this currency event
+        final var update2 = CurrencyStatusUpdate.newBuilder()
             .setOauthId(OAUTH_ID)
             .setCurrencyId(RandomStringUtils.randomAlphanumeric(30));
         var statusUpdate2 = StatusUpdate.newBuilder()
                 .setTraceId(TRACE_ID_1)
-                .setGameCoinUpdate(GameCoinUpdate.newBuilder().setStatusUpdate(update2))
+                .setCurrencyUpdate(CurrencyUpdate.newBuilder().setStatusUpdate(update2))
                 .build();
         mockServer.getStatusStream().sendStatus(titleId, statusUpdate2);
 
         ConcurrentFinisher.wait(TRACE_ID_1);
 
-        assertEquals(OAUTH_ID, gameCoinExecutor.getOauthId());
-        assertEquals(TRACE_ID_1, gameCoinExecutor.getTraceId());
-        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(gameCoinExecutor.getTraceId()));
-        assertNotEquals(bridgeExecutor.getTraceId(), gameCoinExecutor.getTraceId());
+        assertEquals(OAUTH_ID, currencyExecutor.getOauthId());
+        assertEquals(TRACE_ID_1, currencyExecutor.getTraceId());
+        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(currencyExecutor.getTraceId()));
+        assertNotEquals(bridgeExecutor.getTraceId(), currencyExecutor.getTraceId());
 
-        // using the existing stream, confirm the game coin event
+        // using the existing stream, confirm the currency event
         mockServer.verifyCalls("StatusStream", 1);
         mockServer.verifyCalls("StatusConfirmation", 2);
     }

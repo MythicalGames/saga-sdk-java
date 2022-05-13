@@ -1,13 +1,13 @@
 package games.mythical.saga.sdk.client.executor;
 
-import games.mythical.saga.sdk.proto.common.gamecoin.GameCoinState;
+import games.mythical.saga.sdk.proto.common.currency.CurrencyState;
 
-public interface SagaGameCoinExecutor extends BaseSagaExecutor {
-    void updateGameCoin(String currencyId,
+public interface SagaCurrencyExecutor extends BaseSagaExecutor {
+    void updateCurrency(String currencyId,
                         int coinCount,
                         String oauthId,
                         String traceId,
-                        GameCoinState coinState) throws Exception;
+                        CurrencyState coinState) throws Exception;
 
     void emitReceived(String currencyId, String oauthId, String traceId) throws Exception;
 }

@@ -2,7 +2,7 @@ package games.mythical.saga.sdk.client.model;
 
 import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
-import games.mythical.saga.sdk.proto.api.gamecoin.GameCoinProto;
+import games.mythical.saga.sdk.proto.api.currency.CurrencyProto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SagaGameCoin {
+public class SagaCurrency {
     private String traceId;
     private int coinCount;
     private String currencyId;
@@ -27,8 +27,8 @@ public class SagaGameCoin {
     @DtoExclude
     private Instant updatedTimestamp;
 
-    public static SagaGameCoin fromProto(GameCoinProto proto) {
-        var user = ProtoUtil.toDto(proto, SagaGameCoin.class);
+    public static SagaCurrency fromProto(CurrencyProto proto) {
+        var user = ProtoUtil.toDto(proto, SagaCurrency.class);
 
         var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedTimestamp());
         user.setCreatedTimestamp(createdTimestamp);

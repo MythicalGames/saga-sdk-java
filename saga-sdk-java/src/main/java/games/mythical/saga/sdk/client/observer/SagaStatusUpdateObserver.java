@@ -8,7 +8,7 @@ import games.mythical.saga.sdk.proto.streams.StatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.bridge.BridgeUpdate;
-import games.mythical.saga.sdk.proto.streams.gamecoin.GameCoinUpdate;
+import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeUpdate;
 import games.mythical.saga.sdk.proto.streams.listing.ListingUpdate;
@@ -29,7 +29,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private final Consumer<SagaStatusUpdateObserver> resubscribe;
 
     private SagaBridgeExecutor sagaBridgeExecutor;
-    private SagaGameCoinExecutor sagaGameCoinExecutor;
+    private SagaCurrencyExecutor sagaCurrencyExecutor;
     private SagaItemExecutor sagaItemExecutor;
     private SagaItemTypeExecutor sagaItemTypeExecutor;
     private SagaListingExecutor sagaListingExecutor;
@@ -64,8 +64,8 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         return this;
     }
 
-    public SagaStatusUpdateObserver with(SagaGameCoinExecutor sagaGameCoinExecutor) {
-        this.sagaGameCoinExecutor = sagaGameCoinExecutor;
+    public SagaStatusUpdateObserver with(SagaCurrencyExecutor sagaCurrencyExecutor) {
+        this.sagaCurrencyExecutor = sagaCurrencyExecutor;
         return this;
     }
 
@@ -118,8 +118,8 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                 case BRIDGE_UPDATE:
                     handleBridgeUpdate(message.getBridgeUpdate(), message.getTraceId());
                     break;
-                case GAME_COIN_UPDATE:
-                    handleGameCoinUpdate(message.getGameCoinUpdate(), message.getTraceId());
+                case CURRENCY_UPDATE:
+                    handleCurrencyUpdate(message.getCurrencyUpdate(), message.getTraceId());
                     break;
                 case ITEM_UPDATE:
                     handleItemUpdate(message.getItemUpdate(), message.getTraceId());
@@ -190,18 +190,18 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         }
     }
 
-    private void handleGameCoinUpdate(GameCoinUpdate update, String traceId) throws Exception {
+    private void handleCurrencyUpdate(CurrencyUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
             final var error = update.getError();
-            sagaGameCoinExecutor.onError(error.getErrorCode(), error.getMsg(), traceId);
+            sagaCurrencyExecutor.onError(error.getErrorCode(), error.getMsg(), traceId);
         } else {
             final var message = update.getStatusUpdate();
-            sagaGameCoinExecutor.updateGameCoin(
+            sagaCurrencyExecutor.updateCurrency(
                     message.getCurrencyId(),
                     message.getCoinCount(),
                     message.getOauthId(),
                     traceId,
-                    message.getGameCoinState()
+                    message.getCurrencyState()
             );
         }
     }
