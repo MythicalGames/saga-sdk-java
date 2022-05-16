@@ -110,10 +110,6 @@ public class SagaItemClient extends AbstractSagaStreamClient {
                 .setGameItemTypeId(gameItemTypeId)
                 .setMetadata(SagaMetadata.toProto(metadata));
 
-        if (StringUtils.isNotBlank(storeId)) {
-            builder.setStoreId(storeId);
-        }
-
         if (StringUtils.isNotBlank(orderId)) {
             builder.setOrderId(orderId);
         }
