@@ -101,7 +101,6 @@ public class SagaItemClient extends AbstractSagaStreamClient {
                           String oauthId,
                           String gameItemTypeId,
                           SagaMetadata metadata,
-                          String storeId,
                           String orderId,
                           String requestIp) throws SagaException {
         var builder = IssueItemRequest.newBuilder()
