@@ -24,12 +24,28 @@ import java.util.concurrent.atomic.AtomicReference;
 public class SagaCredentialsFactory {
     private final static String ACCESS_TOKEN_KEY = "access_token";
     private final static int HTTP_OK = 200;
+
+    private static SagaCredentialsFactory instance;
+
     private final URI authUrl;
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final HttpRequest.BodyPublisher bodyPublisher;
     private final AtomicReference<String> accessToken = new AtomicReference<>();
 
-    private static SagaCredentialsFactory instance;
+    private SagaCredentialsFactory(SagaSdkConfig config) {
+        this.authUrl = URI.create(config.getAuthUrl());
+        this.bodyPublisher = buildClientCredentialsRequestBody(config.getTitleId(), config.getTitleSecret());
+        if (config.isAuthenticated()) {
+            final var token = getAccessToken();
+            // TODO: Set refresh interval based on token result.
+            accessToken.set(token);
+            final var executor = new ScheduledThreadPoolExecutor(1);
+            executor.scheduleAtFixedRate(
+                    new RefreshToken(), config.getTokenRefresh(), config.getTokenRefresh(), TimeUnit.SECONDS);
+        } else {
+            accessToken.set("");
+        }
+    }
 
     static SagaCredentialsFactory getInstance() throws SagaException {
         if (instance == null) {
@@ -51,19 +67,27 @@ public class SagaCredentialsFactory {
         instance = new SagaCredentialsFactory(config);
     }
 
-    private SagaCredentialsFactory(SagaSdkConfig config) {
-        this.authUrl = URI.create(config.getAuthUrl());
-        this.bodyPublisher = buildClientCredentialsRequestBody(config.getTitleId(), config.getTitleSecret());
-        if (config.isAuthenticated()) {
-            final var token = getAccessToken();
-            // TODO: Set refresh interval based on token result.
-            accessToken.set(token);
-            final var executor = new ScheduledThreadPoolExecutor(1);
-            executor.scheduleAtFixedRate(
-                    new RefreshToken(), config.getTokenRefresh(), config.getTokenRefresh(), TimeUnit.SECONDS);
-        } else {
-            accessToken.set("");
-        }
+    private static HttpRequest.BodyPublisher buildClientCredentialsRequestBody(
+            String clientId,
+            String clientSecret) {
+        return buildFormDataFromMap(Map.of(
+                "grant_type", "client_credentials",
+                "client_id", clientId,
+                "client_secret", clientSecret
+        ));
+    }
+
+    private static HttpRequest.BodyPublisher buildFormDataFromMap(Map<String, String> data) {
+        final var builder = new StringBuilder();
+        data.forEach((key, value) -> {
+            if (builder.length() > 0) {
+                builder.append("&");
+            }
+            builder.append(URLEncoder.encode(key, StandardCharsets.UTF_8));
+            builder.append("=");
+            builder.append(URLEncoder.encode(value, StandardCharsets.UTF_8));
+        });
+        return HttpRequest.BodyPublishers.ofString(builder.toString());
     }
 
     String getToken() {
@@ -96,28 +120,5 @@ public class SagaCredentialsFactory {
             final var token = getAccessToken();
             accessToken.set(token);
         }
-    }
-
-    private static HttpRequest.BodyPublisher buildClientCredentialsRequestBody(
-            String clientId,
-            String clientSecret) {
-        return buildFormDataFromMap(Map.of(
-                "grant_type", "client_credentials",
-                "client_id", clientId,
-                "client_secret", clientSecret
-        ));
-    }
-
-    private static HttpRequest.BodyPublisher buildFormDataFromMap(Map<String, String> data) {
-        final var builder = new StringBuilder();
-        data.forEach((key, value) -> {
-            if (builder.length() > 0) {
-                builder.append("&");
-            }
-            builder.append(URLEncoder.encode(key, StandardCharsets.UTF_8));
-            builder.append("=");
-            builder.append(URLEncoder.encode(value, StandardCharsets.UTF_8));
-        });
-        return HttpRequest.BodyPublishers.ofString(builder.toString());
     }
 }

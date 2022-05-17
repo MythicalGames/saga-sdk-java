@@ -29,8 +29,7 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
 
     @Override
     void initStub() {
-        serviceBlockingStub = BridgeServiceGrpc.newBlockingStub(channel)
-            .withCallCredentials(addAuthentication());
+        serviceBlockingStub = BridgeServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
         initStreamStub();
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
@@ -42,13 +41,13 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
                                String destinationChain,
                                String originChain) throws SagaException {
         var request = WithdrawItemRequest.newBuilder()
-            .setOauthId(oauthId)
-            .setGameItemTypeId(gameItemTypeId)
-            .setGameInventoryId(gameInventoryId)
-            .setDestinationAddress(destinationAddress)
-            .setDestinationChain(destinationChain)
-            .setOriginAddress(originChain)
-            .build();
+                .setOauthId(oauthId)
+                .setGameItemTypeId(gameItemTypeId)
+                .setGameInventoryId(gameInventoryId)
+                .setDestinationAddress(destinationAddress)
+                .setDestinationChain(destinationChain)
+                .setOriginAddress(originChain)
+                .build();
 
         try {
             var receivedResponse = serviceBlockingStub.withdrawItem(request);

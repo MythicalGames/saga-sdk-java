@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
 @Data
@@ -16,30 +15,30 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SagaCurrencyType {
-    String traceId;
-    String id;
-    String gameCurrencyTypeId;
-    String gameTitleId;
-    String publisherAddress;
-    String name;
-    String symbol;
-    long decimalPlaces;
-    String contractAddress;
-    boolean finalized;
-    long maxSupply;
+    private String traceId;
+    private String id;
+    private String gameCurrencyTypeId;
+    private String gameTitleId;
+    private String publisherAddress;
+    private String name;
+    private String symbol;
+    private long decimalPlaces;
+    private String contractAddress;
+    private boolean finalized;
+    private long maxSupply;
     @DtoExclude
-    private Instant createdTimestamp;
+    private Instant createdAt;
     @DtoExclude
-    private Instant updatedTimestamp;
+    private Instant updatedAt;
 
     public static SagaCurrencyType fromProto(CurrencyTypeProto proto) {
         var currencyType = ProtoUtil.toDto(proto, SagaCurrencyType.class);
 
         var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
-        currencyType.setCreatedTimestamp(createdTimestamp);
+        currencyType.setCreatedAt(createdTimestamp);
 
         var updatedTimestamp = Instant.ofEpochMilli(proto.getUpdatedAt());
-        currencyType.setUpdatedTimestamp(updatedTimestamp);
+        currencyType.setUpdatedAt(updatedTimestamp);
 
         return currencyType;
     }

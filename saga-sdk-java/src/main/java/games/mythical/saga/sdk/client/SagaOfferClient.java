@@ -35,9 +35,9 @@ public class SagaOfferClient extends AbstractSagaStreamClient {
     }
 
     public String createOfferQuote(String oauthId,
-                                                     String gameInventoryId,
-                                                     BigDecimal subtotal,
-                                                     String currency) throws SagaException {
+                                   String gameInventoryId,
+                                   BigDecimal subtotal,
+                                   String currency) throws SagaException {
         var request = CreateOfferQuoteRequest.newBuilder()
                 .setOauthId(oauthId)
                 .setGameInventoryId(gameInventoryId)

@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 public class ConversionUtils {
     private final static ObjectMapper objectMapper = new ObjectMapper()
-        .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+            .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
     public static Struct convertProperties(Map<String, Object> properties) throws SagaException {
         try {

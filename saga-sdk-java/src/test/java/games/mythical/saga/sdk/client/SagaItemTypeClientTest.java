@@ -1,8 +1,10 @@
 package games.mythical.saga.sdk.client;
 
-import com.google.protobuf.Empty;
 import games.mythical.saga.sdk.client.executor.MockItemTypeExecutor;
 import games.mythical.saga.sdk.client.model.SagaMetadata;
+import games.mythical.saga.sdk.client.model.query.Filter;
+import games.mythical.saga.sdk.client.model.query.QueryOptions;
+import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.itemtype.*;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
@@ -26,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,10 +65,9 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         itemTypeServer.stop();
     }
 
-    @Test
-    public void getItemType() throws Exception {
-        var expectedResponse = ItemTypeProto.newBuilder()
-                .setGameItemTypeId(GAME_ITEM_TYPE_ID)
+    private ItemTypeProto generateItemTypeProto(String gameItemTypeId) throws SagaException {
+        return ItemTypeProto.newBuilder()
+                .setGameItemTypeId(gameItemTypeId)
                 .setName(RandomStringUtils.randomAlphanumeric(30))
                 .setTitleId(RandomStringUtils.randomAlphanumeric(30))
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
@@ -78,6 +80,11 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
                 .setUpdatedTimestamp(Instant.now().toEpochMilli())
                 .build();
+    }
+
+    @Test
+    public void getItemType() throws Exception {
+        var expectedResponse = generateItemTypeProto(GAME_ITEM_TYPE_ID);
         when(mockServiceBlockingStub.getItemType(any())).thenReturn(expectedResponse);
         var itemTypeResponse = itemTypeClient.getItemType(GAME_ITEM_TYPE_ID);
 
@@ -91,6 +98,36 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         itemTypeResponse = itemTypeClient.getItemType("INVALID-ITEM-TYPE-ID");
 
         assertTrue(itemTypeResponse.isEmpty());
+    }
+
+    @Test
+    public void getItemTypes() throws Exception {
+        var proto_1 = generateItemTypeProto(GAME_ITEM_TYPE_ID);
+        var proto_2 = generateItemTypeProto("item-type-2");
+        var proto_3 = generateItemTypeProto("item-type-3");
+        var expectedResponse = ItemTypesProto.newBuilder()
+                .addAllItemTypes(List.of(proto_1, proto_2, proto_3))
+                .build();
+
+        var filter = new Filter();
+        filter.equal("titleId", "game-title");
+        var options = QueryOptions.builder()
+                .filterOptions(filter)
+                .build();
+
+        when(mockServiceBlockingStub.getItemTypes(any())).thenReturn(expectedResponse);
+        var itemTypeResponseList = itemTypeClient.getItemTypes(options);
+
+        assertFalse(itemTypeResponseList.isEmpty());
+        var itemType = itemTypeResponseList.get(0);
+        assertEquals(GAME_ITEM_TYPE_ID, itemType.getGameItemTypeId());
+        assertEquals(proto_1.getName(), itemType.getName());
+        assertEquals(proto_1.getTitleId(), itemType.getTitleId());
+
+        when(mockServiceBlockingStub.getItemTypes(any())).thenReturn(ItemTypesProto.getDefaultInstance());
+        itemTypeResponseList = itemTypeClient.getItemTypes(QueryOptions.builder().build());
+
+        assertTrue(itemTypeResponseList.isEmpty());
     }
 
     @Test
@@ -127,8 +164,8 @@ class SagaItemTypeClientTest extends AbstractClientTest {
     @Test
     public void updateItemType() throws Exception {
         final var expectedResponse = ReceivedResponse.newBuilder()
-            .setTraceId(RandomStringUtils.randomAlphanumeric(30))
-            .build();
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .build();
         when(mockServiceBlockingStub.updateItemType(any())).thenReturn(expectedResponse);
         final var traceId = itemTypeClient.updateItemType(GAME_ITEM_TYPE_ID, true);
 

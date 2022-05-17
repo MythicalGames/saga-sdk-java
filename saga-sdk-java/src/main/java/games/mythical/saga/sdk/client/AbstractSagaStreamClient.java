@@ -8,14 +8,13 @@ import games.mythical.saga.sdk.proto.streams.Subscribe;
 
 public abstract class AbstractSagaStreamClient extends AbstractSagaClient {
 
-    protected AbstractSagaStreamClient(SagaSdkConfig config)
-        throws SagaException {
+    protected AbstractSagaStreamClient(SagaSdkConfig config) throws SagaException {
         super(config);
     }
 
     protected void initStreamStub() {
         var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
-            .withCallCredentials(addAuthentication());
+                .withCallCredentials(addAuthentication());
 
         if (SagaStatusUpdateObserver.getInstance() == null) {
             subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
@@ -26,8 +25,8 @@ public abstract class AbstractSagaStreamClient extends AbstractSagaClient {
         // set up server stream
         var streamStub = StatusStreamGrpc.newStub(channel).withCallCredentials(addAuthentication());
         var subscribe = Subscribe.newBuilder()
-            .setTitleId(config.getTitleId())
-            .build();
+                .setTitleId(config.getTitleId())
+                .build();
 
         streamStub.statusStream(subscribe, observer);
     }

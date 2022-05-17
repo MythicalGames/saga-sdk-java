@@ -12,9 +12,8 @@ import java.net.HttpURLConnection;
 @Slf4j
 public class SagaException extends Exception {
     public static final int UNPROCESSABLE_ENTITY = 422;
-
-    private final SagaErrorCode code;
     public static final String HTTP_CODE_KEY = "HttpCode";
+    private final SagaErrorCode code;
 
     public SagaException(SagaErrorCode code) {
         super();
@@ -39,10 +38,6 @@ public class SagaException extends Exception {
     public SagaException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, SagaErrorCode code) {
         super(message, cause, enableSuppression, writableStackTrace);
         this.code = code;
-    }
-
-    public SagaErrorCode getCode() {
-        return code;
     }
 
     public static SagaException fromGrpcException(StatusException exception) {
@@ -119,5 +114,9 @@ public class SagaException extends Exception {
             default:
                 return SagaErrorCode.SERVER_ERROR;
         }
+    }
+
+    public SagaErrorCode getCode() {
+        return code;
     }
 }
