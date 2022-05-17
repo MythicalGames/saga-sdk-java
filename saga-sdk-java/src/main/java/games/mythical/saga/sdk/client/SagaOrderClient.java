@@ -85,9 +85,9 @@ public class SagaOrderClient extends AbstractSagaStreamClient {
     }
 
     public String confirmOrder(String oauthId,
-                             String quoteId,
-                             PaymentProviderData paymentProviderData,
-                             String fraudSessionId) throws SagaException {
+                               String quoteId,
+                               PaymentProviderData paymentProviderData,
+                               String fraudSessionId) throws SagaException {
         var request = ConfirmOrderRequest.newBuilder()
                 .setTitleId(config.getTitleId())
                 .setOauthId(oauthId)

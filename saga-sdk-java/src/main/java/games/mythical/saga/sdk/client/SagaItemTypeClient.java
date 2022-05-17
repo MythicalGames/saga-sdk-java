@@ -53,9 +53,7 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
     }
 
     public List<SagaItemType> getItemTypes(QueryOptions providedQueryOptions) throws SagaException {
-        final var queryOptions = providedQueryOptions != null
-            ? providedQueryOptions
-            : new QueryOptions();
+        final var queryOptions = providedQueryOptions != null ? providedQueryOptions : new QueryOptions();
 
         var builder = GetItemTypesRequest.newBuilder()
                 .setQueryOptions(QueryOptions.toProto(queryOptions));
@@ -69,8 +67,8 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
     }
 
     public String createItemType(String gameItemTypeId,
-                               boolean withdrawable,
-                               SagaMetadata metadata) throws SagaException {
+                                 boolean withdrawable,
+                                 SagaMetadata metadata) throws SagaException {
         try {
             log.trace("ItemTypeClient.createItemType called for game item type id: {}", gameItemTypeId);
             var request = CreateItemTypeRequest.newBuilder()

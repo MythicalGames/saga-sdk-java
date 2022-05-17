@@ -14,12 +14,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SagaCurrencyExchange {
-    BigDecimal ask;
-    BigDecimal bid;
+    private BigDecimal ask;
+    private BigDecimal bid;
 
     public static SagaCurrencyExchange fromProto(CurrencyExchangeProto proto) {
         var currencyExchange = ProtoUtil.toDto(proto, SagaCurrencyExchange.class);
-
         return currencyExchange;
     }
 }

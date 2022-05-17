@@ -1,10 +1,8 @@
 package games.mythical.saga.sdk.client;
 
-import games.mythical.saga.sdk.client.model.SagaCurrency;
 import games.mythical.saga.sdk.client.model.SagaCurrencyType;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.proto.api.currency.CurrencyServiceGrpc;
 import games.mythical.saga.sdk.proto.api.currencytype.CurrencyTypeServiceGrpc;
 import games.mythical.saga.sdk.proto.api.currencytype.GetCurrencyTypeRequest;
 import games.mythical.saga.sdk.proto.api.currencytype.GetCurrencyTypesRequest;

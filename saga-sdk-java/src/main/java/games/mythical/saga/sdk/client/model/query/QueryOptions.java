@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 @NoArgsConstructor
 public class QueryOptions {
     private Filter filterOptions;
+    private String cursor;
     private Integer pageSize;
     private SortOrder sortOrder;
     private String sortAttribute;
@@ -22,6 +23,10 @@ public class QueryOptions {
     public static QueryOptionsProto toProto(QueryOptions queryOptions) {
         var queryOptionsBuilder = QueryOptionsProto.newBuilder()
                 .setPageSize(queryOptions.getPageSize() != null ? queryOptions.getPageSize() : 0);
+
+        if (StringUtils.isNotBlank(queryOptions.getCursor())) {
+            queryOptionsBuilder.setCursor(queryOptions.getCursor());
+        }
 
         if (StringUtils.isNotBlank(queryOptions.getSortAttribute())) {
             queryOptionsBuilder.setSortAttribute(queryOptions.getSortAttribute());

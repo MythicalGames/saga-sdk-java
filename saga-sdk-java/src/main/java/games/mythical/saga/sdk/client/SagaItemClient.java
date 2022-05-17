@@ -84,8 +84,8 @@ public class SagaItemClient extends AbstractSagaStreamClient {
     public List<SagaItem> getItemsForPlayer(String oauthId) throws SagaException {
         ValidateUtil.notBlank(oauthId, "oauthId is a required value");
         var request = GetItemsForPlayerRequest.newBuilder()
-            .setOauthId(oauthId)
-            .build();
+                .setOauthId(oauthId)
+                .build();
         try {
             var items = serviceBlockingStub.getItemsForPlayer(request);
             return items.getItemsList().stream().map(SagaItem::fromProto).collect(Collectors.toList());
@@ -98,11 +98,11 @@ public class SagaItemClient extends AbstractSagaStreamClient {
     }
 
     public String issueItem(String gameInventoryId,
-                          String oauthId,
-                          String gameItemTypeId,
-                          SagaMetadata metadata,
-                          String orderId,
-                          String requestIp) throws SagaException {
+                            String oauthId,
+                            String gameItemTypeId,
+                            SagaMetadata metadata,
+                            String orderId,
+                            String requestIp) throws SagaException {
         var builder = IssueItemRequest.newBuilder()
                 .setGameInventoryId(gameInventoryId)
                 .setOauthId(oauthId)
@@ -130,9 +130,9 @@ public class SagaItemClient extends AbstractSagaStreamClient {
     }
 
     public String transferItem(String gameInventoryId,
-                             String sourceOauthId,
-                             String destOauthId,
-                             String storeId) throws SagaException {
+                               String sourceOauthId,
+                               String destOauthId,
+                               String storeId) throws SagaException {
         var builder = TransferItemRequest.newBuilder()
                 .setGameInventoryId(gameInventoryId)
                 .setSourceOauthId(sourceOauthId)

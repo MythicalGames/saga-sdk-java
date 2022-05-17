@@ -26,6 +26,15 @@ public abstract class AbstractSagaClient {
         this.sagaCredentialsFactory = SagaCredentialsFactory.getInstance();
     }
 
+    private static ManagedChannel buildChannel(SagaSdkConfig config) {
+        final var builder = ManagedChannelBuilder.forAddress(config.getHost(), config.getPort())
+                .keepAliveTime(config.getKeepAlive(), TimeUnit.SECONDS);
+        if (config.isPlainText() && "localhost".equals(config.getHost())) {
+            builder.usePlaintext();
+        }
+        return builder.build();
+    }
+
     abstract void initStub();
 
     public CallCredentials addAuthentication() {
@@ -48,14 +57,5 @@ public abstract class AbstractSagaClient {
         log.info("Stopping client: {}", this.getClass().getName());
         SagaStatusUpdateObserver.clear();
         channel.shutdownNow();
-    }
-
-    private static ManagedChannel buildChannel(SagaSdkConfig config) {
-        final var builder = ManagedChannelBuilder.forAddress(config.getHost(), config.getPort())
-                .keepAliveTime(config.getKeepAlive(), TimeUnit.SECONDS);
-        if (config.isPlainText() && "localhost".equals(config.getHost())) {
-            builder.usePlaintext();
-        }
-        return builder.build();
     }
 }
