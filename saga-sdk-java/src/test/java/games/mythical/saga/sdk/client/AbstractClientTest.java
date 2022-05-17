@@ -1,6 +1,5 @@
 package games.mythical.saga.sdk.client;
 
-import games.mythical.saga.sdk.client.executor.MockBaseExecutor;
 import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaException;

@@ -56,8 +56,12 @@ public class SagaClientFactory {
         return new SagaUserClient(config, executor);
     }
 
-    public SagaGameCoinClient createSagaGameCoinClient(SagaGameCoinExecutor executor) throws SagaException {
-        return new SagaGameCoinClient(config, executor);
+    public SagaCurrencyClient createSagaCurrencyClient(SagaCurrencyExecutor executor) throws SagaException {
+        return new SagaCurrencyClient(config, executor);
+    }
+
+    public SagaCurrencyTypeClient createSagaCurrencyTypeClient() throws SagaException {
+        return new SagaCurrencyTypeClient(config);
     }
 
     public SagaTitleClient createSagaTitleClient() throws SagaException {
