@@ -11,17 +11,24 @@
 - [api/bridge/rpc.proto](#api_bridge_rpc-proto)
     - [BridgeService](#saga-api-bridge-BridgeService)
   
-- [api/gamecoin/definition.proto](#api_gamecoin_definition-proto)
-    - [BurnGameCoinRequest](#saga-api-gamecoin-BurnGameCoinRequest)
-    - [GameCoinProto](#saga-api-gamecoin-GameCoinProto)
-    - [GameCoinsProto](#saga-api-gamecoin-GameCoinsProto)
-    - [GetGameCoinRequest](#saga-api-gamecoin-GetGameCoinRequest)
-    - [GetGameCoinsRequest](#saga-api-gamecoin-GetGameCoinsRequest)
-    - [IssueGameCoinRequest](#saga-api-gamecoin-IssueGameCoinRequest)
-    - [TransferGameCoinRequest](#saga-api-gamecoin-TransferGameCoinRequest)
+- [api/currency/definition.proto](#api_currency_definition-proto)
+    - [BurnCurrencyRequest](#saga-api-currency-BurnCurrencyRequest)
+    - [CurrencyProto](#saga-api-currency-CurrencyProto)
+    - [GetCurrencyByPlayerRequest](#saga-api-currency-GetCurrencyByPlayerRequest)
+    - [IssueCurrencyRequest](#saga-api-currency-IssueCurrencyRequest)
+    - [TransferCurrencyRequest](#saga-api-currency-TransferCurrencyRequest)
   
-- [api/gamecoin/rpc.proto](#api_gamecoin_rpc-proto)
-    - [GameCoinService](#saga-api-gamecoin-GameCoinService)
+- [api/currency/rpc.proto](#api_currency_rpc-proto)
+    - [CurrencyService](#saga-api-currency-CurrencyService)
+  
+- [api/currencytype/definition.proto](#api_currencytype_definition-proto)
+    - [CurrencyTypeProto](#saga-api-currencytype-CurrencyTypeProto)
+    - [CurrencyTypesProto](#saga-api-currencytype-CurrencyTypesProto)
+    - [GetCurrencyTypeRequest](#saga-api-currencytype-GetCurrencyTypeRequest)
+    - [GetCurrencyTypesRequest](#saga-api-currencytype-GetCurrencyTypesRequest)
+  
+- [api/currencytype/rpc.proto](#api_currencytype_rpc-proto)
+    - [CurrencyTypeService](#saga-api-currencytype-CurrencyTypeService)
   
 - [api/item/definition.proto](#api_item_definition-proto)
     - [BurnItemRequest](#saga-api-item-BurnItemRequest)
@@ -159,11 +166,11 @@
   
     - [ErrorCode](#saga-common-ErrorCode)
   
+- [common/currency/definition.proto](#common_currency_definition-proto)
+    - [CurrencyState](#saga-proto-common-currency-CurrencyState)
+  
 - [common/finalization.proto](#common_finalization-proto)
     - [Finalized](#saga-common-Finalized)
-  
-- [common/gamecoin/definition.proto](#common_gamecoin_definition-proto)
-    - [GameCoinState](#saga-proto-common-gamecoin-GameCoinState)
   
 - [common/item/definition.proto](#common_item_definition-proto)
     - [ItemState](#saga-proto-common-item-ItemState)
@@ -208,10 +215,10 @@
 - [streams/common.proto](#streams_common-proto)
     - [Subscribe](#saga-rpc-streams-Subscribe)
   
-- [streams/gamecoin/definition.proto](#streams_gamecoin_definition-proto)
-    - [GameCoinStatusConfirmRequest](#saga-rpc-streams-gamecoin-GameCoinStatusConfirmRequest)
-    - [GameCoinStatusUpdate](#saga-rpc-streams-gamecoin-GameCoinStatusUpdate)
-    - [GameCoinUpdate](#saga-rpc-streams-gamecoin-GameCoinUpdate)
+- [streams/currency/definition.proto](#streams_currency_definition-proto)
+    - [CurrencyStatusConfirmRequest](#saga-rpc-streams-currency-CurrencyStatusConfirmRequest)
+    - [CurrencyStatusUpdate](#saga-rpc-streams-currency-CurrencyStatusUpdate)
+    - [CurrencyUpdate](#saga-rpc-streams-currency-CurrencyUpdate)
   
 - [streams/item/definition.proto](#streams_item_definition-proto)
     - [ItemStatusUpdate](#saga-rpc-streams-item-ItemStatusUpdate)
@@ -346,43 +353,42 @@ Withdraw Call
 
 
 
-<a name="api_gamecoin_definition-proto"></a>
+<a name="api_currency_definition-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## api/gamecoin/definition.proto
+## api/currency/definition.proto
 
 
 
-<a name="saga-api-gamecoin-BurnGameCoinRequest"></a>
+<a name="saga-api-currency-BurnCurrencyRequest"></a>
 
-### BurnGameCoinRequest
-Burn coins call
+### BurnCurrencyRequest
+Burn currency call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  | User to burn coins from |
+| oauth_id | [string](#string) |  | User to burn currency from |
 | currency_id | [string](#string) |  |  |
-| coin_count | [int32](#int32) |  | Amount of coins to burn |
+| quantity | [string](#string) |  | Amount of currency to burn |
 
 
 
 
 
 
-<a name="saga-api-gamecoin-GameCoinProto"></a>
+<a name="saga-api-currency-CurrencyProto"></a>
 
-### GameCoinProto
+### CurrencyProto
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
-| coin_count | [int32](#int32) |  | Amount of coins |
-| currency_id | [string](#string) |  |  |
-| name | [string](#string) |  |  |
-| oauth_id | [string](#string) |  | User the coins belong to |
+| quantity | [string](#string) |  | Amount of currency |
+| game_currency_type_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | User the currency belong to |
 | created_timestamp | [int64](#int64) |  |  |
 | updated_timestamp | [int64](#int64) |  |  |
 
@@ -391,47 +397,167 @@ Burn coins call
 
 
 
-<a name="saga-api-gamecoin-GameCoinsProto"></a>
+<a name="saga-api-currency-GetCurrencyByPlayerRequest"></a>
 
-### GameCoinsProto
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| game_coins | [GameCoinProto](#saga-api-gamecoin-GameCoinProto) | repeated |  |
-
-
-
-
-
-
-<a name="saga-api-gamecoin-GetGameCoinRequest"></a>
-
-### GetGameCoinRequest
-Get coin call
+### GetCurrencyByPlayerRequest
+Get Currency call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  | User to get coins for |
+| player_wallet_id | [string](#string) |  | User to get currency for |
+| game_currency_type_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="saga-api-currency-IssueCurrencyRequest"></a>
+
+### IssueCurrencyRequest
+Issue currency call
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
 | currency_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  | User to issue currency to |
+| quantity | [string](#string) |  | Amount of currency to issue |
 
 
 
 
 
 
-<a name="saga-api-gamecoin-GetGameCoinsRequest"></a>
+<a name="saga-api-currency-TransferCurrencyRequest"></a>
 
-### GetGameCoinsRequest
-Get coins call
+### TransferCurrencyRequest
+Transfer currency call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  | User to get coins for |
-| created_after_timestamp | [uint64](#uint64) |  |  |
+| source_oauth_id | [string](#string) |  | User to transfer currency from |
+| destination_oauth_id | [string](#string) |  | User to transfer currency to |
+| currency_id | [string](#string) |  |  |
+| quantity | [string](#string) |  | Amount of currency to transfer |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="api_currency_rpc-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/currency/rpc.proto
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="saga-api-currency-CurrencyService"></a>
+
+### CurrencyService
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| GetCurrencyByPlayer | [GetCurrencyByPlayerRequest](#saga-api-currency-GetCurrencyByPlayerRequest) | [CurrencyProto](#saga-api-currency-CurrencyProto) | Get a Currency for a user |
+| IssueCurrency | [IssueCurrencyRequest](#saga-api-currency-IssueCurrencyRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Issue currency to a user |
+| TransferCurrency | [TransferCurrencyRequest](#saga-api-currency-TransferCurrencyRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Transfer currency between users |
+| BurnCurrency | [BurnCurrencyRequest](#saga-api-currency-BurnCurrencyRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Burn currency for a user |
+
+ 
+
+
+
+<a name="api_currencytype_definition-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/currencytype/definition.proto
+
+
+
+<a name="saga-api-currencytype-CurrencyTypeProto"></a>
+
+### CurrencyTypeProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| trace_id | [string](#string) |  |  |
+| id | [string](#string) |  |  |
+| game_currency_type_id | [string](#string) |  |  |
+| game_title_id | [string](#string) |  |  |
+| publisher_address | [string](#string) |  |  |
+| name | [string](#string) |  |  |
+| symbol | [string](#string) |  |  |
+| decimal_places | [int64](#int64) |  |  |
+| contract_address | [string](#string) |  |  |
+| finalized | [bool](#bool) |  |  |
+| max_supply | [int64](#int64) |  |  |
+| created_at | [int64](#int64) |  |  |
+| updated_at | [int64](#int64) |  |  |
+
+
+
+
+
+
+<a name="saga-api-currencytype-CurrencyTypesProto"></a>
+
+### CurrencyTypesProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| currency_types | [CurrencyTypeProto](#saga-api-currencytype-CurrencyTypeProto) | repeated |  |
+
+
+
+
+
+
+<a name="saga-api-currencytype-GetCurrencyTypeRequest"></a>
+
+### GetCurrencyTypeRequest
+Currency Type call
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| game_currency_type_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="saga-api-currencytype-GetCurrencyTypesRequest"></a>
+
+### GetCurrencyTypesRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
 | page_size | [int32](#int32) |  |  |
 | sort_order | [saga.common.SortOrder](#saga-common-SortOrder) |  |  |
 
@@ -439,41 +565,6 @@ Get coins call
 
 
 
-
-<a name="saga-api-gamecoin-IssueGameCoinRequest"></a>
-
-### IssueGameCoinRequest
-Issue coins call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| currency_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  | User to issue coins to |
-| coin_count | [int32](#int32) |  | Amount of coins to issue |
-
-
-
-
-
-
-<a name="saga-api-gamecoin-TransferGameCoinRequest"></a>
-
-### TransferGameCoinRequest
-Transfer coins call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| source_oauth_id | [string](#string) |  | User to transfer coins from |
-| destination_oauth_id | [string](#string) |  | User to transfer coins to |
-| currency_id | [string](#string) |  |  |
-| coin_count | [int32](#int32) |  | Amount of coins to transfer |
-
-
-
-
-
  
 
  
@@ -484,10 +575,10 @@ Transfer coins call
 
 
 
-<a name="api_gamecoin_rpc-proto"></a>
+<a name="api_currencytype_rpc-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## api/gamecoin/rpc.proto
+## api/currencytype/rpc.proto
 
 
  
@@ -497,18 +588,15 @@ Transfer coins call
  
 
 
-<a name="saga-api-gamecoin-GameCoinService"></a>
+<a name="saga-api-currencytype-CurrencyTypeService"></a>
 
-### GameCoinService
+### CurrencyTypeService
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetGameCoin | [GetGameCoinRequest](#saga-api-gamecoin-GetGameCoinRequest) | [GameCoinProto](#saga-api-gamecoin-GameCoinProto) | Get a GameCoin for a user |
-| GetGameCoins | [GetGameCoinsRequest](#saga-api-gamecoin-GetGameCoinsRequest) | [GameCoinsProto](#saga-api-gamecoin-GameCoinsProto) |  |
-| IssueGameCoin | [IssueGameCoinRequest](#saga-api-gamecoin-IssueGameCoinRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Issue game coins to a user |
-| TransferGameCoin | [TransferGameCoinRequest](#saga-api-gamecoin-TransferGameCoinRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Transfer can coins between users |
-| BurnGameCoin | [BurnGameCoinRequest](#saga-api-gamecoin-BurnGameCoinRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Burn game coins for a user |
+| GetCurrencyType | [GetCurrencyTypeRequest](#saga-api-currencytype-GetCurrencyTypeRequest) | [CurrencyTypeProto](#saga-api-currencytype-CurrencyTypeProto) |  |
+| GetCurrencyTypes | [GetCurrencyTypesRequest](#saga-api-currencytype-GetCurrencyTypesRequest) | [CurrencyTypesProto](#saga-api-currencytype-CurrencyTypesProto) |  |
 
  
 
@@ -2419,6 +2507,36 @@ Metadata properties of Item
 
 
 
+<a name="common_currency_definition-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## common/currency/definition.proto
+
+
+ 
+
+
+<a name="saga-proto-common-currency-CurrencyState"></a>
+
+### CurrencyState
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| FAILED | 0 | Failed to issue/transfer/burn Currency |
+| ISSUED | 1 | Currency issued successfully |
+| TRANSFERRED | 2 | Currency transferred successfully |
+| BURNED | 3 | Currency burned successfully |
+
+
+ 
+
+ 
+
+ 
+
+
+
 <a name="common_finalization-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -2438,36 +2556,6 @@ Metadata properties of Item
 | ALL | 0 |  |
 | YES | 1 |  |
 | NO | 2 |  |
-
-
- 
-
- 
-
- 
-
-
-
-<a name="common_gamecoin_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## common/gamecoin/definition.proto
-
-
- 
-
-
-<a name="saga-proto-common-gamecoin-GameCoinState"></a>
-
-### GameCoinState
-
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| FAILED | 0 | Failed to issue/transfer/burn Game Coin |
-| ISSUED | 1 | Game Coin issued successfully |
-| TRANSFERRED | 2 | Game Coin transferred successfully |
-| BURNED | 3 | Game Coin burned successfully |
 
 
  
@@ -2946,17 +3034,17 @@ Results from a Bridge status update gRPC stream call
 
 
 
-<a name="streams_gamecoin_definition-proto"></a>
+<a name="streams_currency_definition-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## streams/gamecoin/definition.proto
+## streams/currency/definition.proto
 
 
 
-<a name="saga-rpc-streams-gamecoin-GameCoinStatusConfirmRequest"></a>
+<a name="saga-rpc-streams-currency-CurrencyStatusConfirmRequest"></a>
 
-### GameCoinStatusConfirmRequest
-GameCoin information sent on a confirm request
+### CurrencyStatusConfirmRequest
+Currency information sent on a confirm request
 
 
 | Field | Type | Label | Description |
@@ -2964,41 +3052,41 @@ GameCoin information sent on a confirm request
 | trace_id | [string](#string) |  |  |
 | title_id | [string](#string) |  |  |
 | currency_id | [string](#string) |  |  |
-| game_coin_state | [saga.proto.common.gamecoin.GameCoinState](#saga-proto-common-gamecoin-GameCoinState) |  |  |
+| currency_state | [saga.proto.common.currency.CurrencyState](#saga-proto-common-currency-CurrencyState) |  |  |
 
 
 
 
 
 
-<a name="saga-rpc-streams-gamecoin-GameCoinStatusUpdate"></a>
+<a name="saga-rpc-streams-currency-CurrencyStatusUpdate"></a>
 
-### GameCoinStatusUpdate
-Results from a GameCoin status update gRPC stream call
+### CurrencyStatusUpdate
+Results from a Currency status update gRPC stream call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  | User of GameCoin |
+| oauth_id | [string](#string) |  | User of Currency |
 | currency_id | [string](#string) |  |  |
-| coin_count | [int32](#int32) |  | Amount of coins |
-| game_coin_state | [saga.proto.common.gamecoin.GameCoinState](#saga-proto-common-gamecoin-GameCoinState) |  | State of the GameCoin, see GameCoinState |
+| quantity | [string](#string) |  | Amount of coins |
+| currency_state | [saga.proto.common.currency.CurrencyState](#saga-proto-common-currency-CurrencyState) |  | State of the Currency, see CurrencyState |
 
 
 
 
 
 
-<a name="saga-rpc-streams-gamecoin-GameCoinUpdate"></a>
+<a name="saga-rpc-streams-currency-CurrencyUpdate"></a>
 
-### GameCoinUpdate
+### CurrencyUpdate
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
-| status_update | [GameCoinStatusUpdate](#saga-rpc-streams-gamecoin-GameCoinStatusUpdate) |  |  |
+| status_update | [CurrencyStatusUpdate](#saga-rpc-streams-currency-CurrencyStatusUpdate) |  |  |
 
 
 
@@ -3395,7 +3483,7 @@ Returned results on sending a Status stream call
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
 | bridge_update | [bridge.BridgeUpdate](#saga-rpc-streams-bridge-BridgeUpdate) |  |  |
-| game_coin_update | [gamecoin.GameCoinUpdate](#saga-rpc-streams-gamecoin-GameCoinUpdate) |  |  |
+| currency_update | [currency.CurrencyUpdate](#saga-rpc-streams-currency-CurrencyUpdate) |  |  |
 | item_update | [item.ItemUpdate](#saga-rpc-streams-item-ItemUpdate) |  |  |
 | item_type_update | [itemtype.ItemTypeUpdate](#saga-rpc-streams-itemtype-ItemTypeUpdate) |  |  |
 | listing_update | [listing.ListingUpdate](#saga-rpc-streams-listing-ListingUpdate) |  |  |
