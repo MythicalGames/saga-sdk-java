@@ -34,11 +34,11 @@ public class SagaCurrencyType {
     public static SagaCurrencyType fromProto(CurrencyTypeProto proto) {
         var currencyType = ProtoUtil.toDto(proto, SagaCurrencyType.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
-        currencyType.setCreatedAt(createdTimestamp);
+        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        currencyType.setCreatedAt(createdAt);
 
-        var updatedTimestamp = Instant.ofEpochMilli(proto.getUpdatedAt());
-        currencyType.setUpdatedAt(updatedTimestamp);
+        var updatedAt = Instant.ofEpochMilli(proto.getUpdatedAt());
+        currencyType.setUpdatedAt(updatedAt);
 
         return currencyType;
     }
