@@ -2847,6 +2847,7 @@ Options allowed when querying
 | page_size | [int32](#int32) |  | Size of the page of results |
 | sort_order | [SortOrder](#saga-common-SortOrder) |  | Which order to sort |
 | sort_attribute | [string](#string) |  | Which attribute to sort on |
+| cursor | [string](#string) |  | Cursor-based pagination based on the sort_attribute |
 
 
 
@@ -2876,7 +2877,7 @@ Allowed compare operations when filtering
 <a name="saga-common-FilterOperation"></a>
 
 ### FilterOperation
-Alloed operations when chaining filters
+Allowed operations when chaining filters
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
