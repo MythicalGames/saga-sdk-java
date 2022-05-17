@@ -684,7 +684,6 @@ Issue item call
 | oauth_id | [string](#string) |  | User that is issuing Item |
 | game_item_type_id | [string](#string) |  | Unique id set for your game of the Item being issued |
 | metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata associated to Item being issued |
-| store_id | [string](#string) |  | (optional) Id of store |
 | order_id | [string](#string) |  |  |
 | request_ip | [string](#string) |  |  |
 
