@@ -22,6 +22,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 public class SagaCredentialsFactory {
+    private final static String GRANT_TYPE_KEY = "grant_type";
+    private final static String CLIENT_ID_KEY = "client_id";
+    private final static String CLIENT_SECRET_KEY = "client_secret";
+    private final static String CLIENT_CREDENTIAL_VALUE = "client_credentials";
     private final static String ACCESS_TOKEN_KEY = "access_token";
     private final static int HTTP_OK = 200;
 
@@ -71,9 +75,9 @@ public class SagaCredentialsFactory {
             String clientId,
             String clientSecret) {
         return buildFormDataFromMap(Map.of(
-                "grant_type", "client_credentials",
-                "client_id", clientId,
-                "client_secret", clientSecret
+                GRANT_TYPE_KEY, CLIENT_CREDENTIAL_VALUE,
+                CLIENT_ID_KEY, clientId,
+                CLIENT_SECRET_KEY, clientSecret
         ));
     }
 
