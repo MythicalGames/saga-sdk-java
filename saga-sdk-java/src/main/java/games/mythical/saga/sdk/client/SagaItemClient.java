@@ -106,10 +106,14 @@ public class SagaItemClient extends AbstractSagaStreamClient {
                             String buyerWallet) throws SagaException {
         var builder = IssueItemRequest.newBuilder()
                 .setGameInventoryId(gameInventoryId)
-                .setOauthId(oauthId)
                 .setGameItemTypeId(gameItemTypeId)
-                .setMetadata(SagaMetadata.toProto(metadata))
-                .setBuyerWallet(buyerWallet);
+                .setMetadata(SagaMetadata.toProto(metadata));
+
+        if (StringUtils.isNotBlank(oauthId)) {
+            builder.setOauthId(oauthId);
+        } else if (StringUtils.isNotBlank(buyerWallet)) {
+            builder.setBuyerWallet(buyerWallet);
+        }
 
         if (StringUtils.isNotBlank(orderId)) {
             builder.setOrderId(orderId);
