@@ -52,7 +52,6 @@
     - [ItemTypeProto](#saga-api-itemtype-ItemTypeProto)
     - [ItemTypesProto](#saga-api-itemtype-ItemTypesProto)
     - [PriRevShareSettings](#saga-api-itemtype-PriRevShareSettings)
-    - [PriceMap](#saga-api-itemtype-PriceMap)
     - [SecRevShareSettings](#saga-api-itemtype-SecRevShareSettings)
     - [UpdateItemTypeMetadataPayload](#saga-api-itemtype-UpdateItemTypeMetadataPayload)
     - [UpdateItemTypePayload](#saga-api-itemtype-UpdateItemTypePayload)
@@ -836,13 +835,11 @@ Create item type call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| publisher_address | [string](#string) |  |  |
 | game_item_type_id | [string](#string) |  | The game&#39;s unique id for this ItemType |
+| base_price | [string](#string) |  |  |
 | name | [string](#string) |  |  |
-| pri_rev_share_settings | [PriRevShareSettings](#saga-api-itemtype-PriRevShareSettings) |  | (optional) |
-| sec_rev_share_settings | [SecRevShareSettings](#saga-api-itemtype-SecRevShareSettings) |  |  |
-| metadata | [saga.common.Metadata](#saga-common-Metadata) |  |  |
-| withdrawable | [bool](#bool) |  | Is this ItemType withdrawable? |
+| symbol | [string](#string) |  |  |
+| max_supply | [int64](#int64) |  |  |
 
 
 
@@ -894,11 +891,10 @@ Get ItemTypes call
 | pri_rev_share_settings | [PriRevShareSettings](#saga-api-itemtype-PriRevShareSettings) |  |  |
 | sec_rev_share_settings | [SecRevShareSettings](#saga-api-itemtype-SecRevShareSettings) |  |  |
 | withdrawable | [bool](#bool) |  | Is this item withdrawable? |
-| price_map | [PriceMap](#saga-api-itemtype-PriceMap) |  |  |
 | item_type_state | [saga.proto.common.itemtype.ItemTypeState](#saga-proto-common-itemtype-ItemTypeState) |  |  |
 | created_timestamp | [int64](#int64) |  | When this ItemType was created |
 | updated_timestamp | [int64](#int64) |  | When this ItemType was last updated |
-| metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata associated w ith this ItemType |
+| symbol | [string](#string) |  |  |
 
 
 
@@ -923,16 +919,6 @@ Get ItemTypes call
 <a name="saga-api-itemtype-PriRevShareSettings"></a>
 
 ### PriRevShareSettings
-
-
-
-
-
-
-
-<a name="saga-api-itemtype-PriceMap"></a>
-
-### PriceMap
 
 
 
@@ -975,7 +961,7 @@ Update ItemType call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | game_item_type_id | [string](#string) |  | Game&#39;s ItemTypeId for the ItemType to update |
-| withdrawable | [bool](#bool) |  | withdrawable state to udpate to |
+| withdrawable | [bool](#bool) |  | withdrawable state to update to |
 
 
 

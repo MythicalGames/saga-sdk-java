@@ -395,10 +395,6 @@
                 </li>
               
                 <li>
-                  <a href="#saga.api.itemtype.PriceMap"><span class="badge">M</span>PriceMap</a>
-                </li>
-              
-                <li>
                   <a href="#saga.api.itemtype.SecRevShareSettings"><span class="badge">M</span>SecRevShareSettings</a>
                 </li>
               
@@ -2518,17 +2514,17 @@
             <tbody>
               
                 <tr>
-                  <td>publisher_address</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
                   <td>game_item_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>The game&#39;s unique id for this ItemType </p></td>
+                </tr>
+              
+                <tr>
+                  <td>base_price</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
@@ -2539,31 +2535,17 @@
                 </tr>
               
                 <tr>
-                  <td>pri_rev_share_settings</td>
-                  <td><a href="#saga.api.itemtype.PriRevShareSettings">PriRevShareSettings</a></td>
-                  <td></td>
-                  <td><p>(optional) </p></td>
-                </tr>
-              
-                <tr>
-                  <td>sec_rev_share_settings</td>
-                  <td><a href="#saga.api.itemtype.SecRevShareSettings">SecRevShareSettings</a></td>
+                  <td>symbol</td>
+                  <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>metadata</td>
-                  <td><a href="#saga.common.Metadata">saga.common.Metadata</a></td>
+                  <td>max_supply</td>
+                  <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>withdrawable</td>
-                  <td><a href="#bool">bool</a></td>
-                  <td></td>
-                  <td><p>Is this ItemType withdrawable? </p></td>
                 </tr>
               
             </tbody>
@@ -2681,13 +2663,6 @@
                 </tr>
               
                 <tr>
-                  <td>price_map</td>
-                  <td><a href="#saga.api.itemtype.PriceMap">PriceMap</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
                   <td>item_type_state</td>
                   <td><a href="#saga.proto.common.itemtype.ItemTypeState">saga.proto.common.itemtype.ItemTypeState</a></td>
                   <td></td>
@@ -2709,10 +2684,10 @@
                 </tr>
               
                 <tr>
-                  <td>metadata</td>
-                  <td><a href="#saga.common.Metadata">saga.common.Metadata</a></td>
+                  <td>symbol</td>
+                  <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Metadata associated w ith this ItemType </p></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -2747,13 +2722,6 @@
         
       
         <h3 id="saga.api.itemtype.PriRevShareSettings">PriRevShareSettings</h3>
-        <p></p>
-
-        
-
-        
-      
-        <h3 id="saga.api.itemtype.PriceMap">PriceMap</h3>
         <p></p>
 
         
@@ -2819,7 +2787,7 @@
                   <td>withdrawable</td>
                   <td><a href="#bool">bool</a></td>
                   <td></td>
-                  <td><p>withdrawable state to udpate to </p></td>
+                  <td><p>withdrawable state to update to </p></td>
                 </tr>
               
             </tbody>
