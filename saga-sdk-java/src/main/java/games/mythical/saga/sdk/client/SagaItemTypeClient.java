@@ -14,6 +14,7 @@ import io.grpc.StatusException;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,14 +68,18 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
     }
 
     public String createItemType(String gameItemTypeId,
-                                 boolean withdrawable,
-                                 SagaMetadata metadata) throws SagaException {
+                               BigDecimal basePrice,
+                               String name,
+                               String symbol,
+                               int maxSupply) throws SagaException {
         try {
             log.trace("ItemTypeClient.createItemType called for game item type id: {}", gameItemTypeId);
             var request = CreateItemTypeRequest.newBuilder()
                     .setGameItemTypeId(gameItemTypeId)
-                    .setWithdrawable(withdrawable)
-                    .setMetadata(SagaMetadata.toProto(metadata))
+                    .setBasePrice(basePrice.toString())
+                    .setName(name)
+                    .setSymbol(symbol)
+                    .setMaxSupply(maxSupply)
                     .build();
             var result = serviceBlockingStub.createItemType(request);
             executor.emitReceived(gameItemTypeId, result.getTraceId());

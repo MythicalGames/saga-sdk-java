@@ -4,7 +4,6 @@ import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
 import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeProto;
 import games.mythical.saga.sdk.proto.api.itemtype.PriRevShareSettings;
-import games.mythical.saga.sdk.proto.api.itemtype.PriceMap;
 import games.mythical.saga.sdk.proto.api.itemtype.SecRevShareSettings;
 import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
 import lombok.AllArgsConstructor;
@@ -30,21 +29,15 @@ public class SagaItemType {
     private PriRevShareSettings priRevShareSettings;
     private SecRevShareSettings secRevShareSettings;
     private boolean withdrawable;
-    private PriceMap priceMap;
     private ItemTypeState itemTypeState;
     @DtoExclude
     private Instant createdTimestamp;
     @DtoExclude
     private Instant updatedTimestamp;
-    @DtoExclude
-    private SagaMetadata metadata;
+    private String symbol;
 
     public static SagaItemType fromProto(ItemTypeProto proto) {
         var user = ProtoUtil.toDto(proto, SagaItemType.class);
-
-        if (proto.hasMetadata()) {
-            user.setMetadata(SagaMetadata.fromProto(proto.getMetadata()));
-        }
 
         var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedTimestamp());
         user.setCreatedTimestamp(createdTimestamp);
