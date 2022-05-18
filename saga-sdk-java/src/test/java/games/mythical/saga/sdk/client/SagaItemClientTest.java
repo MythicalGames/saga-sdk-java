@@ -105,7 +105,7 @@ class SagaItemClientTest extends AbstractClientTest {
                 EXPECTED_OAUTH_ID,
                 RandomStringUtils.randomAlphanumeric(30),
                 EXPECTED_METADATA,
-                null, null
+                null, null, null
         );
         checkTraceAndStart(expectedResponse, traceId);
 
