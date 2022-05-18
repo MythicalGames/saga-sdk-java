@@ -1,7 +1,6 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockItemTypeExecutor;
-import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.client.model.query.Filter;
 import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.exception.SagaException;
@@ -27,6 +26,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -74,9 +75,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 .setPriRevShareSettings(PriRevShareSettings.newBuilder().build())
                 .setSecRevShareSettings(SecRevShareSettings.newBuilder().build())
                 .setWithdrawable(true)
-                .setPriceMap(PriceMap.newBuilder().build())
                 .setItemTypeState(ItemTypeState.forNumber(RandomUtils.nextInt(0, ItemTypeState.values().length - 1)))
-                .setMetadata(SagaMetadata.toProto(generateItemMetadata()))
                 .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
                 .setUpdatedTimestamp(Instant.now().toEpochMilli())
                 .build();
@@ -133,13 +132,18 @@ class SagaItemTypeClientTest extends AbstractClientTest {
     @Test
     @Timeout(value = 1, unit = TimeUnit.MINUTES)
     public void createItemType() throws Exception {
-        final var EXPECTED_METADATA = generateItemMetadata();
-
         final var expectedResponse = ReceivedResponse.newBuilder()
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.createItemType(any())).thenReturn(expectedResponse);
-        final var traceId = itemTypeClient.createItemType(GAME_ITEM_TYPE_ID, false, EXPECTED_METADATA);
+        final var traceId = itemTypeClient.createItemType(
+                GAME_ITEM_TYPE_ID,
+                BigDecimal.valueOf(RandomUtils.nextDouble(3.50, 1000.0)).setScale(2, RoundingMode.HALF_UP),
+                RandomStringUtils.randomAlphanumeric(30),
+                RandomStringUtils.randomAlphanumeric(30),
+                RandomUtils.nextInt(0, 1000)
+        );
+
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ItemTypeStatusUpdate.newBuilder()
