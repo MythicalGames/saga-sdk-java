@@ -2,7 +2,6 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaItemTypeExecutor;
 import games.mythical.saga.sdk.client.model.SagaItemType;
-import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
@@ -68,10 +67,10 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
     }
 
     public String createItemType(String gameItemTypeId,
-                               BigDecimal basePrice,
-                               String name,
-                               String symbol,
-                               int maxSupply) throws SagaException {
+                                 BigDecimal basePrice,
+                                 String name,
+                                 String symbol,
+                                 int maxSupply) throws SagaException {
         try {
             log.trace("ItemTypeClient.createItemType called for game item type id: {}", gameItemTypeId);
             var request = CreateItemTypeRequest.newBuilder()
