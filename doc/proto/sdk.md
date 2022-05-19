@@ -680,7 +680,8 @@ Issue item call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | game_inventory_id | [string](#string) |  | GameInventory Id of Item being issued |
-| oauth_id | [string](#string) |  | User that is issuing Item |
+| oauth_id | [string](#string) |  |  |
+| buyer_wallet | [string](#string) |  |  |
 | game_item_type_id | [string](#string) |  | Unique id set for your game of the Item being issued |
 | metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata associated to Item being issued |
 | order_id | [string](#string) |  |  |
