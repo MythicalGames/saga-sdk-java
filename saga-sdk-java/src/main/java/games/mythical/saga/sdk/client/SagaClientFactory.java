@@ -69,10 +69,6 @@ public class SagaClientFactory {
         if (config.getTokenRefresh() < MIN_TOKEN_REFRESH) {
             throw new SagaException("Invalid token refresh value: " + config.getTokenRefresh(), SagaErrorCode.INVALID_TOKEN_REFRESH);
         }
-
-        if (config.isPlainText() && !config.getHost().equals("localhost")) {
-            throw new SagaException("Plain text connection can only be used for localhost", SagaErrorCode.NON_LOCAL_PLAIN_TEXT);
-        }
     }
 
     public SagaItemClient createSagaItemClient(SagaItemExecutor executor) throws SagaException {
