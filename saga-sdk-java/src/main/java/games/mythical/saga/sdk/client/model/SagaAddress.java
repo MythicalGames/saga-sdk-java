@@ -17,9 +17,8 @@ public class SagaAddress {
     private String addressLine1;
     private String addressLine2;
     private String city;
-    private String state;
+    private String stateIsoAlpha2;
     private String postalCode;
-    private String countryName;
     private String countryIsoAlpha2;
 
     public static SagaAddress fromProto(Address proto) {
