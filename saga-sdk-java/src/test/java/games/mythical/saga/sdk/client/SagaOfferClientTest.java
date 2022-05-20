@@ -181,7 +181,7 @@ class SagaOfferClientTest extends AbstractClientTest {
                         .setCurrency("USD")
                         .setTotal("100")
                         .setGameInventoryId("game1")
-                        .setCreatedTimestamp(0)
+                        .setCreatedAt(0)
                         .build())
                 .build();
         when(mockServiceBlockingStub.getOffers(any())).thenReturn(expectedResponse);
