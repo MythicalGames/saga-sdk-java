@@ -1,5 +1,6 @@
 package games.mythical.saga.sdk.client;
 
+import com.google.protobuf.ByteString;
 import games.mythical.saga.sdk.client.executor.MockCurrencyExecutor;
 import games.mythical.saga.sdk.proto.api.currency.CurrencyProto;
 import games.mythical.saga.sdk.proto.api.currency.CurrencyServiceGrpc;
@@ -24,7 +25,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,6 +35,7 @@ import static org.mockito.Mockito.when;
 class SagaCurrencyClientTest extends AbstractClientTest {
     private static final String CURRENCY_ID = RandomStringUtils.randomAlphanumeric(30);
     private static final String OAUTH_ID = RandomStringUtils.randomAlphanumeric(30);
+    private static final String OWNER_ADDRESS = RandomStringUtils.randomAlphanumeric(30);
 
     private final MockCurrencyExecutor executor = MockCurrencyExecutor.builder().build();
     private MockServer currencyServer;
@@ -67,10 +68,8 @@ class SagaCurrencyClientTest extends AbstractClientTest {
         var expectedResponse = CurrencyProto.newBuilder()
                 .setGameCurrencyTypeId(CURRENCY_ID)
                 .setQuantity(Integer.toString(RandomUtils.nextInt(0, 1000)))
-                .setOauthId(OAUTH_ID)
+                .setOwnerAddress(OWNER_ADDRESS)
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
-                .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
-                .setUpdatedTimestamp(Instant.now().toEpochMilli())
                 .build();
         when(mockServiceBlockingStub.getCurrencyByPlayer(any())).thenReturn(expectedResponse);
         var currencyResponse = currencyClient.getCurrency(CURRENCY_ID, OAUTH_ID);
@@ -78,7 +77,7 @@ class SagaCurrencyClientTest extends AbstractClientTest {
         assertTrue(currencyResponse.isPresent());
         var currency = currencyResponse.get();
         assertEquals(CURRENCY_ID, currency.getGameCurrencyTypeId());
-        assertEquals(expectedResponse.getOauthId(), currency.getOauthId());
+        assertEquals(expectedResponse.getOwnerAddress(), currency.getOwnerAddress());
         assertEquals(expectedResponse.getQuantity(), currency.getQuantity().toString());
 
         when(mockServiceBlockingStub.getCurrencyByPlayer(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
@@ -94,12 +93,18 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.issueCurrency(any())).thenReturn(expectedResponse);
-        final var traceId = currencyClient.issueCurrency(CURRENCY_ID, OAUTH_ID, Integer.toString(RandomUtils.nextInt(1, 1000)));
+        final var traceId = currencyClient.issueCurrency(
+                CURRENCY_ID,
+                OWNER_ADDRESS,
+                Integer.toString(RandomUtils.nextInt(1, 1000)),
+                1000L,
+                "PAYMENT_TOKEN",
+                ByteString.EMPTY);
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = CurrencyStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
-                .setCurrencyId(CURRENCY_ID)
+                .setOwnerAddress(OWNER_ADDRESS)
+                .setGameCurrencyTypeId(CURRENCY_ID)
                 .setCurrencyState(CurrencyState.ISSUED);
         currencyServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(traceId)
@@ -108,7 +113,7 @@ class SagaCurrencyClientTest extends AbstractClientTest {
 
         ConcurrentFinisher.wait(traceId);
 
-        assertEquals(OAUTH_ID, executor.getOauthId());
+        assertEquals(OWNER_ADDRESS, executor.getOwnerAddress());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertEquals(CurrencyState.ISSUED, executor.getCurrencyState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
@@ -131,8 +136,8 @@ class SagaCurrencyClientTest extends AbstractClientTest {
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = CurrencyStatusUpdate.newBuilder()
-                .setOauthId(DEST)
-                .setCurrencyId(CURRENCY_ID)
+                .setOwnerAddress(DEST)
+                .setGameCurrencyTypeId(CURRENCY_ID)
                 .setCurrencyState(CurrencyState.TRANSFERRED);
         currencyServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(traceId)
@@ -141,7 +146,7 @@ class SagaCurrencyClientTest extends AbstractClientTest {
 
         ConcurrentFinisher.wait(traceId);
 
-        assertEquals(DEST, executor.getOauthId());
+        assertEquals(DEST, executor.getOwnerAddress());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertEquals(CurrencyState.TRANSFERRED, executor.getCurrencyState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
@@ -157,12 +162,12 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.burnCurrency(any())).thenReturn(expectedResponse);
-        final var traceId = currencyClient.burnCurrency(CURRENCY_ID, OAUTH_ID, Integer.toString(RandomUtils.nextInt(1, 1000)));
+        final var traceId = currencyClient.burnCurrency(CURRENCY_ID, OWNER_ADDRESS, Integer.toString(RandomUtils.nextInt(1, 1000)));
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = CurrencyStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
-                .setCurrencyId(CURRENCY_ID)
+                .setOwnerAddress(OWNER_ADDRESS)
+                .setGameCurrencyTypeId(CURRENCY_ID)
                 .setCurrencyState(CurrencyState.BURNED);
         currencyServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(traceId)

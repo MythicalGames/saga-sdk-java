@@ -7,29 +7,29 @@ import lombok.Getter;
 @Getter
 @Builder
 public class MockCurrencyExecutor extends MockBaseExecutor implements SagaCurrencyExecutor {
-    private String currencyId;
+    private String gameCurrencyTypeId;
     private String quantity;
-    private String oauthId;
+    private String ownerAddress;
     private String traceId;
     private CurrencyState currencyState;
 
     @Override
-    public void updateCurrency(String currencyId,
+    public void updateCurrency(String gameCurrencyTypeId,
                                String quantity,
-                               String oauthId,
+                               String ownerAddress,
                                String traceId,
                                CurrencyState currencyState) {
-        this.currencyId = currencyId;
+        this.gameCurrencyTypeId = gameCurrencyTypeId;
         this.quantity = quantity;
-        this.oauthId = oauthId;
+        this.ownerAddress = ownerAddress;
         this.traceId = traceId;
         this.currencyState = currencyState;
     }
 
     @Override
     public void emitReceived(String currencyId, String oauthId, String traceId) {
-        this.currencyId = currencyId;
-        this.oauthId = oauthId;
+        this.gameCurrencyTypeId = currencyId;
+        this.ownerAddress = oauthId;
         this.traceId = traceId;
     }
 }
