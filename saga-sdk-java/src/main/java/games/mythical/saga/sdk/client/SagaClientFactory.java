@@ -43,35 +43,39 @@ public class SagaClientFactory {
 
     private static void validateConfig(SagaSdkConfig config) throws SagaException {
         if (StringUtils.isBlank(config.getTitleId())) {
-            throw new SagaException("Title Id not set!", SagaErrorCode.TITLE_ID_NOT_SET);
+            throw new SagaException(SagaErrorCode.TITLE_ID_NOT_SET, "Title Id not set!");
         }
 
         if (StringUtils.isBlank(config.getTitleSecret())) {
-            throw new SagaException("Title Secret not set!", SagaErrorCode.TITLE_SECRET_NOT_SET);
+            throw new SagaException(SagaErrorCode.TITLE_SECRET_NOT_SET, "Title Secret not set!");
         }
 
         if (StringUtils.isBlank(config.getAuthUrl())) {
-            throw new SagaException("Authorization Url not set!", SagaErrorCode.AUTH_URL_NOT_SET);
+            throw new SagaException(SagaErrorCode.AUTH_URL_NOT_SET, "Authorization Url not set!");
         }
 
         if (StringUtils.isBlank(config.getHost())) {
-            throw new SagaException("Host not set!", SagaErrorCode.HOST_NOT_SET);
+            throw new SagaException(SagaErrorCode.HOST_NOT_SET, "Host not set!");
         }
 
         if (config.getPort() < MIN_PORT || config.getPort() > MAX_PORT) {
-            throw new SagaException("Invalid port number: " + config.getPort(), SagaErrorCode.INVALID_PORT);
+            throw new SagaException(SagaErrorCode.INVALID_PORT,
+                                    "Invalid port number: " + config.getPort());
         }
 
         if (config.getKeepAlive() < MIN_KEEP_ALIVE) {
-            throw new SagaException("Invalid keep alive value: " + config.getKeepAlive(), SagaErrorCode.INVALID_KEEP_ALIVE);
+            throw new SagaException(SagaErrorCode.INVALID_KEEP_ALIVE,
+                                    "Invalid keep alive value: " + config.getKeepAlive());
         }
 
         if (config.getTokenRefresh() < MIN_TOKEN_REFRESH) {
-            throw new SagaException("Invalid token refresh value: " + config.getTokenRefresh(), SagaErrorCode.INVALID_TOKEN_REFRESH);
+            throw new SagaException(SagaErrorCode.INVALID_TOKEN_REFRESH,
+                                    "Invalid token refresh value: " + config.getTokenRefresh());
         }
 
         if (config.isPlainText() && !config.getHost().equals("localhost")) {
-            throw new SagaException("Plain text connection can only be used for localhost", SagaErrorCode.NON_LOCAL_PLAIN_TEXT);
+            throw new SagaException(SagaErrorCode.NON_LOCAL_PLAIN_TEXT,
+                                    "Plain text connection can only be used for localhost");
         }
     }
 

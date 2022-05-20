@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 public class ValidateUtil {
     public static void notBlank(String value, String msg) throws SagaException {
         if (StringUtils.isBlank(value)) {
-            throw new SagaException(msg, SagaErrorCode.INVALID_ARGUMENT);
+            throw new SagaException(SagaErrorCode.INVALID_ARGUMENT, msg);
         }
     }
 }

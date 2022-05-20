@@ -1,7 +1,7 @@
 package games.mythical.saga.sdk.client.executor;
 
-import games.mythical.saga.sdk.proto.common.ErrorCode;
+import games.mythical.saga.sdk.exception.ErrorData;
 
 public interface BaseSagaExecutor {
-    void onError(ErrorCode errorCode, String errorMsg, String traceId);
+    void onError(ErrorData errorData);
 }
