@@ -22,6 +22,7 @@
     - [CurrencyService](#saga-api-currency-CurrencyService)
   
 - [api/currencytype/definition.proto](#api_currencytype_definition-proto)
+    - [CreateCurrencyTypeRequest](#saga-api-currencytype-CreateCurrencyTypeRequest)
     - [CurrencyTypeProto](#saga-api-currencytype-CurrencyTypeProto)
     - [CurrencyTypesProto](#saga-api-currencytype-CurrencyTypesProto)
     - [GetCurrencyTypeRequest](#saga-api-currencytype-GetCurrencyTypeRequest)
@@ -387,9 +388,7 @@ Burn currency call
 | trace_id | [string](#string) |  |  |
 | quantity | [string](#string) |  | Amount of currency |
 | game_currency_type_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  | User the currency belong to |
-| created_timestamp | [int64](#int64) |  |  |
-| updated_timestamp | [int64](#int64) |  |  |
+| owner_address | [string](#string) |  | Wallet address the currency belongs to |
 
 
 
@@ -420,9 +419,12 @@ Issue currency call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| currency_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  | User to issue currency to |
-| quantity | [string](#string) |  | Amount of currency to issue |
+| amount | [string](#string) |  | amount to issue |
+| game_currency_type_id | [string](#string) |  | Currency Type the currency to issue belongs to |
+| owner_address | [string](#string) |  | Wallet address to issue currency to |
+| cost | [uint64](#uint64) |  |  |
+| payment_token | [string](#string) |  |  |
+| signed_message | [bytes](#bytes) |  |  |
 
 
 
@@ -489,6 +491,26 @@ Transfer currency call
 <p align="right"><a href="#top">Top</a></p>
 
 ## api/currencytype/definition.proto
+
+
+
+<a name="saga-api-currencytype-CreateCurrencyTypeRequest"></a>
+
+### CreateCurrencyTypeRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| game_currency_type_id | [string](#string) |  |  |
+| base_price | [string](#string) |  |  |
+| name | [string](#string) |  |  |
+| symbol | [string](#string) |  |  |
+| decimal_places | [int64](#int64) |  |  |
+| max_supply | [int64](#int64) |  |  |
+
+
+
 
 
 
@@ -559,6 +581,7 @@ Currency Type call
 | ----- | ---- | ----- | ----------- |
 | page_size | [int32](#int32) |  |  |
 | sort_order | [saga.common.SortOrder](#saga-common-SortOrder) |  |  |
+| game_currency_type_id | [string](#string) |  |  |
 
 
 
@@ -596,6 +619,7 @@ Currency Type call
 | ----------- | ------------ | ------------- | ------------|
 | GetCurrencyType | [GetCurrencyTypeRequest](#saga-api-currencytype-GetCurrencyTypeRequest) | [CurrencyTypeProto](#saga-api-currencytype-CurrencyTypeProto) |  |
 | GetCurrencyTypes | [GetCurrencyTypesRequest](#saga-api-currencytype-GetCurrencyTypesRequest) | [CurrencyTypesProto](#saga-api-currencytype-CurrencyTypesProto) |  |
+| CreateCurrencyType | [CreateCurrencyTypeRequest](#saga-api-currencytype-CreateCurrencyTypeRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
 
  
 
@@ -3038,7 +3062,7 @@ Currency information sent on a confirm request
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
 | title_id | [string](#string) |  |  |
-| currency_id | [string](#string) |  |  |
+| game_currency_type_id | [string](#string) |  |  |
 | currency_state | [saga.proto.common.currency.CurrencyState](#saga-proto-common-currency-CurrencyState) |  |  |
 
 
@@ -3054,8 +3078,8 @@ Results from a Currency status update gRPC stream call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  | User of Currency |
-| currency_id | [string](#string) |  |  |
+| owner_address | [string](#string) |  | Wallet address of Currency |
+| game_currency_type_id | [string](#string) |  |  |
 | quantity | [string](#string) |  | Amount of coins |
 | currency_state | [saga.proto.common.currency.CurrencyState](#saga-proto-common-currency-CurrencyState) |  | State of the Currency, see CurrencyState |
 

@@ -1,5 +1,6 @@
 package games.mythical.saga.sdk.client;
 
+import com.google.protobuf.ByteString;
 import games.mythical.saga.sdk.client.executor.SagaCurrencyExecutor;
 import games.mythical.saga.sdk.client.model.SagaCurrency;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
@@ -49,16 +50,25 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String issueCurrency(String currencyId, String oauthId, String quantity) throws SagaException {
+    public String issueCurrency(
+            String gameCurrencyTypeId,
+            String ownerAddress,
+            String quantity,
+            long cost,
+            String paymentToken,
+            ByteString signedMessage
+            ) throws SagaException {
         var request = IssueCurrencyRequest.newBuilder()
-                .setCurrencyId(currencyId)
-                .setOauthId(oauthId)
-                .setQuantity(quantity)
+                .setGameCurrencyTypeId(gameCurrencyTypeId)
+                .setOwnerAddress(ownerAddress)
+                .setAmount(quantity)
+                .setCost(cost)
+                .setPaymentToken(paymentToken)
+                .setSignedMessage(signedMessage)
                 .build();
 
         try {
             var receivedResponse = serviceBlockingStub.issueCurrency(request);
-            executor.emitReceived(currencyId, oauthId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
