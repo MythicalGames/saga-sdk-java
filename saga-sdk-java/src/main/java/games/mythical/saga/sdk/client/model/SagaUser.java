@@ -26,7 +26,7 @@ public class SagaUser {
     public static SagaUser fromProto(UserProto proto) {
         var user = ProtoUtil.toDto(proto, SagaUser.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedTimestamp());
+        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
         user.setCreatedTimestamp(createdTimestamp);
 
         return user;

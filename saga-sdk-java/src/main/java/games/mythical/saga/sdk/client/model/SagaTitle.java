@@ -23,7 +23,7 @@ public class SagaTitle {
     public static SagaTitle fromProto(TitleProto proto) {
         var title = ProtoUtil.toDto(proto, SagaTitle.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedTimestamp());
+        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
         title.setCreatedTimestamp(createdTimestamp);
 
         return title;

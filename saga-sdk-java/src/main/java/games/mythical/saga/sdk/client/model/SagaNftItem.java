@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SagaNftItem {
     private String itemTypeName;
-    private String itemTypeId;
+    private String gameItemTypeId;
     private String contractAddress;
     private String tokenId;
 

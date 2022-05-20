@@ -26,7 +26,7 @@ public class SagaOffer {
     public static SagaOffer fromProto(OfferProto proto) {
         var offer = ProtoUtil.toDto(proto, SagaOffer.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedTimestamp());
+        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
         offer.setCreatedTimestamp(createdTimestamp);
 
         return offer;

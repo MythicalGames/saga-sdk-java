@@ -39,10 +39,10 @@ public class SagaItemType {
     public static SagaItemType fromProto(ItemTypeProto proto) {
         var user = ProtoUtil.toDto(proto, SagaItemType.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedTimestamp());
+        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
         user.setCreatedTimestamp(createdTimestamp);
 
-        var updatedTimestamp = Instant.ofEpochMilli(proto.getUpdatedTimestamp());
+        var updatedTimestamp = Instant.ofEpochMilli(proto.getUpdatedAt());
         user.setUpdatedTimestamp(updatedTimestamp);
 
         return user;

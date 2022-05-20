@@ -30,7 +30,7 @@ public class SagaOfferQuote {
     public static SagaOfferQuote fromProto(OfferQuoteProto proto) {
         var quote = ProtoUtil.toDto(proto, SagaOfferQuote.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedTimestamp());
+        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
         quote.setCreatedTimestamp(createdTimestamp);
 
         return quote;
