@@ -28,6 +28,7 @@ atlassian-ide-plugin.xml
 # Build ignores
 build/
 out/
+bin/
 
 # MacOS ignores
 .DS_Store
