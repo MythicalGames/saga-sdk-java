@@ -130,4 +130,8 @@ public class SagaClientFactory {
     public SagaOfferClient createSagaOfferClient(SagaOfferExecutor executor) throws SagaException {
         return new SagaOfferClient(config, executor);
     }
+
+    public SagaPlayerWalletClient createSagaPlayerWalletClient(SagaPlayerWalletExecutor executor) throws SagaException {
+        return new SagaPlayerWalletClient(config, executor);
+    }
 }

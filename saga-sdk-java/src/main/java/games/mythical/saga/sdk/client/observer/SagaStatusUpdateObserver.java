@@ -18,6 +18,7 @@ import games.mythical.saga.sdk.proto.streams.myth.MythTokenUpdate;
 import games.mythical.saga.sdk.proto.streams.offer.OfferUpdate;
 import games.mythical.saga.sdk.proto.streams.order.OrderUpdate;
 import games.mythical.saga.sdk.proto.streams.payment.PaymentUpdate;
+import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
 import games.mythical.saga.sdk.proto.streams.user.UserUpdate;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +40,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private SagaOfferExecutor sagaOfferExecutor;
     private SagaOrderExecutor sagaOrderExecutor;
     private SagaPaymentExecutor sagaPaymentExecutor;
+    private SagaPlayerWalletExecutor sagaPlayerWalletExecutor;
     private SagaUserExecutor sagaUserExecutor;
 
     public SagaStatusUpdateObserver(StatusStreamGrpc.StatusStreamBlockingStub streamBlockingStub,
@@ -106,6 +108,11 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         return this;
     }
 
+    public SagaStatusUpdateObserver with(SagaPlayerWalletExecutor sagaPlayerWalletExecutor) {
+        this.sagaPlayerWalletExecutor = sagaPlayerWalletExecutor;
+        return this;
+    }
+
     public SagaStatusUpdateObserver with(SagaUserExecutor sagaUserExecutor) {
         this.sagaUserExecutor = sagaUserExecutor;
         return this;
@@ -143,6 +150,9 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     break;
                 case PAYMENT_UPDATE:
                     handlePaymentUpdate(message.getPaymentUpdate(), message.getTraceId());
+                    break;
+                case PLAYER_WALLET_UPDATE:
+                    handlePlayerWalletUpdate(message.getPlayerWalletUpdate(), message.getTraceId());
                     break;
                 case USER_UPDATE:
                     handleUserUpdate(message.getUserUpdate(), message.getTraceId());
@@ -314,6 +324,20 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     traceId,
                     SagaPaymentMethod.fromProto(message.getPaymentMethod()),
                     message.getPaymentMethodStatus()
+            );
+        }
+    }
+
+    private void handlePlayerWalletUpdate(PlayerWalletUpdate update, String traceId) throws Exception {
+        if (update.hasError()) {
+            sagaPlayerWalletExecutor.onError(toErrData(update.getError(), traceId));
+        } else {
+            final var statusUpdate = update.getStatusUpdate();
+            sagaPlayerWalletExecutor.updatePlayerWallet(
+                    traceId,
+                    statusUpdate.getOauthId(),
+                    statusUpdate.getAddress(),
+                    statusUpdate.getState()
             );
         }
     }
