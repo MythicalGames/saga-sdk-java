@@ -33,6 +33,7 @@
   
 - [api/item/definition.proto](#api_item_definition-proto)
     - [BurnItemRequest](#saga-api-item-BurnItemRequest)
+    - [DepositItemRequest](#saga-api-item-DepositItemRequest)
     - [GetItemRequest](#saga-api-item-GetItemRequest)
     - [GetItemsForPlayerRequest](#saga-api-item-GetItemsForPlayerRequest)
     - [GetItemsRequest](#saga-api-item-GetItemsRequest)
@@ -179,6 +180,7 @@
     - [Finalized](#saga-common-Finalized)
   
 - [common/item/definition.proto](#common_item_definition-proto)
+    - [BlockChains](#saga-proto-common-item-BlockChains)
     - [ItemState](#saga-proto-common-item-ItemState)
   
 - [common/itemtype/definition.proto](#common_itemtype_definition-proto)
@@ -660,6 +662,26 @@ Burn item call
 
 
 
+<a name="saga-api-item-DepositItemRequest"></a>
+
+### DepositItemRequest
+Deposit item call
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| game_item_inventory_id | [string](#string) |  |  |
+| created_by | [string](#string) |  |  |
+| from_address | [string](#string) |  |  |
+| to_address | [string](#string) |  |  |
+| from_chain | [saga.proto.common.item.BlockChains](#saga-proto-common-item-BlockChains) |  |  |
+| transaction_id | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="saga-api-item-GetItemRequest"></a>
 
 ### GetItemRequest
@@ -853,6 +875,7 @@ Update Metadata on Item call
 | TransferItem | [TransferItemRequest](#saga-api-item-TransferItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Transfer Item between users |
 | BurnItem | [BurnItemRequest](#saga-api-item-BurnItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Burn an Item |
 | UpdateItemsMetadata | [UpdateItemsMetadataRequest](#saga-api-item-UpdateItemsMetadataRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update the Metadata for an Item |
+| DepositItem | [DepositItemRequest](#saga-api-item-DepositItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Deposit an Item |
 
  
 
@@ -2653,6 +2676,17 @@ Metadata properties of Item
 
 
  
+
+
+<a name="saga-proto-common-item-BlockChains"></a>
+
+### BlockChains
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| ETH | 0 |  |
+
 
 
 <a name="saga-proto-common-item-ItemState"></a>
