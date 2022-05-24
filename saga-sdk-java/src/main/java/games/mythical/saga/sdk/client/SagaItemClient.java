@@ -10,6 +10,7 @@ import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.item.*;
 import games.mythical.saga.sdk.proto.common.Finalized;
+import games.mythical.saga.sdk.proto.common.item.BlockChains;
 import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
@@ -174,6 +175,28 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         } catch (Exception e) {
             log.error("Exception calling emitReceived on burnItem, item may be out of sync!", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
+        }
+    }
+
+    public String depositItem(String gameItemInventoryId,
+                            String createdBy,
+                            String fromAddress,
+                            String toAddress,
+                            BlockChains fromChain,
+                            String transactionId) throws SagaException {
+        var request = DepositItemRequest.newBuilder()
+                .setGameItemInventoryId(gameItemInventoryId)
+                .setCreatedBy(createdBy)
+                .setFromAddress(fromAddress)
+                .setToAddress(toAddress)
+                .setFromChain(fromChain)
+                .setTransactionId(transactionId)
+                .build();
+        try {
+            var receivedResponse = serviceBlockingStub.depositItem(request);
+            return receivedResponse.getTraceId();
+        } catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
         }
     }
 
