@@ -127,6 +127,12 @@
 - [api/payment/rpc.proto](#api_payment_rpc-proto)
     - [PaymentService](#saga-api-payment-PaymentService)
   
+- [api/playerwallet/definition.proto](#api_playerwallet_definition-proto)
+    - [CreatePlayerWalletRequest](#saga-api-playerwallet-CreatePlayerWalletRequest)
+  
+- [api/playerwallet/rpc.proto](#api_playerwallet_rpc-proto)
+    - [PlayerWalletService](#saga-api-playerwallet-PlayerWalletService)
+  
 - [api/title/definition.proto](#api_title_definition-proto)
     - [GetTitlesRequest](#saga-api-title-GetTitlesRequest)
     - [TitleProto](#saga-api-title-TitleProto)
@@ -194,6 +200,9 @@
     - [PaymentMethodUpdateStatus](#saga-proto-common-payment-PaymentMethodUpdateStatus)
     - [PaymentProviderId](#saga-proto-common-payment-PaymentProviderId)
   
+- [common/playerwallet/definition.proto](#common_playerwallet_definition-proto)
+    - [PlayerWalletState](#saga-proto-common-playerwallet-PlayerWalletState)
+  
 - [common/query.proto](#common_query-proto)
     - [ExpressionProto](#saga-common-ExpressionProto)
     - [FilterValueProto](#saga-common-FilterValueProto)
@@ -247,6 +256,10 @@
 - [streams/payment/definition.proto](#streams_payment_definition-proto)
     - [PaymentMethodStatusUpdate](#saga-rpc-streams-payment-PaymentMethodStatusUpdate)
     - [PaymentUpdate](#saga-rpc-streams-payment-PaymentUpdate)
+  
+- [streams/playerwallet/definition.proto](#streams_playerwallet_definition-proto)
+    - [PlayerWalletStatusUpdate](#saga-rpc-streams-playerwallet-PlayerWalletStatusUpdate)
+    - [PlayerWalletUpdate](#saga-rpc-streams-playerwallet-PlayerWalletUpdate)
   
 - [streams/stream.proto](#streams_stream-proto)
     - [StatusConfirmRequest](#saga-rpc-streams-StatusConfirmRequest)
@@ -2023,6 +2036,63 @@ Create Order Quote call
 
 
 
+<a name="api_playerwallet_definition-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/playerwallet/definition.proto
+
+
+
+<a name="saga-api-playerwallet-CreatePlayerWalletRequest"></a>
+
+### CreatePlayerWalletRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| oauth_id | [string](#string) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="api_playerwallet_rpc-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/playerwallet/rpc.proto
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="saga-api-playerwallet-PlayerWalletService"></a>
+
+### PlayerWalletService
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| CreatePlayerWallet | [CreatePlayerWalletRequest](#saga-api-playerwallet-CreatePlayerWalletRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create a Player Wallet |
+
+ 
+
+
+
 <a name="api_title_definition-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -2804,6 +2874,34 @@ Types of Payments
 
 
 
+<a name="common_playerwallet_definition-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## common/playerwallet/definition.proto
+
+
+ 
+
+
+<a name="saga-proto-common-playerwallet-PlayerWalletState"></a>
+
+### PlayerWalletState
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| FAILED | 0 |  |
+| CREATED | 1 |  |
+
+
+ 
+
+ 
+
+ 
+
+
+
 <a name="common_query-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -3462,6 +3560,55 @@ Result of payment method creation, update, or deletion
 
 
 
+<a name="streams_playerwallet_definition-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## streams/playerwallet/definition.proto
+
+
+
+<a name="saga-rpc-streams-playerwallet-PlayerWalletStatusUpdate"></a>
+
+### PlayerWalletStatusUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| oauth_id | [string](#string) |  | Wallet owner OAuth ID |
+| address | [string](#string) |  | Wallet address |
+| state | [saga.proto.common.playerwallet.PlayerWalletState](#saga-proto-common-playerwallet-PlayerWalletState) |  | Wallet state |
+
+
+
+
+
+
+<a name="saga-rpc-streams-playerwallet-PlayerWalletUpdate"></a>
+
+### PlayerWalletUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| status_update | [PlayerWalletStatusUpdate](#saga-rpc-streams-playerwallet-PlayerWalletStatusUpdate) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
 <a name="streams_stream-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -3503,6 +3650,7 @@ Returned results on sending a Status stream call
 | order_update | [order.OrderUpdate](#saga-rpc-streams-order-OrderUpdate) |  |  |
 | payment_update | [payment.PaymentUpdate](#saga-rpc-streams-payment-PaymentUpdate) |  |  |
 | user_update | [user.UserUpdate](#saga-rpc-streams-user-UserUpdate) |  |  |
+| player_wallet_update | [playerwallet.PlayerWalletUpdate](#saga-rpc-streams-playerwallet-PlayerWalletUpdate) |  |  |
 | created_timestamp | [int64](#int64) |  |  |
 
 
