@@ -767,8 +767,8 @@ Issue item call
 | metadata_uri | [string](#string) |  | Metadata accessible address |
 | metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata for this Item |
 | item_state | [saga.proto.common.item.ItemState](#saga-proto-common-item-ItemState) |  | State that the Item is in. See ItemState for more information |
-| created_timestamp | [int64](#int64) |  | When was this Item created |
-| updated_timestamp | [int64](#int64) |  | When was this Item last updated |
+| created_at | [int64](#int64) |  | When was this Item created |
+| updated_at | [int64](#int64) |  | When was this Item last updated |
 
 
 
@@ -953,8 +953,8 @@ Get ItemTypes call
 | sec_rev_share_settings | [SecRevShareSettings](#saga-api-itemtype-SecRevShareSettings) |  |  |
 | withdrawable | [bool](#bool) |  | Is this item withdrawable? |
 | item_type_state | [saga.proto.common.itemtype.ItemTypeState](#saga-proto-common-itemtype-ItemTypeState) |  |  |
-| created_timestamp | [int64](#int64) |  | When this ItemType was created |
-| updated_timestamp | [int64](#int64) |  | When this ItemType was last updated |
+| created_at | [int64](#int64) |  | When this ItemType was created |
+| updated_at | [int64](#int64) |  | When this ItemType was last updated |
 | symbol | [string](#string) |  |  |
 
 
@@ -1154,7 +1154,7 @@ Get Listings call
 | game_inventory_id | [string](#string) |  | Item associated with this Listing |
 | currency | [string](#string) |  | Type of currency the total is in |
 | total | [string](#string) |  | Total price of Listing |
-| created_timestamp | [uint64](#uint64) |  | When the Listing was created |
+| created_at | [uint64](#uint64) |  | When the Listing was created |
 
 
 
@@ -1177,7 +1177,7 @@ Get Listings call
 | tax_currency | [string](#string) |  | Currency the tax is in |
 | total | [string](#string) |  | Total price of Listing |
 | currency | [string](#string) |  | Type of currency the total is in |
-| created_timestamp | [uint64](#uint64) |  | When the Listing was created |
+| created_at | [uint64](#uint64) |  | When the Listing was created |
 
 
 
@@ -1253,7 +1253,7 @@ Get Listings call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | quote_id | [string](#string) |  |  |
-| user_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  |  |
 | payment_provider_data | [saga.api.order.PaymentProviderData](#saga-api-order-PaymentProviderData) |  |  |
 
 
@@ -1322,7 +1322,7 @@ Proto of converted units from gwei/eth
 | payment_provider_data | [saga.api.order.PaymentProviderData](#saga-api-order-PaymentProviderData) |  | Payment provider data |
 | denomination_currency | [string](#string) |  |  |
 | origin_sub_account | [string](#string) |  |  |
-| user_id | [string](#string) |  | User that is buying MYTH Tokens |
+| oauth_id | [string](#string) |  | User that is buying MYTH Tokens |
 
 
 
@@ -1353,7 +1353,7 @@ Proto of converted units from gwei/eth
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| user_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  |  |
 | quantity | [string](#string) |  |  |
 
 
@@ -1506,7 +1506,7 @@ Get Offers call
 | game_inventory_id | [string](#string) |  | GameInventory Id of the Offer |
 | currency | [string](#string) |  | Currency of the total |
 | total | [string](#string) |  | Total cost of the offer |
-| created_timestamp | [uint64](#uint64) |  | When the offer was created |
+| created_at | [uint64](#uint64) |  | When the offer was created |
 
 
 
@@ -1531,7 +1531,7 @@ Get Offers call
 | tax_currency | [string](#string) |  | Currency that Tax is in |
 | total | [string](#string) |  | Total cost of the offer |
 | currency | [string](#string) |  | Currency the total is in |
-| created_timestamp | [uint64](#uint64) |  | When the Offer was created |
+| created_at | [uint64](#uint64) |  | When the Offer was created |
 
 
 
@@ -1705,7 +1705,7 @@ Create Order Quote call
 | buyer_oauth_id | [string](#string) |  |  |
 | seller_oauth_id | [string](#string) |  |  |
 | conversion_rate | [string](#string) |  |  |
-| created_timestamp | [uint64](#uint64) |  |  |
+| created_at | [uint64](#uint64) |  |  |
 
 
 
@@ -1768,9 +1768,8 @@ Create Order Quote call
 | address_line_1 | [string](#string) |  |  |
 | address_line_2 | [string](#string) |  |  |
 | city | [string](#string) |  |  |
-| state | [string](#string) |  |  |
+| state_iso_alpha_2 | [string](#string) |  |  |
 | postal_code | [string](#string) |  |  |
-| country_name | [string](#string) |  |  |
 | country_iso_alpha_2 | [string](#string) |  |  |
 
 
@@ -2148,7 +2147,7 @@ Get Titles call
 | ----- | ---- | ----- | ----------- |
 | title_id | [string](#string) |  | Unique id |
 | name | [string](#string) |  | Name for this Title |
-| created_timestamp | [int64](#int64) |  | When this Title was created |
+| created_at | [int64](#int64) |  | When this Title was created |
 
 
 
@@ -2255,7 +2254,7 @@ Get Transactions for a Player call
 | ----- | ---- | ----- | ----------- |
 | transaction_id | [string](#string) |  | Unique Id |
 | title_id | [string](#string) |  | title that this transaction is from |
-| created_timestamp | [int64](#int64) |  | When this Transaction was created |
+| created_at | [int64](#int64) |  | When this Transaction was created |
 
 
 
@@ -2328,7 +2327,6 @@ Create User call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  |  |
 
 
@@ -2345,8 +2343,8 @@ Create User call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Name for this Fungible Token |
-| game_id | [string](#string) |  | Id of game this is part of |
-| quantity | [string](#string) |  | Amount of token available |
+| title_id | [string](#string) |  | Id of game this is part of |
+| balance | [string](#string) |  | Amount of token available |
 | contract_address | [string](#string) |  | Contract address of this Fungible Token |
 
 
@@ -2410,7 +2408,7 @@ Get wallet assets call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | item_type_name | [string](#string) |  | Name of the ItemType |
-| item_type_id | [string](#string) |  | Id of the ItemType |
+| game_item_type_id | [string](#string) |  | Id of the ItemType |
 | contract_address | [string](#string) |  | Contract address of the NFT |
 | token_id | [string](#string) |  |  |
 
@@ -2427,7 +2425,6 @@ Update User call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  |  |
 
 
@@ -2447,7 +2444,7 @@ Update User call
 | oauth_id | [string](#string) |  | Unique Id (oauth) for this User |
 | chain_address | [string](#string) |  | Address on the chain |
 | user_state | [saga.proto.common.user.UserState](#saga-proto-common-user-UserState) |  | What state the User is in |
-| created_timestamp | [uint64](#uint64) |  | When this User was created |
+| created_at | [uint64](#uint64) |  | When this User was created |
 
 
 
@@ -3685,7 +3682,7 @@ Returned results on sending a Status stream call
 | payment_update | [payment.PaymentUpdate](#saga-rpc-streams-payment-PaymentUpdate) |  |  |
 | user_update | [user.UserUpdate](#saga-rpc-streams-user-UserUpdate) |  |  |
 | player_wallet_update | [playerwallet.PlayerWalletUpdate](#saga-rpc-streams-playerwallet-PlayerWalletUpdate) |  |  |
-| created_timestamp | [int64](#int64) |  |  |
+| created_at | [int64](#int64) |  |  |
 
 
 
