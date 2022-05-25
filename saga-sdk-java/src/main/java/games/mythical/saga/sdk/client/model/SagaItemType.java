@@ -3,9 +3,6 @@ package games.mythical.saga.sdk.client.model;
 import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
 import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeProto;
-import games.mythical.saga.sdk.proto.api.itemtype.PriRevShareSettings;
-import games.mythical.saga.sdk.proto.api.itemtype.SecRevShareSettings;
-import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,7 +26,7 @@ public class SagaItemType {
     private BigDecimal basePrice;
     private String name;
     private String symbol;
-    private Long maxSupply;
+    private long maxSupply;
     private String contractAddress;
     private boolean finalized;
     @DtoExclude

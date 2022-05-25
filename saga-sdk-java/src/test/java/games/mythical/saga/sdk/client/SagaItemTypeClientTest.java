@@ -28,7 +28,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -70,14 +69,16 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         return ItemTypeProto.newBuilder()
                 .setGameItemTypeId(gameItemTypeId)
                 .setName(RandomStringUtils.randomAlphanumeric(30))
-                .setTitleId(RandomStringUtils.randomAlphanumeric(30))
+                .setId(RandomStringUtils.randomAlphanumeric(30))
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
-                .setPriRevShareSettings(PriRevShareSettings.newBuilder().build())
-                .setSecRevShareSettings(SecRevShareSettings.newBuilder().build())
-                .setWithdrawable(true)
-                .setItemTypeState(ItemTypeState.forNumber(RandomUtils.nextInt(0, ItemTypeState.values().length - 1)))
-                .setCreatedAt(Instant.now().toEpochMilli() - 86400)
-                .setUpdatedAt(Instant.now().toEpochMilli())
+                .setGameTitleId("game_title_id")
+                .setPublisherAddress("publisher_address")
+                .setBasePrice("9.00")
+                .setName("name")
+                .setSymbol("symbol")
+                .setMaxSupply(1000l)
+                .setContractAddress("contract_address")
+                .setFinalized(true)
                 .build();
     }
 
