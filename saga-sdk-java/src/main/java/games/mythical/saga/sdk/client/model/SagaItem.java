@@ -16,15 +16,13 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SagaItem {
+    private String id;
     private String traceId;
     private String gameInventoryId;
-    private String gameItemTypeId;
-    private String oauthId;
-    private int serialNumber;
-    private String metadataUri;
-    @DtoExclude
-    private SagaMetadata metadata;
-    private ItemState itemState;
+    private String gameTitleId;
+    private String orderId;
+    private String serialNumber;
+    private boolean finalized;
     @DtoExclude
     private Instant createdAt;
     @DtoExclude
@@ -32,10 +30,6 @@ public class SagaItem {
 
     public static SagaItem fromProto(ItemProto proto) {
         var user = ProtoUtil.toDto(proto, SagaItem.class);
-
-        if (proto.hasMetadata()) {
-            user.setMetadata(SagaMetadata.fromProto(proto.getMetadata()));
-        }
 
         var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
         user.setCreatedAt(createdAt);

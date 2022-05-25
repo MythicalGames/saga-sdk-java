@@ -83,7 +83,6 @@ class SagaItemClientTest extends AbstractClientTest {
         assertTrue(itemResponse.isPresent());
         var item = itemResponse.get();
         assertEquals(GAME_INVENTORY_ID, item.getGameInventoryId());
-        assertEquals(expectedResponse.getOauthId(), item.getOauthId());
 
         when(mockServiceBlockingStub.getItem(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
         itemResponse = itemClient.getItem("INVALID-ITEM-ID", false);
