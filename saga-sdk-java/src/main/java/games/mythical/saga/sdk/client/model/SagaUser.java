@@ -21,13 +21,13 @@ public class SagaUser {
     private String chainAddress;
     private UserState userState;
     @DtoExclude
-    private Instant createdTimestamp;
+    private Instant createdAt;
 
     public static SagaUser fromProto(UserProto proto) {
         var user = ProtoUtil.toDto(proto, SagaUser.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
-        user.setCreatedTimestamp(createdTimestamp);
+        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        user.setCreatedAt(createdAt);
 
         return user;
     }

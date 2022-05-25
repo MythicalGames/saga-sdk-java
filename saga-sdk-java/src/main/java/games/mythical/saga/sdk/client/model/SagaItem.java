@@ -26,9 +26,9 @@ public class SagaItem {
     private SagaMetadata metadata;
     private ItemState itemState;
     @DtoExclude
-    private Instant createdTimestamp;
+    private Instant createdAt;
     @DtoExclude
-    private Instant updatedTimestamp;
+    private Instant updatedAt;
 
     public static SagaItem fromProto(ItemProto proto) {
         var user = ProtoUtil.toDto(proto, SagaItem.class);
@@ -37,11 +37,11 @@ public class SagaItem {
             user.setMetadata(SagaMetadata.fromProto(proto.getMetadata()));
         }
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
-        user.setCreatedTimestamp(createdTimestamp);
+        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        user.setCreatedAt(createdAt);
 
-        var updatedTimestamp = Instant.ofEpochMilli(proto.getUpdatedAt());
-        user.setUpdatedTimestamp(updatedTimestamp);
+        var updatedAt = Instant.ofEpochMilli(proto.getUpdatedAt());
+        user.setUpdatedAt(updatedAt);
 
         return user;
     }

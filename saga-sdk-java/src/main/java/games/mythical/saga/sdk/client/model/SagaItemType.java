@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,30 +21,28 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SagaItemType {
+    private String id;
     private String traceId;
     private String gameItemTypeId;
+    private String gameTitleId;
+    private String publisherAddress;
+    private BigDecimal basePrice;
     private String name;
-    private String address;
-    private String titleId;
-    // TODO: reminder these are proto objects
-    private PriRevShareSettings priRevShareSettings;
-    private SecRevShareSettings secRevShareSettings;
-    private boolean withdrawable;
-    private ItemTypeState itemTypeState;
-    @DtoExclude
-    private Instant createdTimestamp;
-    @DtoExclude
-    private Instant updatedTimestamp;
     private String symbol;
+    private Long maxSupply;
+    private String contractAddress;
+    private Boolean finalized;
+    private Instant createdAt;
+    private Instant updatedAt;
 
     public static SagaItemType fromProto(ItemTypeProto proto) {
         var user = ProtoUtil.toDto(proto, SagaItemType.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
-        user.setCreatedTimestamp(createdTimestamp);
+        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        user.setCreatedAt(createdAt);
 
-        var updatedTimestamp = Instant.ofEpochMilli(proto.getUpdatedAt());
-        user.setUpdatedTimestamp(updatedTimestamp);
+        var updatedAt = Instant.ofEpochMilli(proto.getUpdatedAt());
+        user.setUpdatedAt(updatedAt);
 
         return user;
     }

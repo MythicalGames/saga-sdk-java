@@ -21,13 +21,13 @@ public class SagaOffer {
     private String currency;
     private String total;
     @DtoExclude
-    private Instant createdTimestamp;
+    private Instant createdAt;
 
     public static SagaOffer fromProto(OfferProto proto) {
         var offer = ProtoUtil.toDto(proto, SagaOffer.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
-        offer.setCreatedTimestamp(createdTimestamp);
+        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        offer.setCreatedAt(createdAt);
 
         return offer;
     }
