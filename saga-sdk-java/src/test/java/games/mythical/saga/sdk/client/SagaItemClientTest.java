@@ -5,6 +5,7 @@ import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.proto.api.item.ItemProto;
 import games.mythical.saga.sdk.proto.api.item.ItemServiceGrpc;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
+import games.mythical.saga.sdk.proto.common.item.BlockChains;
 import games.mythical.saga.sdk.proto.common.item.ItemState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemStatusUpdate;
@@ -185,6 +186,44 @@ class SagaItemClientTest extends AbstractClientTest {
 
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertEquals(ItemState.BURNED, executor.getItemState());
+        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        itemServer.verifyCalls("StatusStream", 1);
+        itemServer.verifyCalls("StatusConfirmation", 1);
+    }
+
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.MINUTES)
+    public void depositItem() throws Exception {
+        final var expectedResponse = ReceivedResponse.newBuilder()
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .build();
+        when(mockServiceBlockingStub.depositItem(any())).thenReturn(expectedResponse);
+        final var traceId = itemClient.depositItem(
+                GAME_INVENTORY_ID,
+                RandomStringUtils.random(30),
+                RandomStringUtils.randomAlphanumeric(30),
+                RandomStringUtils.randomAlphanumeric(30),
+                BlockChains.ETH,
+                RandomStringUtils.randomAlphanumeric(30)
+        );
+
+        checkTraceAndStart(expectedResponse, traceId);
+
+
+        final var update = ItemStatusUpdate.newBuilder()
+                .setGameInventoryId(GAME_INVENTORY_ID)
+                .setOauthId(RandomStringUtils.randomAlphanumeric(30))
+                .setItemState(ItemState.DEPOSITED);
+        itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
+                .setTraceId(traceId)
+                .setItemUpdate(ItemUpdate.newBuilder().setStatusUpdate(update))
+                .build());
+
+        ConcurrentFinisher.wait(traceId);
+
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertEquals(ItemState.DEPOSITED, executor.getItemState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         itemServer.verifyCalls("StatusStream", 1);

@@ -313,6 +313,10 @@
                 </li>
               
                 <li>
+                  <a href="#saga.api.item.DepositItemRequest"><span class="badge">M</span>DepositItemRequest</a>
+                </li>
+              
+                <li>
                   <a href="#saga.api.item.GetItemRequest"><span class="badge">M</span>GetItemRequest</a>
                 </li>
               
@@ -731,6 +735,36 @@
         
           
           <li>
+            <a href="#api%2fplayerwallet%2fdefinition.proto">api/playerwallet/definition.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#saga.api.playerwallet.CreatePlayerWalletRequest"><span class="badge">M</span>CreatePlayerWalletRequest</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#api%2fplayerwallet%2frpc.proto">api/playerwallet/rpc.proto</a>
+            <ul>
+              
+              
+              
+              
+                <li>
+                  <a href="#saga.api.playerwallet.PlayerWalletService"><span class="badge">S</span>PlayerWalletService</a>
+                </li>
+              
+            </ul>
+          </li>
+        
+          
+          <li>
             <a href="#api%2ftitle%2fdefinition.proto">api/title/definition.proto</a>
             <ul>
               
@@ -939,6 +973,10 @@
               
               
                 <li>
+                  <a href="#saga.proto.common.item.BlockChains"><span class="badge">E</span>BlockChains</a>
+                </li>
+              
+                <li>
                   <a href="#saga.proto.common.item.ItemState"><span class="badge">E</span>ItemState</a>
                 </li>
               
@@ -1034,6 +1072,21 @@
               
                 <li>
                   <a href="#saga.proto.common.payment.PaymentProviderId"><span class="badge">E</span>PaymentProviderId</a>
+                </li>
+              
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#common%2fplayerwallet%2fdefinition.proto">common/playerwallet/definition.proto</a>
+            <ul>
+              
+              
+                <li>
+                  <a href="#saga.proto.common.playerwallet.PlayerWalletState"><span class="badge">E</span>PlayerWalletState</a>
                 </li>
               
               
@@ -1284,6 +1337,25 @@
               
                 <li>
                   <a href="#saga.rpc.streams.payment.PaymentUpdate"><span class="badge">M</span>PaymentUpdate</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#streams%2fplayerwallet%2fdefinition.proto">streams/playerwallet/definition.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#saga.rpc.streams.playerwallet.PlayerWalletStatusUpdate"><span class="badge">M</span>PlayerWalletStatusUpdate</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.rpc.streams.playerwallet.PlayerWalletUpdate"><span class="badge">M</span>PlayerWalletUpdate</a>
                 </li>
               
               
@@ -2135,6 +2207,65 @@
 
         
       
+        <h3 id="saga.api.item.DepositItemRequest">DepositItemRequest</h3>
+        <p>Deposit item call</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>game_item_inventory_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>created_by</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>from_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>to_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>from_chain</td>
+                  <td><a href="#saga.proto.common.item.BlockChains">saga.proto.common.item.BlockChains</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>transaction_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="saga.api.item.GetItemRequest">GetItemRequest</h3>
         <p>Get Item call</p>
 
@@ -2580,6 +2711,13 @@
                 <td><a href="#saga.api.item.UpdateItemsMetadataRequest">UpdateItemsMetadataRequest</a></td>
                 <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Update the Metadata for an Item</p></td>
+              </tr>
+            
+              <tr>
+                <td>DepositItem</td>
+                <td><a href="#saga.api.item.DepositItemRequest">DepositItemRequest</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
+                <td><p>Deposit an Item</p></td>
               </tr>
             
           </tbody>
@@ -5252,6 +5390,77 @@
     
       
       <div class="file-heading">
+        <h2 id="api/playerwallet/definition.proto">api/playerwallet/definition.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="saga.api.playerwallet.CreatePlayerWalletRequest">CreatePlayerWalletRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>oauth_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+
+      
+
+      
+    
+      
+      <div class="file-heading">
+        <h2 id="api/playerwallet/rpc.proto">api/playerwallet/rpc.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+
+      
+
+      
+
+      
+        <h3 id="saga.api.playerwallet.PlayerWalletService">PlayerWalletService</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>CreatePlayerWallet</td>
+                <td><a href="#saga.api.playerwallet.CreatePlayerWalletRequest">CreatePlayerWalletRequest</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
+                <td><p>Create a Player Wallet</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+
+        
+    
+      
+      <div class="file-heading">
         <h2 id="api/title/definition.proto">api/title/definition.proto</h2><a href="#title">Top</a>
       </div>
       <p></p>
@@ -6284,6 +6493,23 @@
       
 
       
+        <h3 id="saga.proto.common.item.BlockChains">BlockChains</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>ETH</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
         <h3 id="saga.proto.common.item.ItemState">ItemState</h3>
         <p></p>
         <table class="enum-table">
@@ -6666,6 +6892,43 @@
               <tr>
                 <td>MYTHICAL</td>
                 <td>2</td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+
+      
+
+      
+    
+      
+      <div class="file-heading">
+        <h2 id="common/playerwallet/definition.proto">common/playerwallet/definition.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+
+      
+        <h3 id="saga.proto.common.playerwallet.PlayerWalletState">PlayerWalletState</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>FAILED</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>CREATED</td>
+                <td>1</td>
                 <td><p></p></td>
               </tr>
             
@@ -7898,6 +8161,89 @@
     
       
       <div class="file-heading">
+        <h2 id="streams/playerwallet/definition.proto">streams/playerwallet/definition.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="saga.rpc.streams.playerwallet.PlayerWalletStatusUpdate">PlayerWalletStatusUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>oauth_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Wallet owner OAuth ID </p></td>
+                </tr>
+              
+                <tr>
+                  <td>address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Wallet address </p></td>
+                </tr>
+              
+                <tr>
+                  <td>state</td>
+                  <td><a href="#saga.proto.common.playerwallet.PlayerWalletState">saga.proto.common.playerwallet.PlayerWalletState</a></td>
+                  <td></td>
+                  <td><p>Wallet state </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.rpc.streams.playerwallet.PlayerWalletUpdate">PlayerWalletUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status_update</td>
+                  <td><a href="#saga.rpc.streams.playerwallet.PlayerWalletStatusUpdate">PlayerWalletStatusUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+
+      
+
+      
+    
+      
+      <div class="file-heading">
         <h2 id="streams/stream.proto">streams/stream.proto</h2><a href="#title">Top</a>
       </div>
       <p></p>
@@ -8010,6 +8356,13 @@
                 <tr>
                   <td>user_update</td>
                   <td><a href="#saga.rpc.streams.user.UserUpdate">user.UserUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>player_wallet_update</td>
+                  <td><a href="#saga.rpc.streams.playerwallet.PlayerWalletUpdate">playerwallet.PlayerWalletUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
