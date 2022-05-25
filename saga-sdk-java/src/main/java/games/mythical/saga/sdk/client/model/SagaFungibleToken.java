@@ -15,8 +15,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class SagaFungibleToken {
     private String name;
-    private String gameId;
-    private BigDecimal quantity;
+    private String titleId;
+    private BigDecimal balance;
     private String contractAddress;
 
     public static SagaFungibleToken fromProto(FungibleToken proto) {

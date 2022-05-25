@@ -67,7 +67,6 @@ public class SagaUserClient extends AbstractSagaStreamClient {
 
     public String createUser(String oauthId) throws SagaException {
         var request = CreateUserRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setOauthId(oauthId)
                 .build();
 
@@ -85,7 +84,6 @@ public class SagaUserClient extends AbstractSagaStreamClient {
 
     public String updateUser(String oauthId) throws SagaException {
         var request = UpdateUserRequest.newBuilder()
-                .setTitleId(config.getTitleId())
                 .setOauthId(oauthId)
                 .build();
 

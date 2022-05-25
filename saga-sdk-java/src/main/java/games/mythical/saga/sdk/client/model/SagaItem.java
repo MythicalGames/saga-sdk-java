@@ -37,10 +37,10 @@ public class SagaItem {
             user.setMetadata(SagaMetadata.fromProto(proto.getMetadata()));
         }
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedTimestamp());
+        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
         user.setCreatedTimestamp(createdTimestamp);
 
-        var updatedTimestamp = Instant.ofEpochMilli(proto.getUpdatedTimestamp());
+        var updatedTimestamp = Instant.ofEpochMilli(proto.getUpdatedAt());
         user.setUpdatedTimestamp(updatedTimestamp);
 
         return user;

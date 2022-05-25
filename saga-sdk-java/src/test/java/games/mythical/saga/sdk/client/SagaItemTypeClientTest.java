@@ -76,8 +76,8 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 .setSecRevShareSettings(SecRevShareSettings.newBuilder().build())
                 .setWithdrawable(true)
                 .setItemTypeState(ItemTypeState.forNumber(RandomUtils.nextInt(0, ItemTypeState.values().length - 1)))
-                .setCreatedTimestamp(Instant.now().toEpochMilli() - 86400)
-                .setUpdatedTimestamp(Instant.now().toEpochMilli())
+                .setCreatedAt(Instant.now().toEpochMilli() - 86400)
+                .setUpdatedAt(Instant.now().toEpochMilli())
                 .build();
     }
 

@@ -55,7 +55,7 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
                 .setPaymentProviderData(paymentProviderData)
                 .setDenominationCurrency(denominationCurrency)
                 .setOriginSubAccount(originSubAccount)
-                .setUserId(userId)
+                .setOauthId(userId)
                 .build();
         var mythToken = serviceBlockingStub.quoteBuyingMythToken(request);
         return Optional.of(SagaMythToken.builder()
@@ -69,7 +69,7 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
                                          PaymentProviderData paymentProviderData) throws SagaException {
         var request = ConfirmBuyingMythTokenRequest.newBuilder()
                 .setQuoteId(quoteId)
-                .setUserId(userId)
+                .setOauthId(userId)
                 .setPaymentProviderData(paymentProviderData)
                 .build();
 
@@ -88,7 +88,7 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
     public Optional<SagaMythToken> quoteMythTokenWithdrawal(String userId,
                                                             BigDecimal quantity) {
         var request = QuoteMythTokenWithdrawalRequest.newBuilder()
-                .setUserId(userId)
+                .setOauthId(userId)
                 .setQuantity(quantity.toString())
                 .build();
         var mythToken = serviceBlockingStub.quoteMythTokenWithdrawal(request);

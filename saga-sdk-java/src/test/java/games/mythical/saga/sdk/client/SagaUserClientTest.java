@@ -101,7 +101,7 @@ class SagaUserClientTest extends AbstractClientTest {
                 .addSagaUsers(UserProto.newBuilder()
                         .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                         .setOauthId(OAUTH_ID)
-                        .setCreatedTimestamp(0)
+                        .setCreatedAt(0)
                         .build())
                 .build();
         when(mockServiceBlockingStub.getUsers(any())).thenReturn(expectedResponse);

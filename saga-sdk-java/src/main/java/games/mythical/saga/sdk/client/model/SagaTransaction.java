@@ -23,7 +23,7 @@ public class SagaTransaction {
     public static SagaTransaction fromProto(TransactionProto proto) {
         var transaction = ProtoUtil.toDto(proto, SagaTransaction.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedTimestamp());
+        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
         transaction.setCreatedTimestamp(createdTimestamp);
 
         return transaction;

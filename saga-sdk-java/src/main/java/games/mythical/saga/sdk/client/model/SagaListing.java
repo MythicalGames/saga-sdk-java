@@ -26,7 +26,7 @@ public class SagaListing {
     public static SagaListing fromProto(ListingProto proto) {
         var listing = ProtoUtil.toDto(proto, SagaListing.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedTimestamp());
+        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
         listing.setCreatedTimestamp(createdTimestamp);
 
 
