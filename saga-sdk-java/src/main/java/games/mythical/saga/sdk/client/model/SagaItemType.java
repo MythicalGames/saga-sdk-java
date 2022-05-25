@@ -31,8 +31,10 @@ public class SagaItemType {
     private String symbol;
     private Long maxSupply;
     private String contractAddress;
-    private Boolean finalized;
+    private boolean finalized;
+    @DtoExclude
     private Instant createdAt;
+    @DtoExclude
     private Instant updatedAt;
 
     public static SagaItemType fromProto(ItemTypeProto proto) {
