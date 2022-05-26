@@ -178,14 +178,14 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String depositItem(String gameItemInventoryId,
+    public String depositItem(String gameInventoryId,
                             String createdBy,
                             String fromAddress,
                             String toAddress,
                             BlockChains fromChain,
                             String transactionId) throws SagaException {
         var request = DepositItemRequest.newBuilder()
-                .setGameItemInventoryId(gameItemInventoryId)
+                .setGameInventoryId(gameInventoryId)
                 .setCreatedBy(createdBy)
                 .setFromAddress(fromAddress)
                 .setToAddress(toAddress)
