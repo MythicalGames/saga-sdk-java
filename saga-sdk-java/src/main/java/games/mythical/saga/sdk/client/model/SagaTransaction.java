@@ -18,13 +18,13 @@ public class SagaTransaction {
     private String transactionId;
     private String titleId;
     @DtoExclude
-    private Instant createdTimestamp;
+    private Instant createdAt;
 
     public static SagaTransaction fromProto(TransactionProto proto) {
         var transaction = ProtoUtil.toDto(proto, SagaTransaction.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
-        transaction.setCreatedTimestamp(createdTimestamp);
+        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        transaction.setCreatedAt(createdAt);
 
         return transaction;
     }

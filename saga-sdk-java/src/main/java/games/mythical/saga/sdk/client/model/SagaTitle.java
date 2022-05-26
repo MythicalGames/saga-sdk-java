@@ -18,13 +18,13 @@ public class SagaTitle {
     private String titleId;
     private String name;
     @DtoExclude
-    private Instant createdTimestamp;
+    private Instant createdAt;
 
     public static SagaTitle fromProto(TitleProto proto) {
         var title = ProtoUtil.toDto(proto, SagaTitle.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
-        title.setCreatedTimestamp(createdTimestamp);
+        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        title.setCreatedAt(createdAt);
 
         return title;
     }

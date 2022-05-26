@@ -16,32 +16,26 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SagaItem {
+    private String id;
     private String traceId;
     private String gameInventoryId;
-    private String gameItemTypeId;
-    private String oauthId;
-    private int serialNumber;
-    private String metadataUri;
+    private String gameTitleId;
+    private String orderId;
+    private String serialNumber;
+    private boolean finalized;
     @DtoExclude
-    private SagaMetadata metadata;
-    private ItemState itemState;
+    private Instant createdAt;
     @DtoExclude
-    private Instant createdTimestamp;
-    @DtoExclude
-    private Instant updatedTimestamp;
+    private Instant updatedAt;
 
     public static SagaItem fromProto(ItemProto proto) {
         var user = ProtoUtil.toDto(proto, SagaItem.class);
 
-        if (proto.hasMetadata()) {
-            user.setMetadata(SagaMetadata.fromProto(proto.getMetadata()));
-        }
+        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        user.setCreatedAt(createdAt);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
-        user.setCreatedTimestamp(createdTimestamp);
-
-        var updatedTimestamp = Instant.ofEpochMilli(proto.getUpdatedAt());
-        user.setUpdatedTimestamp(updatedTimestamp);
+        var updatedAt = Instant.ofEpochMilli(proto.getUpdatedAt());
+        user.setUpdatedAt(updatedAt);
 
         return user;
     }
