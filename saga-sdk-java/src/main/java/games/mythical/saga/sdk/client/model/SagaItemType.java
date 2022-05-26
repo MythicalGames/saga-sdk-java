@@ -33,6 +33,7 @@ public class SagaItemType {
     private Instant createdAt;
     @DtoExclude
     private Instant updatedAt;
+    private boolean withdrawable;
 
     public static SagaItemType fromProto(ItemTypeProto proto) {
         var user = ProtoUtil.toDto(proto, SagaItemType.class);

@@ -79,6 +79,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 .setMaxSupply(1000l)
                 .setContractAddress("contract_address")
                 .setFinalized(true)
+                .setWithdrawable(false)
                 .build();
     }
 
