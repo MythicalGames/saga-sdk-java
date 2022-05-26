@@ -758,16 +758,16 @@ Issue item call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  |  |
 | trace_id | [string](#string) |  |  |
 | game_inventory_id | [string](#string) |  | The game&#39;s unique id for this Item |
-| game_item_type_id | [string](#string) |  | The game&#39;s ItemType id associated to this Item |
-| oauth_id | [string](#string) |  | User for this Item |
+| game_title_id | [string](#string) |  |  |
+| order_id | [string](#string) |  |  |
 | serial_number | [int32](#int32) |  |  |
-| metadata_uri | [string](#string) |  | Metadata accessible address |
-| metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata for this Item |
-| item_state | [saga.proto.common.item.ItemState](#saga-proto-common-item-ItemState) |  | State that the Item is in. See ItemState for more information |
+| finalized | [bool](#bool) |  |  |
 | created_at | [int64](#int64) |  | When was this Item created |
 | updated_at | [int64](#int64) |  | When was this Item last updated |
+| owner_address | [string](#string) |  |  |
 
 
 
@@ -944,17 +944,20 @@ Get ItemTypes call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  |  |
 | trace_id | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  | The game&#39;s unique id for this ItemType |
-| name | [string](#string) |  | Name of this ItemType |
-| title_id | [string](#string) |  | Title this ItemType is associated with |
-| pri_rev_share_settings | [PriRevShareSettings](#saga-api-itemtype-PriRevShareSettings) |  |  |
-| sec_rev_share_settings | [SecRevShareSettings](#saga-api-itemtype-SecRevShareSettings) |  |  |
-| withdrawable | [bool](#bool) |  | Is this item withdrawable? |
-| item_type_state | [saga.proto.common.itemtype.ItemTypeState](#saga-proto-common-itemtype-ItemTypeState) |  |  |
-| created_at | [int64](#int64) |  | When this ItemType was created |
-| updated_at | [int64](#int64) |  | When this ItemType was last updated |
+| game_item_type_id | [string](#string) |  |  |
+| game_title_id | [string](#string) |  |  |
+| publisher_address | [string](#string) |  |  |
+| base_price | [string](#string) |  |  |
+| name | [string](#string) |  |  |
 | symbol | [string](#string) |  |  |
+| max_supply | [int64](#int64) |  |  |
+| contract_address | [string](#string) |  |  |
+| finalized | [bool](#bool) |  |  |
+| created_at | [int64](#int64) |  |  |
+| updated_at | [int64](#int64) |  |  |
+| withdrawable | [bool](#bool) |  |  |
 
 
 

@@ -2436,6 +2436,13 @@
             <tbody>
               
                 <tr>
+                  <td>id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
                   <td>trace_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
@@ -2450,17 +2457,17 @@
                 </tr>
               
                 <tr>
-                  <td>game_item_type_id</td>
+                  <td>game_title_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>The game&#39;s ItemType id associated to this Item </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>oauth_id</td>
+                  <td>order_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>User for this Item </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
@@ -2471,24 +2478,10 @@
                 </tr>
               
                 <tr>
-                  <td>metadata_uri</td>
-                  <td><a href="#string">string</a></td>
+                  <td>finalized</td>
+                  <td><a href="#bool">bool</a></td>
                   <td></td>
-                  <td><p>Metadata accessible address </p></td>
-                </tr>
-              
-                <tr>
-                  <td>metadata</td>
-                  <td><a href="#saga.common.Metadata">saga.common.Metadata</a></td>
-                  <td></td>
-                  <td><p>Metadata for this Item </p></td>
-                </tr>
-              
-                <tr>
-                  <td>item_state</td>
-                  <td><a href="#saga.proto.common.item.ItemState">saga.proto.common.item.ItemState</a></td>
-                  <td></td>
-                  <td><p>State that the Item is in. See ItemState for more information </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
@@ -2503,6 +2496,13 @@
                   <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p>When was this Item last updated </p></td>
+                </tr>
+              
+                <tr>
+                  <td>owner_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -2843,6 +2843,13 @@
             <tbody>
               
                 <tr>
+                  <td>id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
                   <td>trace_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
@@ -2853,47 +2860,61 @@
                   <td>game_item_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>The game&#39;s unique id for this ItemType </p></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>game_title_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>publisher_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>base_price</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
                   <td>name</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Name of this ItemType </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>title_id</td>
+                  <td>symbol</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Title this ItemType is associated with </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>pri_rev_share_settings</td>
-                  <td><a href="#saga.api.itemtype.PriRevShareSettings">PriRevShareSettings</a></td>
+                  <td>max_supply</td>
+                  <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>sec_rev_share_settings</td>
-                  <td><a href="#saga.api.itemtype.SecRevShareSettings">SecRevShareSettings</a></td>
+                  <td>contract_address</td>
+                  <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>withdrawable</td>
+                  <td>finalized</td>
                   <td><a href="#bool">bool</a></td>
-                  <td></td>
-                  <td><p>Is this item withdrawable? </p></td>
-                </tr>
-              
-                <tr>
-                  <td>item_type_state</td>
-                  <td><a href="#saga.proto.common.itemtype.ItemTypeState">saga.proto.common.itemtype.ItemTypeState</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -2902,19 +2923,19 @@
                   <td>created_at</td>
                   <td><a href="#int64">int64</a></td>
                   <td></td>
-                  <td><p>When this ItemType was created </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
                   <td>updated_at</td>
                   <td><a href="#int64">int64</a></td>
                   <td></td>
-                  <td><p>When this ItemType was last updated </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>symbol</td>
-                  <td><a href="#string">string</a></td>
+                  <td>withdrawable</td>
+                  <td><a href="#bool">bool</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
