@@ -5,7 +5,6 @@ import games.mythical.saga.sdk.client.model.SagaPaymentMethod;
 import games.mythical.saga.sdk.exception.ErrorData;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.proto.common.ErrorResponse;
 import games.mythical.saga.sdk.proto.streams.StatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
@@ -359,10 +358,10 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         streamBlockingStub.statusConfirmation(request);
     }
 
-    private ErrorData toErrData(ErrorResponse error, String traceId) {
+    private ErrorData toErrData(games.mythical.saga.sdk.proto.common.ErrorData error, String traceId) {
         return ErrorData.builder()
-            .code(error.getErrorCode().toString())
-            .message(error.getMsg())
+            .code(error.getErrorCode())
+            .message(error.getMessage())
             .trace(traceId)
             .build();
     }
