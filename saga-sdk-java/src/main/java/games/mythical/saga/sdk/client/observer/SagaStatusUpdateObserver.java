@@ -1,11 +1,13 @@
 package games.mythical.saga.sdk.client.observer;
 
+import com.google.protobuf.Struct;
+import games.mythical.proto_util.ProtoUtil;
 import games.mythical.saga.sdk.client.executor.*;
 import games.mythical.saga.sdk.client.model.SagaPaymentMethod;
 import games.mythical.saga.sdk.exception.ErrorData;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.proto.common.ErrorResponse;
+import games.mythical.saga.sdk.exception.SubError;
 import games.mythical.saga.sdk.proto.streams.StatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
@@ -20,10 +22,15 @@ import games.mythical.saga.sdk.proto.streams.order.OrderUpdate;
 import games.mythical.saga.sdk.proto.streams.payment.PaymentUpdate;
 import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
 import games.mythical.saga.sdk.proto.streams.user.UserUpdate;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.util.function.Consumer;
+import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
 public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdate> {
@@ -185,7 +192,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private void handleBridgeUpdate(BridgeUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
             final var error = update.getError();
-            sagaBridgeExecutor.onError(toErrData(error, traceId));
+            sagaBridgeExecutor.onError(toErrData(error));
         } else {
             final var message = update.getStatusUpdate();
             sagaBridgeExecutor.updateItem(
@@ -205,7 +212,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private void handleCurrencyUpdate(CurrencyUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
             final var error = update.getError();
-            sagaCurrencyExecutor.onError(toErrData(error, traceId));
+            sagaCurrencyExecutor.onError(toErrData(error));
         } else {
             final var message = update.getStatusUpdate();
             sagaCurrencyExecutor.updateCurrency(
@@ -221,7 +228,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private void handleItemUpdate(ItemUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
             final var error = update.getError();
-            sagaItemExecutor.onError(toErrData(error, traceId));
+            sagaItemExecutor.onError(toErrData(error));
         } else {
             final var message = update.getStatusUpdate();
             sagaItemExecutor.updateItem(
@@ -239,7 +246,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private void handleItemTypeUpdate(ItemTypeUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
             final var error = update.getError();
-            sagaItemTypeExecutor.onError(toErrData(error, traceId));
+            sagaItemTypeExecutor.onError(toErrData(error));
         } else {
             final var message = update.getStatusUpdate();
             sagaItemTypeExecutor.updateItemType(
@@ -253,7 +260,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private void handleListingUpdate(ListingUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
             final var error = update.getError();
-            sagaListingExecutor.onError(toErrData(error, traceId));
+            sagaListingExecutor.onError(toErrData(error));
         } else {
             final var message = update.getStatusUpdate();
             sagaListingExecutor.updateListing(
@@ -270,7 +277,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private void handleMythTokenUpdate(MythTokenUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
             final var error = update.getError();
-            sagaMythTokenExecutor.onError(toErrData(error, traceId));
+            sagaMythTokenExecutor.onError(toErrData(error));
         } else {
             final var message = update.getStatusUpdate();
             sagaMythTokenExecutor.updateMythToken(
@@ -283,7 +290,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private void handleOfferUpdate(OfferUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
             final var error = update.getError();
-            sagaOfferExecutor.onError(toErrData(error, traceId));
+            sagaOfferExecutor.onError(toErrData(error));
         } else {
             final var message = update.getStatusUpdate();
             sagaOfferExecutor.updateOffer(
@@ -300,7 +307,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private void handleOrderUpdate(OrderUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
             final var error = update.getError();
-            sagaOrderExecutor.onError(toErrData(error, traceId));
+            sagaOrderExecutor.onError(toErrData(error));
         } else {
             final var message = update.getStatusUpdate();
             sagaOrderExecutor.updateOrder(
@@ -317,7 +324,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private void handlePaymentUpdate(PaymentUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
             final var error = update.getError();
-            sagaPaymentExecutor.onError(toErrData(error, traceId));
+            sagaPaymentExecutor.onError(toErrData(error));
         } else {
             final var message = update.getStatusUpdate();
             sagaPaymentExecutor.updatePaymentMethod(
@@ -330,7 +337,8 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
 
     private void handlePlayerWalletUpdate(PlayerWalletUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
-            sagaPlayerWalletExecutor.onError(toErrData(update.getError(), traceId));
+            final var error = update.getError();
+            sagaPlayerWalletExecutor.onError(toErrData(error));
         } else {
             final var statusUpdate = update.getStatusUpdate();
             sagaPlayerWalletExecutor.updatePlayerWallet(
@@ -345,7 +353,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private void handleUserUpdate(UserUpdate update, String traceId) throws Exception {
         if (update.hasError()) {
             final var error = update.getError();
-            sagaUserExecutor.onError(toErrData(error, traceId));
+            sagaUserExecutor.onError(toErrData(error));
         } else {
             sagaUserExecutor.updateUser(update.getStatusUpdate().getOauthId(), traceId);
         }
@@ -359,11 +367,33 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         streamBlockingStub.statusConfirmation(request);
     }
 
-    private ErrorData toErrData(ErrorResponse error, String traceId) {
+    private Map<String, String> toMetadata(Struct protoMetadata) {
+        final var metadataMap = new HashMap<String, String>();
+        protoMetadata.getFieldsMap()
+            .forEach((key, value) -> metadataMap.put(key, value.toString()));
+        return metadataMap;
+    }
+    private SubError toSubError(games.mythical.saga.sdk.proto.common.SubError error) {
+        return SubError.builder()
+            .code(error.getErrorCode())
+            .message(error.getMessage())
+            .source(error.getSource())
+            .metadata(toMetadata(error.getMetadata()))
+            .build();
+    }
+
+    private ErrorData toErrData(games.mythical.saga.sdk.proto.common.ErrorData error) {
+        final var subErrors = error.getSuberrorsList().stream()
+            .map(this::toSubError)
+            .collect(Collectors.toList());
+
         return ErrorData.builder()
-            .code(error.getErrorCode().toString())
-            .message(error.getMsg())
-            .trace(traceId)
+            .code(error.getErrorCode())
+            .trace(error.getTrace())
+            .source(error.getSource())
+            .message(error.getMessage())
+            .metadata(toMetadata(error.getMetadata()))
+            .suberrors(subErrors)
             .build();
     }
 }
