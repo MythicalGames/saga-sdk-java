@@ -915,7 +915,7 @@
             <ul>
               
                 <li>
-                  <a href="#saga.common.ErrorResponse"><span class="badge">M</span>ErrorResponse</a>
+                  <a href="#saga.common.ErrorData"><span class="badge">M</span>ErrorData</a>
                 </li>
               
                 <li>
@@ -926,10 +926,10 @@
                   <a href="#saga.common.ReceivedResponse"><span class="badge">M</span>ReceivedResponse</a>
                 </li>
               
-              
                 <li>
-                  <a href="#saga.common.ErrorCode"><span class="badge">E</span>ErrorCode</a>
+                  <a href="#saga.common.SubError"><span class="badge">M</span>SubError</a>
                 </li>
+              
               
               
               
@@ -2218,7 +2218,7 @@
             <tbody>
               
                 <tr>
-                  <td>game_item_inventory_id</td>
+                  <td>game_inventory_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -2436,6 +2436,13 @@
             <tbody>
               
                 <tr>
+                  <td>id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
                   <td>trace_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
@@ -2450,17 +2457,17 @@
                 </tr>
               
                 <tr>
-                  <td>game_item_type_id</td>
+                  <td>game_title_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>The game&#39;s ItemType id associated to this Item </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>oauth_id</td>
+                  <td>order_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>User for this Item </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
@@ -2471,24 +2478,10 @@
                 </tr>
               
                 <tr>
-                  <td>metadata_uri</td>
-                  <td><a href="#string">string</a></td>
+                  <td>finalized</td>
+                  <td><a href="#bool">bool</a></td>
                   <td></td>
-                  <td><p>Metadata accessible address </p></td>
-                </tr>
-              
-                <tr>
-                  <td>metadata</td>
-                  <td><a href="#saga.common.Metadata">saga.common.Metadata</a></td>
-                  <td></td>
-                  <td><p>Metadata for this Item </p></td>
-                </tr>
-              
-                <tr>
-                  <td>item_state</td>
-                  <td><a href="#saga.proto.common.item.ItemState">saga.proto.common.item.ItemState</a></td>
-                  <td></td>
-                  <td><p>State that the Item is in. See ItemState for more information </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
@@ -2503,6 +2496,13 @@
                   <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p>When was this Item last updated </p></td>
+                </tr>
+              
+                <tr>
+                  <td>owner_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -2843,6 +2843,13 @@
             <tbody>
               
                 <tr>
+                  <td>id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
                   <td>trace_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
@@ -2853,47 +2860,61 @@
                   <td>game_item_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>The game&#39;s unique id for this ItemType </p></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>game_title_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>publisher_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>base_price</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
                   <td>name</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Name of this ItemType </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>title_id</td>
+                  <td>symbol</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Title this ItemType is associated with </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>pri_rev_share_settings</td>
-                  <td><a href="#saga.api.itemtype.PriRevShareSettings">PriRevShareSettings</a></td>
+                  <td>max_supply</td>
+                  <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>sec_rev_share_settings</td>
-                  <td><a href="#saga.api.itemtype.SecRevShareSettings">SecRevShareSettings</a></td>
+                  <td>contract_address</td>
+                  <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>withdrawable</td>
+                  <td>finalized</td>
                   <td><a href="#bool">bool</a></td>
-                  <td></td>
-                  <td><p>Is this item withdrawable? </p></td>
-                </tr>
-              
-                <tr>
-                  <td>item_type_state</td>
-                  <td><a href="#saga.proto.common.itemtype.ItemTypeState">saga.proto.common.itemtype.ItemTypeState</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -2902,19 +2923,19 @@
                   <td>created_at</td>
                   <td><a href="#int64">int64</a></td>
                   <td></td>
-                  <td><p>When this ItemType was created </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
                   <td>updated_at</td>
                   <td><a href="#int64">int64</a></td>
                   <td></td>
-                  <td><p>When this ItemType was last updated </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>symbol</td>
-                  <td><a href="#string">string</a></td>
+                  <td>withdrawable</td>
+                  <td><a href="#bool">bool</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -6211,7 +6232,7 @@
       <p></p>
 
       
-        <h3 id="saga.common.ErrorResponse">ErrorResponse</h3>
+        <h3 id="saga.common.ErrorData">ErrorData</h3>
         <p></p>
 
         
@@ -6223,16 +6244,44 @@
               
                 <tr>
                   <td>error_code</td>
-                  <td><a href="#saga.common.ErrorCode">ErrorCode</a></td>
+                  <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>The type of error that has occurred </p></td>
+                  <td><p>The error code for this type of error </p></td>
                 </tr>
               
                 <tr>
-                  <td>msg</td>
+                  <td>message</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Description of error </p></td>
+                  <td><p>Description of the error </p></td>
+                </tr>
+              
+                <tr>
+                  <td>source</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Indicator of which service the error occurred in </p></td>
+                </tr>
+              
+                <tr>
+                  <td>trace</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Trace id for this operation, if any </p></td>
+                </tr>
+              
+                <tr>
+                  <td>metadata</td>
+                  <td><a href="#google.protobuf.Struct">google.protobuf.Struct</a></td>
+                  <td></td>
+                  <td><p>Error metadata </p></td>
+                </tr>
+              
+                <tr>
+                  <td>suberrors</td>
+                  <td><a href="#saga.common.SubError">SubError</a></td>
+                  <td>repeated</td>
+                  <td><p>Sub-errors assocated with this incident </p></td>
                 </tr>
               
             </tbody>
@@ -6311,60 +6360,52 @@
 
         
       
-
-      
-        <h3 id="saga.common.ErrorCode">ErrorCode</h3>
+        <h3 id="saga.common.SubError">SubError</h3>
         <p></p>
-        <table class="enum-table">
-          <thead>
-            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
-          </thead>
-          <tbody>
-            
-              <tr>
-                <td>UNKNOWN</td>
-                <td>0</td>
-                <td><p>Unknown Error</p></td>
-              </tr>
-            
-              <tr>
-                <td>INTERNAL</td>
-                <td>1</td>
-                <td><p>Internal System Error</p></td>
-              </tr>
-            
-              <tr>
-                <td>GENERAL</td>
-                <td>2</td>
-                <td><p>Generic Error Code</p></td>
-              </tr>
-            
-              <tr>
-                <td>TIMEOUT</td>
-                <td>3</td>
-                <td><p>Operation Timed Out</p></td>
-              </tr>
-            
-              <tr>
-                <td>ITEM_NOT_FOUND</td>
-                <td>4</td>
-                <td><p>The specified item could not be found</p></td>
-              </tr>
-            
-              <tr>
-                <td>ITEM_TYPE_NOT_FOUND</td>
-                <td>5</td>
-                <td><p>The specified itme type could not be found</p></td>
-              </tr>
-            
-              <tr>
-                <td>USER_NOT_FOUND</td>
-                <td>6</td>
-                <td><p>The specified user could not be found</p></td>
-              </tr>
-            
-          </tbody>
-        </table>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error_code</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>The error code for this type of error </p></td>
+                </tr>
+              
+                <tr>
+                  <td>message</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Description of the error </p></td>
+                </tr>
+              
+                <tr>
+                  <td>source</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Indicator of which service the error occurred in </p></td>
+                </tr>
+              
+                <tr>
+                  <td>metadata</td>
+                  <td><a href="#google.protobuf.Struct">google.protobuf.Struct</a></td>
+                  <td></td>
+                  <td><p>Error metadata </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
       
 
       
@@ -7316,7 +7357,7 @@
               
                 <tr>
                   <td>error</td>
-                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -7489,7 +7530,7 @@
               
                 <tr>
                   <td>error</td>
-                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -7593,7 +7634,7 @@
               
                 <tr>
                   <td>error</td>
-                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -7669,7 +7710,7 @@
               
                 <tr>
                   <td>error</td>
-                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -7766,7 +7807,7 @@
               
                 <tr>
                   <td>error</td>
-                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -7835,7 +7876,7 @@
               
                 <tr>
                   <td>error</td>
-                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -7939,7 +7980,7 @@
               
                 <tr>
                   <td>error</td>
-                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -8036,7 +8077,7 @@
               
                 <tr>
                   <td>error</td>
-                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -8112,7 +8153,7 @@
               
                 <tr>
                   <td>error</td>
-                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -8195,7 +8236,7 @@
               
                 <tr>
                   <td>error</td>
-                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -8443,7 +8484,7 @@
               
                 <tr>
                   <td>error</td>
-                  <td><a href="#saga.common.ErrorResponse">saga.common.ErrorResponse</a></td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>

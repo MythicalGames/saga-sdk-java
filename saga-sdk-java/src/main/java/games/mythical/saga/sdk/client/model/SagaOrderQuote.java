@@ -29,13 +29,13 @@ public class SagaOrderQuote {
     private String sellerAddress;
     private String conversionRate;
     @DtoExclude
-    private Instant createdTimestamp;
+    private Instant createdAt;
 
     public static SagaOrderQuote fromProto(QuoteProto proto) {
         var quote = ProtoUtil.toDto(proto, SagaOrderQuote.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
-        quote.setCreatedTimestamp(createdTimestamp);
+        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        quote.setCreatedAt(createdAt);
 
         return quote;
     }

@@ -66,14 +66,13 @@ class SagaItemClientTest extends AbstractClientTest {
     @Test
     public void getItem() throws Exception {
         var expectedResponse = ItemProto.newBuilder()
-                .setGameInventoryId(GAME_INVENTORY_ID)
-                .setGameItemTypeId(RandomStringUtils.randomAlphanumeric(30))
-                .setOauthId(RandomStringUtils.randomAlphanumeric(30))
-                .setSerialNumber(RandomUtils.nextInt(10, 100))
-                .setMetadataUri(RandomStringUtils.randomAlphanumeric(30))
+                .setId(RandomStringUtils.randomAlphanumeric(30))
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
-                .setMetadata(SagaMetadata.toProto(generateItemMetadata()))
-                .setItemState(ItemState.forNumber(RandomUtils.nextInt(0, ItemState.values().length - 1)))
+                .setGameInventoryId(GAME_INVENTORY_ID)
+                .setGameTitleId("game_title_id")
+                .setOrderId("order_id")
+                .setSerialNumber(RandomUtils.nextInt(10, 100))
+                .setFinalized(true)
                 .setCreatedAt(Instant.now().toEpochMilli() - 86400)
                 .setUpdatedAt(Instant.now().toEpochMilli())
                 .build();
@@ -83,7 +82,6 @@ class SagaItemClientTest extends AbstractClientTest {
         assertTrue(itemResponse.isPresent());
         var item = itemResponse.get();
         assertEquals(GAME_INVENTORY_ID, item.getGameInventoryId());
-        assertEquals(expectedResponse.getOauthId(), item.getOauthId());
 
         when(mockServiceBlockingStub.getItem(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
         itemResponse = itemClient.getItem("INVALID-ITEM-ID", false);

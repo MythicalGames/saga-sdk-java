@@ -3,14 +3,12 @@ package games.mythical.saga.sdk.client.model;
 import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
 import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeProto;
-import games.mythical.saga.sdk.proto.api.itemtype.PriRevShareSettings;
-import games.mythical.saga.sdk.proto.api.itemtype.SecRevShareSettings;
-import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,30 +18,31 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SagaItemType {
+    private String id;
     private String traceId;
     private String gameItemTypeId;
+    private String gameTitleId;
+    private String publisherAddress;
+    private BigDecimal basePrice;
     private String name;
-    private String address;
-    private String titleId;
-    // TODO: reminder these are proto objects
-    private PriRevShareSettings priRevShareSettings;
-    private SecRevShareSettings secRevShareSettings;
-    private boolean withdrawable;
-    private ItemTypeState itemTypeState;
-    @DtoExclude
-    private Instant createdTimestamp;
-    @DtoExclude
-    private Instant updatedTimestamp;
     private String symbol;
+    private long maxSupply;
+    private String contractAddress;
+    private boolean finalized;
+    @DtoExclude
+    private Instant createdAt;
+    @DtoExclude
+    private Instant updatedAt;
+    private boolean withdrawable;
 
     public static SagaItemType fromProto(ItemTypeProto proto) {
         var user = ProtoUtil.toDto(proto, SagaItemType.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
-        user.setCreatedTimestamp(createdTimestamp);
+        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        user.setCreatedAt(createdAt);
 
-        var updatedTimestamp = Instant.ofEpochMilli(proto.getUpdatedAt());
-        user.setUpdatedTimestamp(updatedTimestamp);
+        var updatedAt = Instant.ofEpochMilli(proto.getUpdatedAt());
+        user.setUpdatedAt(updatedAt);
 
         return user;
     }

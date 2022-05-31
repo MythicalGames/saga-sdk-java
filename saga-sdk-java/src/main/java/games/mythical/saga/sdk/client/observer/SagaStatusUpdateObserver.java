@@ -1,7 +1,6 @@
 package games.mythical.saga.sdk.client.observer;
 
 import com.google.protobuf.Struct;
-import games.mythical.proto_util.ProtoUtil;
 import games.mythical.saga.sdk.client.executor.*;
 import games.mythical.saga.sdk.client.model.SagaPaymentMethod;
 import games.mythical.saga.sdk.exception.ErrorData;
@@ -23,14 +22,12 @@ import games.mythical.saga.sdk.proto.streams.payment.PaymentUpdate;
 import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
 import games.mythical.saga.sdk.proto.streams.user.UserUpdate;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.util.function.Consumer;
-import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
 public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdate> {

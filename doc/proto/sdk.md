@@ -167,11 +167,10 @@
     - [UserService](#saga-api-user-UserService)
   
 - [common/common.proto](#common_common-proto)
-    - [ErrorResponse](#saga-common-ErrorResponse)
+    - [ErrorData](#saga-common-ErrorData)
     - [Metadata](#saga-common-Metadata)
     - [ReceivedResponse](#saga-common-ReceivedResponse)
-  
-    - [ErrorCode](#saga-common-ErrorCode)
+    - [SubError](#saga-common-SubError)
   
 - [common/currency/definition.proto](#common_currency_definition-proto)
     - [CurrencyState](#saga-proto-common-currency-CurrencyState)
@@ -670,7 +669,7 @@ Deposit item call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_item_inventory_id | [string](#string) |  |  |
+| game_inventory_id | [string](#string) |  |  |
 | created_by | [string](#string) |  |  |
 | from_address | [string](#string) |  |  |
 | to_address | [string](#string) |  |  |
@@ -759,16 +758,16 @@ Issue item call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  |  |
 | trace_id | [string](#string) |  |  |
 | game_inventory_id | [string](#string) |  | The game&#39;s unique id for this Item |
-| game_item_type_id | [string](#string) |  | The game&#39;s ItemType id associated to this Item |
-| oauth_id | [string](#string) |  | User for this Item |
+| game_title_id | [string](#string) |  |  |
+| order_id | [string](#string) |  |  |
 | serial_number | [int32](#int32) |  |  |
-| metadata_uri | [string](#string) |  | Metadata accessible address |
-| metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata for this Item |
-| item_state | [saga.proto.common.item.ItemState](#saga-proto-common-item-ItemState) |  | State that the Item is in. See ItemState for more information |
+| finalized | [bool](#bool) |  |  |
 | created_at | [int64](#int64) |  | When was this Item created |
 | updated_at | [int64](#int64) |  | When was this Item last updated |
+| owner_address | [string](#string) |  |  |
 
 
 
@@ -945,17 +944,20 @@ Get ItemTypes call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| id | [string](#string) |  |  |
 | trace_id | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  | The game&#39;s unique id for this ItemType |
-| name | [string](#string) |  | Name of this ItemType |
-| title_id | [string](#string) |  | Title this ItemType is associated with |
-| pri_rev_share_settings | [PriRevShareSettings](#saga-api-itemtype-PriRevShareSettings) |  |  |
-| sec_rev_share_settings | [SecRevShareSettings](#saga-api-itemtype-SecRevShareSettings) |  |  |
-| withdrawable | [bool](#bool) |  | Is this item withdrawable? |
-| item_type_state | [saga.proto.common.itemtype.ItemTypeState](#saga-proto-common-itemtype-ItemTypeState) |  |  |
-| created_at | [int64](#int64) |  | When this ItemType was created |
-| updated_at | [int64](#int64) |  | When this ItemType was last updated |
+| game_item_type_id | [string](#string) |  |  |
+| game_title_id | [string](#string) |  |  |
+| publisher_address | [string](#string) |  |  |
+| base_price | [string](#string) |  |  |
+| name | [string](#string) |  |  |
 | symbol | [string](#string) |  |  |
+| max_supply | [int64](#int64) |  |  |
+| contract_address | [string](#string) |  |  |
+| finalized | [bool](#bool) |  |  |
+| created_at | [int64](#int64) |  |  |
+| updated_at | [int64](#int64) |  |  |
+| withdrawable | [bool](#bool) |  |  |
 
 
 
@@ -2532,16 +2534,20 @@ Update User call
 
 
 
-<a name="saga-common-ErrorResponse"></a>
+<a name="saga-common-ErrorData"></a>
 
-### ErrorResponse
+### ErrorData
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| error_code | [ErrorCode](#saga-common-ErrorCode) |  | The type of error that has occurred |
-| msg | [string](#string) |  | Description of error |
+| error_code | [string](#string) |  | The error code for this type of error |
+| message | [string](#string) |  | Description of the error |
+| source | [string](#string) |  | Indicator of which service the error occurred in |
+| trace | [string](#string) |  | Trace id for this operation, if any |
+| metadata | [google.protobuf.Struct](#google-protobuf-Struct) |  | Error metadata |
+| suberrors | [SubError](#saga-common-SubError) | repeated | Sub-errors assocated with this incident |
 
 
 
@@ -2580,24 +2586,25 @@ Metadata properties of Item
 
 
 
+
+<a name="saga-common-SubError"></a>
+
+### SubError
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error_code | [string](#string) |  | The error code for this type of error |
+| message | [string](#string) |  | Description of the error |
+| source | [string](#string) |  | Indicator of which service the error occurred in |
+| metadata | [google.protobuf.Struct](#google-protobuf-Struct) |  | Error metadata |
+
+
+
+
+
  
-
-
-<a name="saga-common-ErrorCode"></a>
-
-### ErrorCode
-
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| UNKNOWN | 0 | Unknown Error |
-| INTERNAL | 1 | Internal System Error |
-| GENERAL | 2 | Generic Error Code |
-| TIMEOUT | 3 | Operation Timed Out |
-| ITEM_NOT_FOUND | 4 | The specified item could not be found |
-| ITEM_TYPE_NOT_FOUND | 5 | The specified itme type could not be found |
-| USER_NOT_FOUND | 6 | The specified user could not be found |
-
 
  
 
@@ -3126,7 +3133,7 @@ Results from a Bridge status update gRPC stream call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [BridgeStatusUpdate](#saga-rpc-streams-bridge-BridgeStatusUpdate) |  |  |
 
 
@@ -3225,7 +3232,7 @@ Results from a Currency status update gRPC stream call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [CurrencyStatusUpdate](#saga-rpc-streams-currency-CurrencyStatusUpdate) |  |  |
 
 
@@ -3277,7 +3284,7 @@ Results from an Item status update gRPC stream call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [ItemStatusUpdate](#saga-rpc-streams-item-ItemStatusUpdate) |  |  |
 
 
@@ -3325,7 +3332,7 @@ Results from a ItemType status update gRPC stream call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [ItemTypeStatusUpdate](#saga-rpc-streams-itemtype-ItemTypeStatusUpdate) |  |  |
 
 
@@ -3376,7 +3383,7 @@ Results from a Listing status update gRPC stream call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [ListingStatusUpdate](#saga-rpc-streams-listing-ListingStatusUpdate) |  |  |
 
 
@@ -3423,7 +3430,7 @@ Results from a MYTH Token status update gRPC stream call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [MythTokenStatusUpdate](#saga-rpc-streams-myth-MythTokenStatusUpdate) |  |  |
 
 
@@ -3475,7 +3482,7 @@ Results from a Offer status update gRPC stream call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [OfferStatusUpdate](#saga-rpc-streams-offer-OfferStatusUpdate) |  |  |
 
 
@@ -3526,7 +3533,7 @@ Results from an Order status update gRPC stream call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [OrderStatusUpdate](#saga-rpc-streams-order-OrderStatusUpdate) |  |  |
 
 
@@ -3574,7 +3581,7 @@ Result of payment method creation, update, or deletion
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [PaymentMethodStatusUpdate](#saga-rpc-streams-payment-PaymentMethodStatusUpdate) |  |  |
 
 
@@ -3623,7 +3630,7 @@ Result of payment method creation, update, or deletion
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [PlayerWalletStatusUpdate](#saga-rpc-streams-playerwallet-PlayerWalletStatusUpdate) |  |  |
 
 
@@ -3740,7 +3747,7 @@ Results from a User status update gRPC stream call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorResponse](#saga-common-ErrorResponse) |  |  |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [UserStatusUpdate](#saga-rpc-streams-user-UserStatusUpdate) |  |  |
 
 

@@ -25,13 +25,13 @@ public class SagaListingQuote {
     private BigDecimal total;
     private String currency;
     @DtoExclude
-    private Instant createdTimestamp;
+    private Instant createdAt;
 
     public static SagaListingQuote fromProto(ListingQuoteProto proto) {
         var quote = ProtoUtil.toDto(proto, SagaListingQuote.class);
 
-        var createdTimestamp = Instant.ofEpochMilli(proto.getCreatedAt());
-        quote.setCreatedTimestamp(createdTimestamp);
+        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        quote.setCreatedAt(createdAt);
 
         return quote;
     }
