@@ -47,7 +47,6 @@ public class SagaOfferClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.createOfferQuote(request);
-            executor.emitReceived(SagaOfferExecutor.UNKOWN_QUOTE, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
@@ -64,7 +63,6 @@ public class SagaOfferClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.confirmOffer(request);
-            executor.emitReceived(quoteId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
@@ -81,7 +79,6 @@ public class SagaOfferClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.cancelOffer(request);
-            executor.emitReceived(quoteId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);

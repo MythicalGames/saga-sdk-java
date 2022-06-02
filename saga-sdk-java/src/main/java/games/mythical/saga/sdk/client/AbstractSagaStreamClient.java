@@ -13,11 +13,11 @@ public abstract class AbstractSagaStreamClient extends AbstractSagaClient {
     }
 
     protected void initStreamStub() {
-        var streamBlockingStub = StatusStreamGrpc.newBlockingStub(channel)
+        var streamStub = StatusStreamGrpc.newStub(channel)
                 .withCallCredentials(addAuthentication());
 
         if (SagaStatusUpdateObserver.getInstance() == null) {
-            subscribeToStream(SagaStatusUpdateObserver.initialize(streamBlockingStub, this::subscribeToStream));
+            subscribeToStream(SagaStatusUpdateObserver.initialize(streamStub, this::subscribeToStream));
         }
     }
 

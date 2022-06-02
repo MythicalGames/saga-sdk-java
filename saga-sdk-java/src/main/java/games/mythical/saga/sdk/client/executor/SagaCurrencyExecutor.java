@@ -8,6 +8,4 @@ public interface SagaCurrencyExecutor extends BaseSagaExecutor {
                         String oauthId,
                         String traceId,
                         CurrencyState coinState) throws Exception;
-
-    void emitReceived(String currencyId, String oauthId, String traceId) throws Exception;
 }

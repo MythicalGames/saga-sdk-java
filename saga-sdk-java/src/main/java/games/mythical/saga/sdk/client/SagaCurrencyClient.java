@@ -91,8 +91,6 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.transferCurrency(request);
-            // TODO: destOauthId correct here?
-            executor.emitReceived(currencyId, destOauthId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
@@ -111,7 +109,6 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.burnCurrency(request);
-            executor.emitReceived(currencyId, oauthId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);

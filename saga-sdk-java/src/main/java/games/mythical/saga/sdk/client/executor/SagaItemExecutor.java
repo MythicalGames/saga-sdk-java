@@ -12,6 +12,4 @@ public interface SagaItemExecutor extends BaseSagaExecutor {
                     ItemState itemState) throws Exception;
 
     void updateItemState(String gameInventoryId, String traceId, ItemState itemState) throws Exception;
-
-    void emitReceived(String gameInventoryId, String traceId) throws Exception;
 }

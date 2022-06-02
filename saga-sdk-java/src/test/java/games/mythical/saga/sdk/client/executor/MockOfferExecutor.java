@@ -31,10 +31,4 @@ public class MockOfferExecutor extends MockBaseExecutor implements SagaOfferExec
         this.total = total;
         this.offerState = offerState;
     }
-
-    @Override
-    public void emitReceived(String quoteId, String traceId) throws Exception {
-        this.quoteId = quoteId;
-        this.traceId = traceId;
-    }
 }

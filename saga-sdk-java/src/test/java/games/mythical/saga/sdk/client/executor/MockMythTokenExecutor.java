@@ -22,9 +22,4 @@ public class MockMythTokenExecutor extends MockBaseExecutor implements SagaMythT
         this.traceId = traceId;
         this.tokenState = mythTokenState;
     }
-
-    @Override
-    public void emitReceived(String traceId) throws Exception {
-        this.traceId = traceId;
-    }
 }

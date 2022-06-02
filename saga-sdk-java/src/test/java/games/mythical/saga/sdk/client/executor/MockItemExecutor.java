@@ -38,10 +38,4 @@ public class MockItemExecutor extends MockBaseExecutor implements SagaItemExecut
         this.traceId = traceId;
         this.itemState = itemState;
     }
-
-    @Override
-    public void emitReceived(String gameInventoryId, String traceId) throws Exception {
-        this.gameInventoryId = gameInventoryId;
-        this.traceId = traceId;
-    }
 }
