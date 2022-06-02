@@ -14,6 +14,4 @@ public interface SagaOrderExecutor extends BaseSagaExecutor {
                      String orderId,
                      BigDecimal total,
                      OrderState orderState) throws Exception;
-
-    void emitReceived(String quoteId, String traceId) throws Exception;
 }

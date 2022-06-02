@@ -9,7 +9,6 @@ import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.itemtype.*;
 import io.grpc.Status;
-import io.grpc.StatusException;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -81,14 +80,8 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
                     .setMaxSupply(maxSupply)
                     .build();
             var result = serviceBlockingStub.createItemType(request);
-            executor.emitReceived(gameItemTypeId, result.getTraceId());
             return result.getTraceId();
-        } catch (SagaException e) {
-            log.error("Error parsing metadata!", e);
-            throw new SagaException(SagaErrorCode.PARSING_DATA_EXCEPTION);
         } catch (StatusRuntimeException e) {
-            throw SagaException.fromGrpcException(e);
-        } catch (StatusException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
             log.error("Exception calling emitReceived on createItemType, item type may be lost!", e);
@@ -104,7 +97,6 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
                     .setWithdrawable(withdrawable)
                     .build();
             var result = serviceBlockingStub.updateItemType(request);
-            executor.emitReceived(gameItemTypeId, result.getTraceId());
             return result.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);

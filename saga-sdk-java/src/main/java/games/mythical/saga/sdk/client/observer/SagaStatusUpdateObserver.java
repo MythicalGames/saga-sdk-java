@@ -1,5 +1,6 @@
 package games.mythical.saga.sdk.client.observer;
 
+import com.google.protobuf.Empty;
 import com.google.protobuf.Struct;
 import games.mythical.saga.sdk.client.executor.*;
 import games.mythical.saga.sdk.client.model.SagaPaymentMethod;
@@ -32,8 +33,9 @@ import java.util.function.Consumer;
 @Slf4j
 public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdate> {
     private static SagaStatusUpdateObserver instance;
-    private final StatusStreamGrpc.StatusStreamBlockingStub streamBlockingStub;
+    private final StatusStreamGrpc.StatusStreamStub statusStreamStub;
     private final Consumer<SagaStatusUpdateObserver> resubscribe;
+    private final ConfirmationObserver confirmationObserver = new ConfirmationObserver();
 
     private SagaBridgeExecutor sagaBridgeExecutor;
     private SagaCurrencyExecutor sagaCurrencyExecutor;
@@ -47,9 +49,9 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private SagaPlayerWalletExecutor sagaPlayerWalletExecutor;
     private SagaUserExecutor sagaUserExecutor;
 
-    public SagaStatusUpdateObserver(StatusStreamGrpc.StatusStreamBlockingStub streamBlockingStub,
+    public SagaStatusUpdateObserver(StatusStreamGrpc.StatusStreamStub statusStreamStub,
                                     Consumer<SagaStatusUpdateObserver> resubscribe) {
-        this.streamBlockingStub = streamBlockingStub;
+        this.statusStreamStub = statusStreamStub;
         this.resubscribe = resubscribe;
     }
 
@@ -57,9 +59,9 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         return instance;
     }
 
-    public static SagaStatusUpdateObserver initialize(StatusStreamGrpc.StatusStreamBlockingStub streamBlockingStub,
+    public static SagaStatusUpdateObserver initialize(StatusStreamGrpc.StatusStreamStub statusStreamStub,
                                                       Consumer<SagaStatusUpdateObserver> resubscribe) {
-        instance = new SagaStatusUpdateObserver(streamBlockingStub, resubscribe);
+        instance = new SagaStatusUpdateObserver(statusStreamStub, resubscribe);
         return instance;
     }
 
@@ -361,7 +363,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                 .setTraceId(traceId)
                 .build();
         //noinspection ResultOfMethodCallIgnored
-        streamBlockingStub.statusConfirmation(request);
+        statusStreamStub.statusConfirmation(request, confirmationObserver);
     }
 
     private Map<String, String> toMetadata(Struct protoMetadata) {
@@ -392,5 +394,24 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
             .metadata(toMetadata(error.getMetadata()))
             .suberrors(subErrors)
             .build();
+    }
+
+    // Doesn't need to do anything since confirmations are just for logging on the gateway.
+    private static class ConfirmationObserver extends AbstractObserver<Empty> {
+
+        @Override
+        public void onNext(Empty value) {
+            // no-op
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            // no-op
+        }
+
+        @Override
+        public void onCompleted() {
+            // no-op
+        }
     }
 }

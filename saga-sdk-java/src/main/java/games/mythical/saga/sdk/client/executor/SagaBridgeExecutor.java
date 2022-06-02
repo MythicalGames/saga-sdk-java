@@ -10,6 +10,4 @@ public interface SagaBridgeExecutor extends BaseSagaExecutor {
                     String mythicalTransactionId,
                     String mainnetTransactionId,
                     String traceId) throws Exception;
-
-    void emitReceived(String gameInventoryId, String traceId) throws Exception;
 }

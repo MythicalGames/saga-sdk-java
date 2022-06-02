@@ -75,7 +75,6 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.confirmBuyingMythToken(request);
-            executor.emitReceived(receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
@@ -105,7 +104,6 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.confirmMythTokenWithdrawal(request);
-            executor.emitReceived(receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);

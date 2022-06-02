@@ -14,6 +14,4 @@ public interface SagaListingExecutor extends BaseSagaExecutor {
                        String listingId,
                        BigDecimal total,
                        ListingState listingState) throws Exception;
-
-    void emitReceived(String listingId, String traceId) throws Exception;
 }

@@ -25,11 +25,4 @@ public class MockCurrencyExecutor extends MockBaseExecutor implements SagaCurren
         this.traceId = traceId;
         this.currencyState = currencyState;
     }
-
-    @Override
-    public void emitReceived(String currencyId, String oauthId, String traceId) {
-        this.gameCurrencyTypeId = currencyId;
-        this.ownerAddress = oauthId;
-        this.traceId = traceId;
-    }
 }

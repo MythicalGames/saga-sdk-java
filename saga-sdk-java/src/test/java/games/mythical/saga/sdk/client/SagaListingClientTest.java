@@ -88,7 +88,7 @@ class SagaListingClientTest extends AbstractClientTest {
             .build();
         listingServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(trace);
 
         assertEquals(OAUTH_ID, executor.getOauthId());
         assertEquals(LISTING_ID, executor.getListingId());
@@ -158,7 +158,7 @@ class SagaListingClientTest extends AbstractClientTest {
                 .build();
         listingServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
-        ConcurrentFinisher.wait(executor.getTraceId());
+        ConcurrentFinisher.wait(trace);
 
         assertEquals(OAUTH_ID, executor.getOauthId());
         assertEquals(LISTING_ID, executor.getListingId());

@@ -74,7 +74,6 @@ public class SagaOrderClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.createOrderQuote(builder.build());
-            executor.emitReceived(SagaOrderExecutor.UNKNOWN_ORDER, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
@@ -97,7 +96,6 @@ public class SagaOrderClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.confirmOrder(request);
-            executor.emitReceived(quoteId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);

@@ -126,7 +126,6 @@ public class SagaItemClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.issueItem(builder.build());
-            executor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
@@ -151,7 +150,6 @@ public class SagaItemClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.transferItem(builder.build());
-            executor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
@@ -168,7 +166,6 @@ public class SagaItemClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.burnItem(request);
-            executor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);

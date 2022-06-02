@@ -51,7 +51,6 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.withdrawItem(request);
-            executor.emitReceived(gameInventoryId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);

@@ -47,7 +47,6 @@ public class SagaListingClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.createListingQuote(request);
-            executor.emitReceived(SagaListingExecutor.UNKNOWN_LISTING, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
@@ -64,7 +63,6 @@ public class SagaListingClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.confirmListing(request);
-            executor.emitReceived(quoteId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
@@ -81,7 +79,6 @@ public class SagaListingClient extends AbstractSagaStreamClient {
 
         try {
             var receivedResponse = serviceBlockingStub.cancelListing(request);
-            executor.emitReceived(listingId, receivedResponse.getTraceId());
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);

@@ -31,10 +31,4 @@ public class MockListingExecutor extends MockBaseExecutor implements SagaListing
         this.total = total;
         this.listingState = listingState;
     }
-
-    @Override
-    public void emitReceived(String quoteId, String traceId) throws Exception {
-        this.quoteId = quoteId;
-        this.traceId = traceId;
-    }
 }

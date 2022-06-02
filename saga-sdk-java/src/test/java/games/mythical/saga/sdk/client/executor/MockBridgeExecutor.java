@@ -35,10 +35,4 @@ public class MockBridgeExecutor extends MockBaseExecutor implements SagaBridgeEx
         this.mainnetTransactionId = mainnetTransactionId;
         this.traceId = traceId;
     }
-
-    @Override
-    public void emitReceived(String gameInventoryId, String traceId) {
-        this.gameInventoryId = gameInventoryId;
-        this.traceId = traceId;
-    }
 }
