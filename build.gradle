@@ -17,7 +17,7 @@ buildscript {
     }
 
     ext {
-        project_version = '0.4.0-SNAPSHOT'
+        project_version = '0.4.1-SNAPSHOT'
         grpc_version = '1.46.0'
         grpc_kotlin_version = '1.2.1'
         protobuf_version = '3.21.1'
@@ -38,6 +38,7 @@ version = "${project_version}"
 
 allprojects {
     repositories {
+        mavenLocal()
         mavenCentral()
     }
 

@@ -98,7 +98,7 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String issueItem(String gameInventoryId,
+    public String issueItem(List<String> gameInventoryIds,
                             String oauthId,
                             String gameItemTypeId,
                             SagaMetadata metadata,
@@ -106,7 +106,7 @@ public class SagaItemClient extends AbstractSagaStreamClient {
                             String requestIp,
                             String buyerWallet) throws SagaException {
         var builder = IssueItemRequest.newBuilder()
-                .setGameInventoryId(gameInventoryId)
+                .addAllGameInventoryIds(gameInventoryIds)
                 .setGameItemTypeId(gameItemTypeId)
                 .setMetadata(SagaMetadata.toProto(metadata));
 
@@ -130,7 +130,7 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling emitReceived on issueItem, item may be lost!", e);
+            log.error("Exception on issueItem, item may be lost!", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
