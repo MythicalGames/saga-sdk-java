@@ -29,7 +29,7 @@ public abstract class AbstractSagaClient {
     private static ManagedChannel buildChannel(SagaSdkConfig config) {
         final var builder = ManagedChannelBuilder.forAddress(config.getHost(), config.getPort())
                 .keepAliveTime(config.getKeepAlive(), TimeUnit.SECONDS);
-        if (config.isPlainText() && "localhost".equals(config.getHost())) {
+        if (config.isPlainText() && SagaClientFactory.ALLOWED_UNENCRYPTED_HOSTS.contains(config.getHost())) {
             builder.usePlaintext();
         }
         return builder.build();
