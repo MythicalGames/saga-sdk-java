@@ -4,6 +4,7 @@ import games.mythical.saga.sdk.client.executor.*;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,6 +12,7 @@ import static games.mythical.saga.sdk.config.Constants.*;
 
 @Slf4j
 public class SagaClientFactory {
+    final static List<String> ALLOWED_UNENCRYPTED_HOSTS = List.of("localhost", "saga-gateway");
     private static SagaClientFactory instance;
     private final SagaSdkConfig config;
 
@@ -73,9 +75,9 @@ public class SagaClientFactory {
                                     "Invalid token refresh value: " + config.getTokenRefresh());
         }
 
-        if (config.isPlainText() && !config.getHost().equals("localhost")) {
+        if (config.isPlainText() && !ALLOWED_UNENCRYPTED_HOSTS.contains(config.getHost())) {
             throw new SagaException(SagaErrorCode.NON_LOCAL_PLAIN_TEXT,
-                                    "Plain text connection can only be used for localhost");
+                                    "Plain text connection can only be used for allowed hosts: " + ALLOWED_UNENCRYPTED_HOSTS);
         }
     }
 
