@@ -737,7 +737,7 @@ Issue item call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_inventory_id | [string](#string) |  | GameInventory Id of Item being issued |
+| game_inventory_ids | [string](#string) | repeated | GameInventory Ids of Items being issued |
 | oauth_id | [string](#string) |  |  |
 | buyer_wallet | [string](#string) |  |  |
 | game_item_type_id | [string](#string) |  | Unique id set for your game of the Item being issued |
