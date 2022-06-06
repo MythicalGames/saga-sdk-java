@@ -158,7 +158,6 @@
     - [GetUsersRequest](#saga-api-user-GetUsersRequest)
     - [GetWalletAssetsRequest](#saga-api-user-GetWalletAssetsRequest)
     - [NftItem](#saga-api-user-NftItem)
-    - [UpdateUserRequest](#saga-api-user-UpdateUserRequest)
     - [UserProto](#saga-api-user-UserProto)
     - [UsersProto](#saga-api-user-UsersProto)
     - [WalletAsset](#saga-api-user-WalletAsset)
@@ -2419,21 +2418,6 @@ Get wallet assets call
 
 
 
-<a name="saga-api-user-UpdateUserRequest"></a>
-
-### UpdateUserRequest
-Update User call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-
-
-
-
-
-
 <a name="saga-api-user-UserProto"></a>
 
 ### UserProto
@@ -2520,7 +2504,6 @@ Update User call
 | GetUser | [GetUserRequest](#saga-api-user-GetUserRequest) | [UserProto](#saga-api-user-UserProto) | Get a User given their oauth Id |
 | GetUsers | [GetUsersRequest](#saga-api-user-GetUsersRequest) | [UsersProto](#saga-api-user-UsersProto) | Get a list of Users based on query parameters |
 | CreateUser | [CreateUserRequest](#saga-api-user-CreateUserRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create a User |
-| UpdateUser | [UpdateUserRequest](#saga-api-user-UpdateUserRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update a User |
 | GetWalletAssets | [GetWalletAssetsRequest](#saga-api-user-GetWalletAssetsRequest) | [WalletAsset](#saga-api-user-WalletAsset) | Get assets for a User/publisher/partner |
 
  
