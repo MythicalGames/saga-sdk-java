@@ -144,34 +144,6 @@ class SagaUserClientTest extends AbstractClientTest {
     }
 
     @Test
-    @Timeout(value = 1, unit = TimeUnit.MINUTES)
-    public void updateUser() throws Exception {
-        final var expectedResponse = genReceived();
-        when(mockServiceBlockingStub.updateUser(any())).thenReturn(expectedResponse);
-        final var trace = userClient.updateUser(OAUTH_ID);
-        checkTraceAndStart(expectedResponse, trace);
-
-        final var userStatusUpdate = UserStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
-                .setUserState(UserState.LINKED);
-        final var userUpdate = UserUpdate.newBuilder()
-                .setStatusUpdate(userStatusUpdate);
-        final var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(trace)
-                .setUserUpdate(userUpdate)
-                .build();
-        userServer.getStatusStream().sendStatus(titleId, statusUpdate);
-
-        ConcurrentFinisher.wait(trace);
-
-        assertEquals(OAUTH_ID, executor.getOauthId());
-        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-
-        userServer.verifyCalls("StatusStream", 1);
-        userServer.verifyCalls("StatusConfirmation", 1);
-    }
-
-    @Test
     public void getWalletAssets() throws Exception {
         var expectedResponse = WalletAsset.newBuilder()
                 .setAusdToken("AUSD")

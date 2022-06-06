@@ -82,23 +82,6 @@ public class SagaUserClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String updateUser(String oauthId) throws SagaException {
-        var request = UpdateUserRequest.newBuilder()
-                .setOauthId(oauthId)
-                .build();
-
-        try {
-            var receivedResponse = serviceBlockingStub.updateUser(request);
-            executor.updateUser(oauthId, receivedResponse.getTraceId());
-            return receivedResponse.getTraceId();
-        } catch (StatusRuntimeException e) {
-            throw SagaException.fromGrpcException(e);
-        } catch (Exception e) {
-            log.error("Exception calling emitReceived on updateUser, user update may be lost!", e);
-            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
-        }
-    }
-
     public Optional<SagaWalletAsset> getWalletAssets(String oauthId,
                                                      String publisherId,
                                                      String partnerId) throws SagaException {
