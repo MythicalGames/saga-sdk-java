@@ -9,7 +9,9 @@ import games.mythical.saga.sdk.util.ConversionUtils;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -20,6 +22,13 @@ public class SagaMetadata {
     @ProtoExclude
     @DtoExclude
     private Map<String, Object> properties;
+    private String externalUrl;
+    private String backgroundColor;
+    private String animationUrl;
+    private String youtubeUrl;
+    @ProtoExclude
+    @DtoExclude
+    private List<SagaMetadataAttribute> attributes;
 
     public static SagaMetadata fromProto(Metadata proto) {
         return ProtoUtil.toDto(proto, SagaMetadata.class);
@@ -30,6 +39,10 @@ public class SagaMetadata {
 
         if (metadata.getProperties() != null) {
             builder.setProperties(ConversionUtils.convertProperties(metadata.getProperties()));
+        }
+
+        if (metadata.getAttributes() != null) {
+            builder.addAllAttributes(metadata.getAttributes().stream().map(SagaMetadataAttribute::toProto).collect(Collectors.toList()));
         }
 
         return builder.build();
