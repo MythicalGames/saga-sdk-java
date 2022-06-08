@@ -919,6 +919,10 @@
                 </li>
               
                 <li>
+                  <a href="#saga.common.MetadataAttribute"><span class="badge">M</span>MetadataAttribute</a>
+                </li>
+              
+                <li>
                   <a href="#saga.common.ReceivedResponse"><span class="badge">M</span>ReceivedResponse</a>
                 </li>
               
@@ -6292,6 +6296,100 @@
                   <td><a href="#google.protobuf.Struct">google.protobuf.Struct</a></td>
                   <td></td>
                   <td><p>Additional properties about the Item in a &lt;Key,Value&gt; structure </p></td>
+                </tr>
+              
+                <tr>
+                  <td>external_url</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>URL to the item </p></td>
+                </tr>
+              
+                <tr>
+                  <td>background_color</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>OpenSea background color </p></td>
+                </tr>
+              
+                <tr>
+                  <td>animation_url</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>URL to a media/animation file </p></td>
+                </tr>
+              
+                <tr>
+                  <td>youtube_url</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>URL to a YouTube video </p></td>
+                </tr>
+              
+                <tr>
+                  <td>attributes</td>
+                  <td><a href="#saga.common.MetadataAttribute">MetadataAttribute</a></td>
+                  <td>repeated</td>
+                  <td><p>Metadata attributes </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.common.MetadataAttribute">MetadataAttribute</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>trait_type</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Name of the trait/attribute </p></td>
+                </tr>
+              
+                <tr>
+                  <td>display_type</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Display type (number, date, etc.). Not needed for string traits </p></td>
+                </tr>
+              
+                <tr>
+                  <td>max_value</td>
+                  <td><a href="#google.protobuf.DoubleValue">google.protobuf.DoubleValue</a></td>
+                  <td></td>
+                  <td><p>For numeric traits, a maximum allowed value </p></td>
+                </tr>
+              
+                <tr>
+                  <td>str_value</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>int_value</td>
+                  <td><a href="#int64">int64</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>double_value</td>
+                  <td><a href="#double">double</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>

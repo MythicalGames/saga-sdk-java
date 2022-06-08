@@ -168,6 +168,7 @@
 - [common/common.proto](#common_common-proto)
     - [ErrorData](#saga-common-ErrorData)
     - [Metadata](#saga-common-Metadata)
+    - [MetadataAttribute](#saga-common-MetadataAttribute)
     - [ReceivedResponse](#saga-common-ReceivedResponse)
     - [SubError](#saga-common-SubError)
   
@@ -2549,6 +2550,31 @@ Metadata properties of Item
 | description | [string](#string) |  | Description of the item |
 | image | [string](#string) |  | URL to the image of the item |
 | properties | [google.protobuf.Struct](#google-protobuf-Struct) |  | Additional properties about the Item in a &lt;Key,Value&gt; structure |
+| external_url | [string](#string) |  | URL to the item |
+| background_color | [string](#string) |  | OpenSea background color |
+| animation_url | [string](#string) |  | URL to a media/animation file |
+| youtube_url | [string](#string) |  | URL to a YouTube video |
+| attributes | [MetadataAttribute](#saga-common-MetadataAttribute) | repeated | Metadata attributes |
+
+
+
+
+
+
+<a name="saga-common-MetadataAttribute"></a>
+
+### MetadataAttribute
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| trait_type | [string](#string) |  | Name of the trait/attribute |
+| display_type | [string](#string) |  | Display type (number, date, etc.). Not needed for string traits |
+| max_value | [google.protobuf.DoubleValue](#google-protobuf-DoubleValue) |  | For numeric traits, a maximum allowed value |
+| str_value | [string](#string) |  |  |
+| int_value | [int64](#int64) |  |  |
+| double_value | [double](#double) |  |  |
 
 
 
