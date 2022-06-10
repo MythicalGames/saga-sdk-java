@@ -1,10 +1,9 @@
 package games.mythical.saga.sdk.client;
 
-import games.mythical.saga.sdk.client.model.query.Filter;
-import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.proto.api.title.TitleProto;
 import games.mythical.saga.sdk.proto.api.title.TitleServiceGrpc;
 import games.mythical.saga.sdk.proto.api.title.TitlesProto;
+import games.mythical.saga.sdk.proto.common.SortOrder;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -44,15 +43,9 @@ public class SagaTitleClientTest extends AbstractClientTest {
                         .setName("first game")
                         .build())
                 .build();
-        var filter = new Filter();
-        filter.equal("name", List.of("first game"));
-
-        var options = QueryOptions.builder()
-                .filterOptions(filter)
-                .build();
 
         when(mockServiceBlockingStub.getTitles(any())).thenReturn(expectedResponse);
-        var titlesResponse = titleClient.getTitles(options);
+        var titlesResponse = titleClient.getTitles(10, SortOrder.ASC, Instant.EPOCH);
         assertEquals(1, titlesResponse.size());
 
         var title = titlesResponse.iterator().next();

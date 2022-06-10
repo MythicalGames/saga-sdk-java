@@ -2,18 +2,19 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaItemTypeExecutor;
 import games.mythical.saga.sdk.client.model.SagaItemType;
-import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
+import games.mythical.saga.sdk.factory.CommonFactory;
 import games.mythical.saga.sdk.proto.api.itemtype.*;
+import games.mythical.saga.sdk.proto.common.SortOrder;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
-import java.rmi.ServerException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,14 +53,19 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public List<SagaItemType> getItemTypes(QueryOptions providedQueryOptions) throws SagaException {
-        final var queryOptions = providedQueryOptions != null ? providedQueryOptions : new QueryOptions();
-
-        var builder = GetItemTypesRequest.newBuilder()
-                .setQueryOptions(QueryOptions.toProto(queryOptions));
+    public List<SagaItemType> getItemTypes(String gameTitleId,
+                                           String publisherAddress,
+                                           int pageSize,
+                                           SortOrder sortOrder,
+                                           Instant createdAtCursor) throws SagaException {
+        var request = GetItemTypesRequest.newBuilder()
+                .setGameTitleId(gameTitleId)
+                .setPublisherAddress(publisherAddress)
+                .setQueryOptions(CommonFactory.toProto(pageSize, sortOrder, createdAtCursor))
+                .build();
 
         try {
-            var result = serviceBlockingStub.getItemTypes(builder.build());
+            var result = serviceBlockingStub.getItemTypes(request);
             return SagaItemType.fromProto(result.getItemTypesList());
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
