@@ -2,17 +2,19 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaListingExecutor;
 import games.mythical.saga.sdk.client.model.SagaListing;
-import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
+import games.mythical.saga.sdk.factory.CommonFactory;
 import games.mythical.saga.sdk.proto.api.listing.*;
+import games.mythical.saga.sdk.proto.common.SortOrder;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,15 +93,14 @@ public class SagaListingClient extends AbstractSagaStreamClient {
     public List<SagaListing> getListings(String itemTypeId,
                                          String token,
                                          String oauthId,
-                                         QueryOptions queryOptions) throws SagaException {
-        if (queryOptions == null) {
-            queryOptions = new QueryOptions();
-        }
+                                         int pageSize,
+                                         SortOrder sortOrder,
+                                         Instant createdAtCursor) throws SagaException {
         var request = GetListingsRequest.newBuilder()
                 .setItemTypeId(itemTypeId)
                 .setToken(token)
                 .setOauthId(oauthId)
-                .setQueryOptions(QueryOptions.toProto(queryOptions))
+                .setQueryOptions(CommonFactory.toProto(pageSize, sortOrder, createdAtCursor))
                 .build();
 
         try {

@@ -5,6 +5,7 @@ import games.mythical.saga.sdk.proto.api.listing.ListingProto;
 import games.mythical.saga.sdk.proto.api.listing.ListingServiceGrpc;
 import games.mythical.saga.sdk.proto.api.listing.ListingsProto;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
+import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.proto.common.listing.ListingState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.listing.ListingStatusUpdate;
@@ -24,6 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -182,7 +184,14 @@ class SagaListingClientTest extends AbstractClientTest {
                         .build())
                 .build();
         when(mockServiceBlockingStub.getListings(any())).thenReturn(expectedResponse);
-        var listingsResponse = listingClient.getListings("item123", "token123", OAUTH_ID, null);
+        var listingsResponse = listingClient.getListings(
+                "item123",
+                "token123",
+                OAUTH_ID,
+                10,
+                SortOrder.ASC,
+                Instant.EPOCH
+        );
         assertEquals(1, listingsResponse.size());
 
         var listing = listingsResponse.iterator().next();

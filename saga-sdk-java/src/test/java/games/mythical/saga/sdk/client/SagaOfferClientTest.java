@@ -5,6 +5,7 @@ import games.mythical.saga.sdk.proto.api.offer.OfferProto;
 import games.mythical.saga.sdk.proto.api.offer.OfferServiceGrpc;
 import games.mythical.saga.sdk.proto.api.offer.OffersProto;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
+import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.proto.common.offer.OfferState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.offer.OfferStatusUpdate;
@@ -24,6 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -185,7 +187,14 @@ class SagaOfferClientTest extends AbstractClientTest {
                         .build())
                 .build();
         when(mockServiceBlockingStub.getOffers(any())).thenReturn(expectedResponse);
-        var offersResponse = offerClient.getOffers("item123", "token123", OAUTH_ID, null);
+        var offersResponse = offerClient.getOffers(
+                "item123",
+                "token123",
+                OAUTH_ID,
+                10,
+                SortOrder.ASC,
+                Instant.EPOCH
+        );
         assertEquals(1, offersResponse.size());
 
         var offer = offersResponse.iterator().next();
