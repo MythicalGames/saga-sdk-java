@@ -3,13 +3,14 @@ package games.mythical.saga.sdk.client;
 import games.mythical.saga.sdk.client.executor.SagaItemExecutor;
 import games.mythical.saga.sdk.client.model.SagaItem;
 import games.mythical.saga.sdk.client.model.SagaMetadata;
-import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
+import games.mythical.saga.sdk.factory.CommonFactory;
 import games.mythical.saga.sdk.proto.api.item.*;
 import games.mythical.saga.sdk.proto.common.Finalized;
+import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.proto.common.item.BlockChains;
 import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.Status;
@@ -17,6 +18,7 @@ import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,17 +59,17 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         }
     }
 
-    public List<SagaItem> getItems(Finalized finalized, String token_name, QueryOptions queryOptions) throws SagaException {
-        if (queryOptions == null) {
-            queryOptions = new QueryOptions();
-        }
-
+    public List<SagaItem> getItems(Finalized finalized,
+                                   String tokenName,
+                                   int pageSize,
+                                   SortOrder sortOrder,
+                                   Instant createdAtCursor) throws SagaException {
         var request = GetItemsRequest.newBuilder()
-                .setQueryOptions(QueryOptions.toProto(queryOptions))
+                .setQueryOptions(CommonFactory.toProto(pageSize, sortOrder, createdAtCursor))
                 .setFinalized(finalized);
 
-        if (StringUtils.isNotBlank(token_name)) {
-            request.setTokenName(token_name);
+        if (StringUtils.isNotBlank(tokenName)) {
+            request.setTokenName(tokenName);
         }
 
         try {
@@ -176,11 +178,11 @@ public class SagaItemClient extends AbstractSagaStreamClient {
     }
 
     public String depositItem(String gameInventoryId,
-                            String createdBy,
-                            String fromAddress,
-                            String toAddress,
-                            BlockChains fromChain,
-                            String transactionId) throws SagaException {
+                              String createdBy,
+                              String fromAddress,
+                              String toAddress,
+                              BlockChains fromChain,
+                              String transactionId) throws SagaException {
         var request = DepositItemRequest.newBuilder()
                 .setGameInventoryId(gameInventoryId)
                 .setCreatedBy(createdBy)

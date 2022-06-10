@@ -3,6 +3,7 @@ package games.mythical.saga.sdk.client;
 import games.mythical.saga.sdk.proto.api.transaction.TransactionProto;
 import games.mythical.saga.sdk.proto.api.transaction.TransactionServiceGrpc;
 import games.mythical.saga.sdk.proto.api.transaction.TransactionsProto;
+import games.mythical.saga.sdk.proto.common.SortOrder;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,7 +44,12 @@ public class SagaTransactionClientTest extends AbstractClientTest {
                 .build();
 
         when(mockServiceBlockingStub.getTransactionsForPlayer(any())).thenReturn(expectedResponse);
-        var transactionsResponse = transactionClient.getTransactionsForPlayer(RandomStringUtils.randomAlphanumeric(30), null);
+        var transactionsResponse = transactionClient.getTransactionsForPlayer(
+                RandomStringUtils.randomAlphanumeric(30),
+                10,
+                SortOrder.ASC,
+                Instant.EPOCH
+        );
         assertEquals(1, transactionsResponse.size());
 
         var transaction = transactionsResponse.iterator().next();
@@ -60,7 +68,7 @@ public class SagaTransactionClientTest extends AbstractClientTest {
 
         when(mockServiceBlockingStub.getTransactionsForItemType(any())).thenReturn(expectedResponse);
         var transactionsResponse = transactionClient.getTransactionsForItemType(
-                "item-type-1234", "token1234", null);
+                "item-type-1234", "token1234", 10, SortOrder.ASC, Instant.EPOCH);
         assertEquals(1, transactionsResponse.size());
 
         var transaction = transactionsResponse.iterator().next();

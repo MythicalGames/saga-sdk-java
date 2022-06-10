@@ -1,11 +1,12 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockItemTypeExecutor;
-import games.mythical.saga.sdk.client.model.query.Filter;
-import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.proto.api.itemtype.*;
+import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeProto;
+import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeServiceGrpc;
+import games.mythical.saga.sdk.proto.api.itemtype.ItemTypesProto;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
+import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStatusUpdate;
@@ -28,6 +29,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -109,14 +111,13 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 .addAllItemTypes(List.of(proto_1, proto_2, proto_3))
                 .build();
 
-        var filter = new Filter();
-        filter.equal("titleId", "game-title");
-        var options = QueryOptions.builder()
-                .filterOptions(filter)
-                .build();
-
         when(mockServiceBlockingStub.getItemTypes(any())).thenReturn(expectedResponse);
-        var itemTypeResponseList = itemTypeClient.getItemTypes(options);
+        var itemTypeResponseList = itemTypeClient.getItemTypes(
+                "game-title",
+                "",
+                20,
+                SortOrder.ASC,
+                Instant.EPOCH);
 
         assertFalse(itemTypeResponseList.isEmpty());
         var itemType = itemTypeResponseList.get(0);
@@ -124,7 +125,13 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         assertEquals(proto_1.getName(), itemType.getName());
 
         when(mockServiceBlockingStub.getItemTypes(any())).thenReturn(ItemTypesProto.getDefaultInstance());
-        itemTypeResponseList = itemTypeClient.getItemTypes(QueryOptions.builder().build());
+        itemTypeResponseList = itemTypeClient.getItemTypes(
+                "",
+                "",
+                20,
+                SortOrder.ASC,
+                Instant.EPOCH
+        );
 
         assertTrue(itemTypeResponseList.isEmpty());
     }

@@ -3,16 +3,18 @@ package games.mythical.saga.sdk.client;
 import games.mythical.saga.sdk.client.executor.SagaUserExecutor;
 import games.mythical.saga.sdk.client.model.SagaUser;
 import games.mythical.saga.sdk.client.model.SagaWalletAsset;
-import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
+import games.mythical.saga.sdk.factory.CommonFactory;
 import games.mythical.saga.sdk.proto.api.user.*;
+import games.mythical.saga.sdk.proto.common.SortOrder;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,9 +54,11 @@ public class SagaUserClient extends AbstractSagaStreamClient {
         }
     }
 
-    public Collection<SagaUser> getUsers(QueryOptions queryOptions) throws SagaException {
+    public Collection<SagaUser> getUsers(int pageSize,
+                                         SortOrder sortOrder,
+                                         Instant createdAtCursor) throws SagaException {
         var request = GetUsersRequest.newBuilder()
-                .setQueryOptions(QueryOptions.toProto(queryOptions))
+                .setQueryOptions(CommonFactory.toProto(pageSize, sortOrder, createdAtCursor))
                 .build();
 
         try {

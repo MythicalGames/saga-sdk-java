@@ -1,8 +1,6 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockUserExecutor;
-import games.mythical.saga.sdk.client.model.query.Filter;
-import games.mythical.saga.sdk.client.model.query.QueryOptions;
 import games.mythical.saga.sdk.proto.api.user.*;
 import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.proto.common.user.UserState;
@@ -24,10 +22,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -85,18 +85,6 @@ class SagaUserClientTest extends AbstractClientTest {
 
     @Test
     public void getUsers() throws Exception {
-        Filter filter = new Filter();
-        filter.equal("test", "test value")
-                .and()
-                .equal("test2", "other test value");
-
-        var options = QueryOptions.builder()
-                .filterOptions(filter)
-                .pageSize(100)
-                .sortOrder(SortOrder.ASC)
-                .sortAttribute("test")
-                .build();
-
         var expectedResponse = UsersProto.newBuilder()
                 .addSagaUsers(UserProto.newBuilder()
                         .setTraceId(RandomStringUtils.randomAlphanumeric(30))
@@ -105,7 +93,7 @@ class SagaUserClientTest extends AbstractClientTest {
                         .build())
                 .build();
         when(mockServiceBlockingStub.getUsers(any())).thenReturn(expectedResponse);
-        var usersResponse = userClient.getUsers(options);
+        var usersResponse = userClient.getUsers(10, SortOrder.ASC, Instant.EPOCH);
         assertEquals(1, usersResponse.size());
 
         var user = usersResponse.iterator().next();
