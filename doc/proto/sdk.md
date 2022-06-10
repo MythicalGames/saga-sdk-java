@@ -205,12 +205,7 @@
     - [PlayerWalletState](#saga-proto-common-playerwallet-PlayerWalletState)
   
 - [common/query.proto](#common_query-proto)
-    - [ExpressionProto](#saga-common-ExpressionProto)
-    - [FilterValueProto](#saga-common-FilterValueProto)
     - [QueryOptionsProto](#saga-common-QueryOptionsProto)
-  
-    - [FilterConditional](#saga-common-FilterConditional)
-    - [FilterOperation](#saga-common-FilterOperation)
   
 - [common/sort.proto](#common_sort-proto)
     - [SortOrder](#saga-common-SortOrder)
@@ -929,6 +924,8 @@ Get ItemTypes call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| game_title_id | [string](#string) |  |  |
+| publisher_address | [string](#string) |  |  |
 | query_options | [saga.common.QueryOptionsProto](#saga-common-QueryOptionsProto) |  |  |
 
 
@@ -2956,41 +2953,6 @@ Types of Payments
 
 
 
-<a name="saga-common-ExpressionProto"></a>
-
-### ExpressionProto
-Allowed expression in a query. Expression is a combination of [attribute_name | conditional | value]
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| attribute_name | [string](#string) |  | name of the attribute to filter on |
-| conditional | [FilterConditional](#saga-common-FilterConditional) |  | how to filter on the attribute (See FilterConditional) |
-| double_value | [double](#double) |  |  |
-| string_value | [string](#string) |  |  |
-| bool_value | [bool](#bool) |  |  |
-
-
-
-
-
-
-<a name="saga-common-FilterValueProto"></a>
-
-### FilterValueProto
-container to allow building out a full filter of Expressions and FilterOperations
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| expression | [ExpressionProto](#saga-common-ExpressionProto) |  |  |
-| operation | [FilterOperation](#saga-common-FilterOperation) |  |  |
-
-
-
-
-
-
 <a name="saga-common-QueryOptionsProto"></a>
 
 ### QueryOptionsProto
@@ -2999,47 +2961,15 @@ Options allowed when querying
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| filter_options | [FilterValueProto](#saga-common-FilterValueProto) | repeated | Complete filter chain of attributes to filter on |
 | page_size | [int32](#int32) |  | Size of the page of results |
 | sort_order | [SortOrder](#saga-common-SortOrder) |  | Which order to sort |
-| sort_attribute | [string](#string) |  | Which attribute to sort on |
-| cursor | [string](#string) |  | Cursor-based pagination based on the sort_attribute |
+| created_at_cursor | [uint64](#uint64) |  | Cursor-based pagination based on created_at |
 
 
 
 
 
  
-
-
-<a name="saga-common-FilterConditional"></a>
-
-### FilterConditional
-Allowed compare operations when filtering
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| EQUALS | 0 | ObjectA = ObjectB |
-| EQUALS_LESS_THAN | 1 | ObjectA &lt;= ObjectB |
-| LESS_THAN | 2 | ObjectA &lt; ObjectB |
-| EQUALS_GREATER_THAN | 3 | ObjectA &gt;= ObjectB |
-| GREATER_THAN | 4 | ObjectA &gt; ObjectB |
-| NOT_EQUALS | 5 | ObjectA != ObjectB |
-| CONTAINS | 6 | ObjectA is in ListB |
-| NOT_CONTAINS | 7 | ObjectA is not in ListB |
-
-
-
-<a name="saga-common-FilterOperation"></a>
-
-### FilterOperation
-Allowed operations when chaining filters
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| AND | 0 | FilterA &amp;&amp; FilterB |
-| OR | 1 | FilterA || FilterB |
-
 
  
 

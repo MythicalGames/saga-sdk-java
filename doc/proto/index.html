@@ -1100,25 +1100,9 @@
             <ul>
               
                 <li>
-                  <a href="#saga.common.ExpressionProto"><span class="badge">M</span>ExpressionProto</a>
-                </li>
-              
-                <li>
-                  <a href="#saga.common.FilterValueProto"><span class="badge">M</span>FilterValueProto</a>
-                </li>
-              
-                <li>
                   <a href="#saga.common.QueryOptionsProto"><span class="badge">M</span>QueryOptionsProto</a>
                 </li>
               
-              
-                <li>
-                  <a href="#saga.common.FilterConditional"><span class="badge">E</span>FilterConditional</a>
-                </li>
-              
-                <li>
-                  <a href="#saga.common.FilterOperation"><span class="badge">E</span>FilterOperation</a>
-                </li>
               
               
               
@@ -2817,6 +2801,20 @@
               <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
             </thead>
             <tbody>
+              
+                <tr>
+                  <td>game_title_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>publisher_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
               
                 <tr>
                   <td>query_options</td>
@@ -7030,89 +7028,6 @@
       <p></p>
 
       
-        <h3 id="saga.common.ExpressionProto">ExpressionProto</h3>
-        <p>Allowed expression in a query. Expression is a combination of [attribute_name | conditional | value]</p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>attribute_name</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>name of the attribute to filter on </p></td>
-                </tr>
-              
-                <tr>
-                  <td>conditional</td>
-                  <td><a href="#saga.common.FilterConditional">FilterConditional</a></td>
-                  <td></td>
-                  <td><p>how to filter on the attribute (See FilterConditional) </p></td>
-                </tr>
-              
-                <tr>
-                  <td>double_value</td>
-                  <td><a href="#double">double</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>string_value</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>bool_value</td>
-                  <td><a href="#bool">bool</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
-        <h3 id="saga.common.FilterValueProto">FilterValueProto</h3>
-        <p>container to allow building out a full filter of Expressions and FilterOperations</p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>expression</td>
-                  <td><a href="#saga.common.ExpressionProto">ExpressionProto</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>operation</td>
-                  <td><a href="#saga.common.FilterOperation">FilterOperation</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
         <h3 id="saga.common.QueryOptionsProto">QueryOptionsProto</h3>
         <p>Options allowed when querying</p>
 
@@ -7122,13 +7037,6 @@
               <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
             </thead>
             <tbody>
-              
-                <tr>
-                  <td>filter_options</td>
-                  <td><a href="#saga.common.FilterValueProto">FilterValueProto</a></td>
-                  <td>repeated</td>
-                  <td><p>Complete filter chain of attributes to filter on </p></td>
-                </tr>
               
                 <tr>
                   <td>page_size</td>
@@ -7145,17 +7053,10 @@
                 </tr>
               
                 <tr>
-                  <td>sort_attribute</td>
-                  <td><a href="#string">string</a></td>
+                  <td>created_at_cursor</td>
+                  <td><a href="#uint64">uint64</a></td>
                   <td></td>
-                  <td><p>Which attribute to sort on </p></td>
-                </tr>
-              
-                <tr>
-                  <td>cursor</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>Cursor-based pagination based on the sort_attribute </p></td>
+                  <td><p>Cursor-based pagination based on created_at </p></td>
                 </tr>
               
             </tbody>
@@ -7166,88 +7067,6 @@
         
       
 
-      
-        <h3 id="saga.common.FilterConditional">FilterConditional</h3>
-        <p>Allowed compare operations when filtering</p>
-        <table class="enum-table">
-          <thead>
-            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
-          </thead>
-          <tbody>
-            
-              <tr>
-                <td>EQUALS</td>
-                <td>0</td>
-                <td><p>ObjectA = ObjectB</p></td>
-              </tr>
-            
-              <tr>
-                <td>EQUALS_LESS_THAN</td>
-                <td>1</td>
-                <td><p>ObjectA &lt;= ObjectB</p></td>
-              </tr>
-            
-              <tr>
-                <td>LESS_THAN</td>
-                <td>2</td>
-                <td><p>ObjectA &lt; ObjectB</p></td>
-              </tr>
-            
-              <tr>
-                <td>EQUALS_GREATER_THAN</td>
-                <td>3</td>
-                <td><p>ObjectA &gt;= ObjectB</p></td>
-              </tr>
-            
-              <tr>
-                <td>GREATER_THAN</td>
-                <td>4</td>
-                <td><p>ObjectA &gt; ObjectB</p></td>
-              </tr>
-            
-              <tr>
-                <td>NOT_EQUALS</td>
-                <td>5</td>
-                <td><p>ObjectA != ObjectB</p></td>
-              </tr>
-            
-              <tr>
-                <td>CONTAINS</td>
-                <td>6</td>
-                <td><p>ObjectA is in ListB</p></td>
-              </tr>
-            
-              <tr>
-                <td>NOT_CONTAINS</td>
-                <td>7</td>
-                <td><p>ObjectA is not in ListB</p></td>
-              </tr>
-            
-          </tbody>
-        </table>
-      
-        <h3 id="saga.common.FilterOperation">FilterOperation</h3>
-        <p>Allowed operations when chaining filters</p>
-        <table class="enum-table">
-          <thead>
-            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
-          </thead>
-          <tbody>
-            
-              <tr>
-                <td>AND</td>
-                <td>0</td>
-                <td><p>FilterA &amp;&amp; FilterB</p></td>
-              </tr>
-            
-              <tr>
-                <td>OR</td>
-                <td>1</td>
-                <td><p>FilterA || FilterB</p></td>
-              </tr>
-            
-          </tbody>
-        </table>
       
 
       
