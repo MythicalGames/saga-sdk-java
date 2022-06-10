@@ -9,6 +9,7 @@ import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.factory.CommonFactory;
 import games.mythical.saga.sdk.proto.api.item.*;
+import games.mythical.saga.sdk.proto.api.itemtype.FreezeItemTypePayload;
 import games.mythical.saga.sdk.proto.common.Finalized;
 import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.proto.common.item.BlockChains;
@@ -217,6 +218,22 @@ public class SagaItemClient extends AbstractSagaStreamClient {
             serviceBlockingStub.updateItemsMetadata(request);
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
+        }
+    }
+
+    public String freezeItemType(String gameItemTypeId) throws SagaException {
+        try {
+            log.trace("ItemTypeClient.freezeItemType called for {}", gameItemTypeId);
+            var request = FreezeItemTypePayload.newBuilder()
+                    .setGameItemTypeId(gameItemTypeId)
+                    .build();
+            var result = serviceBlockingStub.freezeItemType(request);
+            return result.getTraceId();
+        } catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
+        } catch (Exception e) {
+            log.error("Exception calling emitReceived on freezeItemType, item type may be lost!", e);
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
 }
