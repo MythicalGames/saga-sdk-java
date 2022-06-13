@@ -181,4 +181,13 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         final var traceId = itemTypeClient.updateItemType(GAME_ITEM_TYPE_ID, true);
 
     }
+
+    @Test
+    public void freezeItemType() throws Exception {
+        final var expectedResponse = ReceivedResponse.newBuilder()
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .build();
+        when(mockServiceBlockingStub.freezeItemType(any())).thenReturn(expectedResponse);
+        final var traceId = itemTypeClient.freezeItemType(GAME_ITEM_TYPE_ID);
+    }
 }
