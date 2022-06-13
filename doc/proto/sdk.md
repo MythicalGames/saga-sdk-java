@@ -49,6 +49,7 @@
   
 - [api/itemtype/definition.proto](#api_itemtype_definition-proto)
     - [CreateItemTypeRequest](#saga-api-itemtype-CreateItemTypeRequest)
+    - [FreezeItemTypePayload](#saga-api-itemtype-FreezeItemTypePayload)
     - [GetItemTypeRequest](#saga-api-itemtype-GetItemTypeRequest)
     - [GetItemTypesRequest](#saga-api-itemtype-GetItemTypesRequest)
     - [ItemTypeProto](#saga-api-itemtype-ItemTypeProto)
@@ -901,6 +902,21 @@ Create item type call
 
 
 
+<a name="saga-api-itemtype-FreezeItemTypePayload"></a>
+
+### FreezeItemTypePayload
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| game_item_type_id | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="saga-api-itemtype-GetItemTypeRequest"></a>
 
 ### GetItemTypeRequest
@@ -1061,6 +1077,7 @@ Update ItemType call
 | GetItemTypes | [GetItemTypesRequest](#saga-api-itemtype-GetItemTypesRequest) | [ItemTypesProto](#saga-api-itemtype-ItemTypesProto) | Get ItemTypes based on filters |
 | CreateItemType | [CreateItemTypeRequest](#saga-api-itemtype-CreateItemTypeRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create an ItemType |
 | UpdateItemType | [UpdateItemTypePayload](#saga-api-itemtype-UpdateItemTypePayload) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update the ItemType |
+| FreezeItemType | [FreezeItemTypePayload](#saga-api-itemtype-FreezeItemTypePayload) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Freeze the ItemType |
 
  
 
