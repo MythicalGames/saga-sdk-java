@@ -112,4 +112,20 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
+
+    public String freezeItemType(String gameItemTypeId) throws SagaException {
+        try {
+            log.trace("ItemTypeClient.freezeItemType called for {}", gameItemTypeId);
+            var request = FreezeItemTypePayload.newBuilder()
+                    .setGameItemTypeId(gameItemTypeId)
+                    .build();
+            var result = serviceBlockingStub.freezeItemType(request);
+            return result.getTraceId();
+        } catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
+        } catch (Exception e) {
+            log.error("Exception calling emitReceived on freezeItemType, item type may be lost!", e);
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
+        }
+    }
 }
