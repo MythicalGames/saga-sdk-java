@@ -124,7 +124,7 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling emitReceived on freezeItemType, item type may be lost!", e);
+            log.error("Exception calling freezeItemType!", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
