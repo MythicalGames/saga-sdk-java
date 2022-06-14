@@ -101,21 +101,18 @@ public class SagaItemClient extends AbstractSagaStreamClient {
     }
 
     public String issueItem(List<String> gameInventoryIds,
-                            String oauthId,
+                            String recipientOauthId,
                             String gameItemTypeId,
                             SagaMetadata metadata,
                             String orderId,
-                            String requestIp,
-                            String buyerWallet) throws SagaException {
+                            String requestIp) throws SagaException {
         var builder = IssueItemRequest.newBuilder()
                 .addAllGameInventoryIds(gameInventoryIds)
                 .setGameItemTypeId(gameItemTypeId)
                 .setMetadata(SagaMetadata.toProto(metadata));
 
-        if (StringUtils.isNotBlank(oauthId)) {
-            builder.setOauthId(oauthId);
-        } else if (StringUtils.isNotBlank(buyerWallet)) {
-            builder.setBuyerWallet(buyerWallet);
+        if (StringUtils.isNotBlank(recipientOauthId)) {
+            builder.setRecipientOauthId(recipientOauthId);
         }
 
         if (StringUtils.isNotBlank(orderId)) {
