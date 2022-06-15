@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
 public class SagaItemTypeClient extends AbstractSagaStreamClient {
@@ -59,8 +60,8 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
                                            SortOrder sortOrder,
                                            Instant createdAtCursor) throws SagaException {
         var request = GetItemTypesRequest.newBuilder()
-                .setGameTitleId(gameTitleId)
-                .setPublisherAddress(publisherAddress)
+                .setGameTitleId(StringUtils.defaultString(gameTitleId))
+                .setPublisherAddress(StringUtils.defaultString(publisherAddress))
                 .setQueryOptions(CommonFactory.toProto(pageSize, sortOrder, createdAtCursor))
                 .build();
 
