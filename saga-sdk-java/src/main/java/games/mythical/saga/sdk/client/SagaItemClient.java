@@ -139,19 +139,15 @@ public class SagaItemClient extends AbstractSagaStreamClient {
 
     public String transferItem(String gameInventoryId,
                                String sourceOauthId,
-                               String destOauthId,
-                               String storeId) throws SagaException {
-        var builder = TransferItemRequest.newBuilder()
+                               String destOauthId) throws SagaException {
+        var request = TransferItemRequest.newBuilder()
                 .setGameInventoryId(gameInventoryId)
                 .setSourceOauthId(sourceOauthId)
-                .setDestinationOauthId(destOauthId);
-
-        if (StringUtils.isNotBlank(storeId)) {
-            builder.setStoreId(storeId);
-        }
+                .setDestinationOauthId(destOauthId)
+                .build();
 
         try {
-            var receivedResponse = serviceBlockingStub.transferItem(builder.build());
+            var receivedResponse = serviceBlockingStub.transferItem(request);
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);

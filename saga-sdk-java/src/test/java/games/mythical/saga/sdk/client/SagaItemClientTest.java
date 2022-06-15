@@ -139,7 +139,7 @@ class SagaItemClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.transferItem(any())).thenReturn(expectedResponse);
-        final var traceId = itemClient.transferItem(GAME_INVENTORY_ID, SOURCE, DEST, null);
+        final var traceId = itemClient.transferItem(GAME_INVENTORY_ID, SOURCE, DEST);
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ItemStatusUpdate.newBuilder()
