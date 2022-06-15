@@ -796,7 +796,6 @@ Transfer item call
 | game_inventory_id | [string](#string) |  | Game&#39;s id for the Item to transfer |
 | source_oauth_id | [string](#string) |  | User of Item to transfer from |
 | destination_oauth_id | [string](#string) |  | User of Item to transfer to |
-| store_id | [string](#string) |  |  |
 
 
 
@@ -2980,7 +2979,7 @@ Options allowed when querying
 | ----- | ---- | ----- | ----------- |
 | page_size | [int32](#int32) |  | Size of the page of results |
 | sort_order | [SortOrder](#saga-common-SortOrder) |  | Which order to sort |
-| created_at_cursor | [uint64](#uint64) |  | Cursor-based pagination based on created_at |
+| created_at_cursor | [int64](#int64) |  | Cursor-based pagination based on created_at |
 
 
 
