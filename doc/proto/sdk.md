@@ -734,8 +734,7 @@ Issue item call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | game_inventory_ids | [string](#string) | repeated | GameInventory Ids of Items being issued |
-| oauth_id | [string](#string) |  |  |
-| buyer_wallet | [string](#string) |  |  |
+| recipient_oauth_id | [string](#string) |  |  |
 | game_item_type_id | [string](#string) |  | Unique id set for your game of the Item being issued |
 | metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata associated to Item being issued |
 | order_id | [string](#string) |  |  |
