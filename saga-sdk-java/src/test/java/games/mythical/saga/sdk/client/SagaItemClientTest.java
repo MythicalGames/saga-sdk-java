@@ -236,7 +236,7 @@ class SagaItemClientTest extends AbstractClientTest {
         final var expectedResponse = ReceivedResponse.newBuilder()
             .setTraceId(RandomStringUtils.randomAlphanumeric(30))
             .build();
-        when(mockServiceBlockingStub.updateItemsMetadata(any())).thenReturn(expectedResponse);
+        when(mockServiceBlockingStub.updateItemMetadata(any())).thenReturn(expectedResponse);
         itemClient.updateItemMetadata(GAME_INVENTORY_ID, EXPECTED_METADATA);
     }
 }
