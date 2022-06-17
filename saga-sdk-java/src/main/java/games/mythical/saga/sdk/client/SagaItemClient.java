@@ -192,22 +192,15 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         }
     }
 
-    public void updateItemMetadata(String gameInventoryId, SagaMetadata metadata) throws SagaException {
-        var updateItem = UpdateItemMetadata.newBuilder()
-                .setGameInventoryId(gameInventoryId)
-                .setMetadata(SagaMetadata.toProto(metadata))
-                .build();
-
-        _updateItemMetadata(List.of(updateItem));
-    }
-
-    private void _updateItemMetadata(List<UpdateItemMetadata> updateItems) throws SagaException {
+    public String updateItemMetadata(String gameInventoryId, SagaMetadata metadata) throws SagaException {
         try {
-            var request = UpdateItemsMetadataRequest.newBuilder()
-                    .addAllUpdateItems(updateItems)
+            var request = UpdateItemMetadata.newBuilder()
+                    .setGameInventoryId(gameInventoryId)
+                    .setMetadata(SagaMetadata.toProto(metadata))
                     .build();
 
-            serviceBlockingStub.updateItemsMetadata(request);
+            var response = serviceBlockingStub.updateItemMetadata(request);
+            return response.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         }
