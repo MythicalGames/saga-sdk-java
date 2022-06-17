@@ -194,7 +194,7 @@ public class SagaItemClient extends AbstractSagaStreamClient {
 
     public String updateItemMetadata(String gameInventoryId, SagaMetadata metadata) throws SagaException {
         try {
-            var request = UpdateItemMetadata.newBuilder()
+            var request = UpdateItemMetadataRequest.newBuilder()
                     .setGameInventoryId(gameInventoryId)
                     .setMetadata(SagaMetadata.toProto(metadata))
                     .build();
