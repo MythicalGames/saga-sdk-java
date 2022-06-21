@@ -41,7 +41,7 @@
     - [ItemProto](#saga-api-item-ItemProto)
     - [ItemsProto](#saga-api-item-ItemsProto)
     - [TransferItemRequest](#saga-api-item-TransferItemRequest)
-    - [UpdateItemMetadata](#saga-api-item-UpdateItemMetadata)
+    - [UpdateItemMetadataRequest](#saga-api-item-UpdateItemMetadataRequest)
   
 - [api/item/rpc.proto](#api_item_rpc-proto)
     - [ItemService](#saga-api-item-ItemService)
@@ -800,9 +800,9 @@ Transfer item call
 
 
 
-<a name="saga-api-item-UpdateItemMetadata"></a>
+<a name="saga-api-item-UpdateItemMetadataRequest"></a>
 
-### UpdateItemMetadata
+### UpdateItemMetadataRequest
 Update Metadata call
 
 
@@ -851,7 +851,7 @@ Update Metadata call
 | IssueItem | [IssueItemRequest](#saga-api-item-IssueItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Issue an Item |
 | TransferItem | [TransferItemRequest](#saga-api-item-TransferItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Transfer Item between users |
 | BurnItem | [BurnItemRequest](#saga-api-item-BurnItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Burn an Item |
-| UpdateItemMetadata | [UpdateItemMetadata](#saga-api-item-UpdateItemMetadata) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update an Item&#39;s metadata |
+| UpdateItemMetadata | [UpdateItemMetadataRequest](#saga-api-item-UpdateItemMetadataRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update an Item&#39;s metadata |
 | DepositItem | [DepositItemRequest](#saga-api-item-DepositItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Deposit an Item |
 
  
