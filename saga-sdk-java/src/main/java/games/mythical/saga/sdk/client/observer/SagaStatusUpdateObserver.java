@@ -32,6 +32,7 @@ import java.util.function.Consumer;
 
 @Slf4j
 public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdate> {
+    private static final String PING_TRACE = "ping";
     private static SagaStatusUpdateObserver instance;
     private final StatusStreamGrpc.StatusStreamStub statusStreamStub;
     private final Consumer<SagaStatusUpdateObserver> resubscribe;
@@ -128,6 +129,9 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     public void onNext(StatusUpdate message) {
         log.trace("StatusUpdateObserver.onNext for event {} with message {}", message.getStatusUpdateCase(), message.getTraceId());
         resetConnectionRetry();
+        if (message.getTraceId().equalsIgnoreCase(PING_TRACE)) {
+            return;
+        }
         try {
             switch (message.getStatusUpdateCase()) {
                 case BRIDGE_UPDATE:
