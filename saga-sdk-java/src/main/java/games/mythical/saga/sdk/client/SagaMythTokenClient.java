@@ -2,6 +2,7 @@ package games.mythical.saga.sdk.client;
 
 import com.google.protobuf.Empty;
 import games.mythical.saga.sdk.client.executor.SagaMythTokenExecutor;
+import games.mythical.saga.sdk.client.model.SagaCreditCardData;
 import games.mythical.saga.sdk.client.model.SagaCurrencyExchange;
 import games.mythical.saga.sdk.client.model.SagaGasFee;
 import games.mythical.saga.sdk.client.model.SagaMythToken;
@@ -9,6 +10,7 @@ import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
+import games.mythical.saga.sdk.factory.PmtProviderDataFactory;
 import games.mythical.saga.sdk.proto.api.myth.*;
 import games.mythical.saga.sdk.proto.api.order.PaymentProviderData;
 import io.grpc.StatusRuntimeException;
@@ -46,42 +48,27 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
     }
 
     public Optional<SagaMythToken> quoteBuyingMythToken(BigDecimal quantity,
-                                                        PaymentProviderData paymentProviderData,
+                                                        SagaCreditCardData creditCardData,
                                                         String denominationCurrency,
                                                         String originSubAccount,
                                                         String userId) {
-        var request = QuoteBuyingMythTokenRequest.newBuilder()
-                .setQuantity(quantity.toString())
-                .setPaymentProviderData(paymentProviderData)
-                .setDenominationCurrency(denominationCurrency)
-                .setOriginSubAccount(originSubAccount)
-                .setOauthId(userId)
-                .build();
-        var mythToken = serviceBlockingStub.quoteBuyingMythToken(request);
-        return Optional.of(SagaMythToken.builder()
-                .quoteId(mythToken.getUpholdQuoteId())
-                .originSubAccount(mythToken.getOriginSubAccount())
-                .build());
+        return quoteBuyingMythToken(quantity,
+                                    PmtProviderDataFactory.fromCreditCard(creditCardData),
+                                    denominationCurrency,
+                                    originSubAccount,
+                                    userId);
     }
 
-    public String confirmBuyingMythToken(String quoteId,
-                                         String userId,
-                                         PaymentProviderData paymentProviderData) throws SagaException {
-        var request = ConfirmBuyingMythTokenRequest.newBuilder()
-                .setQuoteId(quoteId)
-                .setOauthId(userId)
-                .setPaymentProviderData(paymentProviderData)
-                .build();
-
-        try {
-            var receivedResponse = serviceBlockingStub.confirmBuyingMythToken(request);
-            return receivedResponse.getTraceId();
-        } catch (StatusRuntimeException e) {
-            throw SagaException.fromGrpcException(e);
-        } catch (Exception e) {
-            log.error("Exception calling emitReceived on confirmBuyingMythToken.", e);
-            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
-        }
+    public Optional<SagaMythToken> quoteBuyingMythToken(BigDecimal quantity,
+                                                        String upholdCardId,
+                                                        String denominationCurrency,
+                                                        String originSubAccount,
+                                                        String userId) {
+        return quoteBuyingMythToken(quantity,
+                                    PmtProviderDataFactory.fromUpholdCard(upholdCardId),
+                                    denominationCurrency,
+                                    originSubAccount,
+                                    userId);
     }
 
     public Optional<SagaMythToken> quoteMythTokenWithdrawal(String userId,
@@ -111,8 +98,56 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
             log.error("Exception calling emitReceived on confirmMythTokenWithdrawal.", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
-
     }
 
+    public String confirmBuyingMythToken(String quoteId,
+                                          String userId,
+                                          SagaCreditCardData creditCardData) throws SagaException {
+        return confirmBuyingMythToken(quoteId, userId, PmtProviderDataFactory.fromCreditCard(creditCardData));
+    }
 
+    public String confirmBuyingMythToken(String quoteId,
+                                          String userId,
+                                          String upholdCardId) throws SagaException {
+        return confirmBuyingMythToken(quoteId, userId, PmtProviderDataFactory.fromUpholdCard(upholdCardId));
+    }
+
+    private String confirmBuyingMythToken(String quoteId,
+                                          String userId,
+                                          PaymentProviderData paymentProviderData) throws SagaException {
+        var request = ConfirmBuyingMythTokenRequest.newBuilder()
+            .setQuoteId(quoteId)
+            .setOauthId(userId)
+            .setPaymentProviderData(paymentProviderData)
+            .build();
+
+        try {
+            var receivedResponse = serviceBlockingStub.confirmBuyingMythToken(request);
+            return receivedResponse.getTraceId();
+        } catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
+        } catch (Exception e) {
+            log.error("Exception calling emitReceived on confirmBuyingMythToken.", e);
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
+        }
+    }
+
+    private Optional<SagaMythToken> quoteBuyingMythToken(BigDecimal quantity,
+                                                         PaymentProviderData paymentProviderData,
+                                                         String denominationCurrency,
+                                                         String originSubAccount,
+                                                         String userId) {
+        var request = QuoteBuyingMythTokenRequest.newBuilder()
+            .setQuantity(quantity.toString())
+            .setPaymentProviderData(paymentProviderData)
+            .setDenominationCurrency(denominationCurrency)
+            .setOriginSubAccount(originSubAccount)
+            .setOauthId(userId)
+            .build();
+        var mythToken = serviceBlockingStub.quoteBuyingMythToken(request);
+        return Optional.of(SagaMythToken.builder()
+                               .quoteId(mythToken.getUpholdQuoteId())
+                               .originSubAccount(mythToken.getOriginSubAccount())
+                               .build());
+    }
 }

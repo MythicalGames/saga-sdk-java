@@ -1,6 +1,5 @@
 package games.mythical.saga.sdk.client;
 
-import com.google.protobuf.ByteString;
 import games.mythical.saga.sdk.client.executor.SagaCurrencyExecutor;
 import games.mythical.saga.sdk.client.model.SagaCurrency;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
@@ -55,8 +54,7 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
             String ownerAddress,
             String quantity,
             long cost,
-            String paymentToken,
-            ByteString signedMessage
+            String paymentToken
             ) throws SagaException {
         var request = IssueCurrencyRequest.newBuilder()
                 .setGameCurrencyTypeId(gameCurrencyTypeId)
@@ -64,7 +62,6 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
                 .setAmount(quantity)
                 .setCost(cost)
                 .setPaymentToken(paymentToken)
-                .setSignedMessage(signedMessage)
                 .build();
 
         try {

@@ -3,7 +3,6 @@ package games.mythical.saga.sdk.client.model;
 import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
 import games.mythical.saga.sdk.proto.api.user.UserProto;
-import games.mythical.saga.sdk.proto.common.user.UserState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +18,6 @@ public class SagaUser {
     private String traceId;
     private String oauthId;
     private String chainAddress;
-    private UserState userState;
     @DtoExclude
     private Instant createdAt;
 

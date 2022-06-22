@@ -96,7 +96,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
         ConcurrentFinisher.wait(trace);
 
         assertEquals(OAUTH_ID, executor.getPaymentMethod().getOauthId());
-        assertTrue(executor.getPaymentMethod().getPaymentMethodData().getMakeDefault());
+        assertTrue(executor.getPaymentMethod().getSagaPaymentData().isDefaultMethod());
         assertEquals(PaymentMethodUpdateStatus.CREATED, executor.getMethodUpdateStatus());
 
         paymentServer.verifyCalls("StatusStream", 1);
@@ -162,7 +162,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
         ConcurrentFinisher.wait(trace);
 
         assertEquals(OAUTH_ID, executor.getPaymentMethod().getOauthId());
-        assertTrue(executor.getPaymentMethod().getPaymentMethodData().getMakeDefault());
+        assertTrue(executor.getPaymentMethod().getSagaPaymentData().isDefaultMethod());
         assertEquals(PaymentMethodUpdateStatus.UPDATED, executor.getMethodUpdateStatus());
 
         paymentServer.verifyCalls("StatusStream", 1);
@@ -195,7 +195,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
         ConcurrentFinisher.wait(trace);
 
         assertEquals(OAUTH_ID, executor.getPaymentMethod().getOauthId());
-        assertTrue(executor.getPaymentMethod().getPaymentMethodData().getMakeDefault());
+        assertTrue(executor.getPaymentMethod().getSagaPaymentData().isDefaultMethod());
         assertEquals(PaymentMethodUpdateStatus.UPDATED, executor.getMethodUpdateStatus());
 
         paymentServer.verifyCalls("StatusStream", 1);
@@ -228,7 +228,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
         ConcurrentFinisher.wait(trace);
 
         assertEquals(OAUTH_ID, executor.getPaymentMethod().getOauthId());
-        assertTrue(executor.getPaymentMethod().getPaymentMethodData().getMakeDefault());
+        assertTrue(executor.getPaymentMethod().getSagaPaymentData().isDefaultMethod());
         assertEquals(PaymentMethodUpdateStatus.UPDATED, executor.getMethodUpdateStatus());
 
         paymentServer.verifyCalls("StatusStream", 1);
@@ -246,7 +246,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
         assertFalse(paymentResponse.isEmpty());
         var payment = paymentResponse.get(0);
         assertEquals(expectedResponse.getPaymentMethodsList().get(0).getTraceId(), payment.getTraceId());
-        assertTrue(payment.getPaymentMethodData().hasCybersource());
+        assertNotNull(payment.getSagaPaymentData().asCybersource());
     }
 
     private PaymentMethodProto createPaymentMethodProto(String oauthId) {
