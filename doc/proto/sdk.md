@@ -55,7 +55,6 @@
     - [ItemTypesProto](#saga-api-itemtype-ItemTypesProto)
     - [PriRevShareSettings](#saga-api-itemtype-PriRevShareSettings)
     - [SecRevShareSettings](#saga-api-itemtype-SecRevShareSettings)
-    - [UpdateItemTypeMetadataPayload](#saga-api-itemtype-UpdateItemTypeMetadataPayload)
     - [UpdateItemTypePayload](#saga-api-itemtype-UpdateItemTypePayload)
   
 - [api/itemtype/rpc.proto](#api_itemtype_rpc-proto)
@@ -209,9 +208,6 @@
   
 - [common/sort.proto](#common_sort-proto)
     - [SortOrder](#saga-common-SortOrder)
-  
-- [common/user/definition.proto](#common_user_definition-proto)
-    - [UserState](#saga-proto-common-user-UserState)
   
 - [streams/bridge/definition.proto](#streams_bridge_definition-proto)
     - [BridgeStatusUpdate](#saga-rpc-streams-bridge-BridgeStatusUpdate)
@@ -433,7 +429,6 @@ Issue currency call
 | owner_address | [string](#string) |  | Wallet address to issue currency to |
 | cost | [uint64](#uint64) |  |  |
 | payment_token | [string](#string) |  |  |
-| signed_message | [bytes](#bytes) |  |  |
 
 
 
@@ -988,22 +983,6 @@ Get ItemTypes call
 
 ### SecRevShareSettings
 
-
-
-
-
-
-
-<a name="saga-api-itemtype-UpdateItemTypeMetadataPayload"></a>
-
-### UpdateItemTypeMetadataPayload
-Update Metadata on ItemType call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| game_item_type_id | [string](#string) |  | Game&#39;s ItemTypeId for the Metadata to update |
-| metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata to update the ItemType with |
 
 
 
@@ -1655,7 +1634,6 @@ Create Order Quote call
 | city | [string](#string) |  |  |
 | state | [string](#string) |  |  |
 | postal_code | [string](#string) |  |  |
-| country_name | [string](#string) |  |  |
 | country_iso_alpha_2 | [string](#string) |  |  |
 | expiration_month | [string](#string) |  |  |
 | expiration_year | [string](#string) |  |  |
@@ -2426,7 +2404,6 @@ Get wallet assets call
 | trace_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  | Unique Id (oauth) for this User |
 | chain_address | [string](#string) |  | Address on the chain |
-| user_state | [saga.proto.common.user.UserState](#saga-proto-common-user-UserState) |  | What state the User is in |
 | created_at | [uint64](#uint64) |  | When this User was created |
 
 
@@ -2996,34 +2973,6 @@ Options allowed when querying
 | ---- | ------ | ----------- |
 | ASC | 0 | Sort ascending |
 | DESC | 1 | Sort descending |
-
-
- 
-
- 
-
- 
-
-
-
-<a name="common_user_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## common/user/definition.proto
-
-
- 
-
-
-<a name="saga-proto-common-user-UserState"></a>
-
-### UserState
-
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| FAILED | 0 | User failed current action |
-| LINKED | 1 | User linked successfully |
 
 
  
@@ -3670,7 +3619,6 @@ Results from a User status update gRPC stream call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  | Unique id for the user |
-| user_state | [saga.proto.common.user.UserState](#saga-proto-common-user-UserState) |  | State of the User, see UserState |
 
 
 

@@ -407,10 +407,6 @@
                 </li>
               
                 <li>
-                  <a href="#saga.api.itemtype.UpdateItemTypeMetadataPayload"><span class="badge">M</span>UpdateItemTypeMetadataPayload</a>
-                </li>
-              
-                <li>
                   <a href="#saga.api.itemtype.UpdateItemTypePayload"><span class="badge">M</span>UpdateItemTypePayload</a>
                 </li>
               
@@ -1126,21 +1122,6 @@
         
           
           <li>
-            <a href="#common%2fuser%2fdefinition.proto">common/user/definition.proto</a>
-            <ul>
-              
-              
-                <li>
-                  <a href="#saga.proto.common.user.UserState"><span class="badge">E</span>UserState</a>
-                </li>
-              
-              
-              
-            </ul>
-          </li>
-        
-          
-          <li>
             <a href="#streams%2fbridge%2fdefinition.proto">streams/bridge/definition.proto</a>
             <ul>
               
@@ -1722,13 +1703,6 @@
                 <tr>
                   <td>payment_token</td>
                   <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>signed_message</td>
-                  <td><a href="#bytes">bytes</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -2966,37 +2940,6 @@
         <p></p>
 
         
-
-        
-      
-        <h3 id="saga.api.itemtype.UpdateItemTypeMetadataPayload">UpdateItemTypeMetadataPayload</h3>
-        <p>Update Metadata on ItemType call</p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>game_item_type_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>Game&#39;s ItemTypeId for the Metadata to update </p></td>
-                </tr>
-              
-                <tr>
-                  <td>metadata</td>
-                  <td><a href="#saga.common.Metadata">saga.common.Metadata</a></td>
-                  <td></td>
-                  <td><p>Metadata to update the ItemType with </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
 
         
       
@@ -4427,13 +4370,6 @@
               
                 <tr>
                   <td>postal_code</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>country_name</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -6021,13 +5957,6 @@
                 </tr>
               
                 <tr>
-                  <td>user_state</td>
-                  <td><a href="#saga.proto.common.user.UserState">saga.proto.common.user.UserState</a></td>
-                  <td></td>
-                  <td><p>What state the User is in </p></td>
-                </tr>
-              
-                <tr>
                   <td>created_at</td>
                   <td><a href="#uint64">uint64</a></td>
                   <td></td>
@@ -7093,43 +7022,6 @@
                 <td>DESC</td>
                 <td>1</td>
                 <td><p>Sort descending</p></td>
-              </tr>
-            
-          </tbody>
-        </table>
-      
-
-      
-
-      
-    
-      
-      <div class="file-heading">
-        <h2 id="common/user/definition.proto">common/user/definition.proto</h2><a href="#title">Top</a>
-      </div>
-      <p></p>
-
-      
-
-      
-        <h3 id="saga.proto.common.user.UserState">UserState</h3>
-        <p></p>
-        <table class="enum-table">
-          <thead>
-            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
-          </thead>
-          <tbody>
-            
-              <tr>
-                <td>FAILED</td>
-                <td>0</td>
-                <td><p>User failed current action</p></td>
-              </tr>
-            
-              <tr>
-                <td>LINKED</td>
-                <td>1</td>
-                <td><p>User linked successfully</p></td>
               </tr>
             
           </tbody>
@@ -8331,13 +8223,6 @@
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>Unique id for the user </p></td>
-                </tr>
-              
-                <tr>
-                  <td>user_state</td>
-                  <td><a href="#saga.proto.common.user.UserState">saga.proto.common.user.UserState</a></td>
-                  <td></td>
-                  <td><p>State of the User, see UserState </p></td>
                 </tr>
               
             </tbody>
