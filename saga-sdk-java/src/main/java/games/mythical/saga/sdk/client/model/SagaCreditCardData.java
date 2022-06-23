@@ -17,7 +17,6 @@ public class SagaCreditCardData {
     private String city;
     private String state;
     private String postalCode;
-    private String countryName;
     private String countryIsoAlpha2;
     private String expirationMonth;
     private String expirationYear;

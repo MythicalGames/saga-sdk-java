@@ -1,5 +1,7 @@
 package games.mythical.saga.sdk.client.model;
 
+import games.mythical.proto_util.proto.ProtoConvert;
+import games.mythical.saga.sdk.proto.api.payment.UpholdCardProto;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ public class SagaUpholdPaymentData implements SagaPaymentData {
     private String status;
     private String verifications;
     private String birthDate;
+    @ProtoConvert(UpholdCardProto.class)
     private List<SagaUpholdCard> cards;
 
     @Override
