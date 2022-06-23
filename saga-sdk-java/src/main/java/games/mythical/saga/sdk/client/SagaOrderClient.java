@@ -1,10 +1,12 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaOrderExecutor;
+import games.mythical.saga.sdk.client.model.SagaCreditCardData;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
+import games.mythical.saga.sdk.factory.PmtProviderDataFactory;
 import games.mythical.saga.sdk.proto.api.order.ConfirmOrderRequest;
 import games.mythical.saga.sdk.proto.api.order.CreateOrderQuoteRequest;
 import games.mythical.saga.sdk.proto.api.order.OrderServiceGrpc;
@@ -34,6 +36,66 @@ public class SagaOrderClient extends AbstractSagaStreamClient {
     }
 
     public String createQuote(String oauthId,
+                               BigDecimal subtotal,
+                               SagaCreditCardData creditCardData,
+                               String gameItemTypeId,
+                               String listingAddress,
+                               boolean buyMythToken,
+                               boolean withdrawMythToken,
+                               boolean convertMythToUsd,
+                               String withdrawItemAddress) throws SagaException {
+        return createQuote(oauthId,
+                           subtotal,
+                           PmtProviderDataFactory.fromCreditCard(creditCardData),
+                           gameItemTypeId,
+                           listingAddress,
+                           buyMythToken,
+                           withdrawMythToken,
+                           convertMythToUsd,
+                           withdrawItemAddress);
+    }
+
+    public String createQuote(String oauthId,
+                              BigDecimal subtotal,
+                              String upholdCardId,
+                              String gameItemTypeId,
+                              String listingAddress,
+                              boolean buyMythToken,
+                              boolean withdrawMythToken,
+                              boolean convertMythToUsd,
+                              String withdrawItemAddress) throws SagaException {
+        return createQuote(oauthId,
+                           subtotal,
+                           PmtProviderDataFactory.fromUpholdCard(upholdCardId),
+                           gameItemTypeId,
+                           listingAddress,
+                           buyMythToken,
+                           withdrawMythToken,
+                           convertMythToUsd,
+                           withdrawItemAddress);
+    }
+
+    public String confirmOrder(String oauthId,
+                                String quoteId,
+                                SagaCreditCardData creditCardData,
+                                String fraudSessionId) throws SagaException {
+        return confirmOrder(oauthId,
+                            quoteId,
+                            PmtProviderDataFactory.fromCreditCard(creditCardData),
+                            fraudSessionId);
+    }
+
+    public String confirmOrder(String oauthId,
+                                String quoteId,
+                                String upholdCardId,
+                                String fraudSessionId) throws SagaException {
+        return confirmOrder(oauthId,
+                            quoteId,
+                            PmtProviderDataFactory.fromUpholdCard(upholdCardId),
+                            fraudSessionId);
+    }
+
+    private String createQuote(String oauthId,
                               BigDecimal subtotal,
                               PaymentProviderData paymentProviderData,
                               String gameItemTypeId,
@@ -83,7 +145,7 @@ public class SagaOrderClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String confirmOrder(String oauthId,
+    private String confirmOrder(String oauthId,
                                String quoteId,
                                PaymentProviderData paymentProviderData,
                                String fraudSessionId) throws SagaException {

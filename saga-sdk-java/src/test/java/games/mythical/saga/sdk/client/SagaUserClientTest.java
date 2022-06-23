@@ -3,7 +3,6 @@ package games.mythical.saga.sdk.client;
 import games.mythical.saga.sdk.client.executor.MockUserExecutor;
 import games.mythical.saga.sdk.proto.api.user.*;
 import games.mythical.saga.sdk.proto.common.SortOrder;
-import games.mythical.saga.sdk.proto.common.user.UserState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.user.UserStatusUpdate;
 import games.mythical.saga.sdk.proto.streams.user.UserUpdate;
@@ -112,8 +111,7 @@ class SagaUserClientTest extends AbstractClientTest {
         checkTraceAndStart(expectedResponse, trace);
 
         final var userStatusUpdate = UserStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
-                .setUserState(UserState.LINKED);
+                .setOauthId(OAUTH_ID);
         final var userUpdate = UserUpdate.newBuilder()
                 .setStatusUpdate(userStatusUpdate);
         final var statusUpdate = StatusUpdate.newBuilder()

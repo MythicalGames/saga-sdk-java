@@ -12,6 +12,7 @@ import games.mythical.saga.sdk.proto.api.user.*;
 import games.mythical.saga.sdk.proto.common.SortOrder;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
@@ -54,9 +55,9 @@ public class SagaUserClient extends AbstractSagaStreamClient {
         }
     }
 
-    public Collection<SagaUser> getUsers(int pageSize,
-                                         SortOrder sortOrder,
-                                         Instant createdAtCursor) throws SagaException {
+    public List<SagaUser> getUsers(int pageSize,
+                                   SortOrder sortOrder,
+                                   Instant createdAtCursor) throws SagaException {
         var request = GetUsersRequest.newBuilder()
                 .setQueryOptions(CommonFactory.toProto(pageSize, sortOrder, createdAtCursor))
                 .build();

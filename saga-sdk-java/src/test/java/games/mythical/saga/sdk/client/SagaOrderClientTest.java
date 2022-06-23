@@ -1,6 +1,7 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockOrderExecutor;
+import games.mythical.saga.sdk.client.model.SagaCreditCardData;
 import games.mythical.saga.sdk.proto.api.order.*;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.order.OrderState;
@@ -65,17 +66,15 @@ class SagaOrderClientTest extends AbstractClientTest {
         final var expectedResponse = genReceived();
         when(mockServiceBlockingStub.createOrderQuote(any())).thenReturn(expectedResponse);
 
-        final var paymentProviderData = PaymentProviderData.newBuilder()
-            .setCreditCardData(CreditCardData.newBuilder()
-                                   .setAddressLine1(RandomStringUtils.randomAlphanumeric(30))
-                                   .setPostalCode(RandomStringUtils.randomAlphanumeric(30))
-                                   .build())
-            .setUpholdCardId(RandomStringUtils.randomAlphanumeric(30))
+        final var sagaCreditCardData = SagaCreditCardData.builder()
+            .addressLine1(RandomStringUtils.randomAlphanumeric(30))
+            .postalCode(RandomStringUtils.randomAlphanumeric(30))
             .build();
+
         final var trace = orderClient.createQuote(
             OAUTH_ID,
             BigDecimal.TEN,
-            paymentProviderData,
+            sagaCreditCardData,
             RandomStringUtils.randomAlphanumeric(30),
             null,
             false,
@@ -118,17 +117,11 @@ class SagaOrderClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.confirmOrder(any())).thenReturn(expectedResponse);
 
-        var paymentProviderData = PaymentProviderData.newBuilder()
-                .setCreditCardData(CreditCardData.newBuilder()
-                        .setAddressLine1(RandomStringUtils.randomAlphanumeric(30))
-                        .setPostalCode(RandomStringUtils.randomAlphanumeric(30))
-                        .build())
-                .setUpholdCardId(RandomStringUtils.randomAlphanumeric(30))
-                .build();
+        final var upholdCardId = RandomStringUtils.randomAlphanumeric(30);
         final var traceId = orderClient.confirmOrder(
                 OAUTH_ID,
                 QUOTE_ID,
-                paymentProviderData,
+                upholdCardId,
                 RandomStringUtils.randomAlphanumeric(30)
         );
         checkTraceAndStart(expectedResponse, traceId);

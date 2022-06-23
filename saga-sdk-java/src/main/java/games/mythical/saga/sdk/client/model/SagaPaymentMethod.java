@@ -2,7 +2,7 @@ package games.mythical.saga.sdk.client.model;
 
 import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
-import games.mythical.saga.sdk.proto.api.payment.PaymentMethodData;
+import games.mythical.saga.sdk.factory.PmtDataFactory;
 import games.mythical.saga.sdk.proto.api.payment.PaymentMethodProto;
 import games.mythical.saga.sdk.proto.api.payment.PaymentMethodProtos;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,8 @@ import java.util.stream.Collectors;
 public class SagaPaymentMethod {
     private String traceId;
     private String oauthId;
-    private PaymentMethodData paymentMethodData;
+    @DtoExclude
+    private SagaPaymentData sagaPaymentData;
     @DtoExclude
     private SagaAddress address;
 
@@ -29,6 +30,10 @@ public class SagaPaymentMethod {
 
         if (proto.hasAddress()) {
             paymentMethod.setAddress(ProtoUtil.toDto(proto.getAddress(), SagaAddress.class));
+        }
+
+        if (proto.hasPaymentMethodData()) {
+            paymentMethod.setSagaPaymentData(PmtDataFactory.fromProto(proto.getPaymentMethodData()));
         }
 
         return paymentMethod;

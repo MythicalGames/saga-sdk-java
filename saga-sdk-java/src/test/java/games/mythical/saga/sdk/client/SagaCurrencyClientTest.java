@@ -1,6 +1,5 @@
 package games.mythical.saga.sdk.client;
 
-import com.google.protobuf.ByteString;
 import games.mythical.saga.sdk.client.executor.MockCurrencyExecutor;
 import games.mythical.saga.sdk.proto.api.currency.CurrencyProto;
 import games.mythical.saga.sdk.proto.api.currency.CurrencyServiceGrpc;
@@ -98,8 +97,7 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 OWNER_ADDRESS,
                 Integer.toString(RandomUtils.nextInt(1, 1000)),
                 1000L,
-                "PAYMENT_TOKEN",
-                ByteString.EMPTY);
+                "PAYMENT_TOKEN");
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = CurrencyStatusUpdate.newBuilder()
