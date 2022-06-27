@@ -193,12 +193,16 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     }
 
     private void handleBridgeUpdate(BridgeUpdate update, String traceId) throws Exception {
-        if (update.hasError()) {
-            final var error = update.getError();
-            sagaBridgeExecutor.onError(toErrData(error));
-        } else {
-            final var message = update.getStatusUpdate();
-            sagaBridgeExecutor.updateItem(
+        if (sagaBridgeExecutor == null) {
+            log.error("Bridge update received, but no bridge executor registered {}", update);
+        }
+        else {
+            if (update.hasError()) {
+                final var error = update.getError();
+                sagaBridgeExecutor.onError(toErrData(error));
+            } else {
+                final var message = update.getStatusUpdate();
+                sagaBridgeExecutor.updateItem(
                     message.getOauthId(),
                     message.getGameInventoryId(),
                     message.getGameItemTypeId(),
@@ -208,33 +212,43 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     message.getMythicalTransactionId(),
                     message.getMainnetTransactionId(),
                     traceId
-            );
+                );
+            }
         }
     }
 
     private void handleCurrencyUpdate(CurrencyUpdate update, String traceId) throws Exception {
-        if (update.hasError()) {
-            final var error = update.getError();
-            sagaCurrencyExecutor.onError(toErrData(error));
-        } else {
-            final var message = update.getStatusUpdate();
-            sagaCurrencyExecutor.updateCurrency(
+        if (sagaCurrencyExecutor == null) {
+            log.error("Currency update received, but no currency executor registered {}", update);
+        }
+        else {
+            if (update.hasError()) {
+                final var error = update.getError();
+                sagaCurrencyExecutor.onError(toErrData(error));
+            } else {
+                final var message = update.getStatusUpdate();
+                sagaCurrencyExecutor.updateCurrency(
                     message.getGameCurrencyTypeId(),
                     message.getQuantity(),
                     message.getOwnerAddress(),
                     traceId,
                     message.getCurrencyState()
-            );
+                );
+            }
         }
     }
 
     private void handleItemUpdate(ItemUpdate update, String traceId) throws Exception {
-        if (update.hasError()) {
-            final var error = update.getError();
-            sagaItemExecutor.onError(toErrData(error));
-        } else {
-            final var message = update.getStatusUpdate();
-            sagaItemExecutor.updateItem(
+        if (sagaItemExecutor == null) {
+            log.error("Item update received, but no item executor registered {}", update);
+        }
+        else {
+            if (update.hasError()) {
+                final var error = update.getError();
+                sagaItemExecutor.onError(toErrData(error));
+            } else {
+                final var message = update.getStatusUpdate();
+                sagaItemExecutor.updateItem(
                     message.getGameInventoryId(),
                     message.getGameItemTypeId(),
                     message.getOauthId(),
@@ -242,123 +256,164 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     message.getMetadataUri(),
                     traceId,
                     message.getItemState()
-            );
+                );
+            }
         }
     }
 
     private void handleItemTypeUpdate(ItemTypeUpdate update, String traceId) throws Exception {
-        if (update.hasError()) {
-            final var error = update.getError();
-            sagaItemTypeExecutor.onError(toErrData(error));
-        } else {
-            final var message = update.getStatusUpdate();
-            sagaItemTypeExecutor.updateItemType(
+        if (sagaItemTypeExecutor == null) {
+            log.error("Item type update received, but no item type executor registered {}", update);
+        }
+        else {
+            if (update.hasError()) {
+                final var error = update.getError();
+                sagaItemTypeExecutor.onError(toErrData(error));
+            } else {
+                final var message = update.getStatusUpdate();
+                sagaItemTypeExecutor.updateItemType(
                     message.getGameItemTypeId(),
                     traceId,
                     message.getItemTypeState()
-            );
+                );
+            }
         }
     }
 
     private void handleListingUpdate(ListingUpdate update, String traceId) throws Exception {
-        if (update.hasError()) {
-            final var error = update.getError();
-            sagaListingExecutor.onError(toErrData(error));
-        } else {
-            final var message = update.getStatusUpdate();
-            sagaListingExecutor.updateListing(
+        if (sagaListingExecutor == null) {
+            log.error("Listing update received, but no listing executor registered {}", update);
+        }
+        else {
+            if (update.hasError()) {
+                final var error = update.getError();
+                sagaListingExecutor.onError(toErrData(error));
+            } else {
+                final var message = update.getStatusUpdate();
+                sagaListingExecutor.updateListing(
                     message.getOauthId(),
                     traceId,
                     message.getQuoteId(),
                     message.getListingId(),
                     new BigDecimal(message.getTotal()),
                     message.getListingState()
-            );
+                );
+            }
         }
     }
 
     private void handleMythTokenUpdate(MythTokenUpdate update, String traceId) throws Exception {
-        if (update.hasError()) {
-            final var error = update.getError();
-            sagaMythTokenExecutor.onError(toErrData(error));
-        } else {
-            final var message = update.getStatusUpdate();
-            sagaMythTokenExecutor.updateMythToken(
+        if (sagaMythTokenExecutor == null) {
+            log.error("Myth token update received, but no myth token executor registered {}", update);
+        }
+        else {
+            if (update.hasError()) {
+                final var error = update.getError();
+                sagaMythTokenExecutor.onError(toErrData(error));
+            } else {
+                final var message = update.getStatusUpdate();
+                sagaMythTokenExecutor.updateMythToken(
                     traceId,
                     message.getTokenState()
-            );
+                );
+            }
         }
     }
 
     private void handleOfferUpdate(OfferUpdate update, String traceId) throws Exception {
-        if (update.hasError()) {
-            final var error = update.getError();
-            sagaOfferExecutor.onError(toErrData(error));
-        } else {
-            final var message = update.getStatusUpdate();
-            sagaOfferExecutor.updateOffer(
+        if (sagaOfferExecutor == null) {
+            log.error("Offer update received, but no offer executor registered {}", update);
+        }
+        else {
+            if (update.hasError()) {
+                final var error = update.getError();
+                sagaOfferExecutor.onError(toErrData(error));
+            } else {
+                final var message = update.getStatusUpdate();
+                sagaOfferExecutor.updateOffer(
                     message.getOauthId(),
                     traceId,
                     message.getQuoteId(),
                     message.getOfferId(),
                     new BigDecimal(message.getTotal()),
                     message.getOfferState()
-            );
+                );
+            }
         }
     }
 
     private void handleOrderUpdate(OrderUpdate update, String traceId) throws Exception {
-        if (update.hasError()) {
-            final var error = update.getError();
-            sagaOrderExecutor.onError(toErrData(error));
-        } else {
-            final var message = update.getStatusUpdate();
-            sagaOrderExecutor.updateOrder(
+        if (sagaOrderExecutor == null) {
+            log.error("Order update received, but no order executor registered {}", update);
+        }
+        else {
+            if (update.hasError()) {
+                final var error = update.getError();
+                sagaOrderExecutor.onError(toErrData(error));
+            } else {
+                final var message = update.getStatusUpdate();
+                sagaOrderExecutor.updateOrder(
                     message.getOauthId(),
                     traceId,
                     message.getQuoteId(),
                     message.getOrderId(),
                     new BigDecimal(message.getTotal()),
                     message.getOrderState()
-            );
+                );
+            }
         }
     }
 
     private void handlePaymentUpdate(PaymentUpdate update, String traceId) throws Exception {
-        if (update.hasError()) {
-            final var error = update.getError();
-            sagaPaymentExecutor.onError(toErrData(error));
-        } else {
-            final var message = update.getStatusUpdate();
-            sagaPaymentExecutor.updatePaymentMethod(
+        if (sagaPaymentExecutor == null) {
+            log.error("Payment update received, but no payment executor registered {}", update);
+        }
+        else {
+            if (update.hasError()) {
+                final var error = update.getError();
+                sagaPaymentExecutor.onError(toErrData(error));
+            } else {
+                final var message = update.getStatusUpdate();
+                sagaPaymentExecutor.updatePaymentMethod(
                     traceId,
                     SagaPaymentMethod.fromProto(message.getPaymentMethod()),
                     message.getPaymentMethodStatus()
-            );
+                );
+            }
         }
     }
 
     private void handlePlayerWalletUpdate(PlayerWalletUpdate update, String traceId) throws Exception {
-        if (update.hasError()) {
-            final var error = update.getError();
-            sagaPlayerWalletExecutor.onError(toErrData(error));
-        } else {
-            final var statusUpdate = update.getStatusUpdate();
-            sagaPlayerWalletExecutor.updatePlayerWallet(
+        if (sagaPlayerWalletExecutor == null) {
+            log.error("Player wallet update received, but no player wallet executor registered {}", update);
+        }
+        else {
+            if (update.hasError()) {
+                final var error = update.getError();
+                sagaPlayerWalletExecutor.onError(toErrData(error));
+            } else {
+                final var statusUpdate = update.getStatusUpdate();
+                sagaPlayerWalletExecutor.updatePlayerWallet(
                     traceId,
                     statusUpdate.getOauthId(),
                     statusUpdate.getAddress(),
                     statusUpdate.getState()
-            );
+                );
+            }
         }
     }
 
     private void handleUserUpdate(UserUpdate update, String traceId) throws Exception {
-        if (update.hasError()) {
-            final var error = update.getError();
-            sagaUserExecutor.onError(toErrData(error));
-        } else {
-            sagaUserExecutor.updateUser(update.getStatusUpdate().getOauthId(), traceId);
+        if (sagaUserExecutor == null) {
+            log.error("User update received, but no user executor registered {}", update);
+        }
+        else {
+            if (update.hasError()) {
+                final var error = update.getError();
+                sagaUserExecutor.onError(toErrData(error));
+            } else {
+                sagaUserExecutor.updateUser(update.getStatusUpdate().getOauthId(), traceId);
+            }
         }
     }
 
