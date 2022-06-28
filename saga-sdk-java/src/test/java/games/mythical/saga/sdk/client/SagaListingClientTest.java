@@ -177,6 +177,7 @@ class SagaListingClientTest extends AbstractClientTest {
     public void getListings() throws Exception {
         var expectedResponse = ListingsProto.newBuilder()
                 .addListings(ListingProto.newBuilder()
+                        .setTraceId("trace-me")
                         .setOauthId(OAUTH_ID)
                         .setCurrency("USD")
                         .setTotal("100")
@@ -197,6 +198,7 @@ class SagaListingClientTest extends AbstractClientTest {
 
         var listing = listingsResponse.iterator().next();
         var expectedListing = expectedResponse.getListings(0);
+        assertEquals(expectedListing.getTraceId(), listing.getTraceId());
         assertEquals(expectedListing.getOauthId(), listing.getOauthId());
         assertEquals(expectedListing.getCurrency(), listing.getCurrency());
         assertEquals(expectedListing.getTotal(), listing.getTotal());
