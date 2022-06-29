@@ -537,8 +537,8 @@ Transfer currency call
 | contract_address | [string](#string) |  |  |
 | finalized | [bool](#bool) |  |  |
 | max_supply | [int64](#int64) |  |  |
-| created_at | [int64](#int64) |  |  |
-| updated_at | [int64](#int64) |  |  |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
 
 
@@ -754,8 +754,8 @@ Issue item call
 | order_id | [string](#string) |  |  |
 | serial_number | [int32](#int32) |  |  |
 | finalized | [bool](#bool) |  |  |
-| created_at | [int64](#int64) |  | When was this Item created |
-| updated_at | [int64](#int64) |  | When was this Item last updated |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When was this Item created |
+| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When was this Item last updated |
 | owner_address | [string](#string) |  |  |
 
 
@@ -945,8 +945,8 @@ Get ItemTypes call
 | max_supply | [int64](#int64) |  |  |
 | contract_address | [string](#string) |  |  |
 | finalized | [bool](#bool) |  |  |
-| created_at | [int64](#int64) |  |  |
-| updated_at | [int64](#int64) |  |  |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | withdrawable | [bool](#bool) |  |  |
 
 
@@ -1131,7 +1131,7 @@ Get Listings call
 | game_inventory_id | [string](#string) |  | Item associated with this Listing |
 | currency | [string](#string) |  | Type of currency the total is in |
 | total | [string](#string) |  | Total price of Listing |
-| created_at | [uint64](#uint64) |  | When the Listing was created |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When the Listing was created |
 
 
 
@@ -1154,7 +1154,7 @@ Get Listings call
 | tax_currency | [string](#string) |  | Currency the tax is in |
 | total | [string](#string) |  | Total price of Listing |
 | currency | [string](#string) |  | Type of currency the total is in |
-| created_at | [uint64](#uint64) |  | When the Listing was created |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When the Listing was created |
 
 
 
@@ -1483,7 +1483,7 @@ Get Offers call
 | game_inventory_id | [string](#string) |  | GameInventory Id of the Offer |
 | currency | [string](#string) |  | Currency of the total |
 | total | [string](#string) |  | Total cost of the offer |
-| created_at | [uint64](#uint64) |  | When the offer was created |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When the offer was created |
 
 
 
@@ -1508,7 +1508,7 @@ Get Offers call
 | tax_currency | [string](#string) |  | Currency that Tax is in |
 | total | [string](#string) |  | Total cost of the offer |
 | currency | [string](#string) |  | Currency the total is in |
-| created_at | [uint64](#uint64) |  | When the Offer was created |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When the Offer was created |
 
 
 
@@ -1681,7 +1681,7 @@ Create Order Quote call
 | buyer_oauth_id | [string](#string) |  |  |
 | seller_oauth_id | [string](#string) |  |  |
 | conversion_rate | [string](#string) |  |  |
-| created_at | [uint64](#uint64) |  |  |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
 
 
@@ -2123,7 +2123,7 @@ Get Titles call
 | ----- | ---- | ----- | ----------- |
 | title_id | [string](#string) |  | Unique id |
 | name | [string](#string) |  | Name for this Title |
-| created_at | [int64](#int64) |  | When this Title was created |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When this Title was created |
 
 
 
@@ -2230,7 +2230,7 @@ Get Transactions for a Player call
 | ----- | ---- | ----- | ----------- |
 | transaction_id | [string](#string) |  | Unique Id |
 | title_id | [string](#string) |  | title that this transaction is from |
-| created_at | [int64](#int64) |  | When this Transaction was created |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When this Transaction was created |
 
 
 
@@ -2404,7 +2404,7 @@ Get wallet assets call
 | trace_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  | Unique Id (oauth) for this User |
 | chain_address | [string](#string) |  | Address on the chain |
-| created_at | [uint64](#uint64) |  | When this User was created |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When this User was created |
 
 
 
@@ -2939,7 +2939,7 @@ Options allowed when querying
 | ----- | ---- | ----- | ----------- |
 | page_size | [int32](#int32) |  | Size of the page of results |
 | sort_order | [SortOrder](#saga-common-SortOrder) |  | Which order to sort |
-| created_at_cursor | [int64](#int64) |  | Cursor-based pagination based on created_at |
+| created_at_cursor | [google.protobuf.Timestamp](#google-protobuf-Timestamp) | optional | Cursor-based pagination based on created_at |
 
 
 
@@ -3576,7 +3576,7 @@ Returned results on sending a Status stream call
 | payment_update | [payment.PaymentUpdate](#saga-rpc-streams-payment-PaymentUpdate) |  |  |
 | user_update | [user.UserUpdate](#saga-rpc-streams-user-UserUpdate) |  |  |
 | player_wallet_update | [playerwallet.PlayerWalletUpdate](#saga-rpc-streams-playerwallet-PlayerWalletUpdate) |  |  |
-| created_at | [int64](#int64) |  |  |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
 
 
