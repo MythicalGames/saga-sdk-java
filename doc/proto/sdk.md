@@ -1127,6 +1127,7 @@ Get Listings call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| trace_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  | User of this Listing |
 | game_inventory_id | [string](#string) |  | Item associated with this Listing |
 | currency | [string](#string) |  | Type of currency the total is in |
