@@ -19,3 +19,7 @@
 * Removed update user from SDK
 ### Changed
 * Updated dependencies
+
+## [0.4.15] - 2022-06-29
+### Changed
+* Timestamp values in SDK protos changed to protobuf Timestamp type.

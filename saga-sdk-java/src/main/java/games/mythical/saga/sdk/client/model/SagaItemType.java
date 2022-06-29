@@ -3,6 +3,7 @@ package games.mythical.saga.sdk.client.model;
 import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
 import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeProto;
+import games.mythical.saga.sdk.util.ConversionUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,10 +39,10 @@ public class SagaItemType {
     public static SagaItemType fromProto(ItemTypeProto proto) {
         var user = ProtoUtil.toDto(proto, SagaItemType.class);
 
-        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        var createdAt = ConversionUtils.protoTimestampToInstant(proto.getCreatedAt());
         user.setCreatedAt(createdAt);
 
-        var updatedAt = Instant.ofEpochMilli(proto.getUpdatedAt());
+        var updatedAt = ConversionUtils.protoTimestampToInstant(proto.getUpdatedAt());
         user.setUpdatedAt(updatedAt);
 
         return user;

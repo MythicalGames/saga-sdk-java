@@ -4,6 +4,7 @@ import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
 import games.mythical.saga.sdk.proto.api.order.QuoteProto;
 import games.mythical.saga.sdk.proto.common.payment.PaymentProviderId;
+import games.mythical.saga.sdk.util.ConversionUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,7 +35,7 @@ public class SagaOrderQuote {
     public static SagaOrderQuote fromProto(QuoteProto proto) {
         var quote = ProtoUtil.toDto(proto, SagaOrderQuote.class);
 
-        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        var createdAt = ConversionUtils.protoTimestampToInstant(proto.getCreatedAt());
         quote.setCreatedAt(createdAt);
 
         return quote;

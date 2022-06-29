@@ -6,9 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Struct;
+import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.JsonFormat;
+import com.google.protobuf.util.Timestamps;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
+import java.time.Instant;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -48,5 +51,16 @@ public class ConversionUtils {
             log.error("ConversionUtils: couldn't convert JSON into String, Object map", e);
             throw new SagaException(SagaErrorCode.PARSING_DATA_EXCEPTION);
         }
+    }
+
+    public static Instant protoTimestampToInstant(Timestamp timestamp) {
+        return Instant.ofEpochMilli(Timestamps.toMillis(timestamp));
+    }
+
+    public static Timestamp instantToProtoTimestamp(Instant instant) {
+        return Timestamp.newBuilder()
+            .setSeconds(instant.getEpochSecond())
+            .setNanos(instant.getNano())
+            .build();
     }
 }
