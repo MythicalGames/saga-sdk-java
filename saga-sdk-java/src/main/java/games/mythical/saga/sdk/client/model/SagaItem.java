@@ -4,6 +4,7 @@ import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
 import games.mythical.saga.sdk.proto.api.item.ItemProto;
 import games.mythical.saga.sdk.proto.common.item.ItemState;
+import games.mythical.saga.sdk.util.ConversionUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,10 +32,10 @@ public class SagaItem {
     public static SagaItem fromProto(ItemProto proto) {
         var user = ProtoUtil.toDto(proto, SagaItem.class);
 
-        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        var createdAt = ConversionUtils.protoTimestampToInstant(proto.getCreatedAt());
         user.setCreatedAt(createdAt);
 
-        var updatedAt = Instant.ofEpochMilli(proto.getUpdatedAt());
+        var updatedAt = ConversionUtils.protoTimestampToInstant(proto.getUpdatedAt());
         user.setUpdatedAt(updatedAt);
 
         return user;

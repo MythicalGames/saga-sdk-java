@@ -1,5 +1,6 @@
 package games.mythical.saga.sdk.client;
 
+import com.google.protobuf.util.Timestamps;
 import games.mythical.saga.sdk.client.executor.MockOfferExecutor;
 import games.mythical.saga.sdk.proto.api.offer.OfferProto;
 import games.mythical.saga.sdk.proto.api.offer.OfferServiceGrpc;
@@ -183,7 +184,7 @@ class SagaOfferClientTest extends AbstractClientTest {
                         .setCurrency("USD")
                         .setTotal("100")
                         .setGameInventoryId("game1")
-                        .setCreatedAt(0)
+                        .setCreatedAt(Timestamps.fromMillis(0))
                         .build())
                 .build();
         when(mockServiceBlockingStub.getOffers(any())).thenReturn(expectedResponse);

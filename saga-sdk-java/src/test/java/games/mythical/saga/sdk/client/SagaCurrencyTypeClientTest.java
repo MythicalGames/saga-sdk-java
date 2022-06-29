@@ -1,5 +1,6 @@
 package games.mythical.saga.sdk.client;
 
+import com.google.protobuf.util.Timestamps;
 import games.mythical.saga.sdk.proto.api.currencytype.CurrencyTypeProto;
 import games.mythical.saga.sdk.proto.api.currencytype.CurrencyTypeServiceGrpc;
 import io.grpc.Status;
@@ -45,8 +46,8 @@ class SagaCurrencyTypeClientTest extends AbstractClientTest {
                 .setMaxSupply(RandomUtils.nextInt(0, 1000))
                 .setContractAddress(ADDRESS)
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
-                .setCreatedAt(Instant.now().toEpochMilli() - 86400)
-                .setUpdatedAt(Instant.now().toEpochMilli())
+                .setCreatedAt(Timestamps.fromMillis(Instant.now().toEpochMilli() - 86400))
+                .setUpdatedAt(Timestamps.fromMillis(Instant.now().toEpochMilli()))
                 .build();
         when(mockServiceBlockingStub.getCurrencyType(any())).thenReturn(expectedResponse);
         var currencyResponse = currencyTypeClient.getCurrencyType(CURRENCY_ID);

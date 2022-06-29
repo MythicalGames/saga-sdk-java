@@ -3,6 +3,7 @@ package games.mythical.saga.sdk.client.model;
 import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
 import games.mythical.saga.sdk.proto.api.listing.ListingQuoteProto;
+import games.mythical.saga.sdk.util.ConversionUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +31,7 @@ public class SagaListingQuote {
     public static SagaListingQuote fromProto(ListingQuoteProto proto) {
         var quote = ProtoUtil.toDto(proto, SagaListingQuote.class);
 
-        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        var createdAt = ConversionUtils.protoTimestampToInstant(proto.getCreatedAt());
         quote.setCreatedAt(createdAt);
 
         return quote;

@@ -1,5 +1,6 @@
 package games.mythical.saga.sdk.client;
 
+import com.google.protobuf.util.Timestamps;
 import games.mythical.saga.sdk.client.executor.MockListingExecutor;
 import games.mythical.saga.sdk.proto.api.listing.ListingProto;
 import games.mythical.saga.sdk.proto.api.listing.ListingServiceGrpc;
@@ -180,7 +181,7 @@ class SagaListingClientTest extends AbstractClientTest {
                         .setCurrency("USD")
                         .setTotal("100")
                         .setGameInventoryId("game1")
-                        .setCreatedAt(0)
+                        .setCreatedAt(Timestamps.fromMillis(0))
                         .build())
                 .build();
         when(mockServiceBlockingStub.getListings(any())).thenReturn(expectedResponse);

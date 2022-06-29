@@ -3,6 +3,7 @@ package games.mythical.saga.sdk.client.model;
 import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
 import games.mythical.saga.sdk.proto.api.currencytype.CurrencyTypeProto;
+import games.mythical.saga.sdk.util.ConversionUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,10 +35,10 @@ public class SagaCurrencyType {
     public static SagaCurrencyType fromProto(CurrencyTypeProto proto) {
         var currencyType = ProtoUtil.toDto(proto, SagaCurrencyType.class);
 
-        var createdAt = Instant.ofEpochMilli(proto.getCreatedAt());
+        var createdAt = ConversionUtils.protoTimestampToInstant(proto.getCreatedAt());
         currencyType.setCreatedAt(createdAt);
 
-        var updatedAt = Instant.ofEpochMilli(proto.getUpdatedAt());
+        var updatedAt = ConversionUtils.protoTimestampToInstant(proto.getUpdatedAt());
         currencyType.setUpdatedAt(updatedAt);
 
         return currencyType;

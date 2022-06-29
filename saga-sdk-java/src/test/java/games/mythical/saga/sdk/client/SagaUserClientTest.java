@@ -1,5 +1,6 @@
 package games.mythical.saga.sdk.client;
 
+import com.google.protobuf.util.Timestamps;
 import games.mythical.saga.sdk.client.executor.MockUserExecutor;
 import games.mythical.saga.sdk.proto.api.user.*;
 import games.mythical.saga.sdk.proto.common.SortOrder;
@@ -88,7 +89,7 @@ class SagaUserClientTest extends AbstractClientTest {
                 .addSagaUsers(UserProto.newBuilder()
                         .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                         .setOauthId(OAUTH_ID)
-                        .setCreatedAt(0)
+                        .setCreatedAt(Timestamps.fromMillis(0))
                         .build())
                 .build();
         when(mockServiceBlockingStub.getUsers(any())).thenReturn(expectedResponse);

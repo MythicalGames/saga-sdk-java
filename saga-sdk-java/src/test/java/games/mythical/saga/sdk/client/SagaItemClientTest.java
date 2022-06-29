@@ -1,5 +1,6 @@
 package games.mythical.saga.sdk.client;
 
+import com.google.protobuf.util.Timestamps;
 import games.mythical.saga.sdk.client.executor.MockItemExecutor;
 import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.proto.api.item.ItemProto;
@@ -74,8 +75,8 @@ class SagaItemClientTest extends AbstractClientTest {
                 .setOrderId("order_id")
                 .setSerialNumber(RandomUtils.nextInt(10, 100))
                 .setFinalized(true)
-                .setCreatedAt(Instant.now().toEpochMilli() - 86400)
-                .setUpdatedAt(Instant.now().toEpochMilli())
+                .setCreatedAt(Timestamps.fromMillis(Instant.now().toEpochMilli() - 86400))
+                .setUpdatedAt(Timestamps.fromMillis(Instant.now().toEpochMilli()))
                 .build();
         when(mockServiceBlockingStub.getItem(any())).thenReturn(expectedResponse);
         var itemResponse = itemClient.getItem(GAME_INVENTORY_ID, false);
