@@ -150,20 +150,6 @@
 - [api/transaction/rpc.proto](#api_transaction_rpc-proto)
     - [TransactionService](#saga-api-transaction-TransactionService)
   
-- [api/user/definition.proto](#api_user_definition-proto)
-    - [CreateUserRequest](#saga-api-user-CreateUserRequest)
-    - [FungibleToken](#saga-api-user-FungibleToken)
-    - [GetUserRequest](#saga-api-user-GetUserRequest)
-    - [GetUsersRequest](#saga-api-user-GetUsersRequest)
-    - [GetWalletAssetsRequest](#saga-api-user-GetWalletAssetsRequest)
-    - [NftItem](#saga-api-user-NftItem)
-    - [UserProto](#saga-api-user-UserProto)
-    - [UsersProto](#saga-api-user-UsersProto)
-    - [WalletAsset](#saga-api-user-WalletAsset)
-  
-- [api/user/rpc.proto](#api_user_rpc-proto)
-    - [UserService](#saga-api-user-UserService)
-  
 - [common/common.proto](#common_common-proto)
     - [ErrorData](#saga-common-ErrorData)
     - [Metadata](#saga-common-Metadata)
@@ -199,9 +185,6 @@
 - [common/payment/definition.proto](#common_payment_definition-proto)
     - [PaymentMethodUpdateStatus](#saga-proto-common-payment-PaymentMethodUpdateStatus)
     - [PaymentProviderId](#saga-proto-common-payment-PaymentProviderId)
-  
-- [common/playerwallet/definition.proto](#common_playerwallet_definition-proto)
-    - [PlayerWalletState](#saga-proto-common-playerwallet-PlayerWalletState)
   
 - [common/query.proto](#common_query-proto)
     - [QueryOptionsProto](#saga-common-QueryOptionsProto)
@@ -258,10 +241,6 @@
     - [StatusUpdate](#saga-rpc-streams-StatusUpdate)
   
     - [StatusStream](#saga-rpc-streams-StatusStream)
-  
-- [streams/user/definition.proto](#streams_user_definition-proto)
-    - [UserStatusUpdate](#saga-rpc-streams-user-UserStatusUpdate)
-    - [UserUpdate](#saga-rpc-streams-user-UserUpdate)
   
 - [Scalar Value Types](#scalar-value-types)
 
@@ -2289,202 +2268,6 @@ Get Transactions for a Player call
 
 
 
-<a name="api_user_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## api/user/definition.proto
-
-
-
-<a name="saga-api-user-CreateUserRequest"></a>
-
-### CreateUserRequest
-Create User call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-api-user-FungibleToken"></a>
-
-### FungibleToken
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  | Name for this Fungible Token |
-| title_id | [string](#string) |  | Id of game this is part of |
-| balance | [string](#string) |  | Amount of token available |
-| contract_address | [string](#string) |  | Contract address of this Fungible Token |
-
-
-
-
-
-
-<a name="saga-api-user-GetUserRequest"></a>
-
-### GetUserRequest
-Get User call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  | Get the user of this Id |
-
-
-
-
-
-
-<a name="saga-api-user-GetUsersRequest"></a>
-
-### GetUsersRequest
-Get Users call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| query_options | [saga.common.QueryOptionsProto](#saga-common-QueryOptionsProto) |  | Sort/Filter options |
-
-
-
-
-
-
-<a name="saga-api-user-GetWalletAssetsRequest"></a>
-
-### GetWalletAssetsRequest
-Get wallet assets call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  | (optional) User to get Wallet for |
-| publisher_id | [string](#string) |  | (optional) Get related Mythical chain wallet for this Publisher Id |
-| partner_id | [string](#string) |  | (optional) Get related Mythical chain wallet for this Partner Id |
-
-
-
-
-
-
-<a name="saga-api-user-NftItem"></a>
-
-### NftItem
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| item_type_name | [string](#string) |  | Name of the ItemType |
-| game_item_type_id | [string](#string) |  | Id of the ItemType |
-| contract_address | [string](#string) |  | Contract address of the NFT |
-| token_id | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-api-user-UserProto"></a>
-
-### UserProto
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| trace_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  | Unique Id (oauth) for this User |
-| chain_address | [string](#string) |  | Address on the chain |
-| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When this User was created |
-
-
-
-
-
-
-<a name="saga-api-user-UsersProto"></a>
-
-### UsersProto
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| saga_users | [UserProto](#saga-api-user-UserProto) | repeated |  |
-
-
-
-
-
-
-<a name="saga-api-user-WalletAsset"></a>
-
-### WalletAsset
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| nmyth_token | [string](#string) |  |  |
-| nmyth_token_quantity | [string](#string) |  | Quantity of nMYTH tokens |
-| ausd_token | [string](#string) |  |  |
-| ausd_token_quantity | [string](#string) |  | Quantity of aUSD tokens |
-| nft_items | [NftItem](#saga-api-user-NftItem) | repeated | List of NFT Items |
-| fungible_tokens | [FungibleToken](#saga-api-user-FungibleToken) | repeated | List of Fungible Tokens |
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
-<a name="api_user_rpc-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## api/user/rpc.proto
-
-
- 
-
- 
-
- 
-
-
-<a name="saga-api-user-UserService"></a>
-
-### UserService
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| GetUser | [GetUserRequest](#saga-api-user-GetUserRequest) | [UserProto](#saga-api-user-UserProto) | Get a User given their oauth Id |
-| GetUsers | [GetUsersRequest](#saga-api-user-GetUsersRequest) | [UsersProto](#saga-api-user-UsersProto) | Get a list of Users based on query parameters |
-| CreateUser | [CreateUserRequest](#saga-api-user-CreateUserRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create a User |
-| GetWalletAssets | [GetWalletAssetsRequest](#saga-api-user-GetWalletAssetsRequest) | [WalletAsset](#saga-api-user-WalletAsset) | Get assets for a User/publisher/partner |
-
- 
-
-
-
 <a name="common_common-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -2885,34 +2668,6 @@ Types of Payments
 | CYBERSOURCE | 0 |  |
 | UPHOLD | 1 |  |
 | MYTHICAL | 2 |  |
-
-
- 
-
- 
-
- 
-
-
-
-<a name="common_playerwallet_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## common/playerwallet/definition.proto
-
-
- 
-
-
-<a name="saga-proto-common-playerwallet-PlayerWalletState"></a>
-
-### PlayerWalletState
-
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| FAILED | 0 |  |
-| CREATED | 1 |  |
 
 
  
@@ -3502,8 +3257,6 @@ Result of payment method creation, update, or deletion
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  | Wallet owner OAuth ID |
-| address | [string](#string) |  | Wallet address |
-| state | [saga.proto.common.playerwallet.PlayerWalletState](#saga-proto-common-playerwallet-PlayerWalletState) |  | Wallet state |
 
 
 
@@ -3575,7 +3328,6 @@ Returned results on sending a Status stream call
 | offer_update | [offer.OfferUpdate](#saga-rpc-streams-offer-OfferUpdate) |  |  |
 | order_update | [order.OrderUpdate](#saga-rpc-streams-order-OrderUpdate) |  |  |
 | payment_update | [payment.PaymentUpdate](#saga-rpc-streams-payment-PaymentUpdate) |  |  |
-| user_update | [user.UserUpdate](#saga-rpc-streams-user-UserUpdate) |  |  |
 | player_wallet_update | [playerwallet.PlayerWalletUpdate](#saga-rpc-streams-playerwallet-PlayerWalletUpdate) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
@@ -3599,53 +3351,6 @@ Returned results on sending a Status stream call
 | ----------- | ------------ | ------------- | ------------|
 | StatusStream | [Subscribe](#saga-rpc-streams-Subscribe) | [StatusUpdate](#saga-rpc-streams-StatusUpdate) stream | Send a call to update the status |
 | StatusConfirmation | [StatusConfirmRequest](#saga-rpc-streams-StatusConfirmRequest) | [.google.protobuf.Empty](#google-protobuf-Empty) | Get verification of status |
-
- 
-
-
-
-<a name="streams_user_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## streams/user/definition.proto
-
-
-
-<a name="saga-rpc-streams-user-UserStatusUpdate"></a>
-
-### UserStatusUpdate
-Results from a User status update gRPC stream call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  | Unique id for the user |
-
-
-
-
-
-
-<a name="saga-rpc-streams-user-UserUpdate"></a>
-
-### UserUpdate
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
-| status_update | [UserStatusUpdate](#saga-rpc-streams-user-UserStatusUpdate) |  |  |
-
-
-
-
-
- 
-
- 
-
- 
 
  
 
