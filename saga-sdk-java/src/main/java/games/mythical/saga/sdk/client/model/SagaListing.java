@@ -16,8 +16,8 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SagaListing {
+    private String traceId;
     private String oauthId;
-    private String titleId;
     private String gameInventoryId;
     private String currency;
     private String total;
