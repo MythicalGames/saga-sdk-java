@@ -61,6 +61,7 @@ public class SagaOfferClient extends AbstractSagaStreamClient {
     public String confirmOffer(String oauthId, String quoteId) throws SagaException {
         var request = ConfirmOfferRequest.newBuilder()
                 .setOauthId(oauthId)
+                .setQuoteId(quoteId)
                 .build();
 
         try {
@@ -74,9 +75,10 @@ public class SagaOfferClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String cancelOffer(String oauthId, String quoteId) throws SagaException {
+    public String cancelOffer(String oauthId, String offerId) throws SagaException {
         var request = CancelOfferRequest.newBuilder()
                 .setOauthId(oauthId)
+                .setOfferId(offerId)
                 .build();
 
         try {
