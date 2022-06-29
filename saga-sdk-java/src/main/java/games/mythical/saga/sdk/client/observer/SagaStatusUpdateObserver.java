@@ -21,7 +21,6 @@ import games.mythical.saga.sdk.proto.streams.offer.OfferUpdate;
 import games.mythical.saga.sdk.proto.streams.order.OrderUpdate;
 import games.mythical.saga.sdk.proto.streams.payment.PaymentUpdate;
 import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
-import games.mythical.saga.sdk.proto.streams.user.UserUpdate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,7 +47,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private SagaOrderExecutor sagaOrderExecutor;
     private SagaPaymentExecutor sagaPaymentExecutor;
     private SagaPlayerWalletExecutor sagaPlayerWalletExecutor;
-    private SagaUserExecutor sagaUserExecutor;
 
     public SagaStatusUpdateObserver(StatusStreamGrpc.StatusStreamStub statusStreamStub,
                                     Consumer<SagaStatusUpdateObserver> resubscribe) {
@@ -120,11 +118,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         return this;
     }
 
-    public SagaStatusUpdateObserver with(SagaUserExecutor sagaUserExecutor) {
-        this.sagaUserExecutor = sagaUserExecutor;
-        return this;
-    }
-
     @Override
     public void onNext(StatusUpdate message) {
         log.trace("StatusUpdateObserver.onNext for event {} with message {}", message.getStatusUpdateCase(), message.getTraceId());
@@ -163,9 +156,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     break;
                 case PLAYER_WALLET_UPDATE:
                     handlePlayerWalletUpdate(message.getPlayerWalletUpdate(), message.getTraceId());
-                    break;
-                case USER_UPDATE:
-                    handleUserUpdate(message.getUserUpdate(), message.getTraceId());
                     break;
                 default: {
                     log.error("Unrecognized event {}", message.getStatusUpdateCase());
@@ -393,26 +383,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                 sagaPlayerWalletExecutor.onError(toErrData(error));
             } else {
                 final var statusUpdate = update.getStatusUpdate();
-                sagaPlayerWalletExecutor.updatePlayerWallet(
-                    traceId,
-                    statusUpdate.getOauthId(),
-                    statusUpdate.getAddress(),
-                    statusUpdate.getState()
-                );
-            }
-        }
-    }
-
-    private void handleUserUpdate(UserUpdate update, String traceId) throws Exception {
-        if (sagaUserExecutor == null) {
-            log.error("User update received, but no user executor registered {}", update);
-        }
-        else {
-            if (update.hasError()) {
-                final var error = update.getError();
-                sagaUserExecutor.onError(toErrData(error));
-            } else {
-                sagaUserExecutor.updateUser(update.getStatusUpdate().getOauthId(), traceId);
+                sagaPlayerWalletExecutor.updatePlayerWallet(traceId, statusUpdate.getOauthId());
             }
         }
     }

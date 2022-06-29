@@ -3,7 +3,6 @@ package games.mythical.saga.sdk.client;
 import games.mythical.saga.sdk.client.executor.MockPlayerWalletExecutor;
 import games.mythical.saga.sdk.proto.api.playerwallet.PlayerWalletServiceGrpc;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
-import games.mythical.saga.sdk.proto.common.playerwallet.PlayerWalletState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletStatusUpdate;
 import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
@@ -19,7 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -58,16 +57,12 @@ public class SagaPlayerWalletTest extends AbstractClientTest {
         when(mockServiceBlockingStub.createPlayerWallet(any())).thenReturn(expectedResponse);
 
         final var oauthId = RandomStringUtils.randomAlphanumeric(30);
-        final var address = RandomStringUtils.randomAlphanumeric(30);
-
         final var traceId = client.createPlayerWallet(oauthId);
 
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = PlayerWalletStatusUpdate.newBuilder()
                 .setOauthId(oauthId)
-                .setAddress(address)
-                .setState(PlayerWalletState.CREATED)
                 .build();
 
         playerWalletServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
@@ -79,8 +74,6 @@ public class SagaPlayerWalletTest extends AbstractClientTest {
 
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertEquals(oauthId, executor.getOauthId());
-        assertEquals(address, executor.getAddress());
-        assertEquals(PlayerWalletState.CREATED, executor.getPlayerWalletState());
 
         playerWalletServer.verifyCalls("StatusStream", 1);
         playerWalletServer.verifyCalls("StatusConfirmation", 1);
