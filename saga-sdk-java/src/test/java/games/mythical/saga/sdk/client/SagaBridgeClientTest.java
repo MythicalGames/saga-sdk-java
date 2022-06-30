@@ -96,7 +96,7 @@ class SagaBridgeClientTest extends AbstractClientTest {
 
         final var update = BridgeStatusUpdate.newBuilder()
             .setOauthId(OAUTH_ID)
-            .setGameItemTypeId(RandomStringUtils.randomAlphanumeric(30))
+            .setItemTypeId(RandomStringUtils.randomAlphanumeric(30))
             .setGameInventoryId(RandomStringUtils.randomAlphanumeric(30))
             .setDestinationAddress(RandomStringUtils.randomAlphanumeric(30))
             .setDestinationChain(RandomStringUtils.randomAlphanumeric(30))

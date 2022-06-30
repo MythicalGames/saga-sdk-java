@@ -8,22 +8,22 @@ import lombok.Getter;
 @Getter
 @Builder
 public class MockItemTypeExecutor extends MockBaseExecutor implements SagaItemTypeExecutor {
-    private String gameItemTypeId;
+    private String itemTypeId;
     private String traceId;
     private ItemTypeState itemTypeState;
 
     @Override
-    public void updateItemType(String gameItemTypeId, String traceId, ItemTypeState itemTypeState) throws Exception {
-        this.gameItemTypeId = gameItemTypeId;
+    public void updateItemType(String itemTypeId, String traceId, ItemTypeState itemTypeState) throws Exception {
+        this.itemTypeId = itemTypeId;
         this.traceId = traceId;
         this.itemTypeState = itemTypeState;
     }
 
     @Override
-    public void updateItemTypeState(String gameItemTypeId,
+    public void updateItemTypeState(String itemTypeId,
                                     String traceId,
                                     ItemTypeState itemTypeState) throws Exception {
-        this.gameItemTypeId = gameItemTypeId;
+        this.itemTypeId = itemTypeId;
         this.traceId = traceId;
         this.itemTypeState = itemTypeState;
     }

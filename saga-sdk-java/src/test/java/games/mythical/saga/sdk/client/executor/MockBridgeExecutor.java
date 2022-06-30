@@ -8,7 +8,7 @@ import lombok.Getter;
 public class MockBridgeExecutor extends MockBaseExecutor implements SagaBridgeExecutor {
     private String oauthId;
     private String gameInventoryId;
-    private String gameItemTypeId;
+    private String itemTypeId;
     private String destinationAddress;
     private String destinationChain;
     private String originAddress;
@@ -18,7 +18,7 @@ public class MockBridgeExecutor extends MockBaseExecutor implements SagaBridgeEx
     @Override
     public void updateItem(String oauthId,
                            String gameInventoryId,
-                           String gameItemTypeId,
+                           String itemTypeId,
                            String destinationAddress,
                            String destinationChain,
                            String originAddress,
@@ -27,7 +27,7 @@ public class MockBridgeExecutor extends MockBaseExecutor implements SagaBridgeEx
                            String traceId) {
         this.oauthId = oauthId;
         this.gameInventoryId = gameInventoryId;
-        this.gameItemTypeId = gameItemTypeId;
+        this.itemTypeId = itemTypeId;
         this.destinationAddress = destinationAddress;
         this.destinationChain = destinationChain;
         this.originAddress = originAddress;

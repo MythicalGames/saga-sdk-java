@@ -37,9 +37,9 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    public Optional<SagaItemType> getItemType(String gameItemTypeId) throws SagaException {
+    public Optional<SagaItemType> getItemType(String itemTypeId) throws SagaException {
         var request = GetItemTypeRequest.newBuilder()
-                .setGameItemTypeId(gameItemTypeId)
+                .setItemTypeId(itemTypeId)
                 .build();
 
         try {
@@ -54,15 +54,10 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public List<SagaItemType> getItemTypes(String gameTitleId,
-                                           String publisherAddress,
-                                           int pageSize,
-                                           SortOrder sortOrder,
-                                           Instant createdAtCursor) throws SagaException {
+    public List<SagaItemType> getItemTypes(String gameTitleId, String publisherAddress) throws SagaException {
         var request = GetItemTypesRequest.newBuilder()
                 .setGameTitleId(StringUtils.defaultString(gameTitleId))
                 .setPublisherAddress(StringUtils.defaultString(publisherAddress))
-                .setQueryOptions(CommonFactory.toProto(pageSize, sortOrder, createdAtCursor))
                 .build();
 
         try {
@@ -73,16 +68,17 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String createItemType(String gameItemTypeId,
-                                 BigDecimal basePrice,
+    public String createItemType(String itemTypeId,
                                  String name,
                                  String symbol,
-                                 int maxSupply) throws SagaException {
+                                 int maxSupply,
+                                 boolean randomize,
+                                 Instant dateFinished,
+                                 boolean withdrawable) throws SagaException {
         try {
-            log.trace("ItemTypeClient.createItemType called for game item type id: {}", gameItemTypeId);
+            log.trace("ItemTypeClient.createItemType called for game item type id: {}", itemTypeId);
             var request = CreateItemTypeRequest.newBuilder()
-                    .setGameItemTypeId(gameItemTypeId)
-                    .setBasePrice(basePrice.toString())
+                    .setItemTypeId(itemTypeId)
                     .setName(name)
                     .setSymbol(symbol)
                     .setMaxSupply(maxSupply)
@@ -97,11 +93,11 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String updateItemType(String gameItemTypeId, boolean withdrawable) throws SagaException {
+    public String updateItemType(String itemTypeId, boolean withdrawable) throws SagaException {
         try {
-            log.trace("ItemTypeClient.updateItemType called for {}", gameItemTypeId);
+            log.trace("ItemTypeClient.updateItemType called for {}", itemTypeId);
             var request = UpdateItemTypePayload.newBuilder()
-                    .setGameItemTypeId(gameItemTypeId)
+                    .setItemTypeId(itemTypeId)
                     .setWithdrawable(withdrawable)
                     .build();
             var result = serviceBlockingStub.updateItemType(request);
@@ -114,11 +110,11 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String freezeItemType(String gameItemTypeId) throws SagaException {
+    public String freezeItemType(String itemTypeId) throws SagaException {
         try {
-            log.trace("ItemTypeClient.freezeItemType called for {}", gameItemTypeId);
+            log.trace("ItemTypeClient.freezeItemType called for {}", itemTypeId);
             var request = FreezeItemTypePayload.newBuilder()
-                    .setGameItemTypeId(gameItemTypeId)
+                    .setItemTypeId(itemTypeId)
                     .build();
             var result = serviceBlockingStub.freezeItemType(request);
             return result.getTraceId();
