@@ -85,15 +85,12 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         when(mockServiceBlockingStub.getItemType(any())).thenReturn(expectedResponse);
         var itemTypeResponse = itemTypeClient.getItemType(ITEM_TYPE_ID);
 
-        assertTrue(itemTypeResponse.isPresent());
-        var itemType = itemTypeResponse.get();
-        assertEquals(ITEM_TYPE_ID, itemType.getItemTypeId());
-        assertEquals(expectedResponse.getName(), itemType.getName());
+        assertNotNull(itemTypeResponse);
+        assertEquals(ITEM_TYPE_ID, itemTypeResponse.getItemTypeId());
+        assertEquals(expectedResponse.getName(), itemTypeResponse.getName());
 
         when(mockServiceBlockingStub.getItemType(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
-        itemTypeResponse = itemTypeClient.getItemType("INVALID-ITEM-TYPE-ID");
-
-        assertTrue(itemTypeResponse.isEmpty());
+        assertThrows(SagaException.class, () -> itemTypeClient.getItemType("INVALID-ITEM-TYPE-ID"));
     }
 
     @Test

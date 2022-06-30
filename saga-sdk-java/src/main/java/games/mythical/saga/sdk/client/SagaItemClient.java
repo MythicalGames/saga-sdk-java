@@ -20,7 +20,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -41,19 +40,16 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    public Optional<SagaItem> getItem(String inventoryId) throws SagaException {
+    public SagaItem getItem(String inventoryId) throws SagaException {
         var request = GetItemRequest.newBuilder()
                 .setInventoryId(inventoryId)
                 .build();
 
         try {
             var item = serviceBlockingStub.getItem(request);
-            return Optional.of(SagaItem.fromProto(item));
+            ValidateUtil.checkFound(item, String.format("Item %s not found", request.getInventoryId()));
+            return SagaItem.fromProto(item);
         } catch (StatusRuntimeException e) {
-            if (e.getStatus() == Status.NOT_FOUND) {
-                return Optional.empty();
-            }
-
             throw SagaException.fromGrpcException(e);
         }
     }
@@ -78,7 +74,6 @@ public class SagaItemClient extends AbstractSagaStreamClient {
             if (e.getStatus() == Status.NOT_FOUND) {
                 return List.of();
             }
-
             throw SagaException.fromGrpcException(e);
         }
     }

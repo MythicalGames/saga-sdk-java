@@ -8,6 +8,7 @@ import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.itemtype.*;
 import games.mythical.saga.sdk.util.ConversionUtils;
+import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 public class SagaItemTypeClient extends AbstractSagaStreamClient {
@@ -35,19 +35,16 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    public Optional<SagaItemType> getItemType(String itemTypeId) throws SagaException {
+    public SagaItemType getItemType(String itemTypeId) throws SagaException {
         var request = GetItemTypeRequest.newBuilder()
                 .setItemTypeId(itemTypeId)
                 .build();
 
         try {
             var item = serviceBlockingStub.getItemType(request);
-            return Optional.of(SagaItemType.fromProto(item));
+            ValidateUtil.checkFound(item, String.format("Unable to find item %s", request.getItemTypeId()));
+            return SagaItemType.fromProto(item);
         } catch (StatusRuntimeException e) {
-            if (e.getStatus() == Status.NOT_FOUND) {
-                return Optional.empty();
-            }
-
             throw SagaException.fromGrpcException(e);
         }
     }
@@ -62,6 +59,9 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
             var result = serviceBlockingStub.getItemTypes(request);
             return SagaItemType.fromProto(result.getItemTypesList());
         } catch (StatusRuntimeException e) {
+            if (e.getStatus() == Status.NOT_FOUND) {
+                return List.of();
+            }
             throw SagaException.fromGrpcException(e);
         }
     }

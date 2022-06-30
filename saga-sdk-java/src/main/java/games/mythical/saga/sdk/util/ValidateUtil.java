@@ -10,4 +10,19 @@ public class ValidateUtil {
             throw new SagaException(SagaErrorCode.INVALID_ARGUMENT, msg);
         }
     }
+
+    public static void checkFound(Object objToCheck, String msg, Object... args) throws SagaException {
+        checkNotNull(objToCheck, SagaErrorCode.UNABLE_TO_CREATE_QUOTE, msg, args);
+    }
+
+    public static void checkQuote(Object objToCheck, String msg, Object... args) throws SagaException {
+        checkNotNull(objToCheck, SagaErrorCode.UNABLE_TO_CREATE_QUOTE, msg, args);
+    }
+
+    public static void checkNotNull(Object objToCheck, SagaErrorCode errorCode, String msg, Object... args)
+        throws SagaException {
+        if (objToCheck == null) {
+            throw new SagaException(errorCode, String.format(msg, args));
+        }
+    }
 }

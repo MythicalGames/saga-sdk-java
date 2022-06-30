@@ -2,6 +2,8 @@ package games.mythical.saga.sdk.client;
 
 import com.google.protobuf.util.Timestamps;
 import games.mythical.saga.sdk.client.executor.MockItemExecutor;
+import games.mythical.saga.sdk.client.model.SagaMetadata;
+import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.item.ItemProto;
 import games.mythical.saga.sdk.proto.api.item.ItemServiceGrpc;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
@@ -80,14 +82,11 @@ class SagaItemClientTest extends AbstractClientTest {
         when(mockServiceBlockingStub.getItem(any())).thenReturn(expectedResponse);
         var itemResponse = itemClient.getItem(INVENTORY_ID);
 
-        assertTrue(itemResponse.isPresent());
-        var item = itemResponse.get();
-        assertEquals(INVENTORY_ID, item.getInventoryId());
+        assertNotNull(itemResponse);
+        assertEquals(INVENTORY_ID, itemResponse.getInventoryId());
 
         when(mockServiceBlockingStub.getItem(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
-        itemResponse = itemClient.getItem("INVALID-ITEM-ID");
-
-        assertTrue(itemResponse.isEmpty());
+        assertThrows(SagaException.class, () -> itemClient.getItem("INVALID-ITEM-ID"));
     }
 
     @Test

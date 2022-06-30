@@ -70,10 +70,9 @@ class SagaBridgeClientTest extends AbstractClientTest {
 
         var bridgeResponse = bridgeClient.getBridge();
 
-        assertTrue(bridgeResponse.isPresent());
-        var bridge = bridgeResponse.get();
-        assertEquals(expectedResponse.getTraceId(), bridge.getTraceId());
-        assertEquals(expectedResponse.getMythicalAddress(), bridge.getMythicalAddress());
+        assertNotNull(bridgeResponse);
+        assertEquals(expectedResponse.getTraceId(), bridgeResponse.getTraceId());
+        assertEquals(expectedResponse.getMythicalAddress(), bridgeResponse.getMythicalAddress());
     }
 
     @Test

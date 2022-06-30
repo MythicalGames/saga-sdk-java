@@ -9,6 +9,7 @@ import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.payment.*;
 import games.mythical.saga.sdk.proto.common.payment.PaymentProviderId;
+import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -135,13 +136,20 @@ public class SagaPaymentClient extends AbstractSagaStreamClient {
         }
     }
 
-    public List<SagaPaymentMethod> getPaymentMethods(String oauthId, PaymentProviderId paymentProviderId) {
-        var request = GetPaymentMethodsRequest.newBuilder()
+    public List<SagaPaymentMethod> getPaymentMethods(String oauthId, PaymentProviderId paymentProviderId) throws SagaException {
+        try {
+            var request = GetPaymentMethodsRequest.newBuilder()
                 .setOauthId(oauthId)
                 .setPaymentProviderId(paymentProviderId)
                 .build();
 
-        var paymentMethodProtos = serviceBlockingStub.getPaymentMethods(request);
-        return SagaPaymentMethod.fromProtos(paymentMethodProtos);
+            var paymentMethodProtos = serviceBlockingStub.getPaymentMethods(request);
+            return SagaPaymentMethod.fromProtos(paymentMethodProtos);
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus() == Status.NOT_FOUND) {
+                return List.of();
+            }
+            throw SagaException.fromGrpcException(e);
+        }
     }
 }

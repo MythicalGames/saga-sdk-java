@@ -9,11 +9,9 @@ import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.bridge.BridgeServiceGrpc;
 import games.mythical.saga.sdk.proto.api.bridge.GetBridgeRequest;
 import games.mythical.saga.sdk.proto.api.bridge.WithdrawItemRequest;
-import io.grpc.Status;
+import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Optional;
 
 @Slf4j
 public class SagaBridgeClient extends AbstractSagaStreamClient {
@@ -60,17 +58,14 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public Optional<SagaBridge> getBridge() throws SagaException {
+    public SagaBridge getBridge() throws SagaException {
         var request = GetBridgeRequest.newBuilder().build();
 
         try {
             var bridge = serviceBlockingStub.getBridge(request);
-            return Optional.of(SagaBridge.fromProto(bridge));
+            ValidateUtil.checkFound(bridge, "Bridge not found");
+            return SagaBridge.fromProto(bridge);
         } catch (StatusRuntimeException e) {
-            if (e.getStatus() == Status.NOT_FOUND) {
-                return Optional.empty();
-            }
-
             throw SagaException.fromGrpcException(e);
         }
     }

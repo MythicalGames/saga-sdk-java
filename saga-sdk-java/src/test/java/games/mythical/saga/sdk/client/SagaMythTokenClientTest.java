@@ -75,9 +75,8 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         when(mockServiceBlockingStub.getGasFee(any())).thenReturn(expectedResponse);
         var gasFeeResponse = mythTokenClient.getGasFee();
 
-        assertTrue(gasFeeResponse.isPresent());
-        var gasFee = gasFeeResponse.get();
-        compareObjectsByReflection(expectedResponse, gasFee, null);
+        assertNotNull(gasFeeResponse);
+        compareObjectsByReflection(expectedResponse, gasFeeResponse, null);
     }
 
     @Test
@@ -90,13 +89,12 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         when(mockServiceBlockingStub.getCurrencyExchange(any())).thenReturn(expectedResponse);
         var currencyExchangeResponse = mythTokenClient.getExchangeRate();
 
-        assertTrue(currencyExchangeResponse.isPresent());
-        var currencyExchange = currencyExchangeResponse.get();
-        compareObjectsByReflection(expectedResponse, currencyExchange, null);
+        assertNotNull(currencyExchangeResponse);
+        compareObjectsByReflection(expectedResponse, currencyExchangeResponse, null);
     }
 
     @Test
-    public void quoteBuyingMythToken() {
+    public void quoteBuyingMythToken() throws Exception {
         var expectedResponse = QuoteBuyingMythTokenResponse.newBuilder()
                 .setUpholdQuoteId(QUOTE_ID)
                 .setOriginSubAccount("this_account")
@@ -109,7 +107,7 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
                 "this_account",
                 USER_ID);
 
-        assertTrue(quoteBuyingMythTokenResponse.isPresent());
+        assertNotNull(quoteBuyingMythTokenResponse);
     }
 
     @Test
@@ -139,7 +137,7 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
     }
 
     @Test
-    public void quoteMythTokenWithdrawal() {
+    public void quoteMythTokenWithdrawal() throws Exception {
         var expectedResponse = QuoteMythTokenWithdrawalResponse.newBuilder()
                 .setGasFee("1.1234")
                 .setTotalAmount("3000")
@@ -147,7 +145,7 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
 
         when(mockServiceBlockingStub.quoteMythTokenWithdrawal(any())).thenReturn(expectedResponse);
         var response = mythTokenClient.quoteMythTokenWithdrawal(USER_ID, new BigDecimal("3000"));
-        assertTrue(response.isPresent());
+        assertNotNull(response);
     }
 
     @Test
