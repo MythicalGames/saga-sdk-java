@@ -399,14 +399,6 @@
                 </li>
               
                 <li>
-                  <a href="#saga.api.itemtype.PriRevShareSettings"><span class="badge">M</span>PriRevShareSettings</a>
-                </li>
-              
-                <li>
-                  <a href="#saga.api.itemtype.SecRevShareSettings"><span class="badge">M</span>SecRevShareSettings</a>
-                </li>
-              
-                <li>
                   <a href="#saga.api.itemtype.UpdateItemTypePayload"><span class="badge">M</span>UpdateItemTypePayload</a>
                 </li>
               
@@ -1357,7 +1349,7 @@
                 </tr>
               
                 <tr>
-                  <td>game_item_type_id</td>
+                  <td>item_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>Id of the ItemType this Item belongs to </p></td>
@@ -2246,7 +2238,7 @@
                 </tr>
               
                 <tr>
-                  <td>game_item_type_id</td>
+                  <td>item_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>Unique id set for your game of the Item being issued </p></td>
@@ -2567,17 +2559,10 @@
             <tbody>
               
                 <tr>
-                  <td>game_item_type_id</td>
+                  <td>item_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>The game&#39;s unique id for this ItemType </p></td>
-                </tr>
-              
-                <tr>
-                  <td>base_price</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
                 </tr>
               
                 <tr>
@@ -2601,6 +2586,27 @@
                   <td><p> </p></td>
                 </tr>
               
+                <tr>
+                  <td>randomize</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>date_finished</td>
+                  <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>withdrawable</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -2619,7 +2625,7 @@
             <tbody>
               
                 <tr>
-                  <td>game_item_type_id</td>
+                  <td>item_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -2643,7 +2649,7 @@
             <tbody>
               
                 <tr>
-                  <td>game_item_type_id</td>
+                  <td>item_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -2680,13 +2686,6 @@
                   <td><p> </p></td>
                 </tr>
               
-                <tr>
-                  <td>query_options</td>
-                  <td><a href="#saga.common.QueryOptionsProto">saga.common.QueryOptionsProto</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
             </tbody>
           </table>
 
@@ -2705,13 +2704,6 @@
             <tbody>
               
                 <tr>
-                  <td>id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
                   <td>trace_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
@@ -2719,28 +2711,7 @@
                 </tr>
               
                 <tr>
-                  <td>game_item_type_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>game_title_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>publisher_address</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>base_price</td>
+                  <td>item_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -2775,7 +2746,21 @@
                 </tr>
               
                 <tr>
+                  <td>block_explorer_url</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
                   <td>finalized</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>withdrawable</td>
                   <td><a href="#bool">bool</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -2791,13 +2776,6 @@
                 <tr>
                   <td>updated_at</td>
                   <td><a href="#google.protobuf.Timestamp">google.protobuf.Timestamp</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>withdrawable</td>
-                  <td><a href="#bool">bool</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -2833,20 +2811,6 @@
 
         
       
-        <h3 id="saga.api.itemtype.PriRevShareSettings">PriRevShareSettings</h3>
-        <p></p>
-
-        
-
-        
-      
-        <h3 id="saga.api.itemtype.SecRevShareSettings">SecRevShareSettings</h3>
-        <p></p>
-
-        
-
-        
-      
         <h3 id="saga.api.itemtype.UpdateItemTypePayload">UpdateItemTypePayload</h3>
         <p>Update ItemType call</p>
 
@@ -2858,7 +2822,7 @@
             <tbody>
               
                 <tr>
-                  <td>game_item_type_id</td>
+                  <td>item_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>Game&#39;s ItemTypeId for the ItemType to update </p></td>
@@ -4172,7 +4136,7 @@
                 </tr>
               
                 <tr>
-                  <td>game_item_type_id</td>
+                  <td>item_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -6535,7 +6499,7 @@
                 </tr>
               
                 <tr>
-                  <td>game_item_type_id</td>
+                  <td>item_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -6826,7 +6790,7 @@
                 </tr>
               
                 <tr>
-                  <td>game_item_type_id</td>
+                  <td>item_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>Game&#39;s ItemTypeId for the ItemType for this Item </p></td>
@@ -6923,7 +6887,7 @@
             <tbody>
               
                 <tr>
-                  <td>game_item_type_id</td>
+                  <td>item_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>Game&#39;s unique id for this ItemType </p></td>
