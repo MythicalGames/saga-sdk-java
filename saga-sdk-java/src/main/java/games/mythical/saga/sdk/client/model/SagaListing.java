@@ -18,7 +18,7 @@ import java.time.Instant;
 public class SagaListing {
     private String traceId;
     private String oauthId;
-    private String gameInventoryId;
+    private String inventoryId;
     private String currency;
     private String total;
     @DtoExclude

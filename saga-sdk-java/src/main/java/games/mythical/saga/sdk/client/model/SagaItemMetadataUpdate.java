@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class SagaItemMetadataUpdate {
-    private String gameInventoryId;
+    private String inventoryId;
     private SagaMetadata metadata;
 }

@@ -41,10 +41,9 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    public Optional<SagaItem> getItem(String gameInventoryId, boolean history) throws SagaException {
+    public Optional<SagaItem> getItem(String inventoryId) throws SagaException {
         var request = GetItemRequest.newBuilder()
-                .setGameInventoryId(gameInventoryId)
-                .setHistory(history)
+                .setInventoryId(inventoryId)
                 .build();
 
         try {
@@ -100,27 +99,17 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String issueItem(List<String> gameInventoryIds,
+    public String issueItem(List<String> inventoryIds,
                             String recipientOauthId,
                             String itemTypeId,
-                            SagaMetadata metadata,
-                            String orderId,
-                            String requestIp) throws SagaException {
+                            SagaMetadata metadata) throws SagaException {
         var builder = IssueItemRequest.newBuilder()
-                .addAllGameInventoryIds(gameInventoryIds)
+                .addAllInventoryIds(inventoryIds)
                 .setItemTypeId(itemTypeId)
                 .setMetadata(SagaMetadata.toProto(metadata));
 
         if (StringUtils.isNotBlank(recipientOauthId)) {
             builder.setRecipientOauthId(recipientOauthId);
-        }
-
-        if (StringUtils.isNotBlank(orderId)) {
-            builder.setOrderId(orderId);
-        }
-
-        if (StringUtils.isNotBlank(requestIp)) {
-            builder.setRequestIp(requestIp);
         }
 
         try {
@@ -134,12 +123,9 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String transferItem(String gameInventoryId,
-                               String sourceOauthId,
-                               String destOauthId) throws SagaException {
+    public String transferItem(String inventoryId, String destOauthId) throws SagaException {
         var request = TransferItemRequest.newBuilder()
-                .setGameInventoryId(gameInventoryId)
-                .setSourceOauthId(sourceOauthId)
+                .setInventoryId(inventoryId)
                 .setDestinationOauthId(destOauthId)
                 .build();
 
@@ -154,9 +140,9 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String burnItem(String gameInventoryId) throws SagaException {
+    public String burnItem(String inventoryId) throws SagaException {
         var request = BurnItemRequest.newBuilder()
-                .setGameInventoryId(gameInventoryId)
+                .setInventoryId(inventoryId)
                 .build();
 
         try {
@@ -170,14 +156,14 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String depositItem(String gameInventoryId,
+    public String depositItem(String inventoryId,
                               String createdBy,
                               String fromAddress,
                               String toAddress,
                               BlockChains fromChain,
                               String transactionId) throws SagaException {
         var request = DepositItemRequest.newBuilder()
-                .setGameInventoryId(gameInventoryId)
+                .setInventoryId(inventoryId)
                 .setCreatedBy(createdBy)
                 .setFromAddress(fromAddress)
                 .setToAddress(toAddress)
@@ -192,10 +178,10 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String updateItemMetadata(String gameInventoryId, SagaMetadata metadata) throws SagaException {
+    public String updateItemMetadata(String inventoryId, SagaMetadata metadata) throws SagaException {
         try {
             var request = UpdateItemMetadataRequest.newBuilder()
-                    .setGameInventoryId(gameInventoryId)
+                    .setInventoryId(inventoryId)
                     .setMetadata(SagaMetadata.toProto(metadata))
                     .build();
 

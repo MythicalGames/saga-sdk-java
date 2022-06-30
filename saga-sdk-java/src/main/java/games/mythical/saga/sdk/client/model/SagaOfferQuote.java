@@ -20,7 +20,7 @@ public class SagaOfferQuote {
     private String traceId;
     private String oauthId;
     private String quoteId;
-    private String gameInventoryId;
+    private String inventoryId;
     private BigDecimal tax;
     private String taxCurrency;
     private BigDecimal total;

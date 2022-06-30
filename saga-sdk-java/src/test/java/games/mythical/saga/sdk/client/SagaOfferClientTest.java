@@ -183,7 +183,7 @@ class SagaOfferClientTest extends AbstractClientTest {
                         .setOauthId(OAUTH_ID)
                         .setCurrency("USD")
                         .setTotal("100")
-                        .setGameInventoryId("game1")
+                        .setInventoryId("game1")
                         .setCreatedAt(Timestamps.fromMillis(0))
                         .build())
                 .build();
@@ -203,6 +203,6 @@ class SagaOfferClientTest extends AbstractClientTest {
         assertEquals(expectedOffer.getOauthId(), offer.getOauthId());
         assertEquals(expectedOffer.getCurrency(), offer.getCurrency());
         assertEquals(expectedOffer.getTotal(), offer.getTotal());
-        assertEquals(expectedOffer.getGameInventoryId(), offer.getGameInventoryId());
+        assertEquals(expectedOffer.getInventoryId(), offer.getInventoryId());
     }
 }
