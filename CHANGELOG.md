@@ -23,3 +23,11 @@
 ## [0.4.15] - 2022-06-29
 ### Changed
 * Timestamp values in SDK protos changed to protobuf Timestamp type.
+
+## [0.5.0] - 2022-06-29
+### Removed
+* User Client removed
+
+## [0.5.1] - 2022-06-29
+### Changed
+* Fixed offer client not filling all values for confirm and cancel operations.
