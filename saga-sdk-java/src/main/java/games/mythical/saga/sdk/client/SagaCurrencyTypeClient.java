@@ -7,11 +7,11 @@ import games.mythical.saga.sdk.proto.api.currencytype.CurrencyTypeServiceGrpc;
 import games.mythical.saga.sdk.proto.api.currencytype.GetCurrencyTypeRequest;
 import games.mythical.saga.sdk.proto.api.currencytype.GetCurrencyTypesRequest;
 import games.mythical.saga.sdk.proto.common.SortOrder;
+import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SagaCurrencyTypeClient extends AbstractSagaStreamClient {
@@ -28,19 +28,18 @@ public class SagaCurrencyTypeClient extends AbstractSagaStreamClient {
         serviceBlockingStub = CurrencyTypeServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
     }
 
-    public Optional<SagaCurrencyType> getCurrencyType(String currencyTypeId) throws SagaException {
+    public SagaCurrencyType getCurrencyType(String currencyTypeId) throws SagaException {
         var request = GetCurrencyTypeRequest.newBuilder()
                 .setGameCurrencyTypeId(currencyTypeId)
                 .build();
 
         try {
             var currencyType = serviceBlockingStub.getCurrencyType(request);
-            return Optional.of(SagaCurrencyType.fromProto(currencyType));
+            ValidateUtil.checkFound(currencyType,
+                                    String.format("Currency type %s not found",
+                                                  request.getGameCurrencyTypeId()));
+            return SagaCurrencyType.fromProto(currencyType);
         } catch (StatusRuntimeException e) {
-            if (e.getStatus() == Status.NOT_FOUND) {
-                return Optional.empty();
-            }
-
             throw SagaException.fromGrpcException(e);
         }
     }
@@ -57,6 +56,9 @@ public class SagaCurrencyTypeClient extends AbstractSagaStreamClient {
                     .map(SagaCurrencyType::fromProto)
                     .collect(Collectors.toList());
         } catch (StatusRuntimeException e) {
+            if (e.getStatus() == Status.NOT_FOUND) {
+                return List.of();
+            }
             throw SagaException.fromGrpcException(e);
         }
     }

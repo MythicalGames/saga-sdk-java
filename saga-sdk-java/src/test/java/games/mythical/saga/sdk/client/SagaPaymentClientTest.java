@@ -236,7 +236,7 @@ public class SagaPaymentClientTest extends AbstractClientTest {
     }
 
     @Test
-    public void getPaymentMethods() {
+    public void getPaymentMethods() throws Exception {
         var expectedResponse = PaymentMethodProtos.newBuilder()
                 .addPaymentMethods(createPaymentMethodProto(OAUTH_ID))
                 .build();

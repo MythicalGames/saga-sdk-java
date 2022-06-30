@@ -7,11 +7,9 @@ import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.currency.*;
-import io.grpc.Status;
+import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Optional;
 
 @Slf4j
 public class SagaCurrencyClient extends AbstractSagaStreamClient {
@@ -31,7 +29,7 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    public Optional<SagaCurrency> getCurrency(String currencyId, String playerWalletId) throws SagaException {
+    public SagaCurrency getCurrency(String currencyId, String playerWalletId) throws SagaException {
         var request = GetCurrencyByPlayerRequest.newBuilder()
                 .setGameCurrencyTypeId(currencyId)
                 .setPlayerWalletId(playerWalletId)
@@ -39,12 +37,11 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
 
         try {
             var currency = serviceBlockingStub.getCurrencyByPlayer(request);
-            return Optional.of(SagaCurrency.fromProto(currency));
+            ValidateUtil.checkFound(currency,
+                                    String.format("Unable to find currency %s for player wallet %s",
+                                                  currencyId, playerWalletId));
+            return SagaCurrency.fromProto(currency);
         } catch (StatusRuntimeException e) {
-            if (e.getStatus() == Status.NOT_FOUND) {
-                return Optional.empty();
-            }
-
             throw SagaException.fromGrpcException(e);
         }
     }

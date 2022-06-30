@@ -110,7 +110,6 @@ public class SagaListingClient extends AbstractSagaStreamClient {
             if (e.getStatus() == Status.NOT_FOUND) {
                 return List.of();
             }
-
             throw SagaException.fromGrpcException(e);
         }
     }
