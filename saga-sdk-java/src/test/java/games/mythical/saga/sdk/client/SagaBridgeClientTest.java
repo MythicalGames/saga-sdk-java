@@ -70,10 +70,9 @@ class SagaBridgeClientTest extends AbstractClientTest {
 
         var bridgeResponse = bridgeClient.getBridge();
 
-        assertTrue(bridgeResponse.isPresent());
-        var bridge = bridgeResponse.get();
-        assertEquals(expectedResponse.getTraceId(), bridge.getTraceId());
-        assertEquals(expectedResponse.getMythicalAddress(), bridge.getMythicalAddress());
+        assertNotNull(bridgeResponse);
+        assertEquals(expectedResponse.getTraceId(), bridgeResponse.getTraceId());
+        assertEquals(expectedResponse.getMythicalAddress(), bridgeResponse.getMythicalAddress());
     }
 
     @Test
@@ -96,7 +95,7 @@ class SagaBridgeClientTest extends AbstractClientTest {
 
         final var update = BridgeStatusUpdate.newBuilder()
             .setOauthId(OAUTH_ID)
-            .setGameItemTypeId(RandomStringUtils.randomAlphanumeric(30))
+            .setItemTypeId(RandomStringUtils.randomAlphanumeric(30))
             .setGameInventoryId(RandomStringUtils.randomAlphanumeric(30))
             .setDestinationAddress(RandomStringUtils.randomAlphanumeric(30))
             .setDestinationChain(RandomStringUtils.randomAlphanumeric(30))

@@ -53,8 +53,6 @@
     - [GetItemTypesRequest](#saga-api-itemtype-GetItemTypesRequest)
     - [ItemTypeProto](#saga-api-itemtype-ItemTypeProto)
     - [ItemTypesProto](#saga-api-itemtype-ItemTypesProto)
-    - [PriRevShareSettings](#saga-api-itemtype-PriRevShareSettings)
-    - [SecRevShareSettings](#saga-api-itemtype-SecRevShareSettings)
     - [UpdateItemTypePayload](#saga-api-itemtype-UpdateItemTypePayload)
   
 - [api/itemtype/rpc.proto](#api_itemtype_rpc-proto)
@@ -290,7 +288,7 @@ Withdraw Call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  | Id of the ItemType this Item belongs to |
+| item_type_id | [string](#string) |  | Id of the ItemType this Item belongs to |
 | game_inventory_id | [string](#string) |  | Id of the GameInventory this Item belongs to |
 | destination_address | [string](#string) |  | Address of where this Item is going to |
 | destination_chain | [string](#string) |  | Chain of where this Item is going to |
@@ -708,7 +706,7 @@ Issue item call
 | ----- | ---- | ----- | ----------- |
 | game_inventory_ids | [string](#string) | repeated | GameInventory Ids of Items being issued |
 | recipient_oauth_id | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  | Unique id set for your game of the Item being issued |
+| item_type_id | [string](#string) |  | Unique id set for your game of the Item being issued |
 | metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata associated to Item being issued |
 | order_id | [string](#string) |  |  |
 | request_ip | [string](#string) |  |  |
@@ -847,11 +845,13 @@ Create item type call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_item_type_id | [string](#string) |  | The game&#39;s unique id for this ItemType |
-| base_price | [string](#string) |  |  |
+| item_type_id | [string](#string) |  | The game&#39;s unique id for this ItemType |
 | name | [string](#string) |  |  |
 | symbol | [string](#string) |  |  |
 | max_supply | [int64](#int64) |  |  |
+| randomize | [bool](#bool) |  |  |
+| date_finished | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| withdrawable | [bool](#bool) |  |  |
 
 
 
@@ -866,7 +866,7 @@ Create item type call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_item_type_id | [string](#string) |  |  |
+| item_type_id | [string](#string) |  |  |
 
 
 
@@ -881,7 +881,7 @@ Get ItemType call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_item_type_id | [string](#string) |  |  |
+| item_type_id | [string](#string) |  |  |
 
 
 
@@ -898,7 +898,6 @@ Get ItemTypes call
 | ----- | ---- | ----- | ----------- |
 | game_title_id | [string](#string) |  |  |
 | publisher_address | [string](#string) |  |  |
-| query_options | [saga.common.QueryOptionsProto](#saga-common-QueryOptionsProto) |  |  |
 
 
 
@@ -913,20 +912,17 @@ Get ItemTypes call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [string](#string) |  |  |
 | trace_id | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  |  |
-| game_title_id | [string](#string) |  |  |
-| publisher_address | [string](#string) |  |  |
-| base_price | [string](#string) |  |  |
+| item_type_id | [string](#string) |  |  |
 | name | [string](#string) |  |  |
 | symbol | [string](#string) |  |  |
 | max_supply | [int64](#int64) |  |  |
 | contract_address | [string](#string) |  |  |
+| block_explorer_url | [string](#string) |  |  |
 | finalized | [bool](#bool) |  |  |
+| withdrawable | [bool](#bool) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
-| withdrawable | [bool](#bool) |  |  |
 
 
 
@@ -948,26 +944,6 @@ Get ItemTypes call
 
 
 
-<a name="saga-api-itemtype-PriRevShareSettings"></a>
-
-### PriRevShareSettings
-
-
-
-
-
-
-
-<a name="saga-api-itemtype-SecRevShareSettings"></a>
-
-### SecRevShareSettings
-
-
-
-
-
-
-
 <a name="saga-api-itemtype-UpdateItemTypePayload"></a>
 
 ### UpdateItemTypePayload
@@ -976,7 +952,7 @@ Update ItemType call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_item_type_id | [string](#string) |  | Game&#39;s ItemTypeId for the ItemType to update |
+| item_type_id | [string](#string) |  | Game&#39;s ItemTypeId for the ItemType to update |
 | withdrawable | [bool](#bool) |  | withdrawable state to update to |
 
 
@@ -1586,7 +1562,7 @@ Create Order Quote call
 | oauth_id | [string](#string) |  |  |
 | subtotal | [string](#string) |  |  |
 | payment_provider_data | [PaymentProviderData](#saga-api-order-PaymentProviderData) |  |  |
-| game_item_type_id | [string](#string) |  |  |
+| item_type_id | [string](#string) |  |  |
 | listing_address | [string](#string) |  |  |
 | buy_myth_token | [bool](#bool) |  |  |
 | withdraw_myth_token | [bool](#bool) |  |  |
@@ -2755,7 +2731,7 @@ Results from a Bridge status update gRPC stream call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
-| game_item_type_id | [string](#string) |  |  |
+| item_type_id | [string](#string) |  |  |
 | game_inventory_id | [string](#string) |  |  |
 | destination_address | [string](#string) |  |  |
 | destination_chain | [string](#string) |  |  |
@@ -2908,7 +2884,7 @@ Results from an Item status update gRPC stream call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | game_inventory_id | [string](#string) |  | Game&#39;s unique Id for the Item |
-| game_item_type_id | [string](#string) |  | Game&#39;s ItemTypeId for the ItemType for this Item |
+| item_type_id | [string](#string) |  | Game&#39;s ItemTypeId for the ItemType for this Item |
 | oauth_id | [string](#string) |  | User for this Item |
 | serial_number | [int32](#int32) |  |  |
 | metadata_uri | [string](#string) |  | Metadata address |
@@ -2959,7 +2935,7 @@ Results from a ItemType status update gRPC stream call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_item_type_id | [string](#string) |  | Game&#39;s unique id for this ItemType |
+| item_type_id | [string](#string) |  | Game&#39;s unique id for this ItemType |
 | item_type_state | [saga.proto.common.itemtype.ItemTypeState](#saga-proto-common-itemtype-ItemTypeState) |  | State of the ItemType, see ItemTypeState |
 
 

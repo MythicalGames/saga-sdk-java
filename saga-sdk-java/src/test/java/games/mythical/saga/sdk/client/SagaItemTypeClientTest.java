@@ -6,7 +6,6 @@ import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeProto;
 import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeServiceGrpc;
 import games.mythical.saga.sdk.proto.api.itemtype.ItemTypesProto;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
-import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStatusUpdate;
@@ -29,7 +28,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -39,7 +37,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SagaItemTypeClientTest extends AbstractClientTest {
-    private static final String GAME_ITEM_TYPE_ID = RandomStringUtils.randomAlphanumeric(30);
+    private static final String ITEM_TYPE_ID = RandomStringUtils.randomAlphanumeric(30);
 
     private final MockItemTypeExecutor executor = MockItemTypeExecutor.builder().build();
     private MockServer itemTypeServer;
@@ -67,19 +65,15 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         itemTypeServer.stop();
     }
 
-    private ItemTypeProto generateItemTypeProto(String gameItemTypeId) throws SagaException {
+    private ItemTypeProto generateItemTypeProto(String itemTypeId) {
         return ItemTypeProto.newBuilder()
-                .setGameItemTypeId(gameItemTypeId)
-                .setName(RandomStringUtils.randomAlphanumeric(30))
-                .setId(RandomStringUtils.randomAlphanumeric(30))
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
-                .setGameTitleId("game_title_id")
-                .setPublisherAddress("publisher_address")
-                .setBasePrice("9.00")
-                .setName("name")
+                .setItemTypeId(itemTypeId)
+                .setName(RandomStringUtils.randomAlphanumeric(30))
                 .setSymbol("symbol")
-                .setMaxSupply(1000l)
+                .setMaxSupply(1000L)
                 .setContractAddress("contract_address")
+                .setBlockExplorerUrl("url_to_contract_address")
                 .setFinalized(true)
                 .setWithdrawable(false)
                 .build();
@@ -87,24 +81,21 @@ class SagaItemTypeClientTest extends AbstractClientTest {
 
     @Test
     public void getItemType() throws Exception {
-        var expectedResponse = generateItemTypeProto(GAME_ITEM_TYPE_ID);
+        var expectedResponse = generateItemTypeProto(ITEM_TYPE_ID);
         when(mockServiceBlockingStub.getItemType(any())).thenReturn(expectedResponse);
-        var itemTypeResponse = itemTypeClient.getItemType(GAME_ITEM_TYPE_ID);
+        var itemTypeResponse = itemTypeClient.getItemType(ITEM_TYPE_ID);
 
-        assertTrue(itemTypeResponse.isPresent());
-        var itemType = itemTypeResponse.get();
-        assertEquals(GAME_ITEM_TYPE_ID, itemType.getGameItemTypeId());
-        assertEquals(expectedResponse.getName(), itemType.getName());
+        assertNotNull(itemTypeResponse);
+        assertEquals(ITEM_TYPE_ID, itemTypeResponse.getItemTypeId());
+        assertEquals(expectedResponse.getName(), itemTypeResponse.getName());
 
         when(mockServiceBlockingStub.getItemType(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
-        itemTypeResponse = itemTypeClient.getItemType("INVALID-ITEM-TYPE-ID");
-
-        assertTrue(itemTypeResponse.isEmpty());
+        assertThrows(SagaException.class, () -> itemTypeClient.getItemType("INVALID-ITEM-TYPE-ID"));
     }
 
     @Test
     public void getItemTypes() throws Exception {
-        var proto_1 = generateItemTypeProto(GAME_ITEM_TYPE_ID);
+        var proto_1 = generateItemTypeProto(ITEM_TYPE_ID);
         var proto_2 = generateItemTypeProto("item-type-2");
         var proto_3 = generateItemTypeProto("item-type-3");
         var expectedResponse = ItemTypesProto.newBuilder()
@@ -112,26 +103,15 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 .build();
 
         when(mockServiceBlockingStub.getItemTypes(any())).thenReturn(expectedResponse);
-        var itemTypeResponseList = itemTypeClient.getItemTypes(
-                "game-title",
-                "",
-                20,
-                SortOrder.ASC,
-                Instant.EPOCH);
+        var itemTypeResponseList = itemTypeClient.getItemTypes("game-title", "");
 
         assertFalse(itemTypeResponseList.isEmpty());
         var itemType = itemTypeResponseList.get(0);
-        assertEquals(GAME_ITEM_TYPE_ID, itemType.getGameItemTypeId());
+        assertEquals(ITEM_TYPE_ID, itemType.getItemTypeId());
         assertEquals(proto_1.getName(), itemType.getName());
 
         when(mockServiceBlockingStub.getItemTypes(any())).thenReturn(ItemTypesProto.getDefaultInstance());
-        itemTypeResponseList = itemTypeClient.getItemTypes(
-                "",
-                "",
-                20,
-                SortOrder.ASC,
-                Instant.EPOCH
-        );
+        itemTypeResponseList = itemTypeClient.getItemTypes("", "");
 
         assertTrue(itemTypeResponseList.isEmpty());
     }
@@ -144,17 +124,19 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.createItemType(any())).thenReturn(expectedResponse);
         final var traceId = itemTypeClient.createItemType(
-                GAME_ITEM_TYPE_ID,
-                BigDecimal.valueOf(RandomUtils.nextDouble(3.50, 1000.0)).setScale(2, RoundingMode.HALF_UP),
+                ITEM_TYPE_ID,
                 RandomStringUtils.randomAlphanumeric(30),
                 RandomStringUtils.randomAlphanumeric(30),
-                RandomUtils.nextInt(0, 1000)
+                RandomUtils.nextInt(0, 1000),
+                false,
+                null,
+                false
         );
 
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ItemTypeStatusUpdate.newBuilder()
-                .setGameItemTypeId(GAME_ITEM_TYPE_ID)
+                .setItemTypeId(ITEM_TYPE_ID)
                 .setItemTypeState(ItemTypeState.CREATED);
         itemTypeServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(traceId)
@@ -163,7 +145,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
 
         ConcurrentFinisher.wait(traceId);
 
-        assertEquals(GAME_ITEM_TYPE_ID, executor.getGameItemTypeId());
+        assertEquals(ITEM_TYPE_ID, executor.getItemTypeId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertEquals(ItemTypeState.CREATED, executor.getItemTypeState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
@@ -178,7 +160,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.updateItemType(any())).thenReturn(expectedResponse);
-        final var traceId = itemTypeClient.updateItemType(GAME_ITEM_TYPE_ID, true);
+        final var traceId = itemTypeClient.updateItemType(ITEM_TYPE_ID, true);
 
     }
 
@@ -188,6 +170,6 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.freezeItemType(any())).thenReturn(expectedResponse);
-        final var traceId = itemTypeClient.freezeItemType(GAME_ITEM_TYPE_ID);
+        final var traceId = itemTypeClient.freezeItemType(ITEM_TYPE_ID);
     }
 }

@@ -3,7 +3,7 @@ package games.mythical.saga.sdk.client.executor;
 public interface SagaBridgeExecutor extends BaseSagaExecutor {
     void updateItem(String oauthId,
                     String gameInventoryId,
-                    String gameItemTypeId,
+                    String itemTypeId,
                     String destinationAddress,
                     String destinationChain,
                     String originAddress,

@@ -85,7 +85,7 @@ class SagaMultiClientTest extends AbstractClientTest {
         // firing a bridge event so bridge executor should catch it
         final var update = BridgeStatusUpdate.newBuilder()
             .setOauthId(OAUTH_ID)
-            .setGameItemTypeId(RandomStringUtils.randomAlphanumeric(30));
+            .setItemTypeId(RandomStringUtils.randomAlphanumeric(30));
         var statusUpdate = StatusUpdate.newBuilder()
                 .setTraceId(TRACE_ID_2)
                 .setBridgeUpdate(BridgeUpdate.newBuilder().setStatusUpdate(update))
