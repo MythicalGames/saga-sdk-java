@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,33 +18,30 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SagaItemType {
-    private String id;
     private String traceId;
-    private String gameItemTypeId;
-    private String gameTitleId;
-    private String publisherAddress;
-    private BigDecimal basePrice;
+    private String itemTypeId;
     private String name;
     private String symbol;
     private long maxSupply;
     private String contractAddress;
+    private String blockExplorerUrl;
     private boolean finalized;
+    private boolean withdrawable;
     @DtoExclude
     private Instant createdAt;
     @DtoExclude
     private Instant updatedAt;
-    private boolean withdrawable;
 
     public static SagaItemType fromProto(ItemTypeProto proto) {
-        var user = ProtoUtil.toDto(proto, SagaItemType.class);
+        var itemType = ProtoUtil.toDto(proto, SagaItemType.class);
 
         var createdAt = ConversionUtils.protoTimestampToInstant(proto.getCreatedAt());
-        user.setCreatedAt(createdAt);
+        itemType.setCreatedAt(createdAt);
 
         var updatedAt = ConversionUtils.protoTimestampToInstant(proto.getUpdatedAt());
-        user.setUpdatedAt(updatedAt);
+        itemType.setUpdatedAt(updatedAt);
 
-        return user;
+        return itemType;
     }
 
     public static List<SagaItemType> fromProto(List<ItemTypeProto> protos) {

@@ -38,7 +38,7 @@ public class SagaOrderClient extends AbstractSagaStreamClient {
     public String createQuote(String oauthId,
                                BigDecimal subtotal,
                                SagaCreditCardData creditCardData,
-                               String gameItemTypeId,
+                               String itemTypeId,
                                String listingAddress,
                                boolean buyMythToken,
                                boolean withdrawMythToken,
@@ -47,7 +47,7 @@ public class SagaOrderClient extends AbstractSagaStreamClient {
         return createQuote(oauthId,
                            subtotal,
                            PmtProviderDataFactory.fromCreditCard(creditCardData),
-                           gameItemTypeId,
+                           itemTypeId,
                            listingAddress,
                            buyMythToken,
                            withdrawMythToken,
@@ -58,7 +58,7 @@ public class SagaOrderClient extends AbstractSagaStreamClient {
     public String createQuote(String oauthId,
                               BigDecimal subtotal,
                               String upholdCardId,
-                              String gameItemTypeId,
+                              String itemTypeId,
                               String listingAddress,
                               boolean buyMythToken,
                               boolean withdrawMythToken,
@@ -67,7 +67,7 @@ public class SagaOrderClient extends AbstractSagaStreamClient {
         return createQuote(oauthId,
                            subtotal,
                            PmtProviderDataFactory.fromUpholdCard(upholdCardId),
-                           gameItemTypeId,
+                           itemTypeId,
                            listingAddress,
                            buyMythToken,
                            withdrawMythToken,
@@ -98,7 +98,7 @@ public class SagaOrderClient extends AbstractSagaStreamClient {
     private String createQuote(String oauthId,
                               BigDecimal subtotal,
                               PaymentProviderData paymentProviderData,
-                              String gameItemTypeId,
+                              String itemTypeId,
                               String listingAddress,
                               boolean buyMythToken,
                               boolean withdrawMythToken,
@@ -110,8 +110,8 @@ public class SagaOrderClient extends AbstractSagaStreamClient {
                 .setSubtotal(subtotal.toPlainString())
                 .setPaymentProviderData(paymentProviderData);
 
-        if (StringUtils.isNotBlank(gameItemTypeId)) {
-            builder.setGameItemTypeId(gameItemTypeId);
+        if (StringUtils.isNotBlank(itemTypeId)) {
+            builder.setItemTypeId(itemTypeId);
         }
 
         if (StringUtils.isNotBlank(listingAddress)) {
