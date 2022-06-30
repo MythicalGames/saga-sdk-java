@@ -38,7 +38,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SagaItemClientTest extends AbstractClientTest {
-    private static final String GAME_INVENTORY_ID = RandomStringUtils.randomAlphanumeric(30);
+    private static final String INVENTORY_ID = RandomStringUtils.randomAlphanumeric(30);
 
     private final MockItemExecutor executor = MockItemExecutor.builder().build();
     private MockServer itemServer;
@@ -69,24 +69,24 @@ class SagaItemClientTest extends AbstractClientTest {
     @Test
     public void getItem() throws Exception {
         var expectedResponse = ItemProto.newBuilder()
-                .setId(RandomStringUtils.randomAlphanumeric(30))
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
-                .setGameInventoryId(GAME_INVENTORY_ID)
-                .setGameTitleId("game_title_id")
-                .setOrderId("order_id")
+                .setInventoryId(INVENTORY_ID)
+                .setOauthId("owner")
                 .setSerialNumber(RandomUtils.nextInt(10, 100))
                 .setFinalized(true)
+                .setBlockExplorerUrl("block-explorer-url")
+                .setMetadataUrl("metadata-url")
                 .setCreatedAt(Timestamps.fromMillis(Instant.now().toEpochMilli() - 86400))
                 .setUpdatedAt(Timestamps.fromMillis(Instant.now().toEpochMilli()))
                 .build();
         when(mockServiceBlockingStub.getItem(any())).thenReturn(expectedResponse);
-        var itemResponse = itemClient.getItem(GAME_INVENTORY_ID, false);
+        var itemResponse = itemClient.getItem(INVENTORY_ID);
 
         assertNotNull(itemResponse);
-        assertEquals(GAME_INVENTORY_ID, itemResponse.getGameInventoryId());
+        assertEquals(INVENTORY_ID, itemResponse.getInventoryId());
 
         when(mockServiceBlockingStub.getItem(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
-        assertThrows(SagaException.class, () -> itemClient.getItem("INVALID-ITEM-ID", false));
+        assertThrows(SagaException.class, () -> itemClient.getItem("INVALID-ITEM-ID"));
     }
 
     @Test
@@ -100,16 +100,15 @@ class SagaItemClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.issueItem(any())).thenReturn(expectedResponse);
         final var traceId = itemClient.issueItem(
-                List.of(GAME_INVENTORY_ID),
+                List.of(INVENTORY_ID),
                 EXPECTED_OAUTH_ID,
                 RandomStringUtils.randomAlphanumeric(30),
-                EXPECTED_METADATA,
-                null, null
+                EXPECTED_METADATA
         );
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ItemStatusUpdate.newBuilder()
-                .setGameInventoryId(GAME_INVENTORY_ID)
+                .setInventoryId(INVENTORY_ID)
                 .setOauthId(EXPECTED_OAUTH_ID)
                 .setItemState(ItemState.ISSUED);
         itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
@@ -131,18 +130,17 @@ class SagaItemClientTest extends AbstractClientTest {
     @Test
     @Timeout(value = 1, unit = TimeUnit.MINUTES)
     public void transferItem() throws Exception {
-        final var SOURCE = RandomStringUtils.randomAlphanumeric(30);
         final var DEST = RandomStringUtils.randomAlphanumeric(30);
 
         final var expectedResponse = ReceivedResponse.newBuilder()
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.transferItem(any())).thenReturn(expectedResponse);
-        final var traceId = itemClient.transferItem(GAME_INVENTORY_ID, SOURCE, DEST);
+        final var traceId = itemClient.transferItem(INVENTORY_ID, DEST);
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ItemStatusUpdate.newBuilder()
-            .setGameInventoryId(GAME_INVENTORY_ID)
+            .setInventoryId(INVENTORY_ID)
             .setOauthId(DEST)
             .setItemState(ItemState.TRANSFERRED);
         itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
@@ -168,11 +166,11 @@ class SagaItemClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.burnItem(any())).thenReturn(expectedResponse);
-        final var traceId = itemClient.burnItem(GAME_INVENTORY_ID);
+        final var traceId = itemClient.burnItem(INVENTORY_ID);
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ItemStatusUpdate.newBuilder()
-                .setGameInventoryId(GAME_INVENTORY_ID)
+                .setInventoryId(INVENTORY_ID)
                 .setOauthId(RandomStringUtils.randomAlphanumeric(30))
                 .setItemState(ItemState.BURNED);
         itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
@@ -198,7 +196,7 @@ class SagaItemClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.depositItem(any())).thenReturn(expectedResponse);
         final var traceId = itemClient.depositItem(
-                GAME_INVENTORY_ID,
+                INVENTORY_ID,
                 RandomStringUtils.random(30),
                 RandomStringUtils.randomAlphanumeric(30),
                 RandomStringUtils.randomAlphanumeric(30),
@@ -210,7 +208,7 @@ class SagaItemClientTest extends AbstractClientTest {
 
 
         final var update = ItemStatusUpdate.newBuilder()
-                .setGameInventoryId(GAME_INVENTORY_ID)
+                .setInventoryId(INVENTORY_ID)
                 .setOauthId(RandomStringUtils.randomAlphanumeric(30))
                 .setItemState(ItemState.DEPOSITED);
         itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
@@ -236,6 +234,6 @@ class SagaItemClientTest extends AbstractClientTest {
             .setTraceId(RandomStringUtils.randomAlphanumeric(30))
             .build();
         when(mockServiceBlockingStub.updateItemMetadata(any())).thenReturn(expectedResponse);
-        itemClient.updateItemMetadata(GAME_INVENTORY_ID, EXPECTED_METADATA);
+        itemClient.updateItemMetadata(INVENTORY_ID, EXPECTED_METADATA);
     }
 }

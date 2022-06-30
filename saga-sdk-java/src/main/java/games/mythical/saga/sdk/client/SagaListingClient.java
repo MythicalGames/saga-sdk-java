@@ -37,12 +37,12 @@ public class SagaListingClient extends AbstractSagaStreamClient {
     }
 
     public String createListingQuote(String oauthId,
-                                     String gameInventoryId,
+                                     String inventoryId,
                                      BigDecimal subtotal,
                                      String currency) throws SagaException {
         var request = CreateListingQuoteRequest.newBuilder()
                 .setOauthId(oauthId)
-                .setGameInventoryId(gameInventoryId)
+                .setInventoryId(inventoryId)
                 .setTotal(subtotal.toPlainString())
                 .setCurrency(currency)
                 .build();

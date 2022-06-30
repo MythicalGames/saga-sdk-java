@@ -289,7 +289,7 @@ Withdraw Call
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
 | item_type_id | [string](#string) |  | Id of the ItemType this Item belongs to |
-| game_inventory_id | [string](#string) |  | Id of the GameInventory this Item belongs to |
+| inventory_id | [string](#string) |  | Id of the GameInventory this Item belongs to |
 | destination_address | [string](#string) |  | Address of where this Item is going to |
 | destination_chain | [string](#string) |  | Chain of where this Item is going to |
 | origin_address | [string](#string) |  | Address that this Item is being withdrawn from |
@@ -621,7 +621,7 @@ Burn item call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_inventory_id | [string](#string) |  | Game&#39;s id for the Item to burn |
+| inventory_id | [string](#string) |  | Game&#39;s id for the Item to burn |
 
 
 
@@ -636,7 +636,7 @@ Deposit item call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_inventory_id | [string](#string) |  |  |
+| inventory_id | [string](#string) |  |  |
 | created_by | [string](#string) |  |  |
 | from_address | [string](#string) |  |  |
 | to_address | [string](#string) |  |  |
@@ -656,8 +656,7 @@ Get Item call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_inventory_id | [string](#string) |  | Game&#39;s id for the Item to retrieve |
-| history | [bool](#bool) |  | Include history of the Item? |
+| inventory_id | [string](#string) |  | Game&#39;s id for the Item to retrieve |
 
 
 
@@ -704,12 +703,10 @@ Issue item call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_inventory_ids | [string](#string) | repeated | GameInventory Ids of Items being issued |
+| inventory_ids | [string](#string) | repeated | GameInventory Ids of Items being issued |
 | recipient_oauth_id | [string](#string) |  |  |
 | item_type_id | [string](#string) |  | Unique id set for your game of the Item being issued |
 | metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata associated to Item being issued |
-| order_id | [string](#string) |  |  |
-| request_ip | [string](#string) |  |  |
 
 
 
@@ -724,16 +721,15 @@ Issue item call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [string](#string) |  |  |
 | trace_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  | The game&#39;s unique id for this Item |
-| game_title_id | [string](#string) |  |  |
-| order_id | [string](#string) |  |  |
+| inventory_id | [string](#string) |  | The game&#39;s unique id for this Item |
+| oauth_id | [string](#string) |  |  |
 | serial_number | [int32](#int32) |  |  |
 | finalized | [bool](#bool) |  |  |
+| block_explorer_url | [string](#string) |  |  |
+| metadata_url | [string](#string) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When was this Item created |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When was this Item last updated |
-| owner_address | [string](#string) |  |  |
 
 
 
@@ -763,8 +759,7 @@ Transfer item call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_inventory_id | [string](#string) |  | Game&#39;s id for the Item to transfer |
-| source_oauth_id | [string](#string) |  | User of Item to transfer from |
+| inventory_id | [string](#string) |  | Game&#39;s id for the Item to transfer |
 | destination_oauth_id | [string](#string) |  | User of Item to transfer to |
 
 
@@ -780,7 +775,7 @@ Update Metadata call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_inventory_id | [string](#string) |  | Update Metadata for the Item with this id |
+| inventory_id | [string](#string) |  | Update Metadata for the Item with this id |
 | metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata to update with |
 
 
@@ -1047,7 +1042,7 @@ Create Quote for a Listing call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  | User of this Listing Quote |
-| game_inventory_id | [string](#string) |  | Id of GameInventory for this Listing |
+| inventory_id | [string](#string) |  | Id of GameInventory for this Listing |
 | total | [string](#string) |  | Total cost amount for the Listing |
 | currency | [string](#string) |  | Currency that the total is in |
 
@@ -1084,7 +1079,7 @@ Get Listings call
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  | User of this Listing |
-| game_inventory_id | [string](#string) |  | Item associated with this Listing |
+| inventory_id | [string](#string) |  | Item associated with this Listing |
 | currency | [string](#string) |  | Type of currency the total is in |
 | total | [string](#string) |  | Total price of Listing |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When the Listing was created |
@@ -1105,7 +1100,7 @@ Get Listings call
 | trace_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  | User of this Listing |
 | quote_id | [string](#string) |  | unique QuoteId for this Listing |
-| game_inventory_id | [string](#string) |  | Item associated with this Listing |
+| inventory_id | [string](#string) |  | Item associated with this Listing |
 | tax | [string](#string) |  |  |
 | tax_currency | [string](#string) |  | Currency the tax is in |
 | total | [string](#string) |  | Total price of Listing |
@@ -1400,7 +1395,7 @@ Create Offer Quote call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  | GameInventory Id of the Offer |
+| inventory_id | [string](#string) |  | GameInventory Id of the Offer |
 | total | [string](#string) |  | Total quoted for the Offer |
 | currency | [string](#string) |  | Currency the total is in |
 
@@ -1436,7 +1431,7 @@ Get Offers call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  | User of the Offer |
-| game_inventory_id | [string](#string) |  | GameInventory Id of the Offer |
+| inventory_id | [string](#string) |  | GameInventory Id of the Offer |
 | currency | [string](#string) |  | Currency of the total |
 | total | [string](#string) |  | Total cost of the offer |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When the offer was created |
@@ -1457,7 +1452,7 @@ Get Offers call
 | trace_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  | User of this Offer Quote |
 | quote_id | [string](#string) |  | Id of this Offer Quote |
-| game_inventory_id | [string](#string) |  | GameInventory Id for this Offer Quote |
+| inventory_id | [string](#string) |  | GameInventory Id for this Offer Quote |
 | tax | [string](#string) |  | Amount of tax
 
 @exclude and fees? |
@@ -2282,7 +2277,6 @@ Metadata properties of Item
 | name | [string](#string) |  | Name of item |
 | description | [string](#string) |  | Description of the item |
 | image | [string](#string) |  | URL to the image of the item |
-| properties | [google.protobuf.Struct](#google-protobuf-Struct) |  | Additional properties about the Item in a &lt;Key,Value&gt; structure |
 | external_url | [string](#string) |  | URL to the item |
 | background_color | [string](#string) |  | OpenSea background color |
 | animation_url | [string](#string) |  | URL to a media/animation file |
@@ -2732,7 +2726,7 @@ Results from a Bridge status update gRPC stream call
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
 | item_type_id | [string](#string) |  |  |
-| game_inventory_id | [string](#string) |  |  |
+| inventory_id | [string](#string) |  |  |
 | destination_address | [string](#string) |  |  |
 | destination_chain | [string](#string) |  |  |
 | origin_address | [string](#string) |  |  |
@@ -2883,11 +2877,11 @@ Results from an Item status update gRPC stream call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_inventory_id | [string](#string) |  | Game&#39;s unique Id for the Item |
+| inventory_id | [string](#string) |  | Game&#39;s unique Id for the Item |
 | item_type_id | [string](#string) |  | Game&#39;s ItemTypeId for the ItemType for this Item |
 | oauth_id | [string](#string) |  | User for this Item |
 | serial_number | [int32](#int32) |  |  |
-| metadata_uri | [string](#string) |  | Metadata address |
+| metadata_url | [string](#string) |  | Metadata address |
 | item_state | [saga.proto.common.item.ItemState](#saga-proto-common-item-ItemState) |  | State of the Item, see ItemState |
 
 
@@ -3084,7 +3078,7 @@ Results from a Offer status update gRPC stream call
 | oauth_id | [string](#string) |  | User of this Offer |
 | quote_id | [string](#string) |  | Quote associated to this Offer |
 | offer_id | [string](#string) |  | Unique id for this Offer |
-| game_inventory_id | [string](#string) |  | Game&#39;s id for the Item associated with this Offer |
+| inventory_id | [string](#string) |  | Game&#39;s id for the Item associated with this Offer |
 | total | [string](#string) |  | Total price for the offer |
 | offer_state | [saga.proto.common.offer.OfferState](#saga-proto-common-offer-OfferState) |  | State of the Offer, see OfferState |
 

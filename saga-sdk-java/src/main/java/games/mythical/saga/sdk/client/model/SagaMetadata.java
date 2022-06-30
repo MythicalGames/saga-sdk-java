@@ -19,9 +19,6 @@ public class SagaMetadata {
     private String name;
     private String description;
     private String image;
-    @ProtoExclude
-    @DtoExclude
-    private Map<String, Object> properties;
     private String externalUrl;
     private String backgroundColor;
     private String animationUrl;
@@ -36,10 +33,6 @@ public class SagaMetadata {
 
     public static Metadata toProto(SagaMetadata metadata) throws SagaException {
         var builder = ProtoUtil.toProtoBuilder(metadata, Metadata.Builder.class);
-
-        if (metadata.getProperties() != null) {
-            builder.setProperties(ConversionUtils.convertProperties(metadata.getProperties()));
-        }
 
         if (metadata.getAttributes() != null) {
             builder.addAllAttributes(metadata.getAttributes().stream().map(SagaMetadataAttribute::toProto).collect(Collectors.toList()));

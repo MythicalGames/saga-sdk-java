@@ -49,7 +49,6 @@ public abstract class AbstractClientTest {
                 .name(RandomStringUtils.randomAlphanumeric(30))
                 .description(RandomStringUtils.randomAlphanumeric(30))
                 .image(RandomStringUtils.randomAlphanumeric(30))
-                .properties(generateProperties())
                 .build();
     }
 

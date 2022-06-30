@@ -3,7 +3,6 @@ package games.mythical.saga.sdk.client.model;
 import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
 import games.mythical.saga.sdk.proto.api.item.ItemProto;
-import games.mythical.saga.sdk.proto.common.item.ItemState;
 import games.mythical.saga.sdk.util.ConversionUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,13 +16,13 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SagaItem {
-    private String id;
     private String traceId;
-    private String gameInventoryId;
-    private String gameTitleId;
-    private String orderId;
-    private String serialNumber;
+    private String inventoryId;
+    private String oauthId;
+    private int serialNumber;
     private boolean finalized;
+    private String blockExplorerUrl;
+    private String metadataUrl;
     @DtoExclude
     private Instant createdAt;
     @DtoExclude

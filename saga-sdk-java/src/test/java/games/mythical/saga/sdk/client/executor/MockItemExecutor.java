@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class MockItemExecutor extends MockBaseExecutor implements SagaItemExecutor {
-    private String gameInventoryId;
+    private String inventoryId;
     private String itemTypeId;
     private String oauthId;
     private int serialNumber;
@@ -16,25 +16,25 @@ public class MockItemExecutor extends MockBaseExecutor implements SagaItemExecut
     private ItemState itemState;
 
     @Override
-    public void updateItem(String gameInventoryId,
+    public void updateItem(String inventoryId,
                            String itemTypeId,
                            String oauthId,
                            int serialNumber,
-                           String metadataUri,
+                           String metadataUrl,
                            String traceId,
                            ItemState itemState) throws Exception {
-        this.gameInventoryId = gameInventoryId;
+        this.inventoryId = inventoryId;
         this.itemTypeId = itemTypeId;
         this.oauthId = oauthId;
         this.serialNumber = serialNumber;
-        this.metadataUri = metadataUri;
+        this.metadataUri = metadataUrl;
         this.traceId = traceId;
         this.itemState = itemState;
     }
 
     @Override
-    public void updateItemState(String gameInventoryId, String traceId, ItemState itemState) throws Exception {
-        this.gameInventoryId = gameInventoryId;
+    public void updateItemState(String inventoryId, String traceId, ItemState itemState) throws Exception {
+        this.inventoryId = inventoryId;
         this.traceId = traceId;
         this.itemState = itemState;
     }
