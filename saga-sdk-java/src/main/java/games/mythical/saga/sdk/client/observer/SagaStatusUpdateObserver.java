@@ -194,7 +194,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                 final var message = update.getStatusUpdate();
                 sagaBridgeExecutor.updateItem(
                     message.getOauthId(),
-                    message.getGameInventoryId(),
+                    message.getInventoryId(),
                     message.getItemTypeId(),
                     message.getDestinationAddress(),
                     message.getDestinationChain(),
@@ -239,11 +239,11 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
             } else {
                 final var message = update.getStatusUpdate();
                 sagaItemExecutor.updateItem(
-                    message.getGameInventoryId(),
+                    message.getInventoryId(),
                     message.getItemTypeId(),
                     message.getOauthId(),
                     message.getSerialNumber(),
-                    message.getMetadataUri(),
+                    message.getMetadataUrl(),
                     traceId,
                     message.getItemState()
                 );

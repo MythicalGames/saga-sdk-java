@@ -6,18 +6,16 @@ import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.factory.CommonFactory;
 import games.mythical.saga.sdk.proto.api.itemtype.*;
-import games.mythical.saga.sdk.proto.common.SortOrder;
+import games.mythical.saga.sdk.util.ConversionUtils;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
 public class SagaItemTypeClient extends AbstractSagaStreamClient {
@@ -77,13 +75,19 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
                                  boolean withdrawable) throws SagaException {
         try {
             log.trace("ItemTypeClient.createItemType called for game item type id: {}", itemTypeId);
-            var request = CreateItemTypeRequest.newBuilder()
+            var builder = CreateItemTypeRequest.newBuilder()
                     .setItemTypeId(itemTypeId)
                     .setName(name)
                     .setSymbol(symbol)
                     .setMaxSupply(maxSupply)
-                    .build();
-            var result = serviceBlockingStub.createItemType(request);
+                    .setRandomize(randomize)
+                    .setWithdrawable(withdrawable);
+
+            if (dateFinished != null) {
+                builder.setDateFinished(ConversionUtils.instantToProtoTimestamp(dateFinished));
+            }
+
+            var result = serviceBlockingStub.createItemType(builder.build());
             return result.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
