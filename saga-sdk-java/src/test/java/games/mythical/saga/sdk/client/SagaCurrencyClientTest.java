@@ -1,6 +1,7 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockCurrencyExecutor;
+import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.currency.CurrencyProto;
 import games.mythical.saga.sdk.proto.api.currency.CurrencyServiceGrpc;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
@@ -73,16 +74,13 @@ class SagaCurrencyClientTest extends AbstractClientTest {
         when(mockServiceBlockingStub.getCurrencyByPlayer(any())).thenReturn(expectedResponse);
         var currencyResponse = currencyClient.getCurrency(CURRENCY_ID, OAUTH_ID);
 
-        assertTrue(currencyResponse.isPresent());
-        var currency = currencyResponse.get();
-        assertEquals(CURRENCY_ID, currency.getGameCurrencyTypeId());
-        assertEquals(expectedResponse.getOwnerAddress(), currency.getOwnerAddress());
-        assertEquals(expectedResponse.getQuantity(), currency.getQuantity().toString());
+        assertNotNull(currencyResponse);
+        assertEquals(CURRENCY_ID, currencyResponse.getGameCurrencyTypeId());
+        assertEquals(expectedResponse.getOwnerAddress(), currencyResponse.getOwnerAddress());
+        assertEquals(expectedResponse.getQuantity(), currencyResponse.getQuantity().toString());
 
         when(mockServiceBlockingStub.getCurrencyByPlayer(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
-        currencyResponse = currencyClient.getCurrency("INVALID-CURRENCY-ID", "INVALID-USER");
-
-        assertTrue(currencyResponse.isEmpty());
+        assertThrows(SagaException.class, () -> currencyClient.getCurrency("INVALID-CURRENCY-ID", "INVALID-USER"));
     }
 
     @Test
