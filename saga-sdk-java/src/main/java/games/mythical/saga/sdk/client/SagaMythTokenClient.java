@@ -1,11 +1,13 @@
 package games.mythical.saga.sdk.client;
 
 import com.google.protobuf.Empty;
+import games.mythical.proto_util.ProtoUtil;
 import games.mythical.saga.sdk.client.executor.SagaMythTokenExecutor;
 import games.mythical.saga.sdk.client.model.SagaCreditCardData;
 import games.mythical.saga.sdk.client.model.SagaCurrencyExchange;
 import games.mythical.saga.sdk.client.model.SagaGasFee;
-import games.mythical.saga.sdk.client.model.SagaMythToken;
+import games.mythical.saga.sdk.client.model.SagaMythTokenBuyingQuote;
+import games.mythical.saga.sdk.client.model.SagaMythTokenWithdrawalQuote;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
@@ -49,7 +51,7 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
         return SagaCurrencyExchange.fromProto(currencyExchange);
     }
 
-    public SagaMythToken quoteBuyingMythToken(BigDecimal quantity,
+    public SagaMythTokenBuyingQuote quoteBuyingMythToken(BigDecimal quantity,
                                                         SagaCreditCardData creditCardData,
                                                         String denominationCurrency,
                                                         String originSubAccount,
@@ -61,7 +63,7 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
                                     oauthId);
     }
 
-    public SagaMythToken quoteBuyingMythToken(BigDecimal quantity,
+    public SagaMythTokenBuyingQuote quoteBuyingMythToken(BigDecimal quantity,
                                                         String upholdCardId,
                                                         String denominationCurrency,
                                                         String originSubAccount,
@@ -73,7 +75,7 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
                                     oauthId);
     }
 
-    public SagaMythToken quoteMythTokenWithdrawal(String oauthId,
+    public SagaMythTokenWithdrawalQuote quoteMythTokenWithdrawal(String oauthId,
                                                   BigDecimal quantity) throws SagaException {
         var request = QuoteMythTokenWithdrawalRequest.newBuilder()
                 .setOauthId(oauthId)
@@ -81,10 +83,7 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
                 .build();
         var mythToken = serviceBlockingStub.quoteMythTokenWithdrawal(request);
         ValidateUtil.checkQuote(mythToken, "Failed to generate myth token withdrawal quote for %s", oauthId);
-        return SagaMythToken.builder()
-                .totalAmount(new BigDecimal(mythToken.getTotalAmount()))
-                .gasFee(new BigDecimal(mythToken.getGasFee()))
-                .build();
+        return ProtoUtil.toDto(mythToken, SagaMythTokenWithdrawalQuote.class);
     }
 
     public String confirmMythTokenWithdrawal(String quoteId) throws SagaException {
@@ -135,7 +134,7 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
         }
     }
 
-    private SagaMythToken quoteBuyingMythToken(BigDecimal quantity,
+    private SagaMythTokenBuyingQuote quoteBuyingMythToken(BigDecimal quantity,
                                                PaymentProviderData paymentProviderData,
                                                String denominationCurrency,
                                                String originSubAccount,
@@ -150,10 +149,7 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
                 .build();
             final var mythToken = serviceBlockingStub.quoteBuyingMythToken(request);
             ValidateUtil.checkQuote(mythToken, "Failed to generate myth token buying quote for %s", oauthId);
-            return SagaMythToken.builder()
-                .quoteId(mythToken.getUpholdQuoteId())
-                .originSubAccount(mythToken.getOriginSubAccount())
-                .build();
+            return ProtoUtil.toDto(mythToken, SagaMythTokenBuyingQuote.class);
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         }
