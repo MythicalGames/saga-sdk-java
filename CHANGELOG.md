@@ -31,3 +31,7 @@
 ## [0.5.1] - 2022-06-29
 ### Changed
 * Fixed offer client not filling all values for confirm and cancel operations.
+
+## [0.5.5] - 2022-07-01
+### Changed
+* Fix response values for MythToken client.
