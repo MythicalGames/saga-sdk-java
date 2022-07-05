@@ -458,7 +458,7 @@ Transfer currency call
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetCurrencyByPlayer | [GetCurrencyForPlayerRequest](#saga-api-currency-GetCurrencyForPlayerRequest) | [CurrencyProto](#saga-api-currency-CurrencyProto) | Get a Currency for a user |
+| GetCurrencyForPlayer | [GetCurrencyForPlayerRequest](#saga-api-currency-GetCurrencyForPlayerRequest) | [CurrencyProto](#saga-api-currency-CurrencyProto) | Get a Currency for a user |
 | IssueCurrency | [IssueCurrencyRequest](#saga-api-currency-IssueCurrencyRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Issue currency to a user |
 | TransferCurrency | [TransferCurrencyRequest](#saga-api-currency-TransferCurrencyRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Transfer currency between users |
 | BurnCurrency | [BurnCurrencyRequest](#saga-api-currency-BurnCurrencyRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Burn currency for a user |
