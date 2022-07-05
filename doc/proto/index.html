@@ -225,7 +225,7 @@
                 </li>
               
                 <li>
-                  <a href="#saga.api.currency.GetCurrencyByPlayerRequest"><span class="badge">M</span>GetCurrencyByPlayerRequest</a>
+                  <a href="#saga.api.currency.GetCurrencyForPlayerRequest"><span class="badge">M</span>GetCurrencyForPlayerRequest</a>
                 </li>
               
                 <li>
@@ -838,6 +838,10 @@
               
                 <li>
                   <a href="#saga.common.ErrorData"><span class="badge">M</span>ErrorData</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.common.LargeDecimal"><span class="badge">M</span>LargeDecimal</a>
                 </li>
               
                 <li>
@@ -1469,8 +1473,8 @@
                 </tr>
               
                 <tr>
-                  <td>quantity</td>
-                  <td><a href="#string">string</a></td>
+                  <td>amount</td>
+                  <td><a href="#saga.common.LargeDecimal">saga.common.LargeDecimal</a></td>
                   <td></td>
                   <td><p>Amount of currency to burn </p></td>
                 </tr>
@@ -1500,21 +1504,21 @@
                 </tr>
               
                 <tr>
-                  <td>quantity</td>
-                  <td><a href="#string">string</a></td>
+                  <td>amount</td>
+                  <td><a href="#saga.common.LargeDecimal">saga.common.LargeDecimal</a></td>
                   <td></td>
                   <td><p>Amount of currency </p></td>
                 </tr>
               
                 <tr>
-                  <td>game_currency_type_id</td>
+                  <td>currency_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>owner_address</td>
+                  <td>oauth_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>Wallet address the currency belongs to </p></td>
@@ -1527,7 +1531,7 @@
 
         
       
-        <h3 id="saga.api.currency.GetCurrencyByPlayerRequest">GetCurrencyByPlayerRequest</h3>
+        <h3 id="saga.api.currency.GetCurrencyForPlayerRequest">GetCurrencyForPlayerRequest</h3>
         <p>Get Currency call</p>
 
         
@@ -1538,14 +1542,14 @@
             <tbody>
               
                 <tr>
-                  <td>player_wallet_id</td>
+                  <td>oauth_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>User to get currency for </p></td>
                 </tr>
               
                 <tr>
-                  <td>game_currency_type_id</td>
+                  <td>currency_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -1570,37 +1574,23 @@
               
                 <tr>
                   <td>amount</td>
-                  <td><a href="#string">string</a></td>
+                  <td><a href="#saga.common.LargeDecimal">saga.common.LargeDecimal</a></td>
                   <td></td>
                   <td><p>amount to issue </p></td>
                 </tr>
               
                 <tr>
-                  <td>game_currency_type_id</td>
+                  <td>currency_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>Currency Type the currency to issue belongs to </p></td>
                 </tr>
               
                 <tr>
-                  <td>owner_address</td>
+                  <td>oauth_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>Wallet address to issue currency to </p></td>
-                </tr>
-              
-                <tr>
-                  <td>cost</td>
-                  <td><a href="#uint64">uint64</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>payment_token</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -1642,8 +1632,8 @@
                 </tr>
               
                 <tr>
-                  <td>quantity</td>
-                  <td><a href="#string">string</a></td>
+                  <td>amount</td>
+                  <td><a href="#saga.common.LargeDecimal">saga.common.LargeDecimal</a></td>
                   <td></td>
                   <td><p>Amount of currency to transfer </p></td>
                 </tr>
@@ -1685,7 +1675,7 @@
             
               <tr>
                 <td>GetCurrencyByPlayer</td>
-                <td><a href="#saga.api.currency.GetCurrencyByPlayerRequest">GetCurrencyByPlayerRequest</a></td>
+                <td><a href="#saga.api.currency.GetCurrencyForPlayerRequest">GetCurrencyForPlayerRequest</a></td>
                 <td><a href="#saga.api.currency.CurrencyProto">CurrencyProto</a></td>
                 <td><p>Get a Currency for a user</p></td>
               </tr>
@@ -1734,14 +1724,7 @@
             <tbody>
               
                 <tr>
-                  <td>game_currency_type_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>base_price</td>
+                  <td>currency_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -1800,14 +1783,7 @@
                 </tr>
               
                 <tr>
-                  <td>id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>game_currency_type_id</td>
+                  <td>currency_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -1925,7 +1901,7 @@
             <tbody>
               
                 <tr>
-                  <td>game_currency_type_id</td>
+                  <td>currency_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -1958,13 +1934,6 @@
                 <tr>
                   <td>sort_order</td>
                   <td><a href="#saga.common.SortOrder">saga.common.SortOrder</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>game_currency_type_id</td>
-                  <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -5624,6 +5593,37 @@
 
         
       
+        <h3 id="saga.common.LargeDecimal">LargeDecimal</h3>
+        <p>Decimal object for potential 18 decimal value support. Naming was done to not conflict with Java BigDecimal</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>units</td>
+                  <td><a href="#int64">int64</a></td>
+                  <td></td>
+                  <td><p>The whole units part of the amount </p></td>
+                </tr>
+              
+                <tr>
+                  <td>exa</td>
+                  <td><a href="#int64">int64</a></td>
+                  <td></td>
+                  <td><p>Number of exa (10^-18) units of the amount </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="saga.common.Metadata">Metadata</h3>
         <p>Metadata properties of Item</p>
 
@@ -6620,7 +6620,7 @@
                 </tr>
               
                 <tr>
-                  <td>game_currency_type_id</td>
+                  <td>currency_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -6651,22 +6651,22 @@
             <tbody>
               
                 <tr>
-                  <td>owner_address</td>
+                  <td>oauth_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>Wallet address of Currency </p></td>
                 </tr>
               
                 <tr>
-                  <td>game_currency_type_id</td>
+                  <td>currency_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>quantity</td>
-                  <td><a href="#string">string</a></td>
+                  <td>amount</td>
+                  <td><a href="#saga.common.LargeDecimal">saga.common.LargeDecimal</a></td>
                   <td></td>
                   <td><p>Amount of coins </p></td>
                 </tr>
