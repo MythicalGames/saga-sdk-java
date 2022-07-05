@@ -71,7 +71,7 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 .setOauthId(OAUTH_ID)
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
-        when(mockServiceBlockingStub.getCurrencyByPlayer(any())).thenReturn(expectedResponse);
+        when(mockServiceBlockingStub.getCurrencyForPlayer(any())).thenReturn(expectedResponse);
         var currencyResponse = currencyClient.getCurrency(CURRENCY_ID, OAUTH_ID);
 
         assertNotNull(currencyResponse);
@@ -79,7 +79,7 @@ class SagaCurrencyClientTest extends AbstractClientTest {
         assertEquals(expectedResponse.getOauthId(), currencyResponse.getOauthId());
         assertEquals(ConversionUtils.protoDecimalToBigDecimal(expectedResponse.getAmount()), currencyResponse.getAmount());
 
-        when(mockServiceBlockingStub.getCurrencyByPlayer(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
+        when(mockServiceBlockingStub.getCurrencyForPlayer(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
         assertThrows(SagaException.class, () -> currencyClient.getCurrency("INVALID-CURRENCY-ID", "INVALID-USER"));
     }
 
