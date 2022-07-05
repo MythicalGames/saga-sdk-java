@@ -45,7 +45,6 @@ class SagaCurrencyTypeClientTest extends AbstractClientTest {
     @Test
     public void getCurrencyType() throws Exception {
         var expectedResponse = CurrencyTypeProto.newBuilder()
-                .setId(CURRENCY_ID)
                 .setMaxSupply(RandomUtils.nextInt(0, 1000))
                 .setContractAddress(ADDRESS)
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
@@ -56,7 +55,6 @@ class SagaCurrencyTypeClientTest extends AbstractClientTest {
         var currencyResponse = currencyTypeClient.getCurrencyType(CURRENCY_ID);
 
         assertNotNull(currencyResponse);
-        assertEquals(CURRENCY_ID, currencyResponse.getId());
         assertEquals(expectedResponse.getContractAddress(), currencyResponse.getContractAddress());
         assertEquals(expectedResponse.getMaxSupply(), currencyResponse.getMaxSupply());
 

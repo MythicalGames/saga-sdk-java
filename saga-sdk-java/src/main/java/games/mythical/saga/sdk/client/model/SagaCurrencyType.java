@@ -17,8 +17,7 @@ import java.time.Instant;
 @NoArgsConstructor
 public class SagaCurrencyType {
     private String traceId;
-    private String id;
-    private String gameCurrencyTypeId;
+    private String currencyTypeId;
     private String gameTitleId;
     private String publisherAddress;
     private String name;

@@ -24,6 +24,8 @@ import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import games.mythical.saga.sdk.util.ConversionUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -218,9 +220,9 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
             } else {
                 final var message = update.getStatusUpdate();
                 sagaCurrencyExecutor.updateCurrency(
-                    message.getGameCurrencyTypeId(),
-                    message.getQuantity(),
-                    message.getOwnerAddress(),
+                    message.getCurrencyTypeId(),
+                    ConversionUtils.protoDecimalToBigDecimal(message.getAmount()),
+                    message.getOauthId(),
                     traceId,
                     message.getCurrencyState()
                 );
