@@ -30,8 +30,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class SagaMultiClientTest extends AbstractClientTest {
     private static final String OAUTH_ID = UUID.randomUUID().toString();
-    private static final String OWNER_ADDRESS = RandomStringUtils.randomAlphanumeric(30);
-
     private final MockBridgeExecutor bridgeExecutor = MockBridgeExecutor.builder().build();
     private final MockCurrencyExecutor currencyExecutor = MockCurrencyExecutor.builder().build();
     private MockServer mockServer;
@@ -105,8 +103,8 @@ class SagaMultiClientTest extends AbstractClientTest {
 
         // make sure no other stream is catching this currency event
         final var update2 = CurrencyStatusUpdate.newBuilder()
-            .setOwnerAddress(OWNER_ADDRESS)
-            .setGameCurrencyTypeId(RandomStringUtils.randomAlphanumeric(30));
+            .setOauthId(OAUTH_ID)
+            .setCurrencyTypeId(RandomStringUtils.randomAlphanumeric(30));
         var statusUpdate2 = StatusUpdate.newBuilder()
                 .setTraceId(TRACE_ID_1)
                 .setCurrencyUpdate(CurrencyUpdate.newBuilder().setStatusUpdate(update2))
@@ -115,7 +113,7 @@ class SagaMultiClientTest extends AbstractClientTest {
 
         ConcurrentFinisher.wait(TRACE_ID_1);
 
-        assertEquals(OWNER_ADDRESS, currencyExecutor.getOwnerAddress());
+        assertEquals(OAUTH_ID, currencyExecutor.getOauthId());
         assertEquals(TRACE_ID_1, currencyExecutor.getTraceId());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(currencyExecutor.getTraceId()));
         assertNotEquals(bridgeExecutor.getTraceId(), currencyExecutor.getTraceId());

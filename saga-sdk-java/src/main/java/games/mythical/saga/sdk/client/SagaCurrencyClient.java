@@ -7,9 +7,12 @@ import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.currency.*;
+import games.mythical.saga.sdk.util.ConversionUtils;
 import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
+
+import java.math.BigDecimal;
 
 @Slf4j
 public class SagaCurrencyClient extends AbstractSagaStreamClient {
@@ -29,36 +32,30 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    public SagaCurrency getCurrency(String currencyId, String playerWalletId) throws SagaException {
-        var request = GetCurrencyByPlayerRequest.newBuilder()
-                .setGameCurrencyTypeId(currencyId)
-                .setPlayerWalletId(playerWalletId)
+    public SagaCurrency getCurrency(String currencyId, String oauthId) throws SagaException {
+        var request = GetCurrencyForPlayerRequest.newBuilder()
+                .setCurrencyTypeId(currencyId)
+                .setOauthId(oauthId)
                 .build();
 
         try {
             var currency = serviceBlockingStub.getCurrencyByPlayer(request);
             ValidateUtil.checkFound(currency,
-                                    String.format("Unable to find currency %s for player wallet %s",
-                                                  currencyId, playerWalletId));
+                    String.format("Unable to find currency %s for player %s",
+                            currencyId, oauthId));
             return SagaCurrency.fromProto(currency);
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         }
     }
 
-    public String issueCurrency(
-            String gameCurrencyTypeId,
-            String ownerAddress,
-            String quantity,
-            long cost,
-            String paymentToken
-            ) throws SagaException {
+    public String issueCurrency(String currencyTypeId,
+                                String oauthId,
+                                BigDecimal amount) throws SagaException {
         var request = IssueCurrencyRequest.newBuilder()
-                .setGameCurrencyTypeId(gameCurrencyTypeId)
-                .setOwnerAddress(ownerAddress)
-                .setAmount(quantity)
-                .setCost(cost)
-                .setPaymentToken(paymentToken)
+                .setCurrencyTypeId(currencyTypeId)
+                .setOauthId(oauthId)
+                .setAmount(ConversionUtils.bigDecimalToProtoDecimal(amount))
                 .build();
 
         try {
@@ -75,12 +72,12 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
     public String transferCurrency(String currencyId,
                                    String sourceOauthId,
                                    String destOauthId,
-                                   String quantity) throws SagaException {
+                                   BigDecimal amount) throws SagaException {
         var request = TransferCurrencyRequest.newBuilder()
                 .setCurrencyId(currencyId)
                 .setSourceOauthId(sourceOauthId)
                 .setDestinationOauthId(destOauthId)
-                .setQuantity(quantity)
+                .setAmount(ConversionUtils.bigDecimalToProtoDecimal(amount))
                 .build();
 
         try {
@@ -94,11 +91,11 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String burnCurrency(String currencyId, String oauthId, String quantity) throws SagaException {
+    public String burnCurrency(String currencyId, String oauthId, BigDecimal amount) throws SagaException {
         var request = BurnCurrencyRequest.newBuilder()
                 .setCurrencyId(currencyId)
                 .setOauthId(oauthId)
-                .setQuantity(quantity)
+                .setAmount(ConversionUtils.bigDecimalToProtoDecimal(amount))
                 .build();
 
         try {

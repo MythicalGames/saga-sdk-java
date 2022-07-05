@@ -30,14 +30,14 @@ public class SagaCurrencyTypeClient extends AbstractSagaStreamClient {
 
     public SagaCurrencyType getCurrencyType(String currencyTypeId) throws SagaException {
         var request = GetCurrencyTypeRequest.newBuilder()
-                .setGameCurrencyTypeId(currencyTypeId)
+                .setCurrencyTypeId(currencyTypeId)
                 .build();
 
         try {
             var currencyType = serviceBlockingStub.getCurrencyType(request);
             ValidateUtil.checkFound(currencyType,
                                     String.format("Currency type %s not found",
-                                                  request.getGameCurrencyTypeId()));
+                                                  request.getCurrencyTypeId()));
             return SagaCurrencyType.fromProto(currencyType);
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
