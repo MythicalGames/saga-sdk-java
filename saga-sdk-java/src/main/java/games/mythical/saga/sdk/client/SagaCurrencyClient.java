@@ -39,7 +39,7 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
                 .build();
 
         try {
-            var currency = serviceBlockingStub.getCurrencyByPlayer(request);
+            var currency = serviceBlockingStub.getCurrencyForPlayer(request);
             ValidateUtil.checkFound(currency,
                     String.format("Unable to find currency %s for player %s",
                             currencyId, oauthId));
