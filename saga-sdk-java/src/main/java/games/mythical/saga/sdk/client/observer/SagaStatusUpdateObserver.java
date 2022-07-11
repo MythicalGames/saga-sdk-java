@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import games.mythical.saga.sdk.proto.streams.reservation.ReservationUpdate;
 import games.mythical.saga.sdk.util.ConversionUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,6 +50,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private SagaOrderExecutor sagaOrderExecutor;
     private SagaPaymentExecutor sagaPaymentExecutor;
     private SagaPlayerWalletExecutor sagaPlayerWalletExecutor;
+    private SagaReservationExecutor sagaReservationExecutor;
 
     public SagaStatusUpdateObserver(StatusStreamGrpc.StatusStreamStub statusStreamStub,
                                     Consumer<SagaStatusUpdateObserver> resubscribe) {
@@ -120,6 +122,11 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         return this;
     }
 
+    public SagaStatusUpdateObserver with(SagaReservationExecutor sagaReservationExecutor) {
+        this.sagaReservationExecutor = sagaReservationExecutor;
+        return this;
+    }
+
     @Override
     public void onNext(StatusUpdate message) {
         log.trace("StatusUpdateObserver.onNext for event {} with message {}", message.getStatusUpdateCase(), message.getTraceId());
@@ -158,6 +165,9 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     break;
                 case PLAYER_WALLET_UPDATE:
                     handlePlayerWalletUpdate(message.getPlayerWalletUpdate(), message.getTraceId());
+                    break;
+                case RESERVATION_UPDATE:
+                    handleReservationUpdate(message.getReservationUpdate(), message.getTraceId());
                     break;
                 default: {
                     log.error("Unrecognized event {}", message.getStatusUpdateCase());
@@ -386,6 +396,24 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
             } else {
                 final var statusUpdate = update.getStatusUpdate();
                 sagaPlayerWalletExecutor.updatePlayerWallet(traceId, statusUpdate.getOauthId());
+            }
+        }
+    }
+
+    private void handleReservationUpdate(ReservationUpdate update, String traceId) throws Exception {
+        if (sagaReservationExecutor == null) {
+            log.error("Reservation update received, but no reservation executor registered {}", update);
+        } else {
+            switch (update.getUpdateCase()) {
+                case ERROR:
+                    sagaReservationExecutor.onError(toErrData(update.getError()));
+                    break;
+                case RESERVATION_CREATED:
+                    sagaReservationExecutor.onReservationCreated(update.getReservationCreated().getReservationId(), traceId);
+                    break;
+                default:
+                    log.error("Unknown reservation update: {}", update.getUpdateCase());
+                    break;
             }
         }
     }
