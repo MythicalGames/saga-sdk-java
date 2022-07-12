@@ -5,6 +5,7 @@ import io.grpc.Status.Code;
 import io.grpc.Metadata;
 import io.grpc.StatusException;
 import io.grpc.StatusRuntimeException;
+import io.grpc.protobuf.StatusProto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -57,6 +58,26 @@ public class SagaException extends Exception {
             return new SagaException(SagaErrorCode.INTERNAL);
         }
         return new SagaException(toSagaErrorCode(code), message);
+    }
+
+    public static SagaException fromGrpcException2(StatusRuntimeException ex) {
+        return fromGrpcException2(ex.getStatus().getCode(), ex);
+    }
+
+    private static SagaException fromGrpcException2(Code code, Exception ex) {
+        var status = StatusProto.fromThrowable(ex);
+        /*var details = status.getDetailsList();
+
+        var errorProto = details.get(0).unpack(com.mythical.saga.common.Error.class);*/
+
+        var errorData = ErrorData.builder()
+                .code(code.toString())
+                .source("")
+                .message(ex.getMessage())
+                .trace("")
+                .build();
+
+        return new SagaException(errorData);
     }
 
     private static SagaErrorCode toSagaErrorCode(Code grpcCode) {
