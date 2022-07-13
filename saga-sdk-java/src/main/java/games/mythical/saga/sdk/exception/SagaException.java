@@ -1,6 +1,7 @@
 package games.mythical.saga.sdk.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.protobuf.InvalidProtocolBufferException;
 import io.grpc.Status.Code;
 import io.grpc.Metadata;
 import io.grpc.StatusException;
@@ -60,24 +61,34 @@ public class SagaException extends Exception {
         return new SagaException(toSagaErrorCode(code), message);
     }
 
-    public static SagaException fromGrpcException2(StatusRuntimeException ex) {
-        return fromGrpcException2(ex.getStatus().getCode(), ex);
+    public static SagaException fromGrpcException_v2(StatusRuntimeException ex) {
+        return fromGrpcException_v2(ex.getStatus().getCode(), ex);
     }
 
-    private static SagaException fromGrpcException2(Code code, Exception ex) {
-        var status = StatusProto.fromThrowable(ex);
-        /*var details = status.getDetailsList();
+    private static SagaException fromGrpcException_v2(Code code, Exception ex) {
+        try {
 
-        var errorProto = details.get(0).unpack(com.mythical.saga.common.Error.class);*/
+            var status = StatusProto.fromThrowable(ex);
+            var details = status.getDetailsList();
 
-        var errorData = ErrorData.builder()
-                .code(code.toString())
-                .source("")
-                .message(ex.getMessage())
-                .trace("")
-                .build();
+            if (details.isEmpty() ) {
+                return new SagaException(toSagaErrorCode(Code.INTERNAL), ex.getMessage());
+            }
 
-        return new SagaException(errorData);
+            var errorProto = details.get(0).unpack(games.mythical.saga.sdk.proto.api.common.Error.class);
+
+            var errorData = ErrorData.builder()
+                    .code(toSagaErrorCode(code).toString())
+                    .source(errorProto.getSource())
+                    .message(errorProto.getMessage())
+                    .trace(errorProto.getTraceId())
+                    .build();
+
+            return new SagaException(errorData);
+        } catch (InvalidProtocolBufferException e) {
+            log.error("Exception when trying to create SagaException {}", e);
+            return new SagaException(toSagaErrorCode(Code.INTERNAL), ex.getMessage());
+        }
     }
 
     private static SagaErrorCode toSagaErrorCode(Code grpcCode) {

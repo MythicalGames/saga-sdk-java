@@ -45,7 +45,7 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
             ValidateUtil.checkFound(item, String.format("Unable to find item %s", request.getItemTypeId()));
             return SagaItemType.fromProto(item);
         } catch (StatusRuntimeException e) {
-            throw SagaException.fromGrpcException2(e);
+            throw SagaException.fromGrpcException_v2(e);
         }
     }
 
