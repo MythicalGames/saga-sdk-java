@@ -2,6 +2,7 @@ package games.mythical.saga.sdk.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.InvalidProtocolBufferException;
+import games.mythical.saga.sdk.proto.api.common.ErrorProto;
 import io.grpc.Status.Code;
 import io.grpc.Metadata;
 import io.grpc.StatusException;
@@ -75,7 +76,7 @@ public class SagaException extends Exception {
                 return new SagaException(toSagaErrorCode(Code.INTERNAL), ex.getMessage());
             }
 
-            var errorProto = details.get(0).unpack(games.mythical.saga.sdk.proto.api.common.Error.class);
+            var errorProto = details.get(0).unpack(ErrorProto.class);
 
             var errorData = ErrorData.builder()
                     .code(toSagaErrorCode(code).toString())
