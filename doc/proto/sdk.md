@@ -131,6 +131,13 @@
 - [api/playerwallet/rpc.proto](#api_playerwallet_rpc-proto)
     - [PlayerWalletService](#saga-api-playerwallet-PlayerWalletService)
   
+- [api/reservation/definition.proto](#api_reservation_definition-proto)
+    - [CreateReservationRequest](#saga-api-reservation-CreateReservationRequest)
+    - [ItemReservationProto](#saga-api-reservation-ItemReservationProto)
+  
+- [api/reservation/rpc.proto](#api_reservation_rpc-proto)
+    - [ReservationService](#saga-api-reservation-ReservationService)
+  
 - [api/title/definition.proto](#api_title_definition-proto)
     - [GetTitlesRequest](#saga-api-title-GetTitlesRequest)
     - [TitleProto](#saga-api-title-TitleProto)
@@ -234,6 +241,10 @@
 - [streams/playerwallet/definition.proto](#streams_playerwallet_definition-proto)
     - [PlayerWalletStatusUpdate](#saga-rpc-streams-playerwallet-PlayerWalletStatusUpdate)
     - [PlayerWalletUpdate](#saga-rpc-streams-playerwallet-PlayerWalletUpdate)
+  
+- [streams/reservation/definition.proto](#streams_reservation_definition-proto)
+    - [ReservationCreatedProto](#saga-rpc-streams-reservation-ReservationCreatedProto)
+    - [ReservationUpdate](#saga-rpc-streams-reservation-ReservationUpdate)
   
 - [streams/stream.proto](#streams_stream-proto)
     - [StatusConfirmRequest](#saga-rpc-streams-StatusConfirmRequest)
@@ -2038,6 +2049,81 @@ Create Order Quote call
 
 
 
+<a name="api_reservation_definition-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/reservation/definition.proto
+
+
+
+<a name="saga-api-reservation-CreateReservationRequest"></a>
+
+### CreateReservationRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| reservation_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  |  |
+| item_reservations | [ItemReservationProto](#saga-api-reservation-ItemReservationProto) | repeated |  |
+
+
+
+
+
+
+<a name="saga-api-reservation-ItemReservationProto"></a>
+
+### ItemReservationProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| item_type_id | [string](#string) |  |  |
+| count | [int64](#int64) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="api_reservation_rpc-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/reservation/rpc.proto
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="saga-api-reservation-ReservationService"></a>
+
+### ReservationService
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| CreateReservation | [CreateReservationRequest](#saga-api-reservation-CreateReservationRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
+
+ 
+
+
+
 <a name="api_title_definition-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -3270,6 +3356,53 @@ Result of payment method creation, update, or deletion
 
 
 
+<a name="streams_reservation_definition-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## streams/reservation/definition.proto
+
+
+
+<a name="saga-rpc-streams-reservation-ReservationCreatedProto"></a>
+
+### ReservationCreatedProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| reservation_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="saga-rpc-streams-reservation-ReservationUpdate"></a>
+
+### ReservationUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
+| reservation_created | [ReservationCreatedProto](#saga-rpc-streams-reservation-ReservationCreatedProto) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
 <a name="streams_stream-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -3311,6 +3444,7 @@ Returned results on sending a Status stream call
 | order_update | [order.OrderUpdate](#saga-rpc-streams-order-OrderUpdate) |  |  |
 | payment_update | [payment.PaymentUpdate](#saga-rpc-streams-payment-PaymentUpdate) |  |  |
 | player_wallet_update | [playerwallet.PlayerWalletUpdate](#saga-rpc-streams-playerwallet-PlayerWalletUpdate) |  |  |
+| reservation_update | [reservation.ReservationUpdate](#saga-rpc-streams-reservation-ReservationUpdate) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
 

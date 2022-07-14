@@ -133,6 +133,10 @@ public class SagaClientFactory {
         return new SagaPlayerWalletClient(config, validateExecutor(executor));
     }
 
+    public SagaReservationClient createSagaReservationClient(SagaReservationExecutor executor) throws SagaException {
+        return new SagaReservationClient(config, validateExecutor(executor));
+    }
+
     private <T extends BaseSagaExecutor> T validateExecutor(T executor) throws SagaException {
         if (executor == null) {
             throw new SagaException(SagaErrorCode.EXECUTOR_REQUIRED,

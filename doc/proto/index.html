@@ -753,6 +753,40 @@
         
           
           <li>
+            <a href="#api%2freservation%2fdefinition.proto">api/reservation/definition.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#saga.api.reservation.CreateReservationRequest"><span class="badge">M</span>CreateReservationRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.api.reservation.ItemReservationProto"><span class="badge">M</span>ItemReservationProto</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#api%2freservation%2frpc.proto">api/reservation/rpc.proto</a>
+            <ul>
+              
+              
+              
+              
+                <li>
+                  <a href="#saga.api.reservation.ReservationService"><span class="badge">S</span>ReservationService</a>
+                </li>
+              
+            </ul>
+          </li>
+        
+          
+          <li>
             <a href="#api%2ftitle%2fdefinition.proto">api/title/definition.proto</a>
             <ul>
               
@@ -1240,6 +1274,25 @@
               
                 <li>
                   <a href="#saga.rpc.streams.playerwallet.PlayerWalletUpdate"><span class="badge">M</span>PlayerWalletUpdate</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#streams%2freservation%2fdefinition.proto">streams/reservation/definition.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#saga.rpc.streams.reservation.ReservationCreatedProto"><span class="badge">M</span>ReservationCreatedProto</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.rpc.streams.reservation.ReservationUpdate"><span class="badge">M</span>ReservationUpdate</a>
                 </li>
               
               
@@ -5211,6 +5264,122 @@
     
       
       <div class="file-heading">
+        <h2 id="api/reservation/definition.proto">api/reservation/definition.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="saga.api.reservation.CreateReservationRequest">CreateReservationRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>reservation_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>oauth_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>item_reservations</td>
+                  <td><a href="#saga.api.reservation.ItemReservationProto">ItemReservationProto</a></td>
+                  <td>repeated</td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.reservation.ItemReservationProto">ItemReservationProto</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>item_type_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>count</td>
+                  <td><a href="#int64">int64</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+
+      
+
+      
+    
+      
+      <div class="file-heading">
+        <h2 id="api/reservation/rpc.proto">api/reservation/rpc.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+
+      
+
+      
+
+      
+        <h3 id="saga.api.reservation.ReservationService">ReservationService</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>CreateReservation</td>
+                <td><a href="#saga.api.reservation.CreateReservationRequest">CreateReservationRequest</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+
+        
+    
+      
+      <div class="file-heading">
         <h2 id="api/title/definition.proto">api/title/definition.proto</h2><a href="#title">Top</a>
       </div>
       <p></p>
@@ -7417,6 +7586,75 @@
     
       
       <div class="file-heading">
+        <h2 id="streams/reservation/definition.proto">streams/reservation/definition.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="saga.rpc.streams.reservation.ReservationCreatedProto">ReservationCreatedProto</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>reservation_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.rpc.streams.reservation.ReservationUpdate">ReservationUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>reservation_created</td>
+                  <td><a href="#saga.rpc.streams.reservation.ReservationCreatedProto">ReservationCreatedProto</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+
+      
+
+      
+    
+      
+      <div class="file-heading">
         <h2 id="streams/stream.proto">streams/stream.proto</h2><a href="#title">Top</a>
       </div>
       <p></p>
@@ -7529,6 +7767,13 @@
                 <tr>
                   <td>player_wallet_update</td>
                   <td><a href="#saga.rpc.streams.playerwallet.PlayerWalletUpdate">playerwallet.PlayerWalletUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>reservation_update</td>
+                  <td><a href="#saga.rpc.streams.reservation.ReservationUpdate">reservation.ReservationUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
