@@ -1,10 +1,13 @@
 package games.mythical.saga.sdk.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.protobuf.InvalidProtocolBufferException;
+import games.mythical.saga.sdk.proto.api.common.ErrorProto;
 import io.grpc.Status.Code;
 import io.grpc.Metadata;
 import io.grpc.StatusException;
 import io.grpc.StatusRuntimeException;
+import io.grpc.protobuf.StatusProto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -35,28 +38,37 @@ public class SagaException extends Exception {
     }
 
     public static SagaException fromGrpcException(StatusException ex) {
-        return fromGrpcException(ex.getStatus().getCode(), ex.getTrailers(), ex.getMessage());
+        return fromGrpcException(ex.getStatus().getCode(), ex);
     }
 
     public static SagaException fromGrpcException(StatusRuntimeException ex) {
-        return fromGrpcException(ex.getStatus().getCode(), ex.getTrailers(), ex.getMessage());
+        return fromGrpcException(ex.getStatus().getCode(), ex);
     }
 
-    private static SagaException fromGrpcException(Code code, Metadata trailers, String message) {
-        if (trailers != null) {
-            final var dataKey = Metadata.Key.of("ERROR_DATA", Metadata.ASCII_STRING_MARSHALLER);
-            final var errDataJson = trailers.get(dataKey);
-            if (StringUtils.isNotBlank(errDataJson)) {
-                try {
-                    final var errData = objMapper.readValue(errDataJson, ErrorData.class);
-                    return new SagaException(errData);
-                } catch (Exception parsingException) {
-                    log.error("Saga SDK Error parsing error data: {}", errDataJson);
-                }
+    private static SagaException fromGrpcException(Code code, Exception ex) {
+        try {
+
+            var status = StatusProto.fromThrowable(ex);
+            var details = status.getDetailsList();
+
+            if (details.isEmpty() ) {
+                return new SagaException(toSagaErrorCode(Code.INTERNAL), ex.getMessage());
             }
-            return new SagaException(SagaErrorCode.INTERNAL);
+
+            var errorProto = details.get(0).unpack(ErrorProto.class);
+
+            var errorData = ErrorData.builder()
+                    .code(toSagaErrorCode(code).toString())
+                    .source(errorProto.getSource())
+                    .message(errorProto.getMessage())
+                    .trace(errorProto.getTraceId())
+                    .build();
+
+            return new SagaException(errorData);
+        } catch (InvalidProtocolBufferException e) {
+            log.error("Exception when trying to create SagaException {}", e);
+            return new SagaException(toSagaErrorCode(Code.INTERNAL), ex.getMessage());
         }
-        return new SagaException(toSagaErrorCode(code), message);
     }
 
     private static SagaErrorCode toSagaErrorCode(Code grpcCode) {
