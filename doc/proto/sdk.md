@@ -11,6 +11,9 @@
 - [api/bridge/rpc.proto](#api_bridge_rpc-proto)
     - [BridgeService](#saga-api-bridge-BridgeService)
   
+- [api/common/error.proto](#api_common_error-proto)
+    - [ErrorProto](#saga-api-common-ErrorProto)
+  
 - [api/currency/definition.proto](#api_currency_definition-proto)
     - [BurnCurrencyRequest](#saga-api-currency-BurnCurrencyRequest)
     - [CurrencyProto](#saga-api-currency-CurrencyProto)
@@ -342,6 +345,40 @@ Withdraw Call
 | ----------- | ------------ | ------------- | ------------|
 | WithdrawItem | [WithdrawItemRequest](#saga-api-bridge-WithdrawItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Withdraw an Item |
 | GetBridge | [GetBridgeRequest](#saga-api-bridge-GetBridgeRequest) | [BridgeProto](#saga-api-bridge-BridgeProto) | Get Bridge |
+
+ 
+
+
+
+<a name="api_common_error-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/common/error.proto
+
+
+
+<a name="saga-api-common-ErrorProto"></a>
+
+### ErrorProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| code | [int32](#int32) |  |  |
+| message | [string](#string) |  |  |
+| source | [string](#string) |  |  |
+| trace_id | [string](#string) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
 
  
 
