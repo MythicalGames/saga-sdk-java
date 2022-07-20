@@ -63,6 +63,9 @@ public class SagaReservationClient extends AbstractSagaStreamClient {
         if (StringUtils.isBlank(reservationId)) {
             throw new SagaException(SagaErrorCode.BAD_REQUEST, "Reservation ID is required");
         }
+        if (StringUtils.isBlank(itemTypeId)) {
+            throw new SagaException(SagaErrorCode.BAD_REQUEST, "Item Type ID is required");
+        }
 
         var request = ReleaseReservationRequest.newBuilder()
                 .setReservationId(reservationId)
