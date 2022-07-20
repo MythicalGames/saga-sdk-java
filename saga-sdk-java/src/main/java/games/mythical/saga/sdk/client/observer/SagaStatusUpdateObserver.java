@@ -411,6 +411,9 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                 case RESERVATION_CREATED:
                     sagaReservationExecutor.onReservationCreated(update.getReservationCreated().getReservationId(), traceId);
                     break;
+                case RESERVATION_RELEASED:
+                    sagaReservationExecutor.onReservationReleased(update.getReservationReleased().getReservationId(), traceId);
+                    break;
                 default:
                     log.error("Unknown reservation update: {}", update.getUpdateCase());
                     break;
