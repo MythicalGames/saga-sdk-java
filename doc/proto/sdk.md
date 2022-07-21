@@ -130,6 +130,8 @@
   
 - [api/playerwallet/definition.proto](#api_playerwallet_definition-proto)
     - [CreatePlayerWalletRequest](#saga-api-playerwallet-CreatePlayerWalletRequest)
+    - [GetPlayerWalletRequest](#saga-api-playerwallet-GetPlayerWalletRequest)
+    - [PlayerWalletProto](#saga-api-playerwallet-PlayerWalletProto)
   
 - [api/playerwallet/rpc.proto](#api_playerwallet_rpc-proto)
     - [PlayerWalletService](#saga-api-playerwallet-PlayerWalletService)
@@ -2050,6 +2052,38 @@ Create Order Quote call
 
 
 
+
+<a name="saga-api-playerwallet-GetPlayerWalletRequest"></a>
+
+### GetPlayerWalletRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| oauth_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="saga-api-playerwallet-PlayerWalletProto"></a>
+
+### PlayerWalletProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| trace_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  |  |
+| address | [string](#string) |  |  |
+
+
+
+
+
  
 
  
@@ -2081,6 +2115,7 @@ Create Order Quote call
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | CreatePlayerWallet | [CreatePlayerWalletRequest](#saga-api-playerwallet-CreatePlayerWalletRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create a Player Wallet |
+| GetPlayerWallet | [GetPlayerWalletRequest](#saga-api-playerwallet-GetPlayerWalletRequest) | [PlayerWalletProto](#saga-api-playerwallet-PlayerWalletProto) | Get a Player Wallet |
 
  
 

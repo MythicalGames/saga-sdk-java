@@ -745,6 +745,14 @@
                   <a href="#saga.api.playerwallet.CreatePlayerWalletRequest"><span class="badge">M</span>CreatePlayerWalletRequest</a>
                 </li>
               
+                <li>
+                  <a href="#saga.api.playerwallet.GetPlayerWalletRequest"><span class="badge">M</span>GetPlayerWalletRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.api.playerwallet.PlayerWalletProto"><span class="badge">M</span>PlayerWalletProto</a>
+                </li>
+              
               
               
               
@@ -5296,6 +5304,68 @@
 
         
       
+        <h3 id="saga.api.playerwallet.GetPlayerWalletRequest">GetPlayerWalletRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>oauth_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.playerwallet.PlayerWalletProto">PlayerWalletProto</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>trace_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>oauth_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
 
       
 
@@ -5329,6 +5399,13 @@
                 <td><a href="#saga.api.playerwallet.CreatePlayerWalletRequest">CreatePlayerWalletRequest</a></td>
                 <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Create a Player Wallet</p></td>
+              </tr>
+            
+              <tr>
+                <td>GetPlayerWallet</td>
+                <td><a href="#saga.api.playerwallet.GetPlayerWalletRequest">GetPlayerWalletRequest</a></td>
+                <td><a href="#saga.api.playerwallet.PlayerWalletProto">PlayerWalletProto</a></td>
+                <td><p>Get a Player Wallet</p></td>
               </tr>
             
           </tbody>
