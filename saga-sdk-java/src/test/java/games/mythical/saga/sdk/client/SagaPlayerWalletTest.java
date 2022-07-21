@@ -1,6 +1,8 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockPlayerWalletExecutor;
+import games.mythical.saga.sdk.exception.SagaException;
+import games.mythical.saga.sdk.proto.api.playerwallet.PlayerWalletProto;
 import games.mythical.saga.sdk.proto.api.playerwallet.PlayerWalletServiceGrpc;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
@@ -9,6 +11,8 @@ import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -18,12 +22,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class SagaPlayerWalletTest extends AbstractClientTest {
+    private static final String OAUTH_ID = RandomStringUtils.randomAlphanumeric(30);
 
     private final MockPlayerWalletExecutor executor = new MockPlayerWalletExecutor();
     private MockServer playerWalletServer;
@@ -56,13 +61,12 @@ public class SagaPlayerWalletTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.createPlayerWallet(any())).thenReturn(expectedResponse);
 
-        final var oauthId = RandomStringUtils.randomAlphanumeric(30);
-        final var traceId = client.createPlayerWallet(oauthId);
+        final var traceId = client.createPlayerWallet(OAUTH_ID);
 
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = PlayerWalletStatusUpdate.newBuilder()
-                .setOauthId(oauthId)
+                .setOauthId(OAUTH_ID)
                 .build();
 
         playerWalletServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
@@ -73,9 +77,27 @@ public class SagaPlayerWalletTest extends AbstractClientTest {
         ConcurrentFinisher.wait(traceId);
 
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertEquals(oauthId, executor.getOauthId());
+        assertEquals(OAUTH_ID, executor.getOauthId());
 
         playerWalletServer.verifyCalls("StatusStream", 1);
         playerWalletServer.verifyCalls("StatusConfirmation", 1);
+    }
+
+    @Test
+    public void getPlayerWallet() throws Exception {
+        var expectedResponse = PlayerWalletProto.newBuilder()
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .setOauthId(OAUTH_ID)
+                .setAddress("address")
+                .build();
+        when(mockServiceBlockingStub.getPlayerWallet(any())).thenReturn(expectedResponse);
+        var playerWalletResponse = client.getPlayerWallet(OAUTH_ID);
+
+        assertNotNull(playerWalletResponse);
+        assertEquals(OAUTH_ID, playerWalletResponse.getOauthId());
+        assertEquals(expectedResponse.getAddress(), playerWalletResponse.getAddress());
+
+        when(mockServiceBlockingStub.getPlayerWallet(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
+        assertThrows(SagaException.class, () -> client.getPlayerWallet("INVALID-OAUTH-ID"));
     }
 }
