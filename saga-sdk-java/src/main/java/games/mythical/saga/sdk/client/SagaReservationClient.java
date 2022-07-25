@@ -7,6 +7,7 @@ import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.reservation.CreateReservationRequest;
+import games.mythical.saga.sdk.proto.api.reservation.ReleaseReservationRequest;
 import games.mythical.saga.sdk.proto.api.reservation.ReservationServiceGrpc;
 import io.grpc.StatusRuntimeException;
 import org.apache.commons.lang3.StringUtils;
@@ -56,5 +57,29 @@ public class SagaReservationClient extends AbstractSagaStreamClient {
         } catch (Exception e) {
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
+    }
+
+    public String releaseReservation(String reservationId, String itemTypeId) throws SagaException {
+        if (StringUtils.isBlank(reservationId)) {
+            throw new SagaException(SagaErrorCode.BAD_REQUEST, "Reservation ID is required");
+        }
+        if (StringUtils.isBlank(itemTypeId)) {
+            throw new SagaException(SagaErrorCode.BAD_REQUEST, "Item Type ID is required");
+        }
+
+        var request = ReleaseReservationRequest.newBuilder()
+                .setReservationId(reservationId)
+                .setItemTypeId(itemTypeId)
+                .build();
+
+        try {
+            var response = serviceBlockingStub.releaseReservation(request);
+            return response.getTraceId();
+        }  catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
+        } catch (Exception e) {
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
+        }
+
     }
 }
