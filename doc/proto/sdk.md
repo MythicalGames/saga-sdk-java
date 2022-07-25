@@ -139,6 +139,7 @@
 - [api/reservation/definition.proto](#api_reservation_definition-proto)
     - [CreateReservationRequest](#saga-api-reservation-CreateReservationRequest)
     - [ItemReservationProto](#saga-api-reservation-ItemReservationProto)
+    - [ReleaseReservationRequest](#saga-api-reservation-ReleaseReservationRequest)
   
 - [api/reservation/rpc.proto](#api_reservation_rpc-proto)
     - [ReservationService](#saga-api-reservation-ReservationService)
@@ -249,6 +250,7 @@
   
 - [streams/reservation/definition.proto](#streams_reservation_definition-proto)
     - [ReservationCreatedProto](#saga-rpc-streams-reservation-ReservationCreatedProto)
+    - [ReservationReleasedProto](#saga-rpc-streams-reservation-ReservationReleasedProto)
     - [ReservationUpdate](#saga-rpc-streams-reservation-ReservationUpdate)
   
 - [streams/stream.proto](#streams_stream-proto)
@@ -2160,6 +2162,22 @@ Create Order Quote call
 
 
 
+
+<a name="saga-api-reservation-ReleaseReservationRequest"></a>
+
+### ReleaseReservationRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| reservation_id | [string](#string) |  |  |
+| item_type_id | [string](#string) |  |  |
+
+
+
+
+
  
 
  
@@ -2191,6 +2209,7 @@ Create Order Quote call
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | CreateReservation | [CreateReservationRequest](#saga-api-reservation-CreateReservationRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
+| ReleaseReservation | [ReleaseReservationRequest](#saga-api-reservation-ReleaseReservationRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
 
  
 
@@ -3450,6 +3469,21 @@ Result of payment method creation, update, or deletion
 
 
 
+<a name="saga-rpc-streams-reservation-ReservationReleasedProto"></a>
+
+### ReservationReleasedProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| reservation_id | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="saga-rpc-streams-reservation-ReservationUpdate"></a>
 
 ### ReservationUpdate
@@ -3460,6 +3494,7 @@ Result of payment method creation, update, or deletion
 | ----- | ---- | ----- | ----------- |
 | error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | reservation_created | [ReservationCreatedProto](#saga-rpc-streams-reservation-ReservationCreatedProto) |  |  |
+| reservation_released | [ReservationReleasedProto](#saga-rpc-streams-reservation-ReservationReleasedProto) |  |  |
 
 
 

@@ -787,6 +787,10 @@
                   <a href="#saga.api.reservation.ItemReservationProto"><span class="badge">M</span>ItemReservationProto</a>
                 </li>
               
+                <li>
+                  <a href="#saga.api.reservation.ReleaseReservationRequest"><span class="badge">M</span>ReleaseReservationRequest</a>
+                </li>
+              
               
               
               
@@ -1312,6 +1316,10 @@
               
                 <li>
                   <a href="#saga.rpc.streams.reservation.ReservationCreatedProto"><span class="badge">M</span>ReservationCreatedProto</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.rpc.streams.reservation.ReservationReleasedProto"><span class="badge">M</span>ReservationReleasedProto</a>
                 </li>
               
                 <li>
@@ -5489,6 +5497,37 @@
 
         
       
+        <h3 id="saga.api.reservation.ReleaseReservationRequest">ReleaseReservationRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>reservation_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>item_type_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
 
       
 
@@ -5520,6 +5559,13 @@
               <tr>
                 <td>CreateReservation</td>
                 <td><a href="#saga.api.reservation.CreateReservationRequest">CreateReservationRequest</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>ReleaseReservation</td>
+                <td><a href="#saga.api.reservation.ReleaseReservationRequest">ReleaseReservationRequest</a></td>
                 <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p></p></td>
               </tr>
@@ -7766,6 +7812,30 @@
 
         
       
+        <h3 id="saga.rpc.streams.reservation.ReservationReleasedProto">ReservationReleasedProto</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>reservation_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="saga.rpc.streams.reservation.ReservationUpdate">ReservationUpdate</h3>
         <p></p>
 
@@ -7786,6 +7856,13 @@
                 <tr>
                   <td>reservation_created</td>
                   <td><a href="#saga.rpc.streams.reservation.ReservationCreatedProto">ReservationCreatedProto</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>reservation_released</td>
+                  <td><a href="#saga.rpc.streams.reservation.ReservationReleasedProto">ReservationReleasedProto</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
