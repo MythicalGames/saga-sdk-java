@@ -6,9 +6,7 @@ import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.proto.api.bridge.BridgeServiceGrpc;
-import games.mythical.saga.sdk.proto.api.bridge.GetBridgeRequest;
-import games.mythical.saga.sdk.proto.api.bridge.WithdrawItemRequest;
+import games.mythical.saga.sdk.proto.api.bridge.*;
 import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +65,20 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
             return SagaBridge.fromProto(bridge);
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
+        }
+    }
+
+    public BridgeQuote requestQuote() throws SagaException {
+        var request = GetQuoteRequest.newBuilder().build();
+
+        try {
+            var bridgeQuote = serviceBlockingStub.getQuote(request);
+            return SagaBridge.fromProto(bridgeQuote);
+        } catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
+        } catch (Exception e) {
+            log.error("Exception calling requestQuote on ItemType", e);
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
 }
