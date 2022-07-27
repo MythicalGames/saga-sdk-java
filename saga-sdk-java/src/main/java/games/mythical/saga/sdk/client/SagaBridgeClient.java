@@ -2,6 +2,7 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaBridgeExecutor;
 import games.mythical.saga.sdk.client.model.SagaBridge;
+import games.mythical.saga.sdk.client.model.SagaBridgeQuote;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
@@ -68,16 +69,16 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public BridgeQuote requestQuote() throws SagaException {
-        var request = GetQuoteRequest.newBuilder().build();
+    public SagaBridgeQuote requestQuote() throws SagaException {
+        var request = QuoteBridgeNFTRequest.newBuilder().build();
 
         try {
-            var bridgeQuote = serviceBlockingStub.getQuote(request);
-            return SagaBridge.fromProto(bridgeQuote);
+            var bridgeQuote = serviceBlockingStub.getBridgeQuote(request);
+            return SagaBridgeQuote.fromProto(bridgeQuote);
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling requestQuote on ItemType", e);
+            log.error("Exception calling RequestBridgeQuote on ItemType", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
