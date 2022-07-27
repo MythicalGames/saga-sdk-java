@@ -19,7 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -94,14 +96,19 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String issueItem(List<String> inventoryIds,
+    public String issueItem(Map<String, SagaMetadata> inventoryIdToMetadata,
                             String recipientOauthId,
-                            String itemTypeId,
-                            SagaMetadata metadata) throws SagaException {
+                            String itemTypeId) throws SagaException {
+        var items = new ArrayList<IssueItemProto>();
+        for (var entry : inventoryIdToMetadata.entrySet()) {
+            items.add(IssueItemProto.newBuilder()
+                    .setInventoryId(entry.getKey())
+                    .setMetadata(SagaMetadata.toProto(entry.getValue()))
+                    .build());
+        }
         var builder = IssueItemRequest.newBuilder()
-                .addAllInventoryIds(inventoryIds)
-                .setItemTypeId(itemTypeId)
-                .setMetadata(SagaMetadata.toProto(metadata));
+                .addAllItems(items)
+                .setItemTypeId(itemTypeId);
 
         if (StringUtils.isNotBlank(recipientOauthId)) {
             builder.setRecipientOauthId(recipientOauthId);
