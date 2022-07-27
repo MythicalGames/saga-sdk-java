@@ -30,6 +30,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -100,11 +101,9 @@ class SagaItemClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.issueItem(any())).thenReturn(expectedResponse);
         final var traceId = itemClient.issueItem(
-                List.of(INVENTORY_ID),
+                Map.of(INVENTORY_ID, EXPECTED_METADATA),
                 EXPECTED_OAUTH_ID,
-                RandomStringUtils.randomAlphanumeric(30),
-                EXPECTED_METADATA
-        );
+                RandomStringUtils.randomAlphanumeric(30));
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ItemStatusUpdate.newBuilder()

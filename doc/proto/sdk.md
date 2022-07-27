@@ -40,6 +40,7 @@
     - [GetItemRequest](#saga-api-item-GetItemRequest)
     - [GetItemsForPlayerRequest](#saga-api-item-GetItemsForPlayerRequest)
     - [GetItemsRequest](#saga-api-item-GetItemsRequest)
+    - [IssueItemProto](#saga-api-item-IssueItemProto)
     - [IssueItemRequest](#saga-api-item-IssueItemRequest)
     - [ItemProto](#saga-api-item-ItemProto)
     - [ItemsProto](#saga-api-item-ItemsProto)
@@ -743,6 +744,22 @@ Get Items call
 
 
 
+<a name="saga-api-item-IssueItemProto"></a>
+
+### IssueItemProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| inventory_id | [string](#string) |  | GameInventory Ids of Items being issued |
+| metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata associated to Item being issued |
+
+
+
+
+
+
 <a name="saga-api-item-IssueItemRequest"></a>
 
 ### IssueItemRequest
@@ -751,10 +768,9 @@ Issue item call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| inventory_ids | [string](#string) | repeated | GameInventory Ids of Items being issued |
-| recipient_oauth_id | [string](#string) |  |  |
+| items | [IssueItemProto](#saga-api-item-IssueItemProto) | repeated | Repeated items so that metadata is unique per item |
+| recipient_oauth_id | [string](#string) |  | Oauth id of wallet accepting items |
 | item_type_id | [string](#string) |  | Unique id set for your game of the Item being issued |
-| metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata associated to Item being issued |
 
 
 

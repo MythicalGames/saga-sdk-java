@@ -344,6 +344,10 @@
                 </li>
               
                 <li>
+                  <a href="#saga.api.item.IssueItemProto"><span class="badge">M</span>IssueItemProto</a>
+                </li>
+              
+                <li>
                   <a href="#saga.api.item.IssueItemRequest"><span class="badge">M</span>IssueItemRequest</a>
                 </li>
               
@@ -2318,6 +2322,37 @@
 
         
       
+        <h3 id="saga.api.item.IssueItemProto">IssueItemProto</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>inventory_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>GameInventory Ids of Items being issued </p></td>
+                </tr>
+              
+                <tr>
+                  <td>metadata</td>
+                  <td><a href="#saga.common.Metadata">saga.common.Metadata</a></td>
+                  <td></td>
+                  <td><p>Metadata associated to Item being issued </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="saga.api.item.IssueItemRequest">IssueItemRequest</h3>
         <p>Issue item call</p>
 
@@ -2329,17 +2364,17 @@
             <tbody>
               
                 <tr>
-                  <td>inventory_ids</td>
-                  <td><a href="#string">string</a></td>
+                  <td>items</td>
+                  <td><a href="#saga.api.item.IssueItemProto">IssueItemProto</a></td>
                   <td>repeated</td>
-                  <td><p>GameInventory Ids of Items being issued </p></td>
+                  <td><p>Repeated items so that metadata is unique per item </p></td>
                 </tr>
               
                 <tr>
                   <td>recipient_oauth_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p>Oauth id of wallet accepting items </p></td>
                 </tr>
               
                 <tr>
@@ -2347,13 +2382,6 @@
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>Unique id set for your game of the Item being issued </p></td>
-                </tr>
-              
-                <tr>
-                  <td>metadata</td>
-                  <td><a href="#saga.common.Metadata">saga.common.Metadata</a></td>
-                  <td></td>
-                  <td><p>Metadata associated to Item being issued </p></td>
                 </tr>
               
             </tbody>
