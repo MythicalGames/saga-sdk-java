@@ -23,6 +23,9 @@ public class SagaItemType {
     private String name;
     private String symbol;
     private long maxSupply;
+    private long issuedSupply;
+    @DtoExclude
+    private Long availableSupply;
     private String contractAddress;
     private String blockExplorerUrl;
     private boolean finalized;
@@ -40,6 +43,10 @@ public class SagaItemType {
 
         var updatedAt = ConversionUtils.protoTimestampToInstant(proto.getUpdatedAt());
         itemType.setUpdatedAt(updatedAt);
+
+        if (proto.hasAvailableSupply()) {
+            itemType.setAvailableSupply(proto.getAvailableSupply().getValue());
+        }
 
         return itemType;
     }
