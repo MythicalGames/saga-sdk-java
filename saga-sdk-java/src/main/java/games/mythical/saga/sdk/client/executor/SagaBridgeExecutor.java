@@ -1,15 +1,16 @@
 package games.mythical.saga.sdk.client.executor;
 
 public interface SagaBridgeExecutor extends BaseSagaExecutor {
-    void updateItem(String oauthId,
-                    String inventoryId,
-                    String itemTypeId,
-                    String destinationAddress,
-                    String destinationChain,
-                    String originAddress,
-                    String mythicalTransactionId,
-                    String mainnetTransactionId,
-                    String traceId) throws Exception;
+    void updateItem(
+            String oauthId,
+            String inventoryId,
+            String itemTypeId,
+            String destinationAddress,
+            String destinationChain,
+            String originAddress,
+            String mythicalTransactionId,
+            String mainnetTransactionId,
+            String traceId) throws Exception;
 
     void bridgeQuoteUpdate(
             String feeInOriginChainNativeToken,
@@ -20,6 +21,5 @@ public interface SagaBridgeExecutor extends BaseSagaExecutor {
             String gasPriceOriginChainUnit,
             String gasPriceTargetChain,
             String gasPriceTargetChainUnit,
-            String signature
-    ) throws Exception;
+            String signature) throws Exception;
 }

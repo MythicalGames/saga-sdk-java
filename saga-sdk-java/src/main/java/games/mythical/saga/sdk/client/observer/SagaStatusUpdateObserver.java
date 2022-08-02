@@ -209,7 +209,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                         message.getFeeInOriginchainNativeToken(),
                         message.getFeeInOriginchainNativeTokenUnit(),
                         message.getFeeInUsd(),
-                        message.getExpiresAt().toString(),
+                        message.getExpiresAt(),
                         message.getGasPriceOriginchain(),
                         message.getGasPriceOriginchainUnit(),
                         message.getGasPriceTargetchain(),

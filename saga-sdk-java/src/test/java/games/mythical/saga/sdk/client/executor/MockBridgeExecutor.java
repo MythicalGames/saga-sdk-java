@@ -15,6 +15,16 @@ public class MockBridgeExecutor extends MockBaseExecutor implements SagaBridgeEx
     private String mythicalTransactionId;
     private String mainnetTransactionId;
 
+    private String feeInOriginChainNativeToken;
+    private String feeInOriginChainNativeTokenUnit;
+    private String feeInUsd;
+    private String expiresAt;
+    private String gasPriceOriginChain;
+    private String gasPriceOriginChainUnit;
+    private String gasPriceTargetChain;
+    private String gasPriceTargetChainUnit;
+    private String signature;
+
     @Override
     public void updateItem(String oauthId,
                            String inventoryId,
@@ -47,6 +57,15 @@ public class MockBridgeExecutor extends MockBaseExecutor implements SagaBridgeEx
             String gasPriceTargetChain,
             String gasPriceTargetChainUnit,
             String signature
-    ) throws Exception {
+    ) {
+        this.feeInOriginChainNativeToken = feeInOriginChainNativeToken;
+        this.feeInOriginChainNativeTokenUnit = feeInOriginChainNativeTokenUnit;
+        this.feeInUsd = feeInUsd;
+        this.expiresAt = expiresAt;
+        this.gasPriceOriginChain = gasPriceOriginChain;
+        this.gasPriceOriginChainUnit = gasPriceOriginChainUnit;
+        this.gasPriceTargetChain = gasPriceTargetChain;
+        this.gasPriceTargetChainUnit = gasPriceTargetChainUnit;
+        this.signature = signature;
     }
 }
