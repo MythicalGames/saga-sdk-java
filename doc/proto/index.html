@@ -187,6 +187,14 @@
                 </li>
               
                 <li>
+                  <a href="#saga.api.bridge.QuoteBridgeNFTRequest"><span class="badge">M</span>QuoteBridgeNFTRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.api.bridge.QuoteBridgeNFTResponse"><span class="badge">M</span>QuoteBridgeNFTResponse</a>
+                </li>
+              
+                <li>
                   <a href="#saga.api.bridge.WithdrawItemRequest"><span class="badge">M</span>WithdrawItemRequest</a>
                 </li>
               
@@ -1118,6 +1126,10 @@
             <ul>
               
                 <li>
+                  <a href="#saga.rpc.streams.bridge.BridgeQuoteStatusUpdate"><span class="badge">M</span>BridgeQuoteStatusUpdate</a>
+                </li>
+              
+                <li>
                   <a href="#saga.rpc.streams.bridge.BridgeStatusUpdate"><span class="badge">M</span>BridgeStatusUpdate</a>
                 </li>
               
@@ -1435,6 +1447,131 @@
 
         
       
+        <h3 id="saga.api.bridge.QuoteBridgeNFTRequest">QuoteBridgeNFTRequest</h3>
+        <p>Get Bridge Quote Call</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>origin_chain_id</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>target_chain_id</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>item_type_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>origin_chain_wallet_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.bridge.QuoteBridgeNFTResponse">QuoteBridgeNFTResponse</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>fee_in_originchain_native_token</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fee_in_originchain_native_token_unit</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fee_in_usd</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>expires_at</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>gas_price_originchain</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>gas_price_originchain_unit</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>gas_price_targetchain</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>gas_price_targetchain_unit</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>signature</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="saga.api.bridge.WithdrawItemRequest">WithdrawItemRequest</h3>
         <p>Withdraw Call</p>
 
@@ -1534,6 +1671,13 @@
                 <td><a href="#saga.api.bridge.GetBridgeRequest">GetBridgeRequest</a></td>
                 <td><a href="#saga.api.bridge.BridgeProto">BridgeProto</a></td>
                 <td><p>Get Bridge</p></td>
+              </tr>
+            
+              <tr>
+                <td>GetBridgeQuote</td>
+                <td><a href="#saga.api.bridge.QuoteBridgeNFTRequest">QuoteBridgeNFTRequest</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
+                <td><p>Get Bridge Quote</p></td>
               </tr>
             
           </tbody>
@@ -6942,6 +7086,86 @@
       <p></p>
 
       
+        <h3 id="saga.rpc.streams.bridge.BridgeQuoteStatusUpdate">BridgeQuoteStatusUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>fee_in_originchain_native_token</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fee_in_originchain_native_token_unit</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fee_in_usd</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>expires_at</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>gas_price_originchain</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>gas_price_originchain_unit</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>gas_price_targetchain</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>gas_price_targetchain_unit</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>signature</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="saga.rpc.streams.bridge.BridgeStatusUpdate">BridgeStatusUpdate</h3>
         <p>Results from a Bridge status update gRPC stream call</p>
 
@@ -7035,6 +7259,13 @@
                 <tr>
                   <td>status_update</td>
                   <td><a href="#saga.rpc.streams.bridge.BridgeStatusUpdate">BridgeStatusUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>bridge_quote_status_update</td>
+                  <td><a href="#saga.rpc.streams.bridge.BridgeQuoteStatusUpdate">BridgeQuoteStatusUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>

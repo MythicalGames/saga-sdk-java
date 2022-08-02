@@ -6,6 +6,8 @@
 - [api/bridge/definition.proto](#api_bridge_definition-proto)
     - [BridgeProto](#saga-api-bridge-BridgeProto)
     - [GetBridgeRequest](#saga-api-bridge-GetBridgeRequest)
+    - [QuoteBridgeNFTRequest](#saga-api-bridge-QuoteBridgeNFTRequest)
+    - [QuoteBridgeNFTResponse](#saga-api-bridge-QuoteBridgeNFTResponse)
     - [WithdrawItemRequest](#saga-api-bridge-WithdrawItemRequest)
   
 - [api/bridge/rpc.proto](#api_bridge_rpc-proto)
@@ -208,6 +210,7 @@
     - [SortOrder](#saga-common-SortOrder)
   
 - [streams/bridge/definition.proto](#streams_bridge_definition-proto)
+    - [BridgeQuoteStatusUpdate](#saga-rpc-streams-bridge-BridgeQuoteStatusUpdate)
     - [BridgeStatusUpdate](#saga-rpc-streams-bridge-BridgeStatusUpdate)
     - [BridgeUpdate](#saga-rpc-streams-bridge-BridgeUpdate)
   
@@ -302,6 +305,47 @@ Get Bridge Call
 
 
 
+<a name="saga-api-bridge-QuoteBridgeNFTRequest"></a>
+
+### QuoteBridgeNFTRequest
+Get Bridge Quote Call
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| origin_chain_id | [int32](#int32) |  |  |
+| target_chain_id | [int32](#int32) |  |  |
+| item_type_id | [string](#string) |  |  |
+| origin_chain_wallet_address | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="saga-api-bridge-QuoteBridgeNFTResponse"></a>
+
+### QuoteBridgeNFTResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| fee_in_originchain_native_token | [string](#string) |  |  |
+| fee_in_originchain_native_token_unit | [string](#string) |  |  |
+| fee_in_usd | [string](#string) |  |  |
+| expires_at | [string](#string) |  |  |
+| gas_price_originchain | [string](#string) |  |  |
+| gas_price_originchain_unit | [string](#string) |  |  |
+| gas_price_targetchain | [string](#string) |  |  |
+| gas_price_targetchain_unit | [string](#string) |  |  |
+| signature | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="saga-api-bridge-WithdrawItemRequest"></a>
 
 ### WithdrawItemRequest
@@ -353,6 +397,7 @@ Withdraw Call
 | ----------- | ------------ | ------------- | ------------|
 | WithdrawItem | [WithdrawItemRequest](#saga-api-bridge-WithdrawItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Withdraw an Item |
 | GetBridge | [GetBridgeRequest](#saga-api-bridge-GetBridgeRequest) | [BridgeProto](#saga-api-bridge-BridgeProto) | Get Bridge |
+| GetBridgeQuote | [QuoteBridgeNFTRequest](#saga-api-bridge-QuoteBridgeNFTRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Get Bridge Quote |
 
  
 
@@ -2961,6 +3006,29 @@ Options allowed when querying
 
 
 
+<a name="saga-rpc-streams-bridge-BridgeQuoteStatusUpdate"></a>
+
+### BridgeQuoteStatusUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| fee_in_originchain_native_token | [string](#string) |  |  |
+| fee_in_originchain_native_token_unit | [string](#string) |  |  |
+| fee_in_usd | [string](#string) |  |  |
+| expires_at | [string](#string) |  |  |
+| gas_price_originchain | [string](#string) |  |  |
+| gas_price_originchain_unit | [string](#string) |  |  |
+| gas_price_targetchain | [string](#string) |  |  |
+| gas_price_targetchain_unit | [string](#string) |  |  |
+| signature | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="saga-rpc-streams-bridge-BridgeStatusUpdate"></a>
 
 ### BridgeStatusUpdate
@@ -2993,6 +3061,7 @@ Results from a Bridge status update gRPC stream call
 | ----- | ---- | ----- | ----------- |
 | error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [BridgeStatusUpdate](#saga-rpc-streams-bridge-BridgeStatusUpdate) |  |  |
+| bridge_quote_status_update | [BridgeQuoteStatusUpdate](#saga-rpc-streams-bridge-BridgeQuoteStatusUpdate) |  |  |
 
 
 
