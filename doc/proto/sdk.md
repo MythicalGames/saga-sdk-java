@@ -982,6 +982,8 @@ Get ItemTypes call
 | withdrawable | [bool](#bool) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| issued_supply | [int64](#int64) |  |  |
+| available_supply | [google.protobuf.Int64Value](#google-protobuf-Int64Value) |  |  |
 
 
 
