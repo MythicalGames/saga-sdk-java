@@ -2190,7 +2190,7 @@ Create Order Quote call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | reservation_id | [string](#string) |  |  |
-| item_type_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  |  |
 
 
 
