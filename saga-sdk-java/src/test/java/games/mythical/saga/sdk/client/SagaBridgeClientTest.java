@@ -5,6 +5,7 @@ import games.mythical.saga.sdk.proto.api.bridge.BridgeProto;
 import games.mythical.saga.sdk.proto.api.bridge.BridgeServiceGrpc;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
+import games.mythical.saga.sdk.proto.streams.bridge.BridgeQuoteStatusUpdate;
 import games.mythical.saga.sdk.proto.streams.bridge.BridgeStatusUpdate;
 import games.mythical.saga.sdk.proto.streams.bridge.BridgeUpdate;
 import games.mythical.saga.sdk.server.MockServer;
@@ -128,14 +129,39 @@ class SagaBridgeClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.getBridgeQuote(any())).thenReturn(expectedResponse);
-        var bridgeQuoteResponse = bridgeClient.getBridgeQuote(
+
+        final var traceId = bridgeClient.getBridgeQuote(
                 1,
                 2,
                 RandomStringUtils.randomAlphanumeric(30),
                 RandomStringUtils.randomAlphanumeric(30)
         );
+        checkTraceAndStart(expectedResponse, traceId);
 
-        assertNotNull(bridgeQuoteResponse);
-        assertEquals(expectedResponse.getTraceId(), bridgeQuoteResponse);
+        final var update = BridgeQuoteStatusUpdate.newBuilder()
+                .setFeeInOriginchainNativeToken(RandomStringUtils.randomAlphanumeric(30))
+                .setFeeInOriginchainNativeTokenUnit(RandomStringUtils.randomAlphanumeric(30))
+                .setFeeInUsd(RandomStringUtils.randomAlphanumeric(30))
+                .setExpiresAt(RandomStringUtils.randomAlphanumeric(30))
+                .setGasPriceOriginchain(RandomStringUtils.randomAlphanumeric(30))
+                .setGasPriceOriginchainUnit(RandomStringUtils.randomAlphanumeric(30))
+                .setGasPriceTargetchain(RandomStringUtils.randomAlphanumeric(30))
+                .setGasPriceTargetchainUnit(RandomStringUtils.randomAlphanumeric(30))
+                .setSignature(RandomStringUtils.randomAlphanumeric(30))
+                .build();
+        var statusUpdate = StatusUpdate.newBuilder()
+                .setTraceId(traceId)
+                .setBridgeUpdate(BridgeUpdate.newBuilder()
+                        .setBridgeQuoteStatusUpdate(update)
+                        .build())
+                .build();
+        bridgeServer.getStatusStream().sendStatus(titleId, statusUpdate);
+
+        ConcurrentFinisher.wait(traceId);
+
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+        bridgeServer.verifyCalls("StatusStream", 1);
+        bridgeServer.verifyCalls("StatusConfirmation", 1);
     }
 }

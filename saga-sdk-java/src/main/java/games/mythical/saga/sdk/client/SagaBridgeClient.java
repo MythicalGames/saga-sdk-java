@@ -86,7 +86,7 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling getBridgeQuote on ItemType", e);
+            log.error("Exception calling getBridgeQuote", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
