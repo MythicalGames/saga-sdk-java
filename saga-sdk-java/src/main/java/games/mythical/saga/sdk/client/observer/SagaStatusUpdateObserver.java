@@ -215,7 +215,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                         traceId
                 );
             } else {
-                final var message = update.getBridgeStatusUpdate();
+                final var message = update.getStatusUpdate();
                 sagaBridgeExecutor.updateItem(
                         message.getOauthId(),
                         message.getInventoryId(),

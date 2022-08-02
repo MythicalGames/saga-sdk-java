@@ -107,7 +107,7 @@ class SagaBridgeClientTest extends AbstractClientTest {
         var statusUpdate = StatusUpdate.newBuilder()
                 .setTraceId(traceId)
                 .setBridgeUpdate(BridgeUpdate.newBuilder()
-                            .setBridgeStatusUpdate(update)
+                            .setStatusUpdate(update)
                             .build())
                 .build();
         bridgeServer.getStatusStream().sendStatus(titleId, statusUpdate);

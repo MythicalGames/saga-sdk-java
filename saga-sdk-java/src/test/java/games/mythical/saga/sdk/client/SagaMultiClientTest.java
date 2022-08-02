@@ -86,7 +86,7 @@ class SagaMultiClientTest extends AbstractClientTest {
             .setItemTypeId(RandomStringUtils.randomAlphanumeric(30));
         var statusUpdate = StatusUpdate.newBuilder()
                 .setTraceId(TRACE_ID_2)
-                .setBridgeUpdate(BridgeUpdate.newBuilder().setBridgeStatusUpdate(update))
+                .setBridgeUpdate(BridgeUpdate.newBuilder().setStatusUpdate(update))
                 .build();
         mockServer.getStatusStream().sendStatus(titleId, statusUpdate);
 
