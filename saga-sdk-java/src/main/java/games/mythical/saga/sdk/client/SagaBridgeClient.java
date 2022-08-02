@@ -6,9 +6,7 @@ import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.proto.api.bridge.BridgeServiceGrpc;
-import games.mythical.saga.sdk.proto.api.bridge.GetBridgeRequest;
-import games.mythical.saga.sdk.proto.api.bridge.WithdrawItemRequest;
+import games.mythical.saga.sdk.proto.api.bridge.*;
 import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +65,29 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
             return SagaBridge.fromProto(bridge);
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
+        }
+    }
+
+    public String getBridgeQuote(
+        Integer originChainId,
+        Integer targetChainId,
+        String itemTypeId,
+        String originChainWalletAddress
+    ) throws SagaException {
+        var request = QuoteBridgeNFTRequest.newBuilder()
+                .setOriginChainId(originChainId)
+                .setTargetChainId(targetChainId)
+                .setItemTypeId(itemTypeId)
+                .setOriginChainWalletAddress(originChainWalletAddress)
+                .build();
+        try {
+            var receivedResponse = serviceBlockingStub.getBridgeQuote(request);
+            return receivedResponse.getTraceId();
+        } catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
+        } catch (Exception e) {
+            log.error("Exception calling getBridgeQuote", e);
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
 }
