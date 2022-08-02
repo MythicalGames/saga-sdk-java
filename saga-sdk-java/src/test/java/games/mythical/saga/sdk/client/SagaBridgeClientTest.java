@@ -106,7 +106,7 @@ class SagaBridgeClientTest extends AbstractClientTest {
         var statusUpdate = StatusUpdate.newBuilder()
                 .setTraceId(traceId)
                 .setBridgeUpdate(BridgeUpdate.newBuilder()
-                            .setStatusUpdate(update)
+                            .setBridgeStatusUpdate(update)
                             .build())
                 .build();
         bridgeServer.getStatusStream().sendStatus(titleId, statusUpdate);
@@ -119,5 +119,23 @@ class SagaBridgeClientTest extends AbstractClientTest {
 
         bridgeServer.verifyCalls("StatusStream", 1);
         bridgeServer.verifyCalls("StatusConfirmation", 1);
+    }
+
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.MINUTES)
+    public void getBridgeQuote() throws Exception {
+        final var expectedResponse = ReceivedResponse.newBuilder()
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .build();
+        when(mockServiceBlockingStub.getBridgeQuote(any())).thenReturn(expectedResponse);
+        var bridgeQuoteResponse = bridgeClient.getBridgeQuote(
+                1,
+                2,
+                RandomStringUtils.randomAlphanumeric(30),
+                RandomStringUtils.randomAlphanumeric(30)
+        );
+
+        assertNotNull(bridgeQuoteResponse);
+        assertEquals(expectedResponse.getTraceId(), bridgeQuoteResponse);
     }
 }

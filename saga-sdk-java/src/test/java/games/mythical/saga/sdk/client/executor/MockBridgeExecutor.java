@@ -37,5 +37,16 @@ public class MockBridgeExecutor extends MockBaseExecutor implements SagaBridgeEx
     }
 
     @Override
-    public void requestQuote(){}
+    public void bridgeQuoteUpdate(
+            String feeInOriginChainNativeToken,
+            String feeInOriginChainNativeTokenUnit,
+            String feeInUsd,
+            String expiresAt,
+            String gasPriceOriginChain,
+            String gasPriceOriginChainUnit,
+            String gasPriceTargetChain,
+            String gasPriceTargetChainUnit,
+            String signature
+    ) throws Exception {
+    }
 }

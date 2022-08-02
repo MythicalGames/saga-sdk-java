@@ -21,6 +21,7 @@ import games.mythical.saga.sdk.proto.streams.offer.OfferUpdate;
 import games.mythical.saga.sdk.proto.streams.order.OrderUpdate;
 import games.mythical.saga.sdk.proto.streams.payment.PaymentUpdate;
 import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -202,18 +203,31 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
             if (update.hasError()) {
                 final var error = update.getError();
                 sagaBridgeExecutor.onError(toErrData(error));
+            } else if(update.hasBridgeQuoteStatusUpdate()) {
+                final var message = update.getBridgeQuoteStatusUpdate();
+                sagaBridgeExecutor.bridgeQuoteUpdate(
+                        message.getFeeInOriginchainNativeToken(),
+                        message.getFeeInOriginchainNativeTokenUnit(),
+                        message.getFeeInUsd(),
+                        message.getExpiresAt().toString(),
+                        message.getGasPriceOriginchain(),
+                        message.getGasPriceOriginchainUnit(),
+                        message.getGasPriceTargetchain(),
+                        message.getGasPriceTargetchainUnit(),
+                        message.getSignature()
+                );
             } else {
-                final var message = update.getStatusUpdate();
+                final var message = update.getBridgeStatusUpdate();
                 sagaBridgeExecutor.updateItem(
-                    message.getOauthId(),
-                    message.getInventoryId(),
-                    message.getItemTypeId(),
-                    message.getDestinationAddress(),
-                    message.getDestinationChain(),
-                    message.getOriginAddress(),
-                    message.getMythicalTransactionId(),
-                    message.getMainnetTransactionId(),
-                    traceId
+                        message.getOauthId(),
+                        message.getInventoryId(),
+                        message.getItemTypeId(),
+                        message.getDestinationAddress(),
+                        message.getDestinationChain(),
+                        message.getOriginAddress(),
+                        message.getMythicalTransactionId(),
+                        message.getMainnetTransactionId(),
+                        traceId
                 );
             }
         }

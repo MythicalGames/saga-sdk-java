@@ -11,5 +11,15 @@ public interface SagaBridgeExecutor extends BaseSagaExecutor {
                     String mainnetTransactionId,
                     String traceId) throws Exception;
 
-    void requestQuote() throws Exception;
+    void bridgeQuoteUpdate(
+            String feeInOriginChainNativeToken,
+            String feeInOriginChainNativeTokenUnit,
+            String feeInUsd,
+            String expiresAt,
+            String gasPriceOriginChain,
+            String gasPriceOriginChainUnit,
+            String gasPriceTargetChain,
+            String gasPriceTargetChainUnit,
+            String signature
+    ) throws Exception;
 }
