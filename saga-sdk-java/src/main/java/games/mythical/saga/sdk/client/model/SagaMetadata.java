@@ -31,7 +31,7 @@ public class SagaMetadata {
         return ProtoUtil.toDto(proto, SagaMetadata.class);
     }
 
-    public static Metadata toProto(SagaMetadata metadata) throws SagaException {
+    public static Metadata toProto(SagaMetadata metadata) {
         var builder = ProtoUtil.toProtoBuilder(metadata, Metadata.Builder.class);
 
         if (metadata.getAttributes() != null) {
