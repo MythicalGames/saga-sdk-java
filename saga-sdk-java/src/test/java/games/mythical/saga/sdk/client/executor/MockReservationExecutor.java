@@ -14,6 +14,12 @@ public class MockReservationExecutor extends MockBaseExecutor implements SagaRes
     }
 
     @Override
+    public void onReservationRedeemed(String reservationId, String traceId) {
+        this.reservationId = reservationId;
+        this.traceId = traceId;
+    }
+
+    @Override
     public void onReservationReleased(String reservationId, String traceId) {
         this.reservationId = reservationId;
         this.traceId = traceId;

@@ -1,9 +1,12 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockReservationExecutor;
+import games.mythical.saga.sdk.client.model.SagaMetadata;
+import games.mythical.saga.sdk.client.model.SagaRedeemItem;
 import games.mythical.saga.sdk.proto.api.reservation.ReservationServiceGrpc;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
+import games.mythical.saga.sdk.proto.streams.reservation.ReservationRedeemedProto;
 import games.mythical.saga.sdk.proto.streams.reservation.ReservationReleasedProto;
 import games.mythical.saga.sdk.proto.streams.reservation.ReservationUpdate;
 import games.mythical.saga.sdk.server.MockServer;
@@ -17,6 +20,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Collections;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,6 +53,45 @@ public class SagaReservationClientTest  extends AbstractClientTest {
         client.stop();
         Thread.sleep(500);
         server.stop();
+    }
+
+    @Test
+    public void redeemReservation() throws Exception {
+        final var expectedResponse = ReceivedResponse.newBuilder()
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .build();
+        when(blockingStub.redeemReservation(any())).thenReturn(expectedResponse);
+
+        final var reservationId = RandomStringUtils.randomAlphanumeric(10);
+        final var oauthId = RandomStringUtils.randomAlphanumeric(10);
+        final var item = SagaRedeemItem.builder()
+                .itemTypeId(RandomStringUtils.randomAlphanumeric(10))
+                .inventoryId(UUID.randomUUID().toString())
+                .metadata(SagaMetadata.builder()
+                        .name(RandomStringUtils.randomAlphanumeric(10))
+                        .description(RandomStringUtils.randomAlphanumeric(10))
+                        .image(RandomStringUtils.randomAlphanumeric(10))
+                        .build())
+                .build();
+
+        final var traceId = client.redeemReservation(reservationId, oauthId, Collections.singletonList(item));
+
+        checkTraceAndStart(expectedResponse, traceId);
+
+        final var update = ReservationUpdate.newBuilder()
+                .setReservationRedeemed(ReservationRedeemedProto.newBuilder().setReservationId(reservationId).build()).build();
+        server.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
+                .setTraceId(traceId)
+                .setReservationUpdate(update)
+                .build());
+
+        ConcurrentFinisher.wait(traceId);
+
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertEquals(reservationId, executor.getReservationId());
+
+        server.verifyCalls("StatusStream", 1);
+        server.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
