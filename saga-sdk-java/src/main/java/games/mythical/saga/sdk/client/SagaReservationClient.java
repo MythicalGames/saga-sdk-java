@@ -2,12 +2,14 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaReservationExecutor;
 import games.mythical.saga.sdk.client.model.SagaItemReservation;
+import games.mythical.saga.sdk.client.model.SagaRedeemItem;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.reservation.CreateReservationRequest;
 import games.mythical.saga.sdk.proto.api.reservation.ReleaseReservationRequest;
+import games.mythical.saga.sdk.proto.api.reservation.RedeemReservationRequest;
 import games.mythical.saga.sdk.proto.api.reservation.ReservationServiceGrpc;
 import io.grpc.StatusRuntimeException;
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +53,33 @@ public class SagaReservationClient extends AbstractSagaStreamClient {
 
         try {
             var response = serviceBlockingStub.createReservation(request);
+            return response.getTraceId();
+        } catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
+        } catch (Exception e) {
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
+        }
+    }
+
+    public String redeemReservation(String reservationId, String oauthId, List<SagaRedeemItem> items) throws SagaException {
+        if (StringUtils.isBlank(reservationId)) {
+            throw new SagaException(SagaErrorCode.BAD_REQUEST, "Reservation ID is required");
+        }
+        if (StringUtils.isBlank(oauthId)) {
+            throw new SagaException(SagaErrorCode.BAD_REQUEST, "OAuth ID is required");
+        }
+        if (items == null || items.isEmpty()) {
+            throw new SagaException(SagaErrorCode.BAD_REQUEST, "At least one item is required");
+        }
+
+        var request = RedeemReservationRequest.newBuilder()
+                .setReservationId(reservationId)
+                .setOauthId(oauthId)
+                .addAllItems(items.stream().map(SagaRedeemItem::toProto).collect(Collectors.toList()))
+                .build();
+
+        try {
+            var response = serviceBlockingStub.redeemReservation(request);
             return response.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
