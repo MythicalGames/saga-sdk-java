@@ -59,17 +59,17 @@ public class SagaReservationClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String releaseReservation(String reservationId, String itemTypeId) throws SagaException {
+    public String releaseReservation(String reservationId, String oauthId) throws SagaException {
         if (StringUtils.isBlank(reservationId)) {
             throw new SagaException(SagaErrorCode.BAD_REQUEST, "Reservation ID is required");
         }
-        if (StringUtils.isBlank(itemTypeId)) {
-            throw new SagaException(SagaErrorCode.BAD_REQUEST, "Item Type ID is required");
+        if (StringUtils.isBlank(oauthId)) {
+            throw new SagaException(SagaErrorCode.BAD_REQUEST, "OAuth ID is required");
         }
 
         var request = ReleaseReservationRequest.newBuilder()
                 .setReservationId(reservationId)
-                .setItemTypeId(itemTypeId)
+                .setOauthId(oauthId)
                 .build();
 
         try {
