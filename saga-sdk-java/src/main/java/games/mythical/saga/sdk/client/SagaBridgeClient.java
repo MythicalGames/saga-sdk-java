@@ -80,7 +80,6 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
                 .setItemTypeId(itemTypeId)
                 .setOriginChainWalletAddress(originChainWalletAddress)
                 .build();
-
         try {
             var receivedResponse = serviceBlockingStub.getBridgeQuote(request);
             return receivedResponse.getTraceId();

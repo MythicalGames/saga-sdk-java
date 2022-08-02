@@ -21,5 +21,6 @@ public interface SagaBridgeExecutor extends BaseSagaExecutor {
             String gasPriceOriginChainUnit,
             String gasPriceTargetChain,
             String gasPriceTargetChainUnit,
-            String signature) throws Exception;
+            String signature,
+            String traceId) throws Exception;
 }

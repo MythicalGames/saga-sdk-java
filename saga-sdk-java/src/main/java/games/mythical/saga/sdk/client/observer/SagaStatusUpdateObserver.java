@@ -21,15 +21,12 @@ import games.mythical.saga.sdk.proto.streams.offer.OfferUpdate;
 import games.mythical.saga.sdk.proto.streams.order.OrderUpdate;
 import games.mythical.saga.sdk.proto.streams.payment.PaymentUpdate;
 import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import games.mythical.saga.sdk.proto.streams.reservation.ReservationUpdate;
 import games.mythical.saga.sdk.util.ConversionUtils;
 import lombok.extern.slf4j.Slf4j;
-
 import java.math.BigDecimal;
 import java.util.function.Consumer;
 
@@ -214,7 +211,8 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                         message.getGasPriceOriginchainUnit(),
                         message.getGasPriceTargetchain(),
                         message.getGasPriceTargetchainUnit(),
-                        message.getSignature()
+                        message.getSignature(),
+                        traceId
                 );
             } else {
                 final var message = update.getBridgeStatusUpdate();

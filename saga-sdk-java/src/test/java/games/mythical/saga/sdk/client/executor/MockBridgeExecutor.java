@@ -14,7 +14,6 @@ public class MockBridgeExecutor extends MockBaseExecutor implements SagaBridgeEx
     private String originAddress;
     private String mythicalTransactionId;
     private String mainnetTransactionId;
-
     private String feeInOriginChainNativeToken;
     private String feeInOriginChainNativeTokenUnit;
     private String feeInUsd;
@@ -47,17 +46,16 @@ public class MockBridgeExecutor extends MockBaseExecutor implements SagaBridgeEx
     }
 
     @Override
-    public void bridgeQuoteUpdate(
-            String feeInOriginChainNativeToken,
-            String feeInOriginChainNativeTokenUnit,
-            String feeInUsd,
-            String expiresAt,
-            String gasPriceOriginChain,
-            String gasPriceOriginChainUnit,
-            String gasPriceTargetChain,
-            String gasPriceTargetChainUnit,
-            String signature
-    ) {
+    public void bridgeQuoteUpdate(String feeInOriginChainNativeToken,
+                                  String feeInOriginChainNativeTokenUnit,
+                                  String feeInUsd,
+                                  String expiresAt,
+                                  String gasPriceOriginChain,
+                                  String gasPriceOriginChainUnit,
+                                  String gasPriceTargetChain,
+                                  String gasPriceTargetChainUnit,
+                                  String signature,
+                                  String traceId) {
         this.feeInOriginChainNativeToken = feeInOriginChainNativeToken;
         this.feeInOriginChainNativeTokenUnit = feeInOriginChainNativeTokenUnit;
         this.feeInUsd = feeInUsd;
@@ -67,5 +65,6 @@ public class MockBridgeExecutor extends MockBaseExecutor implements SagaBridgeEx
         this.gasPriceTargetChain = gasPriceTargetChain;
         this.gasPriceTargetChainUnit = gasPriceTargetChainUnit;
         this.signature = signature;
+        this.traceId = traceId;
     }
 }
