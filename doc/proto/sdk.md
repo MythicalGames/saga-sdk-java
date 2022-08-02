@@ -140,6 +140,8 @@
 - [api/reservation/definition.proto](#api_reservation_definition-proto)
     - [CreateReservationRequest](#saga-api-reservation-CreateReservationRequest)
     - [ItemReservationProto](#saga-api-reservation-ItemReservationProto)
+    - [RedeemItemProto](#saga-api-reservation-RedeemItemProto)
+    - [RedeemReservationRequest](#saga-api-reservation-RedeemReservationRequest)
     - [ReleaseReservationRequest](#saga-api-reservation-ReleaseReservationRequest)
   
 - [api/reservation/rpc.proto](#api_reservation_rpc-proto)
@@ -251,6 +253,7 @@
   
 - [streams/reservation/definition.proto](#streams_reservation_definition-proto)
     - [ReservationCreatedProto](#saga-rpc-streams-reservation-ReservationCreatedProto)
+    - [ReservationRedeemedProto](#saga-rpc-streams-reservation-ReservationRedeemedProto)
     - [ReservationReleasedProto](#saga-rpc-streams-reservation-ReservationReleasedProto)
     - [ReservationUpdate](#saga-rpc-streams-reservation-ReservationUpdate)
   
@@ -2181,6 +2184,40 @@ Create Order Quote call
 
 
 
+<a name="saga-api-reservation-RedeemItemProto"></a>
+
+### RedeemItemProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| inventory_id | [string](#string) |  |  |
+| item_type_id | [string](#string) |  |  |
+| metadata | [saga.common.Metadata](#saga-common-Metadata) |  |  |
+
+
+
+
+
+
+<a name="saga-api-reservation-RedeemReservationRequest"></a>
+
+### RedeemReservationRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| reservation_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  |  |
+| items | [RedeemItemProto](#saga-api-reservation-RedeemItemProto) | repeated |  |
+
+
+
+
+
+
 <a name="saga-api-reservation-ReleaseReservationRequest"></a>
 
 ### ReleaseReservationRequest
@@ -2227,6 +2264,7 @@ Create Order Quote call
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | CreateReservation | [CreateReservationRequest](#saga-api-reservation-CreateReservationRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
+| RedeemReservation | [RedeemReservationRequest](#saga-api-reservation-RedeemReservationRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
 | ReleaseReservation | [ReleaseReservationRequest](#saga-api-reservation-ReleaseReservationRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
 
  
@@ -3487,6 +3525,21 @@ Result of payment method creation, update, or deletion
 
 
 
+<a name="saga-rpc-streams-reservation-ReservationRedeemedProto"></a>
+
+### ReservationRedeemedProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| reservation_id | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="saga-rpc-streams-reservation-ReservationReleasedProto"></a>
 
 ### ReservationReleasedProto
@@ -3513,6 +3566,7 @@ Result of payment method creation, update, or deletion
 | error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | reservation_created | [ReservationCreatedProto](#saga-rpc-streams-reservation-ReservationCreatedProto) |  |  |
 | reservation_released | [ReservationReleasedProto](#saga-rpc-streams-reservation-ReservationReleasedProto) |  |  |
+| reservation_redeemed | [ReservationRedeemedProto](#saga-rpc-streams-reservation-ReservationRedeemedProto) |  |  |
 
 
 
