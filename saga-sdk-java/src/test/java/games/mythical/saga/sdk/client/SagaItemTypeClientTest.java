@@ -172,4 +172,33 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         when(mockServiceBlockingStub.freezeItemType(any())).thenReturn(expectedResponse);
         final var traceId = itemTypeClient.freezeItemType(ITEM_TYPE_ID);
     }
+
+    @Test
+    public void startMint() throws Exception {
+        final var expectedResponse = ReceivedResponse.newBuilder()
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .build();
+        when(mockServiceBlockingStub.startMint(any())).thenReturn(expectedResponse);
+        final var traceId = itemTypeClient.startMint(ITEM_TYPE_ID);
+
+        checkTraceAndStart(expectedResponse, traceId);
+
+        final var update = ItemTypeStatusUpdate.newBuilder()
+                .setItemTypeId(ITEM_TYPE_ID)
+                .setItemTypeState(ItemTypeState.MINTABLE);
+        itemTypeServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
+                .setTraceId(traceId)
+                .setItemTypeUpdate(ItemTypeUpdate.newBuilder().setStatusUpdate(update))
+                .build());
+
+        ConcurrentFinisher.wait(traceId);
+
+        assertEquals(ITEM_TYPE_ID, executor.getItemTypeId());
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertEquals(ItemTypeState.MINTABLE, executor.getItemTypeState());
+        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        itemTypeServer.verifyCalls("StatusStream", 1);
+        itemTypeServer.verifyCalls("StatusConfirmation", 1);
+    }
 }

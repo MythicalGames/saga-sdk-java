@@ -34,6 +34,7 @@ public class SagaItemType {
     private Instant createdAt;
     @DtoExclude
     private Instant updatedAt;
+    private boolean mintable;
 
     public static SagaItemType fromProto(ItemTypeProto proto) {
         var itemType = ProtoUtil.toDto(proto, SagaItemType.class);
