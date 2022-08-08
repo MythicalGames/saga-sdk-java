@@ -426,6 +426,10 @@
                 </li>
               
                 <li>
+                  <a href="#saga.api.itemtype.StartMintRequest"><span class="badge">M</span>StartMintRequest</a>
+                </li>
+              
+                <li>
                   <a href="#saga.api.itemtype.UpdateItemTypePayload"><span class="badge">M</span>UpdateItemTypePayload</a>
                 </li>
               
@@ -3055,6 +3059,13 @@
                   <td><p> </p></td>
                 </tr>
               
+                <tr>
+                  <td>mintable</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -3076,6 +3087,30 @@
                   <td>item_types</td>
                   <td><a href="#saga.api.itemtype.ItemTypeProto">ItemTypeProto</a></td>
                   <td>repeated</td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.itemtype.StartMintRequest">StartMintRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>item_type_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
                   <td><p> </p></td>
                 </tr>
               
@@ -3178,6 +3213,13 @@
                 <td><a href="#saga.api.itemtype.FreezeItemTypePayload">FreezeItemTypePayload</a></td>
                 <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Freeze the ItemType</p></td>
+              </tr>
+            
+              <tr>
+                <td>StartMint</td>
+                <td><a href="#saga.api.itemtype.StartMintRequest">StartMintRequest</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
+                <td><p></p></td>
               </tr>
             
           </tbody>
@@ -6706,6 +6748,12 @@
                 <td>EXPIRED</td>
                 <td>4</td>
                 <td><p>ItemType has been expired</p></td>
+              </tr>
+            
+              <tr>
+                <td>MINTABLE</td>
+                <td>5</td>
+                <td><p>ItemType can be minted</p></td>
               </tr>
             
           </tbody>

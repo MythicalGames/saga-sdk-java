@@ -59,6 +59,7 @@
     - [GetItemTypesRequest](#saga-api-itemtype-GetItemTypesRequest)
     - [ItemTypeProto](#saga-api-itemtype-ItemTypeProto)
     - [ItemTypesProto](#saga-api-itemtype-ItemTypesProto)
+    - [StartMintRequest](#saga-api-itemtype-StartMintRequest)
     - [UpdateItemTypePayload](#saga-api-itemtype-UpdateItemTypePayload)
   
 - [api/itemtype/rpc.proto](#api_itemtype_rpc-proto)
@@ -1032,6 +1033,7 @@ Get ItemTypes call
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | issued_supply | [int64](#int64) |  |  |
 | available_supply | [google.protobuf.Int64Value](#google-protobuf-Int64Value) |  |  |
+| mintable | [bool](#bool) |  |  |
 
 
 
@@ -1047,6 +1049,21 @@ Get ItemTypes call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | item_types | [ItemTypeProto](#saga-api-itemtype-ItemTypeProto) | repeated |  |
+
+
+
+
+
+
+<a name="saga-api-itemtype-StartMintRequest"></a>
+
+### StartMintRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| item_type_id | [string](#string) |  |  |
 
 
 
@@ -1103,6 +1120,7 @@ Update ItemType call
 | CreateItemType | [CreateItemTypeRequest](#saga-api-itemtype-CreateItemTypeRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create an ItemType |
 | UpdateItemType | [UpdateItemTypePayload](#saga-api-itemtype-UpdateItemTypePayload) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update the ItemType |
 | FreezeItemType | [FreezeItemTypePayload](#saga-api-itemtype-FreezeItemTypePayload) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Freeze the ItemType |
+| StartMint | [StartMintRequest](#saga-api-itemtype-StartMintRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
 
  
 
@@ -2765,6 +2783,7 @@ Metadata properties of Item
 | FROZEN | 2 | ItemType is Frozen |
 | SOLD_OUT | 3 | ItemType is Sold Out |
 | EXPIRED | 4 | ItemType has been expired |
+| MINTABLE | 5 | ItemType can be minted |
 
 
  
