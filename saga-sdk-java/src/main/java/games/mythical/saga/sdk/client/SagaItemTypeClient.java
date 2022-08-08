@@ -129,4 +129,18 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
+
+    public String startMint(String itemTypeId) throws SagaException {
+        try  {
+            log.trace("ItemTypeClient.startMint called for {}", itemTypeId);
+            var request = StartMintRequest.newBuilder().setItemTypeId(itemTypeId).build();
+            var result = serviceBlockingStub.startMint(request);
+            return result.getTraceId();
+        } catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
+        } catch (Exception e) {
+            log.error("Exception calling startMint", e);
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
+        }
+    }
 }
