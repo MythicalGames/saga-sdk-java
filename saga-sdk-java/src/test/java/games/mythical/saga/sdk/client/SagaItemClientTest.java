@@ -73,7 +73,7 @@ class SagaItemClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .setInventoryId(INVENTORY_ID)
                 .setOauthId("owner")
-                .setSerialNumber(RandomUtils.nextInt(10, 100))
+                .setTokenId(RandomUtils.nextLong(10, 100))
                 .setFinalized(true)
                 .setBlockExplorerUrl("block-explorer-url")
                 .setMetadataUrl("metadata-url")

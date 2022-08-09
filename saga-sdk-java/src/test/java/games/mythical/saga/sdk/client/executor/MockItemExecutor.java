@@ -10,7 +10,7 @@ public class MockItemExecutor extends MockBaseExecutor implements SagaItemExecut
     private String inventoryId;
     private String itemTypeId;
     private String oauthId;
-    private int serialNumber;
+    private Long tokenId;
     private String metadataUri;
     private String traceId;
     private ItemState itemState;
@@ -19,14 +19,14 @@ public class MockItemExecutor extends MockBaseExecutor implements SagaItemExecut
     public void updateItem(String inventoryId,
                            String itemTypeId,
                            String oauthId,
-                           int serialNumber,
+                           Long tokenId,
                            String metadataUrl,
                            String traceId,
                            ItemState itemState) throws Exception {
         this.inventoryId = inventoryId;
         this.itemTypeId = itemTypeId;
         this.oauthId = oauthId;
-        this.serialNumber = serialNumber;
+        this.tokenId = tokenId;
         this.metadataUri = metadataUrl;
         this.traceId = traceId;
         this.itemState = itemState;

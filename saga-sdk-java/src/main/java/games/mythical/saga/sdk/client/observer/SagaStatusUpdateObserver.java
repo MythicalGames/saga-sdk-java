@@ -266,7 +266,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     message.getInventoryId(),
                     message.getItemTypeId(),
                     message.getOauthId(),
-                    message.getSerialNumber(),
+                    message.getTokenId(),
                     message.getMetadataUrl(),
                     traceId,
                     message.getItemState()

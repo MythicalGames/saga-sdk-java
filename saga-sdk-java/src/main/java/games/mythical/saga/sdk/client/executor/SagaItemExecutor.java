@@ -6,7 +6,7 @@ public interface SagaItemExecutor extends BaseSagaExecutor {
     void updateItem(String inventoryId,
                     String itemTypeId,
                     String oauthId,
-                    int serialNumber,
+                    Long tokenId,
                     String metadataUrl,
                     String traceId,
                     ItemState itemState) throws Exception;
