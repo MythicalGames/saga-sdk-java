@@ -19,7 +19,7 @@ public class SagaItem {
     private String traceId;
     private String inventoryId;
     private String oauthId;
-    private int serialNumber;
+    private long tokenId;
     private boolean finalized;
     private String blockExplorerUrl;
     private String metadataUrl;
