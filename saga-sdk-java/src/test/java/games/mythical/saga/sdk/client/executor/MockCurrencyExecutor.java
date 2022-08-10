@@ -10,14 +10,14 @@ import java.math.BigDecimal;
 @Builder
 public class MockCurrencyExecutor extends MockBaseExecutor implements SagaCurrencyExecutor {
     private String currencyTypeId;
-    private BigDecimal amount;
+    private long amount;
     private String oauthId;
     private String traceId;
     private CurrencyState currencyState;
 
     @Override
     public void updateCurrency(String currencyTypeId,
-                               BigDecimal amount,
+                               long amount,
                                String oauthId,
                                String traceId,
                                CurrencyState currencyState) {

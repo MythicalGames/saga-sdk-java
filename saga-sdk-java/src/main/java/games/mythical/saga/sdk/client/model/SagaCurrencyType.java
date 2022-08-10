@@ -22,7 +22,6 @@ public class SagaCurrencyType {
     private String publisherAddress;
     private String name;
     private String symbol;
-    private long decimalPlaces;
     private String contractAddress;
     private boolean finalized;
     private long maxSupply;
