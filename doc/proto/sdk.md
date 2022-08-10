@@ -169,7 +169,6 @@
   
 - [common/common.proto](#common_common-proto)
     - [ErrorData](#saga-common-ErrorData)
-    - [LargeDecimal](#saga-common-LargeDecimal)
     - [Metadata](#saga-common-Metadata)
     - [MetadataAttribute](#saga-common-MetadataAttribute)
     - [ReceivedResponse](#saga-common-ReceivedResponse)
@@ -455,7 +454,7 @@ Burn currency call
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  | User to burn currency from |
 | currency_id | [string](#string) |  |  |
-| amount | [saga.common.LargeDecimal](#saga-common-LargeDecimal) |  | Amount of currency to burn |
+| amount | [int64](#int64) |  | Amount of currency to burn |
 
 
 
@@ -471,7 +470,7 @@ Burn currency call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
-| amount | [saga.common.LargeDecimal](#saga-common-LargeDecimal) |  | Amount of currency |
+| amount | [int64](#int64) |  | Amount of currency |
 | currency_type_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  | Wallet address the currency belongs to |
 
@@ -504,7 +503,7 @@ Issue currency call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| amount | [saga.common.LargeDecimal](#saga-common-LargeDecimal) |  | amount to issue |
+| amount | [int64](#int64) |  | amount to issue |
 | currency_type_id | [string](#string) |  | Currency Type the currency to issue belongs to |
 | oauth_id | [string](#string) |  | Wallet address to issue currency to |
 
@@ -524,7 +523,7 @@ Transfer currency call
 | source_oauth_id | [string](#string) |  | User to transfer currency from |
 | destination_oauth_id | [string](#string) |  | User to transfer currency to |
 | currency_id | [string](#string) |  |  |
-| amount | [saga.common.LargeDecimal](#saga-common-LargeDecimal) |  | Amount of currency to transfer |
+| amount | [int64](#int64) |  | Amount of currency to transfer |
 
 
 
@@ -587,7 +586,6 @@ Transfer currency call
 | currency_type_id | [string](#string) |  |  |
 | name | [string](#string) |  |  |
 | symbol | [string](#string) |  |  |
-| decimal_places | [int64](#int64) |  |  |
 | max_supply | [int64](#int64) |  |  |
 
 
@@ -609,7 +607,6 @@ Transfer currency call
 | publisher_address | [string](#string) |  |  |
 | name | [string](#string) |  |  |
 | symbol | [string](#string) |  |  |
-| decimal_places | [int64](#int64) |  |  |
 | contract_address | [string](#string) |  |  |
 | finalized | [bool](#bool) |  |  |
 | max_supply | [int64](#int64) |  |  |
@@ -2558,22 +2555,6 @@ Get Transactions for a Player call
 
 
 
-<a name="saga-common-LargeDecimal"></a>
-
-### LargeDecimal
-Decimal object for potential 18 decimal value support. Naming was done to not conflict with Java BigDecimal
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| units | [int64](#int64) |  | The whole units part of the amount |
-| exa | [int64](#int64) |  | Number of exa (10^-18) units of the amount |
-
-
-
-
-
-
 <a name="saga-common-Metadata"></a>
 
 ### Metadata
@@ -3162,7 +3143,7 @@ Results from a Currency status update gRPC stream call
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  | Wallet address of Currency |
 | currency_type_id | [string](#string) |  |  |
-| amount | [saga.common.LargeDecimal](#saga-common-LargeDecimal) |  | Amount of coins |
+| amount | [int64](#int64) |  | Amount of coins |
 | currency_state | [saga.proto.common.currency.CurrencyState](#saga-proto-common-currency-CurrencyState) |  | State of the Currency, see CurrencyState |
 
 

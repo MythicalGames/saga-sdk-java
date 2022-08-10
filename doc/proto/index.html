@@ -926,10 +926,6 @@
                 </li>
               
                 <li>
-                  <a href="#saga.common.LargeDecimal"><span class="badge">M</span>LargeDecimal</a>
-                </li>
-              
-                <li>
                   <a href="#saga.common.Metadata"><span class="badge">M</span>Metadata</a>
                 </li>
               
@@ -1781,7 +1777,7 @@
               
                 <tr>
                   <td>amount</td>
-                  <td><a href="#saga.common.LargeDecimal">saga.common.LargeDecimal</a></td>
+                  <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p>Amount of currency to burn </p></td>
                 </tr>
@@ -1812,7 +1808,7 @@
               
                 <tr>
                   <td>amount</td>
-                  <td><a href="#saga.common.LargeDecimal">saga.common.LargeDecimal</a></td>
+                  <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p>Amount of currency </p></td>
                 </tr>
@@ -1881,7 +1877,7 @@
               
                 <tr>
                   <td>amount</td>
-                  <td><a href="#saga.common.LargeDecimal">saga.common.LargeDecimal</a></td>
+                  <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p>amount to issue </p></td>
                 </tr>
@@ -1940,7 +1936,7 @@
               
                 <tr>
                   <td>amount</td>
-                  <td><a href="#saga.common.LargeDecimal">saga.common.LargeDecimal</a></td>
+                  <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p>Amount of currency to transfer </p></td>
                 </tr>
@@ -2052,13 +2048,6 @@
                 </tr>
               
                 <tr>
-                  <td>decimal_places</td>
-                  <td><a href="#int64">int64</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
                   <td>max_supply</td>
                   <td><a href="#int64">int64</a></td>
                   <td></td>
@@ -2120,13 +2109,6 @@
                 <tr>
                   <td>symbol</td>
                   <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>decimal_places</td>
-                  <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -6282,37 +6264,6 @@
 
         
       
-        <h3 id="saga.common.LargeDecimal">LargeDecimal</h3>
-        <p>Decimal object for potential 18 decimal value support. Naming was done to not conflict with Java BigDecimal</p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>units</td>
-                  <td><a href="#int64">int64</a></td>
-                  <td></td>
-                  <td><p>The whole units part of the amount </p></td>
-                </tr>
-              
-                <tr>
-                  <td>exa</td>
-                  <td><a href="#int64">int64</a></td>
-                  <td></td>
-                  <td><p>Number of exa (10^-18) units of the amount </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
         <h3 id="saga.common.Metadata">Metadata</h3>
         <p>Metadata properties of Item</p>
 
@@ -7448,7 +7399,7 @@
               
                 <tr>
                   <td>amount</td>
-                  <td><a href="#saga.common.LargeDecimal">saga.common.LargeDecimal</a></td>
+                  <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p>Amount of coins </p></td>
                 </tr>
