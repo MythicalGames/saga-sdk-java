@@ -154,4 +154,22 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
             throw SagaException.fromGrpcException(e);
         }
     }
+
+    public String depositNmyth(String source, String destination, int quantity) throws SagaException {
+        var request = DepositNmythRequest.newBuilder()
+                .setSource(source)
+                .setDestination(destination)
+                .setQuantity(quantity)
+                .build();
+
+        try {
+            var receivedResponse = serviceBlockingStub.depositNmyth(request);
+            return receivedResponse.getTraceId();
+        } catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
+        } catch (Exception e) {
+            log.error("Exception calling emitReceived on deposit nmyth.", e);
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
+        }
+    }
 }
