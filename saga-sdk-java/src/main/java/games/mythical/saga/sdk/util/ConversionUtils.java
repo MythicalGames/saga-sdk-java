@@ -11,18 +11,13 @@ import com.google.protobuf.util.JsonFormat;
 import com.google.protobuf.util.Timestamps;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.proto.common.LargeDecimal;
 import lombok.extern.slf4j.Slf4j;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.time.Instant;
 import java.util.Map;
 
 @Slf4j
 public class ConversionUtils {
-    private static final long EXA_FACTOR = 1000000000000000000L;
-    private static final int EXA_PLACES = 18;
     private final static ObjectMapper objectMapper = new ObjectMapper()
             .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
@@ -67,24 +62,6 @@ public class ConversionUtils {
         return Timestamp.newBuilder()
                 .setSeconds(instant.getEpochSecond())
                 .setNanos(instant.getNano())
-                .build();
-    }
-
-    public static BigDecimal protoDecimalToBigDecimal(LargeDecimal decimal) {
-        var units = new BigDecimal(decimal.getUnits());
-        var exa = new BigDecimal(decimal.getExa())
-                .divide(new BigDecimal(EXA_FACTOR), new MathContext(EXA_PLACES));
-        return units.add(exa);
-    }
-
-    public static LargeDecimal bigDecimalToProtoDecimal(BigDecimal decimal) {
-        var units = decimal.longValue();
-        var exa = decimal.subtract(new BigDecimal(units))
-                .multiply(BigDecimal.valueOf(EXA_FACTOR))
-                .longValue();
-        return LargeDecimal.newBuilder()
-                .setUnits(units)
-                .setExa(exa)
                 .build();
     }
 }

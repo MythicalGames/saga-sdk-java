@@ -51,11 +51,11 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
 
     public String issueCurrency(String currencyTypeId,
                                 String oauthId,
-                                BigDecimal amount) throws SagaException {
+                                long amount) throws SagaException {
         var request = IssueCurrencyRequest.newBuilder()
                 .setCurrencyTypeId(currencyTypeId)
                 .setOauthId(oauthId)
-                .setAmount(ConversionUtils.bigDecimalToProtoDecimal(amount))
+                .setAmount(amount)
                 .build();
 
         try {
@@ -72,12 +72,12 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
     public String transferCurrency(String currencyId,
                                    String sourceOauthId,
                                    String destOauthId,
-                                   BigDecimal amount) throws SagaException {
+                                   long amount) throws SagaException {
         var request = TransferCurrencyRequest.newBuilder()
                 .setCurrencyId(currencyId)
                 .setSourceOauthId(sourceOauthId)
                 .setDestinationOauthId(destOauthId)
-                .setAmount(ConversionUtils.bigDecimalToProtoDecimal(amount))
+                .setAmount(amount)
                 .build();
 
         try {
@@ -91,11 +91,11 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String burnCurrency(String currencyId, String oauthId, BigDecimal amount) throws SagaException {
+    public String burnCurrency(String currencyId, String oauthId, long amount) throws SagaException {
         var request = BurnCurrencyRequest.newBuilder()
                 .setCurrencyId(currencyId)
                 .setOauthId(oauthId)
-                .setAmount(ConversionUtils.bigDecimalToProtoDecimal(amount))
+                .setAmount(amount)
                 .build();
 
         try {
