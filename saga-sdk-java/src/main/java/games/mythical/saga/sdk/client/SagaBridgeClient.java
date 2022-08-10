@@ -2,6 +2,7 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaBridgeExecutor;
 import games.mythical.saga.sdk.client.model.SagaBridge;
+import games.mythical.saga.sdk.client.model.SagaBridgeQuoteResponse;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
@@ -68,7 +69,7 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String getBridgeQuote(
+    public SagaBridgeQuoteResponse getBridgeQuote(
         Integer originChainId,
         Integer targetChainId,
         String itemTypeId,
@@ -81,8 +82,9 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
                 .setOriginChainWalletAddress(originChainWalletAddress)
                 .build();
         try {
-            var receivedResponse = serviceBlockingStub.getBridgeQuote(request);
-            return receivedResponse.getTraceId();
+            var quoteResponse = serviceBlockingStub.getBridgeQuote(request);
+            ValidateUtil.checkFound(quoteResponse, "NFTBridge Quote response not found");
+            return SagaBridgeQuoteResponse.fromProto(quoteResponse);
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
