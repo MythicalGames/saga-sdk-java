@@ -73,10 +73,43 @@ jobs:
       run: |
         ./gradlew build -x test
 
+    - name: Release major version
+      if: (github.ref == 'refs/heads/develop' && contains(github.event.head_commit.message, '[MAJOR]'))
+      run: |
+        # Fetch a full copy of the repo, as required by release plugin:
+        git fetch --tags --unshallow
+          ./gradlew release \
+          -Prelease.versionIncrementer=incrementMajor \
+          -Prelease.customUsername='Mythical Buildbot' \
+          -Prelease.customPassword=${{ github.token }}
+    - name: Release minor version
+      if: (github.ref == 'refs/heads/develop' && contains(github.event.head_commit.message, '[MINOR]'))
+      run: |
+        # Fetch a full copy of the repo, as required by release plugin:
+        git fetch --tags --unshallow
+        ./gradlew release \
+          -Prelease.versionIncrementer=incrementMinor \
+          -Prelease.customUsername='Mythical Buildbot' \
+          -Prelease.customPassword=${{ github.token }}
+    - name: Release patch version
+      if: (github.ref == 'refs/heads/develop' && !contains(github.event.head_commit.message, '[MAJOR]') && !contains(github.event.head_commit.message, '[MINOR]'))
+      run: |
+        # Fetch a full copy of the repo, as required by release plugin:
+        git fetch --tags --unshallow
+        ./gradlew release \
+          -Prelease.versionIncrementer=incrementPatch \
+          -Prelease.customUsername='Mythical Buildbot' \
+          -Prelease.customPassword=${{ github.token }}
+
     - name: Publish with Gradle
       if: (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')
       run: |
         ./gradlew publish
+
+    - name: Bump to next snapshot version
+      if: (github.ref == 'refs/heads/develop')
+      run: |
+        ./gradlew markNextVersion
 
     - name: Generate Proto Docs
       if: github.event_name == 'push'

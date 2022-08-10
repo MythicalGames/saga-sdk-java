@@ -14,10 +14,10 @@ buildscript {
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.18'
         classpath 'com.github.nbaztec:coveralls-jacoco-gradle-plugin:1.2.6'
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10'
+        classpath 'pl.allegro.tech.build:axion-release-plugin:1.14.0'
     }
 
     ext {
-        project_version = '0.5.17-SNAPSHOT'
         grpc_version = '1.47.0'
         grpc_kotlin_version = '1.2.1'
         protobuf_version = '3.21.1'
@@ -33,9 +33,6 @@ buildscript {
     }
 }
 
-group = 'games.mythical'
-version = "${project_version}"
-
 allprojects {
     repositories {
         mavenLocal()
@@ -49,11 +46,15 @@ allprojects {
     apply plugin: 'com.google.cloud.artifactregistry.gradle-plugin'
     apply plugin: 'com.adarshr.test-logger'
     apply plugin: 'signing'
+    apply plugin: 'pl.allegro.tech.build.axion-release'
 }
+
+group = 'games.mythical'
+version = scmVersion.version
 
 subprojects {
     group = 'games.mythical'
-    version = "${project_version}"
+    version = scmVersion.version
 
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
@@ -161,6 +162,6 @@ subprojects {
 
 task printVersionToFile {
     doLast {
-        file("${rootDir}/version.txt").text = "${project.version}"
+        file("${rootDir}/version.txt").text = scmVersion.version
     }
 }
