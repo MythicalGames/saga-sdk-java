@@ -184,7 +184,7 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         var expectedResponse = ReceivedResponse.newBuilder()
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
-        when(mockServiceBlockingStub.confirmMythTokenWithdrawal(any())).thenReturn(expectedResponse);
+        when(mockServiceBlockingStub.depositNmyth(any())).thenReturn(expectedResponse);
         final var traceId = mythTokenClient.depositNmyth(
                 DEPOSIT_SOURCE, DEPOSIT_DESTINATION, DEPOSIT_QUANTITY, DEPOSIT_CARD_ID);
         checkTraceAndStart(expectedResponse, traceId);
