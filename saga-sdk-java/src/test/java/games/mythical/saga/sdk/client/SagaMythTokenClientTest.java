@@ -42,6 +42,10 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
     private MockServer mythTokenServer;
     @Mock
     private MythServiceGrpc.MythServiceBlockingStub mockServiceBlockingStub;
+    private final String DEPOSIT_SOURCE = "deposit_source";
+    private final String  DEPOSIT_DESTINATION = "deposit_destination";
+    private final int DEPOSIT_QUANTITY = 1;
+    private final String DEPOSIT_CARD_ID = "deposit_card_id";
 
     @BeforeEach
     void setup() throws Exception {
@@ -160,6 +164,33 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
 
         final var update = MythTokenStatusUpdate.newBuilder()
                 .setTokenState(MythTokenState.WITHDRAWN);
+        mythTokenServer.getStatusStream().sendStatus(config.getTitleId(), StatusUpdate.newBuilder()
+                .setTraceId(traceId)
+                .setMythTokenUpdate(MythTokenUpdate.newBuilder().setStatusUpdate(update))
+                .build());
+
+        ConcurrentFinisher.wait(traceId);
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertEquals(MythTokenState.WITHDRAWN, executor.getTokenState());
+        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        mythTokenServer.verifyCalls("StatusStream", 1);
+        mythTokenServer.verifyCalls("StatusConfirmation", 1);
+    }
+
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.MINUTES)
+    public void depositNmyth() throws Exception {
+        var expectedResponse = ReceivedResponse.newBuilder()
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .build();
+        when(mockServiceBlockingStub.confirmMythTokenWithdrawal(any())).thenReturn(expectedResponse);
+        final var traceId = mythTokenClient.depositNmyth(
+                DEPOSIT_SOURCE, DEPOSIT_DESTINATION, DEPOSIT_QUANTITY, DEPOSIT_CARD_ID);
+        checkTraceAndStart(expectedResponse, traceId);
+
+        final var update = MythTokenStatusUpdate.newBuilder()
+                .setTokenState(MythTokenState.DEPOSIT);
         mythTokenServer.getStatusStream().sendStatus(config.getTitleId(), StatusUpdate.newBuilder()
                 .setTraceId(traceId)
                 .setMythTokenUpdate(MythTokenUpdate.newBuilder().setStatusUpdate(update))

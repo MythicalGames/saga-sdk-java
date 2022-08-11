@@ -155,11 +155,12 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String depositNmyth(String source, String destination, int quantity) throws SagaException {
+    public String depositNmyth(String source, String destination, int quantity, String cardId) throws SagaException {
         var request = DepositNmythRequest.newBuilder()
                 .setSource(source)
                 .setDestination(destination)
                 .setQuantity(quantity)
+                .setCardId(cardId)
                 .build();
 
         try {
@@ -168,7 +169,7 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling emitReceived on deposit nmyth.", e);
+            log.error("Exception calling deposit nmyth.", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
