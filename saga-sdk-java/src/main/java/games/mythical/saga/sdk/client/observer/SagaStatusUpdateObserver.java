@@ -200,20 +200,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
             if (update.hasError()) {
                 final var error = update.getError();
                 sagaBridgeExecutor.onError(toErrData(error));
-            } else if(update.hasBridgeQuoteStatusUpdate()) {
-                final var message = update.getBridgeQuoteStatusUpdate();
-                sagaBridgeExecutor.bridgeQuoteUpdate(
-                        message.getFeeInOriginchainNativeToken(),
-                        message.getFeeInOriginchainNativeTokenUnit(),
-                        message.getFeeInUsd(),
-                        message.getExpiresAt(),
-                        message.getGasPriceOriginchain(),
-                        message.getGasPriceOriginchainUnit(),
-                        message.getGasPriceTargetchain(),
-                        message.getGasPriceTargetchainUnit(),
-                        message.getSignature(),
-                        traceId
-                );
             } else {
                 final var message = update.getStatusUpdate();
                 sagaBridgeExecutor.updateItem(
