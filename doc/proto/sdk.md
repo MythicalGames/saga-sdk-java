@@ -2163,6 +2163,7 @@ Create Order Quote call
 | trace_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  |  |
 | address | [string](#string) |  |  |
+| balance_in_wei | [string](#string) |  |  |
 
 
 
