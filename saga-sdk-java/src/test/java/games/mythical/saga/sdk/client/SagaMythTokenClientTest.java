@@ -44,7 +44,7 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
     private MythServiceGrpc.MythServiceBlockingStub mockServiceBlockingStub;
     private final String DEPOSIT_SOURCE = "deposit_source";
     private final String  DEPOSIT_DESTINATION = "deposit_destination";
-    private final int DEPOSIT_QUANTITY = 1;
+    private final String DEPOSIT_QUANTITY = "1";
     private final String DEPOSIT_CARD_ID = "deposit_card_id";
 
     @BeforeEach
