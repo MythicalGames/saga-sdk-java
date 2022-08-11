@@ -331,6 +331,7 @@ Get Bridge Quote Call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| trace_id | [string](#string) |  |  |
 | fee_in_originchain_native_token | [string](#string) |  |  |
 | fee_in_originchain_native_token_unit | [string](#string) |  |  |
 | fee_in_usd | [string](#string) |  |  |
@@ -397,7 +398,7 @@ Withdraw Call
 | ----------- | ------------ | ------------- | ------------|
 | WithdrawItem | [WithdrawItemRequest](#saga-api-bridge-WithdrawItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Withdraw an Item |
 | GetBridge | [GetBridgeRequest](#saga-api-bridge-GetBridgeRequest) | [BridgeProto](#saga-api-bridge-BridgeProto) | Get Bridge |
-| GetBridgeQuote | [QuoteBridgeNFTRequest](#saga-api-bridge-QuoteBridgeNFTRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Get Bridge Quote |
+| GetBridgeQuote | [QuoteBridgeNFTRequest](#saga-api-bridge-QuoteBridgeNFTRequest) | [QuoteBridgeNFTResponse](#saga-api-bridge-QuoteBridgeNFTResponse) | Get Bridge Quote |
 
  
 
@@ -2162,6 +2163,7 @@ Create Order Quote call
 | trace_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  |  |
 | address | [string](#string) |  |  |
+| balance_in_wei | [string](#string) |  |  |
 
 
 

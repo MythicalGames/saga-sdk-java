@@ -3,6 +3,7 @@ package games.mythical.saga.sdk.client;
 import games.mythical.saga.sdk.client.executor.MockBridgeExecutor;
 import games.mythical.saga.sdk.proto.api.bridge.BridgeProto;
 import games.mythical.saga.sdk.proto.api.bridge.BridgeServiceGrpc;
+import games.mythical.saga.sdk.proto.api.bridge.QuoteBridgeNFTResponse;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.bridge.BridgeQuoteStatusUpdate;
@@ -123,45 +124,29 @@ class SagaBridgeClientTest extends AbstractClientTest {
     }
 
     @Test
-    @Timeout(value = 1, unit = TimeUnit.MINUTES)
     public void getBridgeQuote() throws Exception {
-        final var expectedResponse = ReceivedResponse.newBuilder()
+        var expectedResponse = QuoteBridgeNFTResponse.newBuilder()
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .setFeeInOriginchainNativeToken("100")
+                .setFeeInOriginchainNativeTokenUnit("wei")
+                .setExpiresAt("100000")
+                .setFeeInUsd("100")
+                .setGasPriceTargetchain("100")
+                .setGasPriceOriginchainUnit("gwei")
+                .setGasPriceTargetchainUnit("100")
+                .setGasPriceTargetchainUnit("gwei")
+                .setSignature(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.getBridgeQuote(any())).thenReturn(expectedResponse);
 
-        final var traceId = bridgeClient.getBridgeQuote(
-                1,
-                2,
+        var bridgeResponse = bridgeClient.getBridgeQuote(
+                100,
+                100,
                 RandomStringUtils.randomAlphanumeric(30),
                 RandomStringUtils.randomAlphanumeric(30)
         );
-        checkTraceAndStart(expectedResponse, traceId);
 
-        final var update = BridgeQuoteStatusUpdate.newBuilder()
-                .setFeeInOriginchainNativeToken(RandomStringUtils.randomAlphanumeric(30))
-                .setFeeInOriginchainNativeTokenUnit(RandomStringUtils.randomAlphanumeric(30))
-                .setFeeInUsd(RandomStringUtils.randomAlphanumeric(30))
-                .setExpiresAt(RandomStringUtils.randomAlphanumeric(30))
-                .setGasPriceOriginchain(RandomStringUtils.randomAlphanumeric(30))
-                .setGasPriceOriginchainUnit(RandomStringUtils.randomAlphanumeric(30))
-                .setGasPriceTargetchain(RandomStringUtils.randomAlphanumeric(30))
-                .setGasPriceTargetchainUnit(RandomStringUtils.randomAlphanumeric(30))
-                .setSignature(RandomStringUtils.randomAlphanumeric(30))
-                .build();
-        var statusUpdate = StatusUpdate.newBuilder()
-                .setTraceId(traceId)
-                .setBridgeUpdate(BridgeUpdate.newBuilder()
-                        .setBridgeQuoteStatusUpdate(update)
-                        .build())
-                .build();
-        bridgeServer.getStatusStream().sendStatus(titleId, statusUpdate);
-
-        ConcurrentFinisher.wait(traceId);
-
-        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
-        bridgeServer.verifyCalls("StatusStream", 1);
-        bridgeServer.verifyCalls("StatusConfirmation", 1);
+        assertNotNull(bridgeResponse);
+        assertEquals(expectedResponse.getFeeInOriginchainNativeToken(), bridgeResponse.getFeeInOriginchainNativeToken());
     }
 }

@@ -44,27 +44,4 @@ public class MockBridgeExecutor extends MockBaseExecutor implements SagaBridgeEx
         this.mainnetTransactionId = mainnetTransactionId;
         this.traceId = traceId;
     }
-
-    @Override
-    public void bridgeQuoteUpdate(String feeInOriginChainNativeToken,
-                                  String feeInOriginChainNativeTokenUnit,
-                                  String feeInUsd,
-                                  String expiresAt,
-                                  String gasPriceOriginChain,
-                                  String gasPriceOriginChainUnit,
-                                  String gasPriceTargetChain,
-                                  String gasPriceTargetChainUnit,
-                                  String signature,
-                                  String traceId) {
-        this.feeInOriginChainNativeToken = feeInOriginChainNativeToken;
-        this.feeInOriginChainNativeTokenUnit = feeInOriginChainNativeTokenUnit;
-        this.feeInUsd = feeInUsd;
-        this.expiresAt = expiresAt;
-        this.gasPriceOriginChain = gasPriceOriginChain;
-        this.gasPriceOriginChainUnit = gasPriceOriginChainUnit;
-        this.gasPriceTargetChain = gasPriceTargetChain;
-        this.gasPriceTargetChainUnit = gasPriceTargetChainUnit;
-        this.signature = signature;
-        this.traceId = traceId;
-    }
 }

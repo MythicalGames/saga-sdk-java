@@ -1,18 +1,31 @@
 # Changelog
 
-## [0.4.0] - 2022-06-02
+## [0.5.17] - 2022-08-10
+### Changed
+* Removed LargeDecimal in favor of long for saga currency amounts
+* serialNumber renamed tokenId
+* New startMint() function
+* New getBridgeQuote() function
+* NFT Reservation system, reserve(), redeem(), release()
+* Add issued and available supply to itemtype model
+* Batch item mints
+* New getPlayerWallet() function
+
+## [0.5.5] - 2022-07-01
+### Changed
+* Fix response values for MythToken client.
+
+## [0.5.1] - 2022-06-29
+### Changed
+* Fixed offer client not filling all values for confirm and cancel operations.
+
+## [0.5.0] - 2022-06-29
 ### Removed
-* emitReceived(...) method removed from all executor interfaces
-### Changed
-* stream confirmations are now non-blocking
+* User Client removed
 
-## [0.4.1] - 2022-06-03
+## [0.4.15] - 2022-06-29
 ### Changed
-* issueItem call can now batch issue items
-
-## [0.4.2] - 2022-06-03
-### Added
-* Add saga-gateway to hosts allowed without encryption.
+* Timestamp values in SDK protos changed to protobuf Timestamp type.
 
 ## [0.4.3] - 2022-06-06
 ### Removed
@@ -20,18 +33,24 @@
 ### Changed
 * Updated dependencies
 
-## [0.4.15] - 2022-06-29
-### Changed
-* Timestamp values in SDK protos changed to protobuf Timestamp type.
+## [0.4.2] - 2022-06-03
+### Added
+* Add saga-gateway to hosts allowed without encryption.
 
-## [0.5.0] - 2022-06-29
+## [0.4.1] - 2022-06-03
+### Changed
+* issueItem call can now batch issue items
+* 
+## [0.4.0] - 2022-06-02
 ### Removed
-* User Client removed
-
-## [0.5.1] - 2022-06-29
+* emitReceived(...) method removed from all executor interfaces
 ### Changed
-* Fixed offer client not filling all values for confirm and cancel operations.
+* stream confirmations are now non-blocking
 
-## [0.5.5] - 2022-07-01
-### Changed
-* Fix response values for MythToken client.
+
+
+
+
+
+
+
