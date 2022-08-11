@@ -198,7 +198,7 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
 
         ConcurrentFinisher.wait(traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertEquals(MythTokenState.WITHDRAWN, executor.getTokenState());
+        assertEquals(MythTokenState.DEPOSIT, executor.getTokenState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         mythTokenServer.verifyCalls("StatusStream", 1);
