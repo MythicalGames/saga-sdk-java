@@ -42,6 +42,9 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
     private MockServer mythTokenServer;
     @Mock
     private MythServiceGrpc.MythServiceBlockingStub mockServiceBlockingStub;
+    private final String DEPOSIT_OAUTHID = "deposit_oauthid";
+    private final String DEPOSIT_QUANTITY = "1";
+    private final String DEPOSIT_SOURCE_WALLET = "deposit_card_id";
 
     @BeforeEach
     void setup() throws Exception {
@@ -168,6 +171,33 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
         ConcurrentFinisher.wait(traceId);
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertEquals(MythTokenState.WITHDRAWN, executor.getTokenState());
+        assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
+
+        mythTokenServer.verifyCalls("StatusStream", 1);
+        mythTokenServer.verifyCalls("StatusConfirmation", 1);
+    }
+
+    @Test
+    @Timeout(value = 1, unit = TimeUnit.MINUTES)
+    public void depositNmyth() throws Exception {
+        var expectedResponse = ReceivedResponse.newBuilder()
+                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
+                .build();
+        when(mockServiceBlockingStub.depositNmyth(any())).thenReturn(expectedResponse);
+        final var traceId = mythTokenClient.depositNmyth(
+                DEPOSIT_OAUTHID, DEPOSIT_QUANTITY, DEPOSIT_SOURCE_WALLET);
+        checkTraceAndStart(expectedResponse, traceId);
+
+        final var update = MythTokenStatusUpdate.newBuilder()
+                .setTokenState(MythTokenState.DEPOSIT);
+        mythTokenServer.getStatusStream().sendStatus(config.getTitleId(), StatusUpdate.newBuilder()
+                .setTraceId(traceId)
+                .setMythTokenUpdate(MythTokenUpdate.newBuilder().setStatusUpdate(update))
+                .build());
+
+        ConcurrentFinisher.wait(traceId);
+        assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
+        assertEquals(MythTokenState.DEPOSIT, executor.getTokenState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         mythTokenServer.verifyCalls("StatusStream", 1);
