@@ -155,12 +155,11 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String depositNmyth(String source, String destination, String quantity, String cardId) throws SagaException {
+    public String depositNmyth(String oauthId, String quantity, String sourceWallet) throws SagaException {
         var request = DepositNmythRequest.newBuilder()
-                .setSource(source)
-                .setDestination(destination)
+                .setOauthId(oauthId)
                 .setQuantity(quantity)
-                .setCardId(cardId)
+                .setSourceWallet(sourceWallet)
                 .build();
 
         try {

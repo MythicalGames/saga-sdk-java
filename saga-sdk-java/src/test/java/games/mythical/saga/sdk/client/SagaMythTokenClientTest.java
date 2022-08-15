@@ -42,10 +42,9 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
     private MockServer mythTokenServer;
     @Mock
     private MythServiceGrpc.MythServiceBlockingStub mockServiceBlockingStub;
-    private final String DEPOSIT_SOURCE = "deposit_source";
-    private final String  DEPOSIT_DESTINATION = "deposit_destination";
+    private final String DEPOSIT_OAUTHID = "deposit_oauthid";
     private final String DEPOSIT_QUANTITY = "1";
-    private final String DEPOSIT_CARD_ID = "deposit_card_id";
+    private final String DEPOSIT_SOURCE_WALLET = "deposit_card_id";
 
     @BeforeEach
     void setup() throws Exception {
@@ -186,7 +185,7 @@ public class SagaMythTokenClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.depositNmyth(any())).thenReturn(expectedResponse);
         final var traceId = mythTokenClient.depositNmyth(
-                DEPOSIT_SOURCE, DEPOSIT_DESTINATION, DEPOSIT_QUANTITY, DEPOSIT_CARD_ID);
+                DEPOSIT_OAUTHID, DEPOSIT_QUANTITY, DEPOSIT_SOURCE_WALLET);
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = MythTokenStatusUpdate.newBuilder()
