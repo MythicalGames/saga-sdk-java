@@ -81,6 +81,7 @@
     - [ConfirmBuyingMythTokenRequest](#saga-api-myth-ConfirmBuyingMythTokenRequest)
     - [ConfirmMythTokenWithdrawalRequest](#saga-api-myth-ConfirmMythTokenWithdrawalRequest)
     - [CurrencyExchangeProto](#saga-api-myth-CurrencyExchangeProto)
+    - [DepositNmythRequest](#saga-api-myth-DepositNmythRequest)
     - [GasFeeProto](#saga-api-myth-GasFeeProto)
     - [QuoteBuyingMythTokenRequest](#saga-api-myth-QuoteBuyingMythTokenRequest)
     - [QuoteBuyingMythTokenResponse](#saga-api-myth-QuoteBuyingMythTokenResponse)
@@ -1350,6 +1351,24 @@ Get Listings call
 
 
 
+<a name="saga-api-myth-DepositNmythRequest"></a>
+
+### DepositNmythRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| source | [string](#string) |  | Source (User’s uphold subaccount in $MYTH) |
+| destination | [string](#string) |  | Destination (User’s OAUTHID to which nMYTH balance would go to) |
+| quantity | [string](#string) |  | Quantity of $MYTH to deposit |
+| card_id | [string](#string) |  | We want to take a card id so we can use a particular MYTH card |
+
+
+
+
+
+
 <a name="saga-api-myth-GasFeeProto"></a>
 
 ### GasFeeProto
@@ -1470,6 +1489,7 @@ Proto of converted units from gwei/eth
 | ConfirmBuyingMythToken | [ConfirmBuyingMythTokenRequest](#saga-api-myth-ConfirmBuyingMythTokenRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Confirm buying of MYTH Tokens |
 | QuoteMythTokenWithdrawal | [QuoteMythTokenWithdrawalRequest](#saga-api-myth-QuoteMythTokenWithdrawalRequest) | [QuoteMythTokenWithdrawalResponse](#saga-api-myth-QuoteMythTokenWithdrawalResponse) | Quote withdrawing MYTH Tokens |
 | ConfirmMythTokenWithdrawal | [ConfirmMythTokenWithdrawalRequest](#saga-api-myth-ConfirmMythTokenWithdrawalRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Confirm withdrawing MYTH Tokens |
+| DepositNmyth | [DepositNmythRequest](#saga-api-myth-DepositNmythRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Deposit nmyth |
 
  
 
@@ -2224,6 +2244,7 @@ Create Order Quote call
 | reservation_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  |  |
 | item_reservations | [ItemReservationProto](#saga-api-reservation-ItemReservationProto) | repeated |  |
+| ttl | [google.protobuf.Int64Value](#google-protobuf-Int64Value) |  |  |
 
 
 
@@ -2826,6 +2847,7 @@ Metadata properties of Item
 | FAILED | 0 | MYTH Token failed to be transferred/withdrawn |
 | TRANSFERRED | 1 | MYTH Token transferred successfully |
 | WITHDRAWN | 2 | MYTH Token withdrawn successfully |
+| DEPOSIT | 3 |  |
 
 
  
