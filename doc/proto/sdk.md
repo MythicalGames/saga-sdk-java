@@ -211,7 +211,6 @@
     - [SortOrder](#saga-common-SortOrder)
   
 - [streams/bridge/definition.proto](#streams_bridge_definition-proto)
-    - [BridgeQuoteStatusUpdate](#saga-rpc-streams-bridge-BridgeQuoteStatusUpdate)
     - [BridgeStatusUpdate](#saga-rpc-streams-bridge-BridgeStatusUpdate)
     - [BridgeUpdate](#saga-rpc-streams-bridge-BridgeUpdate)
   
@@ -351,17 +350,17 @@ Get Bridge Quote Call
 <a name="saga-api-bridge-WithdrawItemRequest"></a>
 
 ### WithdrawItemRequest
-Withdraw Call
+
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| item_type_id | [string](#string) |  | Id of the ItemType this Item belongs to |
-| inventory_id | [string](#string) |  | Id of the GameInventory this Item belongs to |
-| destination_address | [string](#string) |  | Address of where this Item is going to |
-| destination_chain | [string](#string) |  | Chain of where this Item is going to |
-| origin_address | [string](#string) |  | Address that this Item is being withdrawn from |
+| quote_request | [QuoteBridgeNFTRequest](#saga-api-bridge-QuoteBridgeNFTRequest) |  |  |
+| fee_in_originchain_native_token | [string](#string) |  |  |
+| expires_at | [string](#string) |  |  |
+| signature | [string](#string) |  |  |
+| game_title_id | [string](#string) |  |  |
+| user_auth_id | [string](#string) |  |  |
 
 
 
@@ -1359,10 +1358,9 @@ Get Listings call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| source | [string](#string) |  | Source (User’s uphold subaccount in $MYTH) |
-| destination | [string](#string) |  | Destination (User’s OAUTHID to which nMYTH balance would go to) |
-| quantity | [string](#string) |  | Quantity of $MYTH to deposit |
-| card_id | [string](#string) |  | We want to take a card id so we can use a particular MYTH card |
+| oauth_id | [string](#string) |  |  |
+| quantity | [string](#string) |  |  |
+| source_wallet | [string](#string) |  |  |
 
 
 
@@ -3030,29 +3028,6 @@ Options allowed when querying
 
 
 
-<a name="saga-rpc-streams-bridge-BridgeQuoteStatusUpdate"></a>
-
-### BridgeQuoteStatusUpdate
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| fee_in_originchain_native_token | [string](#string) |  |  |
-| fee_in_originchain_native_token_unit | [string](#string) |  |  |
-| fee_in_usd | [string](#string) |  |  |
-| expires_at | [string](#string) |  |  |
-| gas_price_originchain | [string](#string) |  |  |
-| gas_price_originchain_unit | [string](#string) |  |  |
-| gas_price_targetchain | [string](#string) |  |  |
-| gas_price_targetchain_unit | [string](#string) |  |  |
-| signature | [string](#string) |  |  |
-
-
-
-
-
-
 <a name="saga-rpc-streams-bridge-BridgeStatusUpdate"></a>
 
 ### BridgeStatusUpdate
@@ -3085,7 +3060,6 @@ Results from a Bridge status update gRPC stream call
 | ----- | ---- | ----- | ----------- |
 | error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [BridgeStatusUpdate](#saga-rpc-streams-bridge-BridgeStatusUpdate) |  |  |
-| bridge_quote_status_update | [BridgeQuoteStatusUpdate](#saga-rpc-streams-bridge-BridgeQuoteStatusUpdate) |  |  |
 
 
 

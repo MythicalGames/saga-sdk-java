@@ -1130,10 +1130,6 @@
             <ul>
               
                 <li>
-                  <a href="#saga.rpc.streams.bridge.BridgeQuoteStatusUpdate"><span class="badge">M</span>BridgeQuoteStatusUpdate</a>
-                </li>
-              
-                <li>
                   <a href="#saga.rpc.streams.bridge.BridgeStatusUpdate"><span class="badge">M</span>BridgeStatusUpdate</a>
                 </li>
               
@@ -1584,7 +1580,7 @@
         
       
         <h3 id="saga.api.bridge.WithdrawItemRequest">WithdrawItemRequest</h3>
-        <p>Withdraw Call</p>
+        <p></p>
 
         
           <table class="field-table">
@@ -1594,45 +1590,45 @@
             <tbody>
               
                 <tr>
-                  <td>oauth_id</td>
+                  <td>quote_request</td>
+                  <td><a href="#saga.api.bridge.QuoteBridgeNFTRequest">QuoteBridgeNFTRequest</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fee_in_originchain_native_token</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>item_type_id</td>
+                  <td>expires_at</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Id of the ItemType this Item belongs to </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>inventory_id</td>
+                  <td>signature</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Id of the GameInventory this Item belongs to </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>destination_address</td>
+                  <td>game_title_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Address of where this Item is going to </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>destination_chain</td>
+                  <td>user_auth_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Chain of where this Item is going to </p></td>
-                </tr>
-              
-                <tr>
-                  <td>origin_address</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>Address that this Item is being withdrawn from </p></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -3714,31 +3710,24 @@
             <tbody>
               
                 <tr>
-                  <td>source</td>
+                  <td>oauth_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Source (User’s uphold subaccount in $MYTH) </p></td>
-                </tr>
-              
-                <tr>
-                  <td>destination</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>Destination (User’s OAUTHID to which nMYTH balance would go to) </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
                   <td>quantity</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Quantity of $MYTH to deposit </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>card_id</td>
+                  <td>source_wallet</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>We want to take a card id so we can use a particular MYTH card </p></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -7168,86 +7157,6 @@
       <p></p>
 
       
-        <h3 id="saga.rpc.streams.bridge.BridgeQuoteStatusUpdate">BridgeQuoteStatusUpdate</h3>
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>fee_in_originchain_native_token</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>fee_in_originchain_native_token_unit</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>fee_in_usd</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>expires_at</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>gas_price_originchain</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>gas_price_originchain_unit</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>gas_price_targetchain</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>gas_price_targetchain_unit</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>signature</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
         <h3 id="saga.rpc.streams.bridge.BridgeStatusUpdate">BridgeStatusUpdate</h3>
         <p>Results from a Bridge status update gRPC stream call</p>
 
@@ -7341,13 +7250,6 @@
                 <tr>
                   <td>status_update</td>
                   <td><a href="#saga.rpc.streams.bridge.BridgeStatusUpdate">BridgeStatusUpdate</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>bridge_quote_status_update</td>
-                  <td><a href="#saga.rpc.streams.bridge.BridgeQuoteStatusUpdate">BridgeQuoteStatusUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
