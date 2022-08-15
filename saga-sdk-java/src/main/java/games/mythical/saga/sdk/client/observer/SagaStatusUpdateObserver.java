@@ -200,7 +200,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
             if (update.hasError()) {
                 final var error = update.getError();
                 sagaBridgeExecutor.onError(toErrData(error));
-            } {
+            } else {
                 final var message = update.getStatusUpdate();
                 sagaBridgeExecutor.updateItem(
                         message.getOauthId(),

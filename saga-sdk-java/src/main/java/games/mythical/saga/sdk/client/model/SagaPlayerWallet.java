@@ -15,6 +15,7 @@ public class SagaPlayerWallet {
     private String traceId;
     private String oauthId;
     private String address;
+    private String balanceInWei;
 
     public static SagaPlayerWallet fromProto(PlayerWalletProto proto) {
         return ProtoUtil.toDto(proto, SagaPlayerWallet.class);

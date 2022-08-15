@@ -1,5 +1,6 @@
 package games.mythical.saga.sdk.client;
 
+import com.google.protobuf.Int64Value;
 import games.mythical.saga.sdk.client.executor.SagaReservationExecutor;
 import games.mythical.saga.sdk.client.model.SagaItemReservation;
 import games.mythical.saga.sdk.client.model.SagaRedeemItem;
@@ -8,12 +9,13 @@ import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.reservation.CreateReservationRequest;
-import games.mythical.saga.sdk.proto.api.reservation.ReleaseReservationRequest;
 import games.mythical.saga.sdk.proto.api.reservation.RedeemReservationRequest;
+import games.mythical.saga.sdk.proto.api.reservation.ReleaseReservationRequest;
 import games.mythical.saga.sdk.proto.api.reservation.ReservationServiceGrpc;
 import io.grpc.StatusRuntimeException;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +37,10 @@ public class SagaReservationClient extends AbstractSagaStreamClient {
     }
 
     public String createReservation(String reservationId, String oauthId, List<SagaItemReservation> itemReservations) throws SagaException {
+        return createReservation(reservationId, oauthId, itemReservations, null);
+    }
+
+    public String createReservation(String reservationId, String oauthId, List<SagaItemReservation> itemReservations, Duration ttl) throws SagaException {
         if (StringUtils.isBlank(reservationId)) {
             throw new SagaException(SagaErrorCode.BAD_REQUEST, "Reservation ID is required");
         }
@@ -45,14 +51,17 @@ public class SagaReservationClient extends AbstractSagaStreamClient {
             throw new SagaException(SagaErrorCode.BAD_REQUEST, "At least one item reservation is required");
         }
 
-        var request = CreateReservationRequest.newBuilder()
+        var requestBuilder = CreateReservationRequest.newBuilder()
                 .setReservationId(reservationId)
                 .setOauthId(oauthId)
-                .addAllItemReservations(itemReservations.stream().map(SagaItemReservation::toProto).collect(Collectors.toList()))
-                .build();
+                .addAllItemReservations(itemReservations.stream().map(SagaItemReservation::toProto).collect(Collectors.toList()));
+
+        if (ttl != null) {
+            requestBuilder.setTtl(Int64Value.of(ttl.toSeconds()));
+        }
 
         try {
-            var response = serviceBlockingStub.createReservation(request);
+            var response = serviceBlockingStub.createReservation(requestBuilder.build());
             return response.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
