@@ -1,12 +1,13 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockBridgeExecutor;
+import games.mythical.saga.sdk.client.model.SagaBridgeQuoteRequest;
 import games.mythical.saga.sdk.proto.api.bridge.BridgeProto;
 import games.mythical.saga.sdk.proto.api.bridge.BridgeServiceGrpc;
+import games.mythical.saga.sdk.proto.api.bridge.QuoteBridgeNFTRequest;
 import games.mythical.saga.sdk.proto.api.bridge.QuoteBridgeNFTResponse;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
-import games.mythical.saga.sdk.proto.streams.bridge.BridgeQuoteStatusUpdate;
 import games.mythical.saga.sdk.proto.streams.bridge.BridgeStatusUpdate;
 import games.mythical.saga.sdk.proto.streams.bridge.BridgeUpdate;
 import games.mythical.saga.sdk.server.MockServer;
@@ -86,7 +87,7 @@ class SagaBridgeClientTest extends AbstractClientTest {
         when(mockServiceBlockingStub.withdrawItem(any())).thenReturn(expectedResponse);
 
         final var traceId = bridgeClient.withdrawItem(
-                OAUTH_ID,
+                new SagaBridgeQuoteRequest(10, 11, "itemType", "orginChainAddres"),
                 RandomStringUtils.randomAlphanumeric(30),
                 RandomStringUtils.randomAlphanumeric(30),
                 RandomStringUtils.randomAlphanumeric(30),

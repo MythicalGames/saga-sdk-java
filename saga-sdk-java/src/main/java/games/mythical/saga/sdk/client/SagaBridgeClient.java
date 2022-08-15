@@ -1,7 +1,9 @@
 package games.mythical.saga.sdk.client;
 
+import games.mythical.proto_util.ProtoUtil;
 import games.mythical.saga.sdk.client.executor.SagaBridgeExecutor;
 import games.mythical.saga.sdk.client.model.SagaBridge;
+import games.mythical.saga.sdk.client.model.SagaBridgeQuoteRequest;
 import games.mythical.saga.sdk.client.model.SagaBridgeQuoteResponse;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
@@ -31,19 +33,19 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    public String withdrawItem(String oauthId,
-                               String itemTypeId,
-                               String inventoryId,
-                               String destinationAddress,
-                               String destinationChain,
-                               String originChain) throws SagaException {
+    public String withdrawItem(SagaBridgeQuoteRequest quoteRequest,
+                               String feeInOriginChainNativeToken,
+                               String expiresAt,
+                               String signature,
+                               String gameTitleId,
+                               String userAuthId) throws SagaException {
         var request = WithdrawItemRequest.newBuilder()
-                .setOauthId(oauthId)
-                .setItemTypeId(itemTypeId)
-                .setInventoryId(inventoryId)
-                .setDestinationAddress(destinationAddress)
-                .setDestinationChain(destinationChain)
-                .setOriginAddress(originChain)
+                .setQuoteRequest(ProtoUtil.toProto(quoteRequest, QuoteBridgeNFTRequest.class))
+                .setFeeInOriginchainNativeToken(feeInOriginChainNativeToken)
+                .setExpiresAt(expiresAt)
+                .setSignature(signature)
+                .setGameTitleId(gameTitleId)
+                .setUserAuthId(userAuthId)
                 .build();
 
         try {
