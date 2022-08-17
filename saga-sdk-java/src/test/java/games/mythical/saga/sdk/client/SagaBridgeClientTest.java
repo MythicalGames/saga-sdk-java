@@ -87,7 +87,10 @@ class SagaBridgeClientTest extends AbstractClientTest {
         when(mockServiceBlockingStub.withdrawItem(any())).thenReturn(expectedResponse);
 
         final var traceId = bridgeClient.withdrawItem(
-                new SagaBridgeQuoteRequest(10, 11, "itemType", "orginChainAddres"),
+                10,
+                11,
+                RandomStringUtils.randomAlphanumeric(30),
+                RandomStringUtils.randomAlphanumeric(30),
                 RandomStringUtils.randomAlphanumeric(30),
                 RandomStringUtils.randomAlphanumeric(30),
                 RandomStringUtils.randomAlphanumeric(30),

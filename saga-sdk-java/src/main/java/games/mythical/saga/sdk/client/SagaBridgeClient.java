@@ -33,19 +33,27 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
-    public String withdrawItem(SagaBridgeQuoteRequest quoteRequest,
+    public String withdrawItem(Integer originChainId,
+                               Integer targetChainId,
+                               String itemTypeId,
+                               String originChainWalletAddress,
                                String feeInOriginChainNativeToken,
                                String expiresAt,
                                String signature,
                                String gameTitleId,
-                               String userAuthId) throws SagaException {
+                               String userOauthId) throws SagaException {
         var request = WithdrawItemRequest.newBuilder()
-                .setQuoteRequest(ProtoUtil.toProto(quoteRequest, QuoteBridgeNFTRequest.class))
+                .setQuoteRequest(QuoteBridgeNFTRequest.newBuilder()
+                        .setOriginChainId(originChainId)
+                        .setTargetChainId(targetChainId)
+                        .setItemTypeId(itemTypeId)
+                        .setOriginChainWalletAddress(originChainWalletAddress)
+                        .build())
                 .setFeeInOriginchainNativeToken(feeInOriginChainNativeToken)
                 .setExpiresAt(expiresAt)
                 .setSignature(signature)
                 .setGameTitleId(gameTitleId)
-                .setUserAuthId(userAuthId)
+                .setUserOauthId(userOauthId)
                 .build();
 
         try {
