@@ -359,8 +359,8 @@ Get Bridge Quote Call
 | fee_in_originchain_native_token | [string](#string) |  |  |
 | expires_at | [string](#string) |  |  |
 | signature | [string](#string) |  |  |
-| game_title_id | [string](#string) |  |  |
-| user_auth_id | [string](#string) |  |  |
+| title_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  |  |
 
 
 
