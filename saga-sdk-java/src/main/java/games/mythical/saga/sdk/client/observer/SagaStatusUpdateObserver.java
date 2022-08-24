@@ -11,7 +11,7 @@ import games.mythical.saga.sdk.exception.SubError;
 import games.mythical.saga.sdk.proto.streams.StatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
-import games.mythical.saga.sdk.proto.streams.bridge.BridgeUpdate;
+import games.mythical.saga.sdk.proto.streams.nftbridge.NftBridgeUpdate;
 import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeUpdate;
@@ -133,8 +133,8 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         }
         try {
             switch (message.getStatusUpdateCase()) {
-                case BRIDGE_UPDATE:
-                    handleBridgeUpdate(message.getBridgeUpdate(), message.getTraceId());
+                case NFT_BRIDGE_UPDATE:
+                    handleBridgeUpdate(message.getNftBridgeUpdate(), message.getTraceId());
                     break;
                 case CURRENCY_UPDATE:
                     handleCurrencyUpdate(message.getCurrencyUpdate(), message.getTraceId());
@@ -191,7 +191,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         resubscribe.accept(this);
     }
 
-    private void handleBridgeUpdate(BridgeUpdate update, String traceId) throws Exception {
+    private void handleBridgeUpdate(NftBridgeUpdate update, String traceId) throws Exception {
         if (sagaNftBridgeExecutor == null) {
             log.error("Bridge update received, but no bridge executor registered {}", update);
         }
