@@ -67,7 +67,7 @@ public class SagaNftBridgeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public SagaNftBridge getBridge() throws SagaException {
+    public SagaNftBridge getNftBridge() throws SagaException {
         var request = GetNftBridgeRequest.newBuilder().build();
 
         try {
@@ -79,7 +79,7 @@ public class SagaNftBridgeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public SagaNftBridgeQuoteResponse getBridgeQuote(
+    public SagaNftBridgeQuoteResponse getNftBridgeQuote(
             Integer originChainId,
             Integer targetChainId,
             String gameTitleId,

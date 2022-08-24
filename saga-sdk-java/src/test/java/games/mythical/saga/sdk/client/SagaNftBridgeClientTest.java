@@ -69,7 +69,7 @@ class SagaNftBridgeClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.getBridge(any())).thenReturn(expectedResponse);
 
-        var bridgeResponse = bridgeClient.getBridge();
+        var bridgeResponse = bridgeClient.getNftBridge();
 
         assertNotNull(bridgeResponse);
         assertEquals(expectedResponse.getTraceId(), bridgeResponse.getTraceId());
@@ -142,7 +142,7 @@ class SagaNftBridgeClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.getBridgeQuote(any())).thenReturn(expectedResponse);
 
-        var bridgeResponse = bridgeClient.getBridgeQuote(
+        var bridgeResponse = bridgeClient.getNftBridgeQuote(
                 100,
                 100,
                 RandomStringUtils.randomAlphanumeric(30),
