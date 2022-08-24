@@ -54,6 +54,7 @@
   
 - [api/itemtype/definition.proto](#api_itemtype_definition-proto)
     - [CreateItemTypeRequest](#saga-api-itemtype-CreateItemTypeRequest)
+    - [EndMintRequest](#saga-api-itemtype-EndMintRequest)
     - [FreezeItemTypePayload](#saga-api-itemtype-FreezeItemTypePayload)
     - [GetItemTypeRequest](#saga-api-itemtype-GetItemTypeRequest)
     - [GetItemTypesRequest](#saga-api-itemtype-GetItemTypesRequest)
@@ -964,6 +965,21 @@ Create item type call
 
 
 
+<a name="saga-api-itemtype-EndMintRequest"></a>
+
+### EndMintRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| item_type_id | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="saga-api-itemtype-FreezeItemTypePayload"></a>
 
 ### FreezeItemTypePayload
@@ -1119,6 +1135,7 @@ Update ItemType call
 | UpdateItemType | [UpdateItemTypePayload](#saga-api-itemtype-UpdateItemTypePayload) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update the ItemType |
 | FreezeItemType | [FreezeItemTypePayload](#saga-api-itemtype-FreezeItemTypePayload) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Freeze the ItemType |
 | StartMint | [StartMintRequest](#saga-api-itemtype-StartMintRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
+| EndMint | [EndMintRequest](#saga-api-itemtype-EndMintRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
 
  
 
@@ -2786,6 +2803,7 @@ Metadata properties of Item
 | SOLD_OUT | 3 | ItemType is Sold Out |
 | EXPIRED | 4 | ItemType has been expired |
 | MINTABLE | 5 | ItemType can be minted |
+| MINT_ENDED | 6 | ItemType mint has permanently ended |
 
 
  

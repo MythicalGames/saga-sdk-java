@@ -406,6 +406,10 @@
                 </li>
               
                 <li>
+                  <a href="#saga.api.itemtype.EndMintRequest"><span class="badge">M</span>EndMintRequest</a>
+                </li>
+              
+                <li>
                   <a href="#saga.api.itemtype.FreezeItemTypePayload"><span class="badge">M</span>FreezeItemTypePayload</a>
                 </li>
               
@@ -2868,6 +2872,30 @@
 
         
       
+        <h3 id="saga.api.itemtype.EndMintRequest">EndMintRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>item_type_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="saga.api.itemtype.FreezeItemTypePayload">FreezeItemTypePayload</h3>
         <p></p>
 
@@ -3207,6 +3235,13 @@
               <tr>
                 <td>StartMint</td>
                 <td><a href="#saga.api.itemtype.StartMintRequest">StartMintRequest</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>EndMint</td>
+                <td><a href="#saga.api.itemtype.EndMintRequest">EndMintRequest</a></td>
                 <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p></p></td>
               </tr>
@@ -6771,6 +6806,12 @@
                 <td>MINTABLE</td>
                 <td>5</td>
                 <td><p>ItemType can be minted</p></td>
+              </tr>
+            
+              <tr>
+                <td>MINT_ENDED</td>
+                <td>6</td>
+                <td><p>ItemType mint has permanently ended</p></td>
               </tr>
             
           </tbody>
