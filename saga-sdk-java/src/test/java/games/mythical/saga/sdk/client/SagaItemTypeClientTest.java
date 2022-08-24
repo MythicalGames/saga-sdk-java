@@ -130,8 +130,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 RandomUtils.nextInt(0, 1000),
                 false,
                 null,
-                false
-        );
+                false);
 
         checkTraceAndStart(expectedResponse, traceId);
 
@@ -214,7 +213,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
 
         final var update = ItemTypeStatusUpdate.newBuilder()
                 .setItemTypeId(ITEM_TYPE_ID)
-                .setItemTypeState(ItemTypeState.MINTABLE);
+                .setItemTypeState(ItemTypeState.MINT_ENDED);
         itemTypeServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(traceId)
                 .setItemTypeUpdate(ItemTypeUpdate.newBuilder().setStatusUpdate(update))
@@ -224,7 +223,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
 
         assertEquals(ITEM_TYPE_ID, executor.getItemTypeId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertEquals(ItemTypeState.MINTABLE, executor.getItemTypeState());
+        assertEquals(ItemTypeState.MINT_ENDED, executor.getItemTypeState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         itemTypeServer.verifyCalls("StatusStream", 1);
