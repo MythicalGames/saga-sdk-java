@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SagaBridgeQuoteResponse {
+public class SagaNftBridgeQuoteResponse {
     private String traceId;
     private String feeInOriginchainNativeToken;
     private String feeInOriginchainNativeTokenUnit;
@@ -23,7 +23,7 @@ public class SagaBridgeQuoteResponse {
     private String gasPriceTargetchainUnit;
     private String signature;
 
-    public static SagaBridgeQuoteResponse fromProto(QuoteBridgeNFTResponse proto) {
-        return ProtoUtil.toDto(proto, SagaBridgeQuoteResponse.class);
+    public static SagaNftBridgeQuoteResponse fromProto(QuoteBridgeNFTResponse proto) {
+        return ProtoUtil.toDto(proto, SagaNftBridgeQuoteResponse.class);
     }
 }

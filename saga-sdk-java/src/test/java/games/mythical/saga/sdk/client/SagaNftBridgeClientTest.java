@@ -1,10 +1,8 @@
 package games.mythical.saga.sdk.client;
 
-import games.mythical.saga.sdk.client.executor.MockBridgeExecutor;
-import games.mythical.saga.sdk.client.model.SagaBridgeQuoteRequest;
+import games.mythical.saga.sdk.client.executor.MockNftBridgeExecutor;
 import games.mythical.saga.sdk.proto.api.bridge.BridgeProto;
 import games.mythical.saga.sdk.proto.api.bridge.BridgeServiceGrpc;
-import games.mythical.saga.sdk.proto.api.bridge.QuoteBridgeNFTRequest;
 import games.mythical.saga.sdk.proto.api.bridge.QuoteBridgeNFTResponse;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
@@ -31,12 +29,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class SagaBridgeClientTest extends AbstractClientTest {
+class SagaNftBridgeClientTest extends AbstractClientTest {
     private static final String OAUTH_ID = UUID.randomUUID().toString();
 
-    private final MockBridgeExecutor executor = MockBridgeExecutor.builder().build();
+    private final MockNftBridgeExecutor executor = MockNftBridgeExecutor.builder().build();
     private MockServer bridgeServer;
-    private SagaBridgeClient bridgeClient;
+    private SagaNftBridgeClient bridgeClient;
 
     @Mock
     private BridgeServiceGrpc.BridgeServiceBlockingStub mockServiceBlockingStub;

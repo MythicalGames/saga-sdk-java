@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SagaBridgeQuoteRequest {
+public class SagaNftBridgeQuoteRequest {
     private Integer originChainId;
     private Integer targetChainId;
     private String itemTypeId;
     private String originChainWalletAddress;
 
-    public static SagaBridgeQuoteRequest fromProto(QuoteBridgeNFTRequest proto) {
-        return ProtoUtil.toDto(proto, SagaBridgeQuoteRequest.class);
+    public static SagaNftBridgeQuoteRequest fromProto(QuoteBridgeNFTRequest proto) {
+        return ProtoUtil.toDto(proto, SagaNftBridgeQuoteRequest.class);
     }
 }

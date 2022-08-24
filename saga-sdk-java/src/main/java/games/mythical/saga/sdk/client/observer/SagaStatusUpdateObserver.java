@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import games.mythical.saga.sdk.proto.streams.reservation.ReservationUpdate;
-import games.mythical.saga.sdk.util.ConversionUtils;
 import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
 import java.util.function.Consumer;
@@ -38,7 +37,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private final Consumer<SagaStatusUpdateObserver> resubscribe;
     private final ConfirmationObserver confirmationObserver = new ConfirmationObserver();
 
-    private SagaBridgeExecutor sagaBridgeExecutor;
+    private SagaNftBridgeExecutor sagaNftBridgeExecutor;
     private SagaCurrencyExecutor sagaCurrencyExecutor;
     private SagaItemExecutor sagaItemExecutor;
     private SagaItemTypeExecutor sagaItemTypeExecutor;
@@ -70,8 +69,8 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         instance = null;
     }
 
-    public SagaStatusUpdateObserver with(SagaBridgeExecutor sagaBridgeExecutor) {
-        this.sagaBridgeExecutor = sagaBridgeExecutor;
+    public SagaStatusUpdateObserver with(SagaNftBridgeExecutor sagaNftBridgeExecutor) {
+        this.sagaNftBridgeExecutor = sagaNftBridgeExecutor;
         return this;
     }
 
@@ -193,16 +192,16 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     }
 
     private void handleBridgeUpdate(BridgeUpdate update, String traceId) throws Exception {
-        if (sagaBridgeExecutor == null) {
+        if (sagaNftBridgeExecutor == null) {
             log.error("Bridge update received, but no bridge executor registered {}", update);
         }
         else {
             if (update.hasError()) {
                 final var error = update.getError();
-                sagaBridgeExecutor.onError(toErrData(error));
+                sagaNftBridgeExecutor.onError(toErrData(error));
             } else {
                 final var message = update.getStatusUpdate();
-                sagaBridgeExecutor.updateItem(
+                sagaNftBridgeExecutor.updateItem(
                         message.getOauthId(),
                         message.getInventoryId(),
                         message.getItemTypeId(),

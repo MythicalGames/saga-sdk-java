@@ -1,10 +1,8 @@
 package games.mythical.saga.sdk.client;
 
-import games.mythical.proto_util.ProtoUtil;
-import games.mythical.saga.sdk.client.executor.SagaBridgeExecutor;
-import games.mythical.saga.sdk.client.model.SagaBridge;
-import games.mythical.saga.sdk.client.model.SagaBridgeQuoteRequest;
-import games.mythical.saga.sdk.client.model.SagaBridgeQuoteResponse;
+import games.mythical.saga.sdk.client.executor.SagaNftBridgeExecutor;
+import games.mythical.saga.sdk.client.model.SagaNftBridge;
+import games.mythical.saga.sdk.client.model.SagaNftBridgeQuoteResponse;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
@@ -15,12 +13,12 @@ import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SagaBridgeClient extends AbstractSagaStreamClient {
+public class SagaNftBridgeClient extends AbstractSagaStreamClient {
 
-    private final SagaBridgeExecutor executor;
+    private final SagaNftBridgeExecutor executor;
     private BridgeServiceGrpc.BridgeServiceBlockingStub serviceBlockingStub;
 
-    SagaBridgeClient(SagaSdkConfig config, SagaBridgeExecutor executor) throws SagaException {
+    SagaNftBridgeClient(SagaSdkConfig config, SagaNftBridgeExecutor executor) throws SagaException {
         super(config);
         this.executor = executor;
         initStub();
@@ -67,19 +65,19 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public SagaBridge getBridge() throws SagaException {
+    public SagaNftBridge getBridge() throws SagaException {
         var request = GetBridgeRequest.newBuilder().build();
 
         try {
             var bridge = serviceBlockingStub.getBridge(request);
             ValidateUtil.checkFound(bridge, "Bridge not found");
-            return SagaBridge.fromProto(bridge);
+            return SagaNftBridge.fromProto(bridge);
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         }
     }
 
-    public SagaBridgeQuoteResponse getBridgeQuote(
+    public SagaNftBridgeQuoteResponse getBridgeQuote(
         Integer originChainId,
         Integer targetChainId,
         String itemTypeId,
@@ -94,7 +92,7 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
         try {
             var quoteResponse = serviceBlockingStub.getBridgeQuote(request);
             ValidateUtil.checkFound(quoteResponse, "NFTBridge Quote response not found");
-            return SagaBridgeQuoteResponse.fromProto(quoteResponse);
+            return SagaNftBridgeQuoteResponse.fromProto(quoteResponse);
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {

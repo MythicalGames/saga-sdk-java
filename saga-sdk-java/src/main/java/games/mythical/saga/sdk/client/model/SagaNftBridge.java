@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SagaBridge {
+public class SagaNftBridge {
     private String traceId;
     private String mythicalAddress;
     private String mainnetAddress;
     private String chainName;
 
-    public static SagaBridge fromProto(BridgeProto proto) {
-        return ProtoUtil.toDto(proto, SagaBridge.class);
+    public static SagaNftBridge fromProto(BridgeProto proto) {
+        return ProtoUtil.toDto(proto, SagaNftBridge.class);
     }
 }
