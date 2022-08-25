@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MockNftBridgeExecutor extends MockBaseExecutor implements SagaNftBridgeExecutor {
+public class MockNFTBridgeExecutor extends MockBaseExecutor implements SagaNFTBridgeExecutor {
     private String oauthId;
     private String inventoryId;
     private String itemTypeId;

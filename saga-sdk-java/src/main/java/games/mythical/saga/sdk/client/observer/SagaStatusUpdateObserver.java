@@ -37,7 +37,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private final Consumer<SagaStatusUpdateObserver> resubscribe;
     private final ConfirmationObserver confirmationObserver = new ConfirmationObserver();
 
-    private SagaNftBridgeExecutor sagaNftBridgeExecutor;
+    private SagaNFTBridgeExecutor sagaNFTBridgeExecutor;
     private SagaCurrencyExecutor sagaCurrencyExecutor;
     private SagaItemExecutor sagaItemExecutor;
     private SagaItemTypeExecutor sagaItemTypeExecutor;
@@ -69,8 +69,8 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         instance = null;
     }
 
-    public SagaStatusUpdateObserver with(SagaNftBridgeExecutor sagaNftBridgeExecutor) {
-        this.sagaNftBridgeExecutor = sagaNftBridgeExecutor;
+    public SagaStatusUpdateObserver with(SagaNFTBridgeExecutor sagaNFTBridgeExecutor) {
+        this.sagaNFTBridgeExecutor = sagaNFTBridgeExecutor;
         return this;
     }
 
@@ -192,16 +192,16 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     }
 
     private void handleBridgeUpdate(NftBridgeUpdate update, String traceId) throws Exception {
-        if (sagaNftBridgeExecutor == null) {
+        if (sagaNFTBridgeExecutor == null) {
             log.error("Bridge update received, but no bridge executor registered {}", update);
         }
         else {
             if (update.hasError()) {
                 final var error = update.getError();
-                sagaNftBridgeExecutor.onError(toErrData(error));
+                sagaNFTBridgeExecutor.onError(toErrData(error));
             } else {
                 final var message = update.getStatusUpdate();
-                sagaNftBridgeExecutor.updateItem(
+                sagaNFTBridgeExecutor.updateItem(
                         message.getOauthId(),
                         message.getInventoryId(),
                         message.getItemTypeId(),

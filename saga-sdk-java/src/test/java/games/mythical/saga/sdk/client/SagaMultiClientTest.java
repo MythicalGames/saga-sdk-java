@@ -1,6 +1,6 @@
 package games.mythical.saga.sdk.client;
 
-import games.mythical.saga.sdk.client.executor.MockNftBridgeExecutor;
+import games.mythical.saga.sdk.client.executor.MockNFTBridgeExecutor;
 import games.mythical.saga.sdk.client.executor.MockCurrencyExecutor;
 import games.mythical.saga.sdk.proto.api.nftbridge.NftBridgeServiceGrpc;
 import games.mythical.saga.sdk.proto.api.currency.CurrencyServiceGrpc;
@@ -30,10 +30,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class SagaMultiClientTest extends AbstractClientTest {
     private static final String OAUTH_ID = UUID.randomUUID().toString();
-    private final MockNftBridgeExecutor bridgeExecutor = MockNftBridgeExecutor.builder().build();
+    private final MockNFTBridgeExecutor bridgeExecutor = MockNFTBridgeExecutor.builder().build();
     private final MockCurrencyExecutor currencyExecutor = MockCurrencyExecutor.builder().build();
     private MockServer mockServer;
-    private SagaNftBridgeClient bridgeClient;
+    private SagaNFTBridgeClient bridgeClient;
     private SagaCurrencyClient currencyClient;
 
     @Mock

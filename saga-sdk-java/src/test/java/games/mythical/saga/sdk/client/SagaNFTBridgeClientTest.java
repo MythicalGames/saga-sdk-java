@@ -1,6 +1,6 @@
 package games.mythical.saga.sdk.client;
 
-import games.mythical.saga.sdk.client.executor.MockNftBridgeExecutor;
+import games.mythical.saga.sdk.client.executor.MockNFTBridgeExecutor;
 import games.mythical.saga.sdk.proto.api.nftbridge.NftBridgeProto;
 import games.mythical.saga.sdk.proto.api.nftbridge.NftBridgeServiceGrpc;
 import games.mythical.saga.sdk.proto.api.nftbridge.QuoteBridgeNFTResponse;
@@ -29,12 +29,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class SagaNftBridgeClientTest extends AbstractClientTest {
+class SagaNFTBridgeClientTest extends AbstractClientTest {
     private static final String OAUTH_ID = UUID.randomUUID().toString();
 
-    private final MockNftBridgeExecutor executor = MockNftBridgeExecutor.builder().build();
+    private final MockNFTBridgeExecutor executor = MockNFTBridgeExecutor.builder().build();
     private MockServer bridgeServer;
-    private SagaNftBridgeClient bridgeClient;
+    private SagaNFTBridgeClient bridgeClient;
 
     @Mock
     private NftBridgeServiceGrpc.NftBridgeServiceBlockingStub mockServiceBlockingStub;
@@ -69,7 +69,7 @@ class SagaNftBridgeClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.getBridge(any())).thenReturn(expectedResponse);
 
-        var bridgeResponse = bridgeClient.getNftBridge();
+        var bridgeResponse = bridgeClient.getNFTBridge();
 
         assertNotNull(bridgeResponse);
         assertEquals(expectedResponse.getTraceId(), bridgeResponse.getTraceId());
@@ -142,7 +142,7 @@ class SagaNftBridgeClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.getBridgeQuote(any())).thenReturn(expectedResponse);
 
-        var bridgeResponse = bridgeClient.getNftBridgeQuote(
+        var bridgeResponse = bridgeClient.getNFTBridgeQuote(
                 100,
                 100,
                 RandomStringUtils.randomAlphanumeric(30),
