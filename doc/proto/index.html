@@ -175,52 +175,6 @@
         
           
           <li>
-            <a href="#api%2fbridge%2fdefinition.proto">api/bridge/definition.proto</a>
-            <ul>
-              
-                <li>
-                  <a href="#saga.api.bridge.BridgeProto"><span class="badge">M</span>BridgeProto</a>
-                </li>
-              
-                <li>
-                  <a href="#saga.api.bridge.GetBridgeRequest"><span class="badge">M</span>GetBridgeRequest</a>
-                </li>
-              
-                <li>
-                  <a href="#saga.api.bridge.QuoteBridgeNFTRequest"><span class="badge">M</span>QuoteBridgeNFTRequest</a>
-                </li>
-              
-                <li>
-                  <a href="#saga.api.bridge.QuoteBridgeNFTResponse"><span class="badge">M</span>QuoteBridgeNFTResponse</a>
-                </li>
-              
-                <li>
-                  <a href="#saga.api.bridge.WithdrawItemRequest"><span class="badge">M</span>WithdrawItemRequest</a>
-                </li>
-              
-              
-              
-              
-            </ul>
-          </li>
-        
-          
-          <li>
-            <a href="#api%2fbridge%2frpc.proto">api/bridge/rpc.proto</a>
-            <ul>
-              
-              
-              
-              
-                <li>
-                  <a href="#saga.api.bridge.BridgeService"><span class="badge">S</span>BridgeService</a>
-                </li>
-              
-            </ul>
-          </li>
-        
-          
-          <li>
             <a href="#api%2fcommon%2ferror.proto">api/common/error.proto</a>
             <ul>
               
@@ -569,6 +523,52 @@
               
                 <li>
                   <a href="#saga.api.myth.MythService"><span class="badge">S</span>MythService</a>
+                </li>
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#api%2fnftbridge%2fdefinition.proto">api/nftbridge/definition.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#saga.api.nftbridge.GetNftBridgeRequest"><span class="badge">M</span>GetNftBridgeRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.api.nftbridge.NftBridgeProto"><span class="badge">M</span>NftBridgeProto</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.api.nftbridge.QuoteBridgeNFTRequest"><span class="badge">M</span>QuoteBridgeNFTRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.api.nftbridge.QuoteBridgeNFTResponse"><span class="badge">M</span>QuoteBridgeNFTResponse</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.api.nftbridge.WithdrawItemRequest"><span class="badge">M</span>WithdrawItemRequest</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#api%2fnftbridge%2frpc.proto">api/nftbridge/rpc.proto</a>
+            <ul>
+              
+              
+              
+              
+                <li>
+                  <a href="#saga.api.nftbridge.NftBridgeService"><span class="badge">S</span>NftBridgeService</a>
                 </li>
               
             </ul>
@@ -1130,25 +1130,6 @@
         
           
           <li>
-            <a href="#streams%2fbridge%2fdefinition.proto">streams/bridge/definition.proto</a>
-            <ul>
-              
-                <li>
-                  <a href="#saga.rpc.streams.bridge.BridgeStatusUpdate"><span class="badge">M</span>BridgeStatusUpdate</a>
-                </li>
-              
-                <li>
-                  <a href="#saga.rpc.streams.bridge.BridgeUpdate"><span class="badge">M</span>BridgeUpdate</a>
-                </li>
-              
-              
-              
-              
-            </ul>
-          </li>
-        
-          
-          <li>
             <a href="#streams%2fcommon.proto">streams/common.proto</a>
             <ul>
               
@@ -1253,6 +1234,25 @@
               
                 <li>
                   <a href="#saga.rpc.streams.myth.MythTokenUpdate"><span class="badge">M</span>MythTokenUpdate</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#streams%2fnftbridge%2fdefinition.proto">streams/nftbridge/definition.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#saga.rpc.streams.nftbridge.NftBridgeStatusUpdate"><span class="badge">M</span>NftBridgeStatusUpdate</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.rpc.streams.nftbridge.NftBridgeUpdate"><span class="badge">M</span>NftBridgeUpdate</a>
                 </li>
               
               
@@ -1391,310 +1391,6 @@
       </ul>
     </div>
 
-    
-      
-      <div class="file-heading">
-        <h2 id="api/bridge/definition.proto">api/bridge/definition.proto</h2><a href="#title">Top</a>
-      </div>
-      <p></p>
-
-      
-        <h3 id="saga.api.bridge.BridgeProto">BridgeProto</h3>
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>trace_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>mythical_address</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>mainnet_address</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>Address on Mainnet </p></td>
-                </tr>
-              
-                <tr>
-                  <td>chain_name</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>Name of the chain </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
-        <h3 id="saga.api.bridge.GetBridgeRequest">GetBridgeRequest</h3>
-        <p>Get Bridge Call</p>
-
-        
-
-        
-      
-        <h3 id="saga.api.bridge.QuoteBridgeNFTRequest">QuoteBridgeNFTRequest</h3>
-        <p>Get Bridge Quote Call</p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>origin_chain_id</td>
-                  <td><a href="#int32">int32</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>target_chain_id</td>
-                  <td><a href="#int32">int32</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>item_type_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>origin_chain_wallet_address</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
-        <h3 id="saga.api.bridge.QuoteBridgeNFTResponse">QuoteBridgeNFTResponse</h3>
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>trace_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>fee_in_originchain_native_token</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>fee_in_originchain_native_token_unit</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>fee_in_usd</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>expires_at</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>gas_price_originchain</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>gas_price_originchain_unit</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>gas_price_targetchain</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>gas_price_targetchain_unit</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>signature</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
-        <h3 id="saga.api.bridge.WithdrawItemRequest">WithdrawItemRequest</h3>
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>quote_request</td>
-                  <td><a href="#saga.api.bridge.QuoteBridgeNFTRequest">QuoteBridgeNFTRequest</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>fee_in_originchain_native_token</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>expires_at</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>signature</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>title_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>oauth_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
-
-      
-
-      
-
-      
-    
-      
-      <div class="file-heading">
-        <h2 id="api/bridge/rpc.proto">api/bridge/rpc.proto</h2><a href="#title">Top</a>
-      </div>
-      <p></p>
-
-      
-
-      
-
-      
-
-      
-        <h3 id="saga.api.bridge.BridgeService">BridgeService</h3>
-        <p></p>
-        <table class="enum-table">
-          <thead>
-            <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>
-          </thead>
-          <tbody>
-            
-              <tr>
-                <td>WithdrawItem</td>
-                <td><a href="#saga.api.bridge.WithdrawItemRequest">WithdrawItemRequest</a></td>
-                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
-                <td><p>Withdraw an Item</p></td>
-              </tr>
-            
-              <tr>
-                <td>GetBridge</td>
-                <td><a href="#saga.api.bridge.GetBridgeRequest">GetBridgeRequest</a></td>
-                <td><a href="#saga.api.bridge.BridgeProto">BridgeProto</a></td>
-                <td><p>Get Bridge</p></td>
-              </tr>
-            
-              <tr>
-                <td>GetBridgeQuote</td>
-                <td><a href="#saga.api.bridge.QuoteBridgeNFTRequest">QuoteBridgeNFTRequest</a></td>
-                <td><a href="#saga.api.bridge.QuoteBridgeNFTResponse">QuoteBridgeNFTResponse</a></td>
-                <td><p>Get Bridge Quote</p></td>
-              </tr>
-            
-          </tbody>
-        </table>
-
-        
     
       
       <div class="file-heading">
@@ -4037,6 +3733,317 @@
                 <td><a href="#saga.api.myth.DepositNmythRequest">DepositNmythRequest</a></td>
                 <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Deposit nmyth</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+
+        
+    
+      
+      <div class="file-heading">
+        <h2 id="api/nftbridge/definition.proto">api/nftbridge/definition.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="saga.api.nftbridge.GetNftBridgeRequest">GetNftBridgeRequest</h3>
+        <p>Get NftBridge Call</p>
+
+        
+
+        
+      
+        <h3 id="saga.api.nftbridge.NftBridgeProto">NftBridgeProto</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>trace_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>mythical_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>mainnet_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Address on Mainnet </p></td>
+                </tr>
+              
+                <tr>
+                  <td>chain_name</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Name of the chain </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.nftbridge.QuoteBridgeNFTRequest">QuoteBridgeNFTRequest</h3>
+        <p>Get Bridge Quote Call</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>origin_chain_id</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>target_chain_id</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>game_title_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>inventory_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>oauth_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.nftbridge.QuoteBridgeNFTResponse">QuoteBridgeNFTResponse</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>trace_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fee_in_originchain_native_token</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fee_in_originchain_native_token_unit</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fee_in_usd</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>expires_at</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>gas_price_originchain</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>gas_price_originchain_unit</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>gas_price_targetchain</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>gas_price_targetchain_unit</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>signature</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.nftbridge.WithdrawItemRequest">WithdrawItemRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>quote_request</td>
+                  <td><a href="#saga.api.nftbridge.QuoteBridgeNFTRequest">QuoteBridgeNFTRequest</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fee_in_originchain_native_token</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>expires_at</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>signature</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>item_type_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>targetchain_wallet_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+
+      
+
+      
+    
+      
+      <div class="file-heading">
+        <h2 id="api/nftbridge/rpc.proto">api/nftbridge/rpc.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+
+      
+
+      
+
+      
+        <h3 id="saga.api.nftbridge.NftBridgeService">NftBridgeService</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>WithdrawItem</td>
+                <td><a href="#saga.api.nftbridge.WithdrawItemRequest">WithdrawItemRequest</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
+                <td><p>Withdraw an Item</p></td>
+              </tr>
+            
+              <tr>
+                <td>GetBridge</td>
+                <td><a href="#saga.api.nftbridge.GetNftBridgeRequest">GetNftBridgeRequest</a></td>
+                <td><a href="#saga.api.nftbridge.NftBridgeProto">NftBridgeProto</a></td>
+                <td><p>Get Bridge</p></td>
+              </tr>
+            
+              <tr>
+                <td>GetBridgeQuote</td>
+                <td><a href="#saga.api.nftbridge.QuoteBridgeNFTRequest">QuoteBridgeNFTRequest</a></td>
+                <td><a href="#saga.api.nftbridge.QuoteBridgeNFTResponse">QuoteBridgeNFTResponse</a></td>
+                <td><p>Get Bridge Quote</p></td>
               </tr>
             
           </tbody>
@@ -7193,124 +7200,6 @@
     
       
       <div class="file-heading">
-        <h2 id="streams/bridge/definition.proto">streams/bridge/definition.proto</h2><a href="#title">Top</a>
-      </div>
-      <p></p>
-
-      
-        <h3 id="saga.rpc.streams.bridge.BridgeStatusUpdate">BridgeStatusUpdate</h3>
-        <p>Results from a Bridge status update gRPC stream call</p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>oauth_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>item_type_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>inventory_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>destination_address</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>destination_chain</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>origin_address</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>mythical_transaction_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>mainnet_transaction_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
-        <h3 id="saga.rpc.streams.bridge.BridgeUpdate">BridgeUpdate</h3>
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>error</td>
-                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>status_update</td>
-                  <td><a href="#saga.rpc.streams.bridge.BridgeStatusUpdate">BridgeStatusUpdate</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
-
-      
-
-      
-
-      
-    
-      
-      <div class="file-heading">
         <h2 id="streams/common.proto">streams/common.proto</h2><a href="#title">Top</a>
       </div>
       <p></p>
@@ -7810,6 +7699,124 @@
                 <tr>
                   <td>status_update</td>
                   <td><a href="#saga.rpc.streams.myth.MythTokenStatusUpdate">MythTokenStatusUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+
+      
+
+      
+    
+      
+      <div class="file-heading">
+        <h2 id="streams/nftbridge/definition.proto">streams/nftbridge/definition.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="saga.rpc.streams.nftbridge.NftBridgeStatusUpdate">NftBridgeStatusUpdate</h3>
+        <p>Results from a Bridge status update gRPC stream call</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>oauth_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>item_type_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>inventory_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>destination_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>destination_chain</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>origin_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>mythical_transaction_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>mainnet_transaction_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.rpc.streams.nftbridge.NftBridgeUpdate">NftBridgeUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status_update</td>
+                  <td><a href="#saga.rpc.streams.nftbridge.NftBridgeStatusUpdate">NftBridgeStatusUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -8354,8 +8361,8 @@
                 </tr>
               
                 <tr>
-                  <td>bridge_update</td>
-                  <td><a href="#saga.rpc.streams.bridge.BridgeUpdate">bridge.BridgeUpdate</a></td>
+                  <td>nft_bridge_update</td>
+                  <td><a href="#saga.rpc.streams.nftbridge.NftBridgeUpdate">nftbridge.NftBridgeUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>

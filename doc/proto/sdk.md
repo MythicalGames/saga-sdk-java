@@ -3,16 +3,6 @@
 
 ## Table of Contents
 
-- [api/bridge/definition.proto](#api_bridge_definition-proto)
-    - [BridgeProto](#saga-api-bridge-BridgeProto)
-    - [GetBridgeRequest](#saga-api-bridge-GetBridgeRequest)
-    - [QuoteBridgeNFTRequest](#saga-api-bridge-QuoteBridgeNFTRequest)
-    - [QuoteBridgeNFTResponse](#saga-api-bridge-QuoteBridgeNFTResponse)
-    - [WithdrawItemRequest](#saga-api-bridge-WithdrawItemRequest)
-  
-- [api/bridge/rpc.proto](#api_bridge_rpc-proto)
-    - [BridgeService](#saga-api-bridge-BridgeService)
-  
 - [api/common/error.proto](#api_common_error-proto)
     - [ErrorProto](#saga-api-common-ErrorProto)
   
@@ -91,6 +81,16 @@
   
 - [api/myth/rpc.proto](#api_myth_rpc-proto)
     - [MythService](#saga-api-myth-MythService)
+  
+- [api/nftbridge/definition.proto](#api_nftbridge_definition-proto)
+    - [GetNftBridgeRequest](#saga-api-nftbridge-GetNftBridgeRequest)
+    - [NftBridgeProto](#saga-api-nftbridge-NftBridgeProto)
+    - [QuoteBridgeNFTRequest](#saga-api-nftbridge-QuoteBridgeNFTRequest)
+    - [QuoteBridgeNFTResponse](#saga-api-nftbridge-QuoteBridgeNFTResponse)
+    - [WithdrawItemRequest](#saga-api-nftbridge-WithdrawItemRequest)
+  
+- [api/nftbridge/rpc.proto](#api_nftbridge_rpc-proto)
+    - [NftBridgeService](#saga-api-nftbridge-NftBridgeService)
   
 - [api/offer/definition.proto](#api_offer_definition-proto)
     - [CancelOfferRequest](#saga-api-offer-CancelOfferRequest)
@@ -211,10 +211,6 @@
 - [common/sort.proto](#common_sort-proto)
     - [SortOrder](#saga-common-SortOrder)
   
-- [streams/bridge/definition.proto](#streams_bridge_definition-proto)
-    - [BridgeStatusUpdate](#saga-rpc-streams-bridge-BridgeStatusUpdate)
-    - [BridgeUpdate](#saga-rpc-streams-bridge-BridgeUpdate)
-  
 - [streams/common.proto](#streams_common-proto)
     - [Subscribe](#saga-rpc-streams-Subscribe)
   
@@ -238,6 +234,10 @@
 - [streams/myth/definition.proto](#streams_myth_definition-proto)
     - [MythTokenStatusUpdate](#saga-rpc-streams-myth-MythTokenStatusUpdate)
     - [MythTokenUpdate](#saga-rpc-streams-myth-MythTokenUpdate)
+  
+- [streams/nftbridge/definition.proto](#streams_nftbridge_definition-proto)
+    - [NftBridgeStatusUpdate](#saga-rpc-streams-nftbridge-NftBridgeStatusUpdate)
+    - [NftBridgeUpdate](#saga-rpc-streams-nftbridge-NftBridgeUpdate)
   
 - [streams/offer/definition.proto](#streams_offer_definition-proto)
     - [OfferStatusUpdate](#saga-rpc-streams-offer-OfferStatusUpdate)
@@ -268,140 +268,6 @@
     - [StatusStream](#saga-rpc-streams-StatusStream)
   
 - [Scalar Value Types](#scalar-value-types)
-
-
-
-<a name="api_bridge_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## api/bridge/definition.proto
-
-
-
-<a name="saga-api-bridge-BridgeProto"></a>
-
-### BridgeProto
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| trace_id | [string](#string) |  |  |
-| mythical_address | [string](#string) |  |  |
-| mainnet_address | [string](#string) |  | Address on Mainnet |
-| chain_name | [string](#string) |  | Name of the chain |
-
-
-
-
-
-
-<a name="saga-api-bridge-GetBridgeRequest"></a>
-
-### GetBridgeRequest
-Get Bridge Call
-
-
-
-
-
-
-<a name="saga-api-bridge-QuoteBridgeNFTRequest"></a>
-
-### QuoteBridgeNFTRequest
-Get Bridge Quote Call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| origin_chain_id | [int32](#int32) |  |  |
-| target_chain_id | [int32](#int32) |  |  |
-| item_type_id | [string](#string) |  |  |
-| origin_chain_wallet_address | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-api-bridge-QuoteBridgeNFTResponse"></a>
-
-### QuoteBridgeNFTResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| trace_id | [string](#string) |  |  |
-| fee_in_originchain_native_token | [string](#string) |  |  |
-| fee_in_originchain_native_token_unit | [string](#string) |  |  |
-| fee_in_usd | [string](#string) |  |  |
-| expires_at | [string](#string) |  |  |
-| gas_price_originchain | [string](#string) |  |  |
-| gas_price_originchain_unit | [string](#string) |  |  |
-| gas_price_targetchain | [string](#string) |  |  |
-| gas_price_targetchain_unit | [string](#string) |  |  |
-| signature | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-api-bridge-WithdrawItemRequest"></a>
-
-### WithdrawItemRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| quote_request | [QuoteBridgeNFTRequest](#saga-api-bridge-QuoteBridgeNFTRequest) |  |  |
-| fee_in_originchain_native_token | [string](#string) |  |  |
-| expires_at | [string](#string) |  |  |
-| signature | [string](#string) |  |  |
-| title_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
-<a name="api_bridge_rpc-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## api/bridge/rpc.proto
-
-
- 
-
- 
-
- 
-
-
-<a name="saga-api-bridge-BridgeService"></a>
-
-### BridgeService
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| WithdrawItem | [WithdrawItemRequest](#saga-api-bridge-WithdrawItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Withdraw an Item |
-| GetBridge | [GetBridgeRequest](#saga-api-bridge-GetBridgeRequest) | [BridgeProto](#saga-api-bridge-BridgeProto) | Get Bridge |
-| GetBridgeQuote | [QuoteBridgeNFTRequest](#saga-api-bridge-QuoteBridgeNFTRequest) | [QuoteBridgeNFTResponse](#saga-api-bridge-QuoteBridgeNFTResponse) | Get Bridge Quote |
-
- 
 
 
 
@@ -1505,6 +1371,141 @@ Proto of converted units from gwei/eth
 | QuoteMythTokenWithdrawal | [QuoteMythTokenWithdrawalRequest](#saga-api-myth-QuoteMythTokenWithdrawalRequest) | [QuoteMythTokenWithdrawalResponse](#saga-api-myth-QuoteMythTokenWithdrawalResponse) | Quote withdrawing MYTH Tokens |
 | ConfirmMythTokenWithdrawal | [ConfirmMythTokenWithdrawalRequest](#saga-api-myth-ConfirmMythTokenWithdrawalRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Confirm withdrawing MYTH Tokens |
 | DepositNmyth | [DepositNmythRequest](#saga-api-myth-DepositNmythRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Deposit nmyth |
+
+ 
+
+
+
+<a name="api_nftbridge_definition-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/nftbridge/definition.proto
+
+
+
+<a name="saga-api-nftbridge-GetNftBridgeRequest"></a>
+
+### GetNftBridgeRequest
+Get NftBridge Call
+
+
+
+
+
+
+<a name="saga-api-nftbridge-NftBridgeProto"></a>
+
+### NftBridgeProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| trace_id | [string](#string) |  |  |
+| mythical_address | [string](#string) |  |  |
+| mainnet_address | [string](#string) |  | Address on Mainnet |
+| chain_name | [string](#string) |  | Name of the chain |
+
+
+
+
+
+
+<a name="saga-api-nftbridge-QuoteBridgeNFTRequest"></a>
+
+### QuoteBridgeNFTRequest
+Get Bridge Quote Call
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| origin_chain_id | [int32](#int32) |  |  |
+| target_chain_id | [int32](#int32) |  |  |
+| game_title_id | [string](#string) |  |  |
+| inventory_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="saga-api-nftbridge-QuoteBridgeNFTResponse"></a>
+
+### QuoteBridgeNFTResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| trace_id | [string](#string) |  |  |
+| fee_in_originchain_native_token | [string](#string) |  |  |
+| fee_in_originchain_native_token_unit | [string](#string) |  |  |
+| fee_in_usd | [string](#string) |  |  |
+| expires_at | [string](#string) |  |  |
+| gas_price_originchain | [string](#string) |  |  |
+| gas_price_originchain_unit | [string](#string) |  |  |
+| gas_price_targetchain | [string](#string) |  |  |
+| gas_price_targetchain_unit | [string](#string) |  |  |
+| signature | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="saga-api-nftbridge-WithdrawItemRequest"></a>
+
+### WithdrawItemRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| quote_request | [QuoteBridgeNFTRequest](#saga-api-nftbridge-QuoteBridgeNFTRequest) |  |  |
+| fee_in_originchain_native_token | [string](#string) |  |  |
+| expires_at | [string](#string) |  |  |
+| signature | [string](#string) |  |  |
+| item_type_id | [string](#string) |  |  |
+| targetchain_wallet_address | [string](#string) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="api_nftbridge_rpc-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/nftbridge/rpc.proto
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="saga-api-nftbridge-NftBridgeService"></a>
+
+### NftBridgeService
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| WithdrawItem | [WithdrawItemRequest](#saga-api-nftbridge-WithdrawItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Withdraw an Item |
+| GetBridge | [GetNftBridgeRequest](#saga-api-nftbridge-GetNftBridgeRequest) | [NftBridgeProto](#saga-api-nftbridge-NftBridgeProto) | Get Bridge |
+| GetBridgeQuote | [QuoteBridgeNFTRequest](#saga-api-nftbridge-QuoteBridgeNFTRequest) | [QuoteBridgeNFTResponse](#saga-api-nftbridge-QuoteBridgeNFTResponse) | Get Bridge Quote |
 
  
 
@@ -3039,60 +3040,6 @@ Options allowed when querying
 
 
 
-<a name="streams_bridge_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## streams/bridge/definition.proto
-
-
-
-<a name="saga-rpc-streams-bridge-BridgeStatusUpdate"></a>
-
-### BridgeStatusUpdate
-Results from a Bridge status update gRPC stream call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| item_type_id | [string](#string) |  |  |
-| inventory_id | [string](#string) |  |  |
-| destination_address | [string](#string) |  |  |
-| destination_chain | [string](#string) |  |  |
-| origin_address | [string](#string) |  |  |
-| mythical_transaction_id | [string](#string) |  |  |
-| mainnet_transaction_id | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-rpc-streams-bridge-BridgeUpdate"></a>
-
-### BridgeUpdate
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
-| status_update | [BridgeStatusUpdate](#saga-rpc-streams-bridge-BridgeStatusUpdate) |  |  |
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
 <a name="streams_common-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -3375,6 +3322,60 @@ Results from a MYTH Token status update gRPC stream call
 | ----- | ---- | ----- | ----------- |
 | error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [MythTokenStatusUpdate](#saga-rpc-streams-myth-MythTokenStatusUpdate) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="streams_nftbridge_definition-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## streams/nftbridge/definition.proto
+
+
+
+<a name="saga-rpc-streams-nftbridge-NftBridgeStatusUpdate"></a>
+
+### NftBridgeStatusUpdate
+Results from a Bridge status update gRPC stream call
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| oauth_id | [string](#string) |  |  |
+| item_type_id | [string](#string) |  |  |
+| inventory_id | [string](#string) |  |  |
+| destination_address | [string](#string) |  |  |
+| destination_chain | [string](#string) |  |  |
+| origin_address | [string](#string) |  |  |
+| mythical_transaction_id | [string](#string) |  |  |
+| mainnet_transaction_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="saga-rpc-streams-nftbridge-NftBridgeUpdate"></a>
+
+### NftBridgeUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
+| status_update | [NftBridgeStatusUpdate](#saga-rpc-streams-nftbridge-NftBridgeStatusUpdate) |  |  |
 
 
 
@@ -3698,7 +3699,7 @@ Returned results on sending a Status stream call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
-| bridge_update | [bridge.BridgeUpdate](#saga-rpc-streams-bridge-BridgeUpdate) |  |  |
+| nft_bridge_update | [nftbridge.NftBridgeUpdate](#saga-rpc-streams-nftbridge-NftBridgeUpdate) |  |  |
 | currency_update | [currency.CurrencyUpdate](#saga-rpc-streams-currency-CurrencyUpdate) |  |  |
 | item_update | [item.ItemUpdate](#saga-rpc-streams-item-ItemUpdate) |  |  |
 | item_type_update | [itemtype.ItemTypeUpdate](#saga-rpc-streams-itemtype-ItemTypeUpdate) |  |  |
