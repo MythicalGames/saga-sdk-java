@@ -914,6 +914,7 @@ Get ItemTypes call
 | issued_supply | [int64](#int64) |  |  |
 | available_supply | [google.protobuf.Int64Value](#google-protobuf-Int64Value) |  |  |
 | mintable | [bool](#bool) |  |  |
+| mint_ended | [bool](#bool) |  |  |
 
 
 
