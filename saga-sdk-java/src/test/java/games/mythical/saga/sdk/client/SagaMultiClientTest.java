@@ -1,14 +1,14 @@
 package games.mythical.saga.sdk.client;
 
-import games.mythical.saga.sdk.client.executor.MockBridgeExecutor;
+import games.mythical.saga.sdk.client.executor.MockNFTBridgeExecutor;
 import games.mythical.saga.sdk.client.executor.MockCurrencyExecutor;
-import games.mythical.saga.sdk.proto.api.bridge.BridgeServiceGrpc;
+import games.mythical.saga.sdk.proto.api.nftbridge.NftBridgeServiceGrpc;
 import games.mythical.saga.sdk.proto.api.currency.CurrencyServiceGrpc;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
-import games.mythical.saga.sdk.proto.streams.bridge.BridgeStatusUpdate;
-import games.mythical.saga.sdk.proto.streams.bridge.BridgeUpdate;
 import games.mythical.saga.sdk.proto.streams.currency.CurrencyStatusUpdate;
 import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
+import games.mythical.saga.sdk.proto.streams.nftbridge.NftBridgeStatusUpdate;
+import games.mythical.saga.sdk.proto.streams.nftbridge.NftBridgeUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
 import games.mythical.saga.sdk.util.ConcurrentFinisher;
@@ -30,14 +30,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class SagaMultiClientTest extends AbstractClientTest {
     private static final String OAUTH_ID = UUID.randomUUID().toString();
-    private final MockBridgeExecutor bridgeExecutor = MockBridgeExecutor.builder().build();
+    private final MockNFTBridgeExecutor bridgeExecutor = MockNFTBridgeExecutor.builder().build();
     private final MockCurrencyExecutor currencyExecutor = MockCurrencyExecutor.builder().build();
     private MockServer mockServer;
-    private SagaBridgeClient bridgeClient;
+    private SagaNFTBridgeClient bridgeClient;
     private SagaCurrencyClient currencyClient;
 
     @Mock
-    private BridgeServiceGrpc.BridgeServiceBlockingStub mockBridgeService;
+    private NftBridgeServiceGrpc.NftBridgeServiceBlockingStub mockBridgeService;
 
     @Mock
     private CurrencyServiceGrpc.CurrencyServiceBlockingStub mockCurrencyService;
@@ -81,12 +81,12 @@ class SagaMultiClientTest extends AbstractClientTest {
         ConcurrentFinisher.start(TRACE_ID_2);
 
         // firing a bridge event so bridge executor should catch it
-        final var update = BridgeStatusUpdate.newBuilder()
+        final var update = NftBridgeStatusUpdate.newBuilder()
             .setOauthId(OAUTH_ID)
             .setItemTypeId(RandomStringUtils.randomAlphanumeric(30));
         var statusUpdate = StatusUpdate.newBuilder()
                 .setTraceId(TRACE_ID_2)
-                .setBridgeUpdate(BridgeUpdate.newBuilder().setStatusUpdate(update))
+                .setNftBridgeUpdate(NftBridgeUpdate.newBuilder().setStatusUpdate(update))
                 .build();
         mockServer.getStatusStream().sendStatus(titleId, statusUpdate);
 

@@ -21,6 +21,12 @@ hs_err_pid*
 *.iml
 atlassian-ide-plugin.xml
 
+# Eclipse ignores 
+.classpath
+.project
+*.settings/*
+*eclipse*
+
 # Gradle settings
 .gradle/
 !gradle-wrapper.jar

@@ -1,7 +1,7 @@
 package games.mythical.saga.sdk.client.model;
 
 import games.mythical.proto_util.ProtoUtil;
-import games.mythical.saga.sdk.proto.api.bridge.QuoteBridgeNFTResponse;
+import games.mythical.saga.sdk.proto.api.nftbridge.QuoteBridgeNFTResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SagaBridgeQuoteResponse {
+public class SagaNFTBridgeQuoteResponse {
     private String traceId;
     private String feeInOriginchainNativeToken;
     private String feeInOriginchainNativeTokenUnit;
@@ -23,7 +23,7 @@ public class SagaBridgeQuoteResponse {
     private String gasPriceTargetchainUnit;
     private String signature;
 
-    public static SagaBridgeQuoteResponse fromProto(QuoteBridgeNFTResponse proto) {
-        return ProtoUtil.toDto(proto, SagaBridgeQuoteResponse.class);
+    public static SagaNFTBridgeQuoteResponse fromProto(QuoteBridgeNFTResponse proto) {
+        return ProtoUtil.toDto(proto, SagaNFTBridgeQuoteResponse.class);
     }
 }

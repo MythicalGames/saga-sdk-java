@@ -1,7 +1,7 @@
 package games.mythical.saga.sdk.client.model;
 
 import games.mythical.proto_util.ProtoUtil;
-import games.mythical.saga.sdk.proto.api.bridge.BridgeProto;
+import games.mythical.saga.sdk.proto.api.nftbridge.NftBridgeProto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SagaBridge {
+public class SagaNFTBridge {
     private String traceId;
     private String mythicalAddress;
     private String mainnetAddress;
     private String chainName;
 
-    public static SagaBridge fromProto(BridgeProto proto) {
-        return ProtoUtil.toDto(proto, SagaBridge.class);
+    public static SagaNFTBridge fromProto(NftBridgeProto proto) {
+        return ProtoUtil.toDto(proto, SagaNFTBridge.class);
     }
 }

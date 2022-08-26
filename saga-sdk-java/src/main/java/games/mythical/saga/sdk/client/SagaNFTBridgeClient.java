@@ -1,26 +1,24 @@
 package games.mythical.saga.sdk.client;
 
-import games.mythical.proto_util.ProtoUtil;
-import games.mythical.saga.sdk.client.executor.SagaBridgeExecutor;
-import games.mythical.saga.sdk.client.model.SagaBridge;
-import games.mythical.saga.sdk.client.model.SagaBridgeQuoteRequest;
-import games.mythical.saga.sdk.client.model.SagaBridgeQuoteResponse;
+import games.mythical.saga.sdk.client.executor.SagaNFTBridgeExecutor;
+import games.mythical.saga.sdk.client.model.SagaNFTBridge;
+import games.mythical.saga.sdk.client.model.SagaNFTBridgeQuoteResponse;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.proto.api.bridge.*;
+import games.mythical.saga.sdk.proto.api.nftbridge.*;
 import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SagaBridgeClient extends AbstractSagaStreamClient {
+public class SagaNFTBridgeClient extends AbstractSagaStreamClient {
 
-    private final SagaBridgeExecutor executor;
-    private BridgeServiceGrpc.BridgeServiceBlockingStub serviceBlockingStub;
+    private final SagaNFTBridgeExecutor executor;
+    private NftBridgeServiceGrpc.NftBridgeServiceBlockingStub serviceBlockingStub;
 
-    SagaBridgeClient(SagaSdkConfig config, SagaBridgeExecutor executor) throws SagaException {
+    SagaNFTBridgeClient(SagaSdkConfig config, SagaNFTBridgeExecutor executor) throws SagaException {
         super(config);
         this.executor = executor;
         initStub();
@@ -28,32 +26,34 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
 
     @Override
     void initStub() {
-        serviceBlockingStub = BridgeServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
+        serviceBlockingStub = NftBridgeServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
         initStreamStub();
         SagaStatusUpdateObserver.getInstance().with(executor);
     }
 
     public String withdrawItem(Integer originChainId,
                                Integer targetChainId,
-                               String itemTypeId,
-                               String originChainWalletAddress,
+                               String gameTitleId,
+                               String inventoryId,
+                               String oauthId,
                                String feeInOriginChainNativeToken,
                                String expiresAt,
                                String signature,
-                               String titleId,
-                               String oauthId) throws SagaException {
+                               String itemTypeId,
+                               String targetChainWalletAddress) throws SagaException {
         var request = WithdrawItemRequest.newBuilder()
                 .setQuoteRequest(QuoteBridgeNFTRequest.newBuilder()
                         .setOriginChainId(originChainId)
                         .setTargetChainId(targetChainId)
-                        .setItemTypeId(itemTypeId)
-                        .setOriginChainWalletAddress(originChainWalletAddress)
+                        .setGameTitleId(gameTitleId)
+                        .setInventoryId(inventoryId)
+                        .setOauthId(oauthId)
                         .build())
                 .setFeeInOriginchainNativeToken(feeInOriginChainNativeToken)
                 .setExpiresAt(expiresAt)
                 .setSignature(signature)
-                .setTitleId(titleId)
-                .setOauthId(oauthId)
+                .setItemTypeId(itemTypeId)
+                .setTargetchainWalletAddress(targetChainWalletAddress)
                 .build();
 
         try {
@@ -67,38 +67,40 @@ public class SagaBridgeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public SagaBridge getBridge() throws SagaException {
-        var request = GetBridgeRequest.newBuilder().build();
+    public SagaNFTBridge getNFTBridge() throws SagaException {
+        var request = GetNftBridgeRequest.newBuilder().build();
 
         try {
             var bridge = serviceBlockingStub.getBridge(request);
-            ValidateUtil.checkFound(bridge, "Bridge not found");
-            return SagaBridge.fromProto(bridge);
+            ValidateUtil.checkFound(bridge, "NFT Bridge not found");
+            return SagaNFTBridge.fromProto(bridge);
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         }
     }
 
-    public SagaBridgeQuoteResponse getBridgeQuote(
-        Integer originChainId,
-        Integer targetChainId,
-        String itemTypeId,
-        String originChainWalletAddress
+    public SagaNFTBridgeQuoteResponse getNFTBridgeQuote(
+            Integer originChainId,
+            Integer targetChainId,
+            String gameTitleId,
+            String inventoryId,
+            String oauthId
     ) throws SagaException {
         var request = QuoteBridgeNFTRequest.newBuilder()
                 .setOriginChainId(originChainId)
                 .setTargetChainId(targetChainId)
-                .setItemTypeId(itemTypeId)
-                .setOriginChainWalletAddress(originChainWalletAddress)
+                .setGameTitleId(gameTitleId)
+                .setInventoryId(inventoryId)
+                .setOauthId(oauthId)
                 .build();
         try {
             var quoteResponse = serviceBlockingStub.getBridgeQuote(request);
-            ValidateUtil.checkFound(quoteResponse, "NFTBridge Quote response not found");
-            return SagaBridgeQuoteResponse.fromProto(quoteResponse);
+            ValidateUtil.checkFound(quoteResponse, "NFT Bridge Quote response not found");
+            return SagaNFTBridgeQuoteResponse.fromProto(quoteResponse);
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
-            log.error("Exception calling getBridgeQuote", e);
+            log.error("Exception calling getNFTBridgeQuote", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
         }
     }
