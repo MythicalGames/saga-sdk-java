@@ -13,4 +13,6 @@ import lombok.NoArgsConstructor;
 public class SagaMythTokenWithdrawalQuote {
     private BigDecimal totalAmount;
     private BigDecimal gasFee;
+    private long quoteId;
+    private long ttl;
 }
