@@ -1330,6 +1330,8 @@ Proto of converted units from gwei/eth
 | ----- | ---- | ----- | ----------- |
 | total_amount | [string](#string) |  | Amount of MYTH Tokens to withdraw |
 | gas_fee | [string](#string) |  | Gas cost of withdrawal |
+| quote_id | [string](#string) |  |  |
+| ttl | [int64](#int64) |  |  |
 
 
 
