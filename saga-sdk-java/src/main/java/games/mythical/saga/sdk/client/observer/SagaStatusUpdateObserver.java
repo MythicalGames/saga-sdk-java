@@ -43,7 +43,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private SagaListingExecutor sagaListingExecutor;
     private SagaMythTokenExecutor sagaMythTokenExecutor;
     private SagaOfferExecutor sagaOfferExecutor;
-    private SagaOrderExecutor sagaOrderExecutor;
     private SagaPlayerWalletExecutor sagaPlayerWalletExecutor;
     private SagaReservationExecutor sagaReservationExecutor;
 
@@ -102,11 +101,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         return this;
     }
 
-    public SagaStatusUpdateObserver with(SagaOrderExecutor sagaOrderExecutor) {
-        this.sagaOrderExecutor = sagaOrderExecutor;
-        return this;
-    }
-
     public SagaStatusUpdateObserver with(SagaPlayerWalletExecutor sagaPlayerWalletExecutor) {
         this.sagaPlayerWalletExecutor = sagaPlayerWalletExecutor;
         return this;
@@ -146,9 +140,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     break;
                 case OFFER_UPDATE:
                     handleOfferUpdate(message.getOfferUpdate(), message.getTraceId());
-                    break;
-                case ORDER_UPDATE:
-                    handleOrderUpdate(message.getOrderUpdate(), message.getTraceId());
                     break;
                 case PLAYER_WALLET_UPDATE:
                     handlePlayerWalletUpdate(message.getPlayerWalletUpdate(), message.getTraceId());
@@ -326,28 +317,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     message.getOfferId(),
                     new BigDecimal(message.getTotal()),
                     message.getOfferState()
-                );
-            }
-        }
-    }
-
-    private void handleOrderUpdate(OrderUpdate update, String traceId) throws Exception {
-        if (sagaOrderExecutor == null) {
-            log.error("Order update received, but no order executor registered {}", update);
-        }
-        else {
-            if (update.hasError()) {
-                final var error = update.getError();
-                sagaOrderExecutor.onError(toErrData(error));
-            } else {
-                final var message = update.getStatusUpdate();
-                sagaOrderExecutor.updateOrder(
-                    message.getOauthId(),
-                    traceId,
-                    message.getQuoteId(),
-                    message.getOrderId(),
-                    new BigDecimal(message.getTotal()),
-                    message.getOrderState()
                 );
             }
         }

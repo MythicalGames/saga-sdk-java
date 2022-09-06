@@ -109,10 +109,6 @@ public class SagaClientFactory {
         return new SagaTransactionClient(config);
     }
 
-    public SagaOrderClient createSagaOrderClient(SagaOrderExecutor executor) throws SagaException {
-        return new SagaOrderClient(config, validateExecutor(executor));
-    }
-
     public SagaNFTBridgeClient createSagaBridgeClient(SagaNFTBridgeExecutor executor) throws SagaException {
         return new SagaNFTBridgeClient(config, validateExecutor(executor));
     }
