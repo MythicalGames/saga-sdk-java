@@ -3,7 +3,6 @@ package games.mythical.saga.sdk.client.observer;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Struct;
 import games.mythical.saga.sdk.client.executor.*;
-import games.mythical.saga.sdk.client.model.SagaPaymentMethod;
 import games.mythical.saga.sdk.exception.ErrorData;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
@@ -45,7 +44,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private SagaMythTokenExecutor sagaMythTokenExecutor;
     private SagaOfferExecutor sagaOfferExecutor;
     private SagaOrderExecutor sagaOrderExecutor;
-    private SagaPaymentExecutor sagaPaymentExecutor;
     private SagaPlayerWalletExecutor sagaPlayerWalletExecutor;
     private SagaReservationExecutor sagaReservationExecutor;
 
@@ -109,11 +107,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         return this;
     }
 
-    public SagaStatusUpdateObserver with(SagaPaymentExecutor sagaPaymentExecutor) {
-        this.sagaPaymentExecutor = sagaPaymentExecutor;
-        return this;
-    }
-
     public SagaStatusUpdateObserver with(SagaPlayerWalletExecutor sagaPlayerWalletExecutor) {
         this.sagaPlayerWalletExecutor = sagaPlayerWalletExecutor;
         return this;
@@ -156,9 +149,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     break;
                 case ORDER_UPDATE:
                     handleOrderUpdate(message.getOrderUpdate(), message.getTraceId());
-                    break;
-                case PAYMENT_UPDATE:
-                    handlePaymentUpdate(message.getPaymentUpdate(), message.getTraceId());
                     break;
                 case PLAYER_WALLET_UPDATE:
                     handlePlayerWalletUpdate(message.getPlayerWalletUpdate(), message.getTraceId());
@@ -358,25 +348,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     message.getOrderId(),
                     new BigDecimal(message.getTotal()),
                     message.getOrderState()
-                );
-            }
-        }
-    }
-
-    private void handlePaymentUpdate(PaymentUpdate update, String traceId) throws Exception {
-        if (sagaPaymentExecutor == null) {
-            log.error("Payment update received, but no payment executor registered {}", update);
-        }
-        else {
-            if (update.hasError()) {
-                final var error = update.getError();
-                sagaPaymentExecutor.onError(toErrData(error));
-            } else {
-                final var message = update.getStatusUpdate();
-                sagaPaymentExecutor.updatePaymentMethod(
-                    traceId,
-                    SagaPaymentMethod.fromProto(message.getPaymentMethod()),
-                    message.getPaymentMethodStatus()
                 );
             }
         }

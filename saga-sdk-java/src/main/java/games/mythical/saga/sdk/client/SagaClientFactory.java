@@ -93,10 +93,6 @@ public class SagaClientFactory {
         return new SagaMythTokenClient(config, validateExecutor(executor));
     }
 
-    public SagaPaymentClient createSagaPaymentClient(SagaPaymentExecutor executor) throws SagaException {
-        return new SagaPaymentClient(config, validateExecutor(executor));
-    }
-
     public SagaCurrencyClient createSagaCurrencyClient(SagaCurrencyExecutor executor) throws SagaException {
         return new SagaCurrencyClient(config, validateExecutor(executor));
     }
