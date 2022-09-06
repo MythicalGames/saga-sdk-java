@@ -114,22 +114,6 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String freezeItemType(String itemTypeId) throws SagaException {
-        try {
-            log.trace("ItemTypeClient.freezeItemType called for {}", itemTypeId);
-            var request = FreezeItemTypePayload.newBuilder()
-                    .setItemTypeId(itemTypeId)
-                    .build();
-            var result = serviceBlockingStub.freezeItemType(request);
-            return result.getTraceId();
-        } catch (StatusRuntimeException e) {
-            throw SagaException.fromGrpcException(e);
-        } catch (Exception e) {
-            log.error("Exception calling freezeItemType!", e);
-            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
-        }
-    }
-
     public String startMint(String itemTypeId) throws SagaException {
         try  {
             log.trace("ItemTypeClient.startMint called for {}", itemTypeId);
