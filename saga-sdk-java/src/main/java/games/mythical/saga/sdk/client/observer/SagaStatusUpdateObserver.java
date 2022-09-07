@@ -10,7 +10,6 @@ import games.mythical.saga.sdk.exception.SubError;
 import games.mythical.saga.sdk.proto.streams.StatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
-import games.mythical.saga.sdk.proto.streams.nftbridge.NftBridgeUpdate;
 import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeUpdate;
@@ -30,8 +29,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private final StatusStreamGrpc.StatusStreamStub statusStreamStub;
     private final Consumer<SagaStatusUpdateObserver> resubscribe;
     private final ConfirmationObserver confirmationObserver = new ConfirmationObserver();
-
-    private SagaNFTBridgeExecutor sagaNFTBridgeExecutor;
     private SagaCurrencyExecutor sagaCurrencyExecutor;
     private SagaItemExecutor sagaItemExecutor;
     private SagaItemTypeExecutor sagaItemTypeExecutor;
@@ -57,11 +54,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
 
     public static void clear() {
         instance = null;
-    }
-
-    public SagaStatusUpdateObserver with(SagaNFTBridgeExecutor sagaNFTBridgeExecutor) {
-        this.sagaNFTBridgeExecutor = sagaNFTBridgeExecutor;
-        return this;
     }
 
     public SagaStatusUpdateObserver with(SagaCurrencyExecutor sagaCurrencyExecutor) {
@@ -103,9 +95,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         }
         try {
             switch (message.getStatusUpdateCase()) {
-                case NFT_BRIDGE_UPDATE:
-                    handleBridgeUpdate(message.getNftBridgeUpdate(), message.getTraceId());
-                    break;
                 case CURRENCY_UPDATE:
                     handleCurrencyUpdate(message.getCurrencyUpdate(), message.getTraceId());
                     break;
@@ -147,31 +136,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         log.info("StatusUpdateObserver stream closed");
         sleepBetweenReconnects();
         resubscribe.accept(this);
-    }
-
-    private void handleBridgeUpdate(NftBridgeUpdate update, String traceId) throws Exception {
-        if (sagaNFTBridgeExecutor == null) {
-            log.error("Bridge update received, but no bridge executor registered {}", update);
-        }
-        else {
-            if (update.hasError()) {
-                final var error = update.getError();
-                sagaNFTBridgeExecutor.onError(toErrData(error));
-            } else {
-                final var message = update.getStatusUpdate();
-                sagaNFTBridgeExecutor.updateItem(
-                        message.getOauthId(),
-                        message.getInventoryId(),
-                        message.getItemTypeId(),
-                        message.getDestinationAddress(),
-                        message.getDestinationChain(),
-                        message.getOriginAddress(),
-                        message.getMythicalTransactionId(),
-                        message.getMainnetTransactionId(),
-                        traceId
-                );
-            }
-        }
     }
 
     private void handleCurrencyUpdate(CurrencyUpdate update, String traceId) throws Exception {
