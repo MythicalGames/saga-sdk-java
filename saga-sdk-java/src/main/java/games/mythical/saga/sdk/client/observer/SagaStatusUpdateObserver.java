@@ -14,11 +14,8 @@ import games.mythical.saga.sdk.proto.streams.nftbridge.NftBridgeUpdate;
 import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeUpdate;
-import games.mythical.saga.sdk.proto.streams.listing.ListingUpdate;
 import games.mythical.saga.sdk.proto.streams.myth.MythTokenUpdate;
 import games.mythical.saga.sdk.proto.streams.offer.OfferUpdate;
-import games.mythical.saga.sdk.proto.streams.order.OrderUpdate;
-import games.mythical.saga.sdk.proto.streams.payment.PaymentUpdate;
 import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +37,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private SagaCurrencyExecutor sagaCurrencyExecutor;
     private SagaItemExecutor sagaItemExecutor;
     private SagaItemTypeExecutor sagaItemTypeExecutor;
-    private SagaListingExecutor sagaListingExecutor;
     private SagaMythTokenExecutor sagaMythTokenExecutor;
     private SagaOfferExecutor sagaOfferExecutor;
     private SagaPlayerWalletExecutor sagaPlayerWalletExecutor;
@@ -86,11 +82,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         return this;
     }
 
-    public SagaStatusUpdateObserver with(SagaListingExecutor sagaListingExecutor) {
-        this.sagaListingExecutor = sagaListingExecutor;
-        return this;
-    }
-
     public SagaStatusUpdateObserver with(SagaMythTokenExecutor sagaMythTokenExecutor) {
         this.sagaMythTokenExecutor = sagaMythTokenExecutor;
         return this;
@@ -131,9 +122,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     break;
                 case ITEM_TYPE_UPDATE:
                     handleItemTypeUpdate(message.getItemTypeUpdate(), message.getTraceId());
-                    break;
-                case LISTING_UPDATE:
-                    handleListingUpdate(message.getListingUpdate(), message.getTraceId());
                     break;
                 case MYTH_TOKEN_UPDATE:
                     handleMythTokenUpdate(message.getMythTokenUpdate(), message.getTraceId());
@@ -255,28 +243,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     message.getItemTypeId(),
                     traceId,
                     message.getItemTypeState()
-                );
-            }
-        }
-    }
-
-    private void handleListingUpdate(ListingUpdate update, String traceId) throws Exception {
-        if (sagaListingExecutor == null) {
-            log.error("Listing update received, but no listing executor registered {}", update);
-        }
-        else {
-            if (update.hasError()) {
-                final var error = update.getError();
-                sagaListingExecutor.onError(toErrData(error));
-            } else {
-                final var message = update.getStatusUpdate();
-                sagaListingExecutor.updateListing(
-                    message.getOauthId(),
-                    traceId,
-                    message.getQuoteId(),
-                    message.getListingId(),
-                    new BigDecimal(message.getTotal()),
-                    message.getListingState()
                 );
             }
         }
