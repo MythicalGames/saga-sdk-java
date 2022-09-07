@@ -15,14 +15,12 @@ import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeUpdate;
 import games.mythical.saga.sdk.proto.streams.myth.MythTokenUpdate;
-import games.mythical.saga.sdk.proto.streams.offer.OfferUpdate;
 import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import games.mythical.saga.sdk.proto.streams.reservation.ReservationUpdate;
 import lombok.extern.slf4j.Slf4j;
-import java.math.BigDecimal;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -38,7 +36,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private SagaItemExecutor sagaItemExecutor;
     private SagaItemTypeExecutor sagaItemTypeExecutor;
     private SagaMythTokenExecutor sagaMythTokenExecutor;
-    private SagaOfferExecutor sagaOfferExecutor;
     private SagaPlayerWalletExecutor sagaPlayerWalletExecutor;
     private SagaReservationExecutor sagaReservationExecutor;
 
@@ -87,11 +84,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         return this;
     }
 
-    public SagaStatusUpdateObserver with(SagaOfferExecutor sagaOfferExecutor) {
-        this.sagaOfferExecutor = sagaOfferExecutor;
-        return this;
-    }
-
     public SagaStatusUpdateObserver with(SagaPlayerWalletExecutor sagaPlayerWalletExecutor) {
         this.sagaPlayerWalletExecutor = sagaPlayerWalletExecutor;
         return this;
@@ -125,9 +117,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     break;
                 case MYTH_TOKEN_UPDATE:
                     handleMythTokenUpdate(message.getMythTokenUpdate(), message.getTraceId());
-                    break;
-                case OFFER_UPDATE:
-                    handleOfferUpdate(message.getOfferUpdate(), message.getTraceId());
                     break;
                 case PLAYER_WALLET_UPDATE:
                     handlePlayerWalletUpdate(message.getPlayerWalletUpdate(), message.getTraceId());
@@ -261,28 +250,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                 sagaMythTokenExecutor.updateMythToken(
                     traceId,
                     message.getTokenState()
-                );
-            }
-        }
-    }
-
-    private void handleOfferUpdate(OfferUpdate update, String traceId) throws Exception {
-        if (sagaOfferExecutor == null) {
-            log.error("Offer update received, but no offer executor registered {}", update);
-        }
-        else {
-            if (update.hasError()) {
-                final var error = update.getError();
-                sagaOfferExecutor.onError(toErrData(error));
-            } else {
-                final var message = update.getStatusUpdate();
-                sagaOfferExecutor.updateOffer(
-                    message.getOauthId(),
-                    traceId,
-                    message.getQuoteId(),
-                    message.getOfferId(),
-                    new BigDecimal(message.getTotal()),
-                    message.getOfferState()
                 );
             }
         }
