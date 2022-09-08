@@ -2,8 +2,8 @@ package games.mythical.saga.sdk.factory;
 
 import games.mythical.proto_util.ProtoUtil;
 import games.mythical.saga.sdk.client.model.SagaCreditCardData;
-import games.mythical.saga.sdk.proto.api.order.CreditCardData;
-import games.mythical.saga.sdk.proto.api.order.PaymentProviderData;
+import games.mythical.saga.sdk.proto.api.myth.CreditCardData;
+import games.mythical.saga.sdk.proto.api.myth.PaymentProviderData;
 
 public class PmtProviderDataFactory {
 

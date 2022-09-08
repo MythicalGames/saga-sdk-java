@@ -3,7 +3,6 @@ package games.mythical.saga.sdk.client.observer;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Struct;
 import games.mythical.saga.sdk.client.executor.*;
-import games.mythical.saga.sdk.client.model.SagaPaymentMethod;
 import games.mythical.saga.sdk.exception.ErrorData;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
@@ -11,22 +10,16 @@ import games.mythical.saga.sdk.exception.SubError;
 import games.mythical.saga.sdk.proto.streams.StatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
-import games.mythical.saga.sdk.proto.streams.nftbridge.NftBridgeUpdate;
 import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeUpdate;
-import games.mythical.saga.sdk.proto.streams.listing.ListingUpdate;
 import games.mythical.saga.sdk.proto.streams.myth.MythTokenUpdate;
-import games.mythical.saga.sdk.proto.streams.offer.OfferUpdate;
-import games.mythical.saga.sdk.proto.streams.order.OrderUpdate;
-import games.mythical.saga.sdk.proto.streams.payment.PaymentUpdate;
 import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import games.mythical.saga.sdk.proto.streams.reservation.ReservationUpdate;
 import lombok.extern.slf4j.Slf4j;
-import java.math.BigDecimal;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -36,16 +29,10 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private final StatusStreamGrpc.StatusStreamStub statusStreamStub;
     private final Consumer<SagaStatusUpdateObserver> resubscribe;
     private final ConfirmationObserver confirmationObserver = new ConfirmationObserver();
-
-    private SagaNFTBridgeExecutor sagaNFTBridgeExecutor;
     private SagaCurrencyExecutor sagaCurrencyExecutor;
     private SagaItemExecutor sagaItemExecutor;
     private SagaItemTypeExecutor sagaItemTypeExecutor;
-    private SagaListingExecutor sagaListingExecutor;
     private SagaMythTokenExecutor sagaMythTokenExecutor;
-    private SagaOfferExecutor sagaOfferExecutor;
-    private SagaOrderExecutor sagaOrderExecutor;
-    private SagaPaymentExecutor sagaPaymentExecutor;
     private SagaPlayerWalletExecutor sagaPlayerWalletExecutor;
     private SagaReservationExecutor sagaReservationExecutor;
 
@@ -69,11 +56,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         instance = null;
     }
 
-    public SagaStatusUpdateObserver with(SagaNFTBridgeExecutor sagaNFTBridgeExecutor) {
-        this.sagaNFTBridgeExecutor = sagaNFTBridgeExecutor;
-        return this;
-    }
-
     public SagaStatusUpdateObserver with(SagaCurrencyExecutor sagaCurrencyExecutor) {
         this.sagaCurrencyExecutor = sagaCurrencyExecutor;
         return this;
@@ -89,28 +71,8 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         return this;
     }
 
-    public SagaStatusUpdateObserver with(SagaListingExecutor sagaListingExecutor) {
-        this.sagaListingExecutor = sagaListingExecutor;
-        return this;
-    }
-
     public SagaStatusUpdateObserver with(SagaMythTokenExecutor sagaMythTokenExecutor) {
         this.sagaMythTokenExecutor = sagaMythTokenExecutor;
-        return this;
-    }
-
-    public SagaStatusUpdateObserver with(SagaOfferExecutor sagaOfferExecutor) {
-        this.sagaOfferExecutor = sagaOfferExecutor;
-        return this;
-    }
-
-    public SagaStatusUpdateObserver with(SagaOrderExecutor sagaOrderExecutor) {
-        this.sagaOrderExecutor = sagaOrderExecutor;
-        return this;
-    }
-
-    public SagaStatusUpdateObserver with(SagaPaymentExecutor sagaPaymentExecutor) {
-        this.sagaPaymentExecutor = sagaPaymentExecutor;
         return this;
     }
 
@@ -133,9 +95,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         }
         try {
             switch (message.getStatusUpdateCase()) {
-                case NFT_BRIDGE_UPDATE:
-                    handleBridgeUpdate(message.getNftBridgeUpdate(), message.getTraceId());
-                    break;
                 case CURRENCY_UPDATE:
                     handleCurrencyUpdate(message.getCurrencyUpdate(), message.getTraceId());
                     break;
@@ -145,20 +104,8 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                 case ITEM_TYPE_UPDATE:
                     handleItemTypeUpdate(message.getItemTypeUpdate(), message.getTraceId());
                     break;
-                case LISTING_UPDATE:
-                    handleListingUpdate(message.getListingUpdate(), message.getTraceId());
-                    break;
                 case MYTH_TOKEN_UPDATE:
                     handleMythTokenUpdate(message.getMythTokenUpdate(), message.getTraceId());
-                    break;
-                case OFFER_UPDATE:
-                    handleOfferUpdate(message.getOfferUpdate(), message.getTraceId());
-                    break;
-                case ORDER_UPDATE:
-                    handleOrderUpdate(message.getOrderUpdate(), message.getTraceId());
-                    break;
-                case PAYMENT_UPDATE:
-                    handlePaymentUpdate(message.getPaymentUpdate(), message.getTraceId());
                     break;
                 case PLAYER_WALLET_UPDATE:
                     handlePlayerWalletUpdate(message.getPlayerWalletUpdate(), message.getTraceId());
@@ -189,31 +136,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         log.info("StatusUpdateObserver stream closed");
         sleepBetweenReconnects();
         resubscribe.accept(this);
-    }
-
-    private void handleBridgeUpdate(NftBridgeUpdate update, String traceId) throws Exception {
-        if (sagaNFTBridgeExecutor == null) {
-            log.error("Bridge update received, but no bridge executor registered {}", update);
-        }
-        else {
-            if (update.hasError()) {
-                final var error = update.getError();
-                sagaNFTBridgeExecutor.onError(toErrData(error));
-            } else {
-                final var message = update.getStatusUpdate();
-                sagaNFTBridgeExecutor.updateItem(
-                        message.getOauthId(),
-                        message.getInventoryId(),
-                        message.getItemTypeId(),
-                        message.getDestinationAddress(),
-                        message.getDestinationChain(),
-                        message.getOriginAddress(),
-                        message.getMythicalTransactionId(),
-                        message.getMainnetTransactionId(),
-                        traceId
-                );
-            }
-        }
     }
 
     private void handleCurrencyUpdate(CurrencyUpdate update, String traceId) throws Exception {
@@ -279,28 +201,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         }
     }
 
-    private void handleListingUpdate(ListingUpdate update, String traceId) throws Exception {
-        if (sagaListingExecutor == null) {
-            log.error("Listing update received, but no listing executor registered {}", update);
-        }
-        else {
-            if (update.hasError()) {
-                final var error = update.getError();
-                sagaListingExecutor.onError(toErrData(error));
-            } else {
-                final var message = update.getStatusUpdate();
-                sagaListingExecutor.updateListing(
-                    message.getOauthId(),
-                    traceId,
-                    message.getQuoteId(),
-                    message.getListingId(),
-                    new BigDecimal(message.getTotal()),
-                    message.getListingState()
-                );
-            }
-        }
-    }
-
     private void handleMythTokenUpdate(MythTokenUpdate update, String traceId) throws Exception {
         if (sagaMythTokenExecutor == null) {
             log.error("Myth token update received, but no myth token executor registered {}", update);
@@ -314,69 +214,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                 sagaMythTokenExecutor.updateMythToken(
                     traceId,
                     message.getTokenState()
-                );
-            }
-        }
-    }
-
-    private void handleOfferUpdate(OfferUpdate update, String traceId) throws Exception {
-        if (sagaOfferExecutor == null) {
-            log.error("Offer update received, but no offer executor registered {}", update);
-        }
-        else {
-            if (update.hasError()) {
-                final var error = update.getError();
-                sagaOfferExecutor.onError(toErrData(error));
-            } else {
-                final var message = update.getStatusUpdate();
-                sagaOfferExecutor.updateOffer(
-                    message.getOauthId(),
-                    traceId,
-                    message.getQuoteId(),
-                    message.getOfferId(),
-                    new BigDecimal(message.getTotal()),
-                    message.getOfferState()
-                );
-            }
-        }
-    }
-
-    private void handleOrderUpdate(OrderUpdate update, String traceId) throws Exception {
-        if (sagaOrderExecutor == null) {
-            log.error("Order update received, but no order executor registered {}", update);
-        }
-        else {
-            if (update.hasError()) {
-                final var error = update.getError();
-                sagaOrderExecutor.onError(toErrData(error));
-            } else {
-                final var message = update.getStatusUpdate();
-                sagaOrderExecutor.updateOrder(
-                    message.getOauthId(),
-                    traceId,
-                    message.getQuoteId(),
-                    message.getOrderId(),
-                    new BigDecimal(message.getTotal()),
-                    message.getOrderState()
-                );
-            }
-        }
-    }
-
-    private void handlePaymentUpdate(PaymentUpdate update, String traceId) throws Exception {
-        if (sagaPaymentExecutor == null) {
-            log.error("Payment update received, but no payment executor registered {}", update);
-        }
-        else {
-            if (update.hasError()) {
-                final var error = update.getError();
-                sagaPaymentExecutor.onError(toErrData(error));
-            } else {
-                final var message = update.getStatusUpdate();
-                sagaPaymentExecutor.updatePaymentMethod(
-                    traceId,
-                    SagaPaymentMethod.fromProto(message.getPaymentMethod()),
-                    message.getPaymentMethodStatus()
                 );
             }
         }

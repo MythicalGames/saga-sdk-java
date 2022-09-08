@@ -93,10 +93,6 @@ public class SagaClientFactory {
         return new SagaMythTokenClient(config, validateExecutor(executor));
     }
 
-    public SagaPaymentClient createSagaPaymentClient(SagaPaymentExecutor executor) throws SagaException {
-        return new SagaPaymentClient(config, validateExecutor(executor));
-    }
-
     public SagaCurrencyClient createSagaCurrencyClient(SagaCurrencyExecutor executor) throws SagaException {
         return new SagaCurrencyClient(config, validateExecutor(executor));
     }
@@ -111,22 +107,6 @@ public class SagaClientFactory {
 
     public SagaTransactionClient createSagaTransactionClient() throws SagaException {
         return new SagaTransactionClient(config);
-    }
-
-    public SagaOrderClient createSagaOrderClient(SagaOrderExecutor executor) throws SagaException {
-        return new SagaOrderClient(config, validateExecutor(executor));
-    }
-
-    public SagaNFTBridgeClient createSagaBridgeClient(SagaNFTBridgeExecutor executor) throws SagaException {
-        return new SagaNFTBridgeClient(config, validateExecutor(executor));
-    }
-
-    public SagaListingClient createSagaListingClient(SagaListingExecutor executor) throws SagaException {
-        return new SagaListingClient(config, validateExecutor(executor));
-    }
-
-    public SagaOfferClient createSagaOfferClient(SagaOfferExecutor executor) throws SagaException {
-        return new SagaOfferClient(config, validateExecutor(executor));
     }
 
     public SagaPlayerWalletClient createSagaPlayerWalletClient(SagaPlayerWalletExecutor executor) throws SagaException {

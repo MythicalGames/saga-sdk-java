@@ -164,15 +164,6 @@ class SagaItemTypeClientTest extends AbstractClientTest {
     }
 
     @Test
-    public void freezeItemType() throws Exception {
-        final var expectedResponse = ReceivedResponse.newBuilder()
-                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
-                .build();
-        when(mockServiceBlockingStub.freezeItemType(any())).thenReturn(expectedResponse);
-        final var traceId = itemTypeClient.freezeItemType(ITEM_TYPE_ID);
-    }
-
-    @Test
     public void startMint() throws Exception {
         final var expectedResponse = ReceivedResponse.newBuilder()
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))

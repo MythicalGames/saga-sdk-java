@@ -14,7 +14,6 @@ import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.factory.PmtProviderDataFactory;
 import games.mythical.saga.sdk.proto.api.myth.*;
-import games.mythical.saga.sdk.proto.api.order.PaymentProviderData;
 import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
