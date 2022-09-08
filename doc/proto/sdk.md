@@ -45,7 +45,6 @@
 - [api/itemtype/definition.proto](#api_itemtype_definition-proto)
     - [CreateItemTypeRequest](#saga-api-itemtype-CreateItemTypeRequest)
     - [EndMintRequest](#saga-api-itemtype-EndMintRequest)
-    - [FreezeItemTypePayload](#saga-api-itemtype-FreezeItemTypePayload)
     - [GetItemTypeRequest](#saga-api-itemtype-GetItemTypeRequest)
     - [GetItemTypesRequest](#saga-api-itemtype-GetItemTypesRequest)
     - [ItemTypeProto](#saga-api-itemtype-ItemTypeProto)
@@ -71,9 +70,11 @@
 - [api/myth/definition.proto](#api_myth_definition-proto)
     - [ConfirmBuyingMythTokenRequest](#saga-api-myth-ConfirmBuyingMythTokenRequest)
     - [ConfirmMythTokenWithdrawalRequest](#saga-api-myth-ConfirmMythTokenWithdrawalRequest)
+    - [CreditCardData](#saga-api-myth-CreditCardData)
     - [CurrencyExchangeProto](#saga-api-myth-CurrencyExchangeProto)
     - [DepositNmythRequest](#saga-api-myth-DepositNmythRequest)
     - [GasFeeProto](#saga-api-myth-GasFeeProto)
+    - [PaymentProviderData](#saga-api-myth-PaymentProviderData)
     - [QuoteBuyingMythTokenRequest](#saga-api-myth-QuoteBuyingMythTokenRequest)
     - [QuoteBuyingMythTokenResponse](#saga-api-myth-QuoteBuyingMythTokenResponse)
     - [QuoteMythTokenWithdrawalRequest](#saga-api-myth-QuoteMythTokenWithdrawalRequest)
@@ -103,36 +104,6 @@
   
 - [api/offer/rpc.proto](#api_offer_rpc-proto)
     - [OfferService](#saga-api-offer-OfferService)
-  
-- [api/order/definition.proto](#api_order_definition-proto)
-    - [ConfirmOrderRequest](#saga-api-order-ConfirmOrderRequest)
-    - [CreateOrderQuoteRequest](#saga-api-order-CreateOrderQuoteRequest)
-    - [CreditCardData](#saga-api-order-CreditCardData)
-    - [PaymentProviderData](#saga-api-order-PaymentProviderData)
-    - [QuoteProto](#saga-api-order-QuoteProto)
-  
-- [api/order/rpc.proto](#api_order_rpc-proto)
-    - [OrderService](#saga-api-order-OrderService)
-  
-- [api/payment/definition.proto](#api_payment_definition-proto)
-    - [Address](#saga-api-payment-Address)
-    - [CreateCybersourceCardProto](#saga-api-payment-CreateCybersourceCardProto)
-    - [CreatePaymentMethodRequest](#saga-api-payment-CreatePaymentMethodRequest)
-    - [CybersourcePaymentData](#saga-api-payment-CybersourcePaymentData)
-    - [DeletePaymentMethodRequest](#saga-api-payment-DeletePaymentMethodRequest)
-    - [GetPaymentMethodsRequest](#saga-api-payment-GetPaymentMethodsRequest)
-    - [PaymentMethodData](#saga-api-payment-PaymentMethodData)
-    - [PaymentMethodProto](#saga-api-payment-PaymentMethodProto)
-    - [PaymentMethodProtos](#saga-api-payment-PaymentMethodProtos)
-    - [UpdateCybersourceCardProto](#saga-api-payment-UpdateCybersourceCardProto)
-    - [UpdatePaymentMethodRequest](#saga-api-payment-UpdatePaymentMethodRequest)
-    - [UpholdCardProto](#saga-api-payment-UpholdCardProto)
-    - [UpholdFinishLinkProto](#saga-api-payment-UpholdFinishLinkProto)
-    - [UpholdPaymentData](#saga-api-payment-UpholdPaymentData)
-    - [UpholdStartLinkProto](#saga-api-payment-UpholdStartLinkProto)
-  
-- [api/payment/rpc.proto](#api_payment_rpc-proto)
-    - [PaymentService](#saga-api-payment-PaymentService)
   
 - [api/playerwallet/definition.proto](#api_playerwallet_definition-proto)
     - [CreatePlayerWalletRequest](#saga-api-playerwallet-CreatePlayerWalletRequest)
@@ -198,13 +169,6 @@
 - [common/offer/definition.proto](#common_offer_definition-proto)
     - [OfferState](#saga-proto-common-offer-OfferState)
   
-- [common/order/definition.proto](#common_order_definition-proto)
-    - [OrderState](#saga-proto-common-order-OrderState)
-  
-- [common/payment/definition.proto](#common_payment_definition-proto)
-    - [PaymentMethodUpdateStatus](#saga-proto-common-payment-PaymentMethodUpdateStatus)
-    - [PaymentProviderId](#saga-proto-common-payment-PaymentProviderId)
-  
 - [common/query.proto](#common_query-proto)
     - [QueryOptionsProto](#saga-common-QueryOptionsProto)
   
@@ -227,29 +191,9 @@
     - [ItemTypeStatusUpdate](#saga-rpc-streams-itemtype-ItemTypeStatusUpdate)
     - [ItemTypeUpdate](#saga-rpc-streams-itemtype-ItemTypeUpdate)
   
-- [streams/listing/definition.proto](#streams_listing_definition-proto)
-    - [ListingStatusUpdate](#saga-rpc-streams-listing-ListingStatusUpdate)
-    - [ListingUpdate](#saga-rpc-streams-listing-ListingUpdate)
-  
 - [streams/myth/definition.proto](#streams_myth_definition-proto)
     - [MythTokenStatusUpdate](#saga-rpc-streams-myth-MythTokenStatusUpdate)
     - [MythTokenUpdate](#saga-rpc-streams-myth-MythTokenUpdate)
-  
-- [streams/nftbridge/definition.proto](#streams_nftbridge_definition-proto)
-    - [NftBridgeStatusUpdate](#saga-rpc-streams-nftbridge-NftBridgeStatusUpdate)
-    - [NftBridgeUpdate](#saga-rpc-streams-nftbridge-NftBridgeUpdate)
-  
-- [streams/offer/definition.proto](#streams_offer_definition-proto)
-    - [OfferStatusUpdate](#saga-rpc-streams-offer-OfferStatusUpdate)
-    - [OfferUpdate](#saga-rpc-streams-offer-OfferUpdate)
-  
-- [streams/order/definition.proto](#streams_order_definition-proto)
-    - [OrderStatusUpdate](#saga-rpc-streams-order-OrderStatusUpdate)
-    - [OrderUpdate](#saga-rpc-streams-order-OrderUpdate)
-  
-- [streams/payment/definition.proto](#streams_payment_definition-proto)
-    - [PaymentMethodStatusUpdate](#saga-rpc-streams-payment-PaymentMethodStatusUpdate)
-    - [PaymentUpdate](#saga-rpc-streams-payment-PaymentUpdate)
   
 - [streams/playerwallet/definition.proto](#streams_playerwallet_definition-proto)
     - [PlayerWalletStatusUpdate](#saga-rpc-streams-playerwallet-PlayerWalletStatusUpdate)
@@ -846,21 +790,6 @@ Create item type call
 
 
 
-<a name="saga-api-itemtype-FreezeItemTypePayload"></a>
-
-### FreezeItemTypePayload
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| item_type_id | [string](#string) |  |  |
-
-
-
-
-
-
 <a name="saga-api-itemtype-GetItemTypeRequest"></a>
 
 ### GetItemTypeRequest
@@ -1000,7 +929,6 @@ Update ItemType call
 | GetItemTypes | [GetItemTypesRequest](#saga-api-itemtype-GetItemTypesRequest) | [ItemTypesProto](#saga-api-itemtype-ItemTypesProto) | Get ItemTypes based on filters |
 | CreateItemType | [CreateItemTypeRequest](#saga-api-itemtype-CreateItemTypeRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create an ItemType |
 | UpdateItemType | [UpdateItemTypePayload](#saga-api-itemtype-UpdateItemTypePayload) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update the ItemType |
-| FreezeItemType | [FreezeItemTypePayload](#saga-api-itemtype-FreezeItemTypePayload) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Freeze the ItemType |
 | StartMint | [StartMintRequest](#saga-api-itemtype-StartMintRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
 | EndMint | [EndMintRequest](#saga-api-itemtype-EndMintRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
 
@@ -1196,7 +1124,7 @@ Get Listings call
 | ----- | ---- | ----- | ----------- |
 | quote_id | [string](#string) |  |  |
 | oauth_id | [string](#string) |  |  |
-| payment_provider_data | [saga.api.order.PaymentProviderData](#saga-api-order-PaymentProviderData) |  |  |
+| payment_provider_data | [PaymentProviderData](#saga-api-myth-PaymentProviderData) |  |  |
 
 
 
@@ -1212,6 +1140,33 @@ Get Listings call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | quote_id | [string](#string) |  | Quote Id for this withdrawal |
+
+
+
+
+
+
+<a name="saga-api-myth-CreditCardData"></a>
+
+### CreditCardData
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| first_name | [string](#string) |  |  |
+| last_name | [string](#string) |  |  |
+| address_line_1 | [string](#string) |  |  |
+| address_line_2 | [string](#string) |  |  |
+| city | [string](#string) |  |  |
+| state | [string](#string) |  |  |
+| postal_code | [string](#string) |  |  |
+| country_iso_alpha_2 | [string](#string) |  |  |
+| expiration_month | [string](#string) |  |  |
+| expiration_year | [string](#string) |  |  |
+| card_type | [string](#string) |  |  |
+| instrument_id | [string](#string) |  |  |
+| payment_method_token_id | [string](#string) |  |  |
 
 
 
@@ -1269,6 +1224,22 @@ Proto of converted units from gwei/eth
 
 
 
+<a name="saga-api-myth-PaymentProviderData"></a>
+
+### PaymentProviderData
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| credit_card_data | [CreditCardData](#saga-api-myth-CreditCardData) |  |  |
+| uphold_card_id | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="saga-api-myth-QuoteBuyingMythTokenRequest"></a>
 
 ### QuoteBuyingMythTokenRequest
@@ -1278,7 +1249,7 @@ Proto of converted units from gwei/eth
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | quantity | [string](#string) |  | Amount of MYTH Tokens to buy |
-| payment_provider_data | [saga.api.order.PaymentProviderData](#saga-api-order-PaymentProviderData) |  | Payment provider data |
+| payment_provider_data | [PaymentProviderData](#saga-api-myth-PaymentProviderData) |  | Payment provider data |
 | denomination_currency | [string](#string) |  |  |
 | origin_sub_account | [string](#string) |  |  |
 | oauth_id | [string](#string) |  | User that is buying MYTH Tokens |
@@ -1683,472 +1654,6 @@ Get Offers call
 | ConfirmOffer | [ConfirmOfferRequest](#saga-api-offer-ConfirmOfferRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Confirm the Offer |
 | CancelOffer | [CancelOfferRequest](#saga-api-offer-CancelOfferRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Cancel the Offer |
 | GetOffers | [GetOffersRequest](#saga-api-offer-GetOffersRequest) | [OffersProto](#saga-api-offer-OffersProto) | Get Offers based on filters |
-
- 
-
-
-
-<a name="api_order_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## api/order/definition.proto
-
-
-
-<a name="saga-api-order-ConfirmOrderRequest"></a>
-
-### ConfirmOrderRequest
-Confirm Order call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
-| quote_id | [string](#string) |  |  |
-| payment_provider_data | [PaymentProviderData](#saga-api-order-PaymentProviderData) |  |  |
-| fraud_session_id | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-api-order-CreateOrderQuoteRequest"></a>
-
-### CreateOrderQuoteRequest
-Create Order Quote call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
-| subtotal | [string](#string) |  |  |
-| payment_provider_data | [PaymentProviderData](#saga-api-order-PaymentProviderData) |  |  |
-| item_type_id | [string](#string) |  |  |
-| listing_address | [string](#string) |  |  |
-| buy_myth_token | [bool](#bool) |  |  |
-| withdraw_myth_token | [bool](#bool) |  |  |
-| myth_to_usd | [bool](#bool) |  |  |
-| withdraw_item_address | [string](#string) |  |  |
-| no_op | [bool](#bool) |  |  |
-
-
-
-
-
-
-<a name="saga-api-order-CreditCardData"></a>
-
-### CreditCardData
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| first_name | [string](#string) |  |  |
-| last_name | [string](#string) |  |  |
-| address_line_1 | [string](#string) |  |  |
-| address_line_2 | [string](#string) |  |  |
-| city | [string](#string) |  |  |
-| state | [string](#string) |  |  |
-| postal_code | [string](#string) |  |  |
-| country_iso_alpha_2 | [string](#string) |  |  |
-| expiration_month | [string](#string) |  |  |
-| expiration_year | [string](#string) |  |  |
-| card_type | [string](#string) |  |  |
-| instrument_id | [string](#string) |  |  |
-| payment_method_token_id | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-api-order-PaymentProviderData"></a>
-
-### PaymentProviderData
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| credit_card_data | [CreditCardData](#saga-api-order-CreditCardData) |  |  |
-| uphold_card_id | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-api-order-QuoteProto"></a>
-
-### QuoteProto
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| trace_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  |  |
-| quote_id | [string](#string) |  |  |
-| tax | [string](#string) |  |  |
-| tax_currency | [string](#string) |  |  |
-| total | [string](#string) |  |  |
-| currency | [string](#string) |  |  |
-| payment_provider_id | [saga.proto.common.payment.PaymentProviderId](#saga-proto-common-payment-PaymentProviderId) |  |  |
-| buyer_oauth_id | [string](#string) |  |  |
-| seller_oauth_id | [string](#string) |  |  |
-| conversion_rate | [string](#string) |  |  |
-| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
-<a name="api_order_rpc-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## api/order/rpc.proto
-
-
- 
-
- 
-
- 
-
-
-<a name="saga-api-order-OrderService"></a>
-
-### OrderService
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| CreateOrderQuote | [CreateOrderQuoteRequest](#saga-api-order-CreateOrderQuoteRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create an Order |
-| ConfirmOrder | [ConfirmOrderRequest](#saga-api-order-ConfirmOrderRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Confirm the Order |
-
- 
-
-
-
-<a name="api_payment_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## api/payment/definition.proto
-
-
-
-<a name="saga-api-payment-Address"></a>
-
-### Address
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| first_name | [string](#string) |  |  |
-| last_name | [string](#string) |  |  |
-| address_line_1 | [string](#string) |  |  |
-| address_line_2 | [string](#string) |  |  |
-| city | [string](#string) |  |  |
-| state_iso_alpha_2 | [string](#string) |  |  |
-| postal_code | [string](#string) |  |  |
-| country_iso_alpha_2 | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-api-payment-CreateCybersourceCardProto"></a>
-
-### CreateCybersourceCardProto
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| exp_month | [string](#string) |  |  |
-| exp_year | [string](#string) |  |  |
-| card_type | [string](#string) |  |  |
-| instrument_id | [string](#string) |  |  |
-| billing_address | [Address](#saga-api-payment-Address) |  |  |
-| make_default | [bool](#bool) |  |  |
-
-
-
-
-
-
-<a name="saga-api-payment-CreatePaymentMethodRequest"></a>
-
-### CreatePaymentMethodRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| cybersource | [CreateCybersourceCardProto](#saga-api-payment-CreateCybersourceCardProto) |  |  |
-| uphold | [UpholdStartLinkProto](#saga-api-payment-UpholdStartLinkProto) |  |  |
-
-
-
-
-
-
-<a name="saga-api-payment-CybersourcePaymentData"></a>
-
-### CybersourcePaymentData
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| expiration_month | [string](#string) |  |  |
-| expiration_year | [string](#string) |  |  |
-| card_type | [string](#string) |  |  |
-| instrument_id | [string](#string) |  |  |
-| payment_method_token_id | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-api-payment-DeletePaymentMethodRequest"></a>
-
-### DeletePaymentMethodRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| payment_provider_id | [saga.proto.common.payment.PaymentProviderId](#saga-proto-common-payment-PaymentProviderId) |  |  |
-| payment_method_token | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-api-payment-GetPaymentMethodsRequest"></a>
-
-### GetPaymentMethodsRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| payment_provider_id | [saga.proto.common.payment.PaymentProviderId](#saga-proto-common-payment-PaymentProviderId) |  |  |
-
-
-
-
-
-
-<a name="saga-api-payment-PaymentMethodData"></a>
-
-### PaymentMethodData
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| make_default | [bool](#bool) |  | Make this the default payment |
-| cybersource | [CybersourcePaymentData](#saga-api-payment-CybersourcePaymentData) |  |  |
-| uphold | [UpholdPaymentData](#saga-api-payment-UpholdPaymentData) |  |  |
-
-
-
-
-
-
-<a name="saga-api-payment-PaymentMethodProto"></a>
-
-### PaymentMethodProto
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| trace_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  | User of this Payment Method |
-| payment_method_data | [PaymentMethodData](#saga-api-payment-PaymentMethodData) |  | Payment method data |
-| address | [Address](#saga-api-payment-Address) |  | Address of this Payment Method |
-
-
-
-
-
-
-<a name="saga-api-payment-PaymentMethodProtos"></a>
-
-### PaymentMethodProtos
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| payment_methods | [PaymentMethodProto](#saga-api-payment-PaymentMethodProto) | repeated |  |
-
-
-
-
-
-
-<a name="saga-api-payment-UpdateCybersourceCardProto"></a>
-
-### UpdateCybersourceCardProto
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| payment_method_token | [string](#string) |  |  |
-| exp_month | [string](#string) |  |  |
-| exp_year | [string](#string) |  |  |
-| card_type | [string](#string) |  |  |
-| instrument_id | [string](#string) |  |  |
-| billing_address | [Address](#saga-api-payment-Address) |  |  |
-| make_default | [bool](#bool) |  |  |
-
-
-
-
-
-
-<a name="saga-api-payment-UpdatePaymentMethodRequest"></a>
-
-### UpdatePaymentMethodRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| cybersource | [UpdateCybersourceCardProto](#saga-api-payment-UpdateCybersourceCardProto) |  |  |
-| uphold | [UpholdFinishLinkProto](#saga-api-payment-UpholdFinishLinkProto) |  |  |
-
-
-
-
-
-
-<a name="saga-api-payment-UpholdCardProto"></a>
-
-### UpholdCardProto
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| uphold_id | [string](#string) |  |  |
-| currency | [string](#string) |  |  |
-| balance | [string](#string) |  |  |
-| normalized_currency | [string](#string) |  |  |
-| normalized_balance | [string](#string) |  |  |
-| label | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-api-payment-UpholdFinishLinkProto"></a>
-
-### UpholdFinishLinkProto
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| state_code | [string](#string) |  |  |
-| generated_temporary_code | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-api-payment-UpholdPaymentData"></a>
-
-### UpholdPaymentData
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| temp_state_code | [string](#string) |  |  |
-| email | [string](#string) |  |  |
-| status | [string](#string) |  |  |
-| verifications | [string](#string) |  |  |
-| birth_date | [string](#string) |  |  |
-| cards | [UpholdCardProto](#saga-api-payment-UpholdCardProto) | repeated |  |
-
-
-
-
-
-
-<a name="saga-api-payment-UpholdStartLinkProto"></a>
-
-### UpholdStartLinkProto
-
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
-<a name="api_payment_rpc-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## api/payment/rpc.proto
-
-
- 
-
- 
-
- 
-
-
-<a name="saga-api-payment-PaymentService"></a>
-
-### PaymentService
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| CreatePaymentMethod | [CreatePaymentMethodRequest](#saga-api-payment-CreatePaymentMethodRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create a Payment Method |
-| GetPaymentMethods | [GetPaymentMethodsRequest](#saga-api-payment-GetPaymentMethodsRequest) | [PaymentMethodProtos](#saga-api-payment-PaymentMethodProtos) | Get Payment Methods for a user |
-| UpdatePaymentMethod | [UpdatePaymentMethodRequest](#saga-api-payment-UpdatePaymentMethodRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update the Payment Method for a User |
-| DeletePaymentMethod | [DeletePaymentMethodRequest](#saga-api-payment-DeletePaymentMethodRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Delete a Payment Method for a User |
 
  
 
@@ -2908,80 +2413,6 @@ Metadata properties of Item
 
 
 
-<a name="common_order_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## common/order/definition.proto
-
-
- 
-
-
-<a name="saga-proto-common-order-OrderState"></a>
-
-### OrderState
-
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| FAILED | 0 | Order failed current action |
-| STARTED | 1 | Order started |
-| COMPLETE | 2 | Order completed successfully |
-| PAID | 3 | Order paid successfully |
-| EXPIRED | 4 | Order has expired |
-| REFUNDED | 5 | Order refunded successfully |
-
-
- 
-
- 
-
- 
-
-
-
-<a name="common_payment_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## common/payment/definition.proto
-
-
- 
-
-
-<a name="saga-proto-common-payment-PaymentMethodUpdateStatus"></a>
-
-### PaymentMethodUpdateStatus
-Payment Update Status
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| UPDATED | 0 |  |
-| CREATED | 1 |  |
-| DELETED | 2 |  |
-
-
-
-<a name="saga-proto-common-payment-PaymentProviderId"></a>
-
-### PaymentProviderId
-Types of Payments
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| CYBERSOURCE | 0 |  |
-| UPHOLD | 1 |  |
-| MYTHICAL | 2 |  |
-
-
- 
-
- 
-
- 
-
-
-
 <a name="common_query-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -3242,57 +2673,6 @@ Results from a ItemType status update gRPC stream call
 
 
 
-<a name="streams_listing_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## streams/listing/definition.proto
-
-
-
-<a name="saga-rpc-streams-listing-ListingStatusUpdate"></a>
-
-### ListingStatusUpdate
-Results from a Listing status update gRPC stream call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  | User of this Listing |
-| quote_id | [string](#string) |  | Quote id associated to this Listing |
-| listing_id | [string](#string) |  | Unique id for this listing |
-| total | [string](#string) |  | total cose on listing |
-| listing_state | [saga.proto.common.listing.ListingState](#saga-proto-common-listing-ListingState) |  | State of the Listing, see ListingState |
-
-
-
-
-
-
-<a name="saga-rpc-streams-listing-ListingUpdate"></a>
-
-### ListingUpdate
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
-| status_update | [ListingStatusUpdate](#saga-rpc-streams-listing-ListingStatusUpdate) |  |  |
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
 <a name="streams_myth_definition-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -3325,211 +2705,6 @@ Results from a MYTH Token status update gRPC stream call
 | ----- | ---- | ----- | ----------- |
 | error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [MythTokenStatusUpdate](#saga-rpc-streams-myth-MythTokenStatusUpdate) |  |  |
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
-<a name="streams_nftbridge_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## streams/nftbridge/definition.proto
-
-
-
-<a name="saga-rpc-streams-nftbridge-NftBridgeStatusUpdate"></a>
-
-### NftBridgeStatusUpdate
-Results from a Bridge status update gRPC stream call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  |  |
-| item_type_id | [string](#string) |  |  |
-| inventory_id | [string](#string) |  |  |
-| destination_address | [string](#string) |  |  |
-| destination_chain | [string](#string) |  |  |
-| origin_address | [string](#string) |  |  |
-| mythical_transaction_id | [string](#string) |  |  |
-| mainnet_transaction_id | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-rpc-streams-nftbridge-NftBridgeUpdate"></a>
-
-### NftBridgeUpdate
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
-| status_update | [NftBridgeStatusUpdate](#saga-rpc-streams-nftbridge-NftBridgeStatusUpdate) |  |  |
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
-<a name="streams_offer_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## streams/offer/definition.proto
-
-
-
-<a name="saga-rpc-streams-offer-OfferStatusUpdate"></a>
-
-### OfferStatusUpdate
-Results from a Offer status update gRPC stream call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  | User of this Offer |
-| quote_id | [string](#string) |  | Quote associated to this Offer |
-| offer_id | [string](#string) |  | Unique id for this Offer |
-| inventory_id | [string](#string) |  | Game&#39;s id for the Item associated with this Offer |
-| total | [string](#string) |  | Total price for the offer |
-| offer_state | [saga.proto.common.offer.OfferState](#saga-proto-common-offer-OfferState) |  | State of the Offer, see OfferState |
-
-
-
-
-
-
-<a name="saga-rpc-streams-offer-OfferUpdate"></a>
-
-### OfferUpdate
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
-| status_update | [OfferStatusUpdate](#saga-rpc-streams-offer-OfferStatusUpdate) |  |  |
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
-<a name="streams_order_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## streams/order/definition.proto
-
-
-
-<a name="saga-rpc-streams-order-OrderStatusUpdate"></a>
-
-### OrderStatusUpdate
-Results from an Order status update gRPC stream call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  | User of the Order |
-| quote_id | [string](#string) |  |  |
-| order_id | [string](#string) |  |  |
-| total | [string](#string) |  | Total price of the Order |
-| order_state | [saga.proto.common.order.OrderState](#saga-proto-common-order-OrderState) |  | State of the Order, see OrderState |
-
-
-
-
-
-
-<a name="saga-rpc-streams-order-OrderUpdate"></a>
-
-### OrderUpdate
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
-| status_update | [OrderStatusUpdate](#saga-rpc-streams-order-OrderStatusUpdate) |  |  |
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
-<a name="streams_payment_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## streams/payment/definition.proto
-
-
-
-<a name="saga-rpc-streams-payment-PaymentMethodStatusUpdate"></a>
-
-### PaymentMethodStatusUpdate
-Result of payment method creation, update, or deletion
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| payment_method | [saga.api.payment.PaymentMethodProto](#saga-api-payment-PaymentMethodProto) |  |  |
-| payment_method_status | [saga.proto.common.payment.PaymentMethodUpdateStatus](#saga-proto-common-payment-PaymentMethodUpdateStatus) |  |  |
-
-
-
-
-
-
-<a name="saga-rpc-streams-payment-PaymentUpdate"></a>
-
-### PaymentUpdate
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
-| status_update | [PaymentMethodStatusUpdate](#saga-rpc-streams-payment-PaymentMethodStatusUpdate) |  |  |
 
 
 
@@ -3702,15 +2877,10 @@ Returned results on sending a Status stream call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
-| nft_bridge_update | [nftbridge.NftBridgeUpdate](#saga-rpc-streams-nftbridge-NftBridgeUpdate) |  |  |
 | currency_update | [currency.CurrencyUpdate](#saga-rpc-streams-currency-CurrencyUpdate) |  |  |
 | item_update | [item.ItemUpdate](#saga-rpc-streams-item-ItemUpdate) |  |  |
 | item_type_update | [itemtype.ItemTypeUpdate](#saga-rpc-streams-itemtype-ItemTypeUpdate) |  |  |
-| listing_update | [listing.ListingUpdate](#saga-rpc-streams-listing-ListingUpdate) |  |  |
 | myth_token_update | [myth.MythTokenUpdate](#saga-rpc-streams-myth-MythTokenUpdate) |  |  |
-| offer_update | [offer.OfferUpdate](#saga-rpc-streams-offer-OfferUpdate) |  |  |
-| order_update | [order.OrderUpdate](#saga-rpc-streams-order-OrderUpdate) |  |  |
-| payment_update | [payment.PaymentUpdate](#saga-rpc-streams-payment-PaymentUpdate) |  |  |
 | player_wallet_update | [playerwallet.PlayerWalletUpdate](#saga-rpc-streams-playerwallet-PlayerWalletUpdate) |  |  |
 | reservation_update | [reservation.ReservationUpdate](#saga-rpc-streams-reservation-ReservationUpdate) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
