@@ -22,4 +22,10 @@ public class MockMythTokenExecutor extends MockBaseExecutor implements SagaMythT
         this.traceId = traceId;
         this.tokenState = mythTokenState;
     }
+
+    @Override
+    public void onWithdrawalCompleted(String traceId, MythTokenState mythTokenState) throws Exception {
+        this.traceId = traceId;
+        this.tokenState = mythTokenState;
+    }
 }
