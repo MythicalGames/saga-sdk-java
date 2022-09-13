@@ -213,20 +213,20 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
             if (update.hasError()) {
                 final var error = update.getError();
                 sagaMythTokenExecutor.onError(toErrData(error));
+            } else if (update.hasWithdrawalCompleted()) {
+                sagaMythTokenExecutor.onWithdrawalCompleted(
+                        traceId,
+                        update.getWithdrawalCompleted().getOauthId(),
+                        update.getWithdrawalCompleted().getQuoteId(),
+                        update.getWithdrawalCompleted().getAmount(),
+                        update.getWithdrawalCompleted().getGasFee()
+                );
             } else {
                 final var message = update.getStatusUpdate();
-
-                if (message.getTokenState() == MythTokenState.WITHDRAWN) {
-                    sagaMythTokenExecutor.onWithdrawalCompleted(
-                            traceId,
-                            message.getTokenState()
-                    );
-                } else {
-                    sagaMythTokenExecutor.updateMythToken(
-                            traceId,
-                            message.getTokenState()
-                    );
-                }
+                sagaMythTokenExecutor.updateMythToken(
+                        traceId,
+                        message.getTokenState()
+                );
             }
         }
     }

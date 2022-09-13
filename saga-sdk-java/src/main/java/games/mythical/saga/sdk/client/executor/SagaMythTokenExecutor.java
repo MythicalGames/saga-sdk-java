@@ -7,5 +7,10 @@ public interface SagaMythTokenExecutor extends BaseSagaExecutor {
 
     void updateMythTokenState(String traceId, MythTokenState mythTokenState) throws Exception;
 
-    void onWithdrawalCompleted(String traceId, MythTokenState mythTokenState) throws Exception;
+    void onWithdrawalCompleted(String traceId,
+                               String oauthId,
+                               String quoteId,
+                               String amount,
+                               String gasFee
+                               ) throws Exception;
 }
