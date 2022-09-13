@@ -224,8 +224,8 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
             } else {
                 final var message = update.getStatusUpdate();
                 sagaMythTokenExecutor.updateMythToken(
-                        traceId,
-                        message.getTokenState()
+                    traceId,
+                    message.getTokenState()
                 );
             }
         }
