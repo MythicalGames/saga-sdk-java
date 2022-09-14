@@ -7,7 +7,6 @@ import games.mythical.saga.sdk.exception.ErrorData;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.exception.SubError;
-import games.mythical.saga.sdk.proto.common.myth.MythTokenState;
 import games.mythical.saga.sdk.proto.streams.StatusConfirmRequest;
 import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
@@ -22,9 +21,6 @@ import java.util.stream.Collectors;
 import games.mythical.saga.sdk.proto.streams.reservation.ReservationUpdate;
 import lombok.extern.slf4j.Slf4j;
 import java.util.function.Consumer;
-
-import static games.mythical.saga.sdk.proto.common.myth.MythTokenState.DEPOSIT;
-import static games.mythical.saga.sdk.proto.common.myth.MythTokenState.WITHDRAWN;
 
 @Slf4j
 public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdate> {
