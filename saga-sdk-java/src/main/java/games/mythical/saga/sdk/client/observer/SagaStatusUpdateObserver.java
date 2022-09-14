@@ -214,8 +214,8 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                         traceId,
                         update.getWithdrawalCompleted().getOauthId(),
                         update.getWithdrawalCompleted().getQuoteId(),
-                        update.getWithdrawalCompleted().getAmount(),
-                        update.getWithdrawalCompleted().getGasFee()
+                        update.getWithdrawalCompleted().getAmountInNmyth(),
+                        update.getWithdrawalCompleted().getGasFeeInWei()
                 );
             } else {
                 final var message = update.getStatusUpdate();
