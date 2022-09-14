@@ -194,6 +194,7 @@
 - [streams/myth/definition.proto](#streams_myth_definition-proto)
     - [MythTokenStatusUpdate](#saga-rpc-streams-myth-MythTokenStatusUpdate)
     - [MythTokenUpdate](#saga-rpc-streams-myth-MythTokenUpdate)
+    - [WithdrawalCompletedProto](#saga-rpc-streams-myth-WithdrawalCompletedProto)
   
 - [streams/playerwallet/definition.proto](#streams_playerwallet_definition-proto)
     - [PlayerWalletStatusUpdate](#saga-rpc-streams-playerwallet-PlayerWalletStatusUpdate)
@@ -2707,6 +2708,25 @@ Results from a MYTH Token status update gRPC stream call
 | ----- | ---- | ----- | ----------- |
 | error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [MythTokenStatusUpdate](#saga-rpc-streams-myth-MythTokenStatusUpdate) |  |  |
+| withdrawal_completed | [WithdrawalCompletedProto](#saga-rpc-streams-myth-WithdrawalCompletedProto) |  |  |
+
+
+
+
+
+
+<a name="saga-rpc-streams-myth-WithdrawalCompletedProto"></a>
+
+### WithdrawalCompletedProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| oauth_id | [string](#string) |  |  |
+| quote_id | [string](#string) |  |  |
+| amount_in_nmyth | [string](#string) |  |  |
+| gas_fee_in_wei | [string](#string) |  |  |
 
 
 
