@@ -1708,6 +1708,8 @@ Get Offers call
 | oauth_id | [string](#string) |  |  |
 | address | [string](#string) |  |  |
 | balance_in_wei | [string](#string) |  |  |
+| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
 
 
