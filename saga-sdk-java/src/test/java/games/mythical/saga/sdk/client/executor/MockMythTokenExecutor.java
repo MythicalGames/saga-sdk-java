@@ -12,8 +12,8 @@ public class MockMythTokenExecutor extends MockBaseExecutor implements SagaMythT
     private MythTokenState tokenState;
     private String oAuthId;
     private String quoteId;
-    private String amount;
-    private String gasFee;
+    private String amountInNmyth;
+    private String gasFeeInWei;
 
     @Override
     public void updateMythToken(String traceId, MythTokenState mythTokenState) throws Exception {
@@ -28,11 +28,11 @@ public class MockMythTokenExecutor extends MockBaseExecutor implements SagaMythT
     }
 
     @Override
-    public void onWithdrawalCompleted(String traceId, String oauthId, String quoteId, String amount, String gasFee) throws Exception {
+    public void onWithdrawalCompleted(String traceId, String oauthId, String quoteId, String amountInNmyth, String gasFeeInWei) throws Exception {
         this.traceId = traceId;
         this.oAuthId = oauthId;
         this.quoteId = quoteId;
-        this.amount = amount;
-        this.gasFee = gasFee;
+        this.amountInNmyth = amountInNmyth;
+        this.gasFeeInWei = gasFeeInWei;
     }
 }
