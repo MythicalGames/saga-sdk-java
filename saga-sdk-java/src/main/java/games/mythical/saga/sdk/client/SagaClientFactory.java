@@ -81,6 +81,9 @@ public class SagaClientFactory {
         }
     }
 
+    public SagaMetadataClient createSagaMetadataClient(SagaMetadataExecutor executor) throws SagaException {
+        return new SagaMetadataClient(config, validateExecutor(executor));
+    }
     public SagaItemClient createSagaItemClient(SagaItemExecutor executor) throws SagaException {
         return new SagaItemClient(config, validateExecutor(executor));
     }

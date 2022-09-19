@@ -224,15 +224,4 @@ class SagaItemClientTest extends AbstractClientTest {
         itemServer.verifyCalls("StatusStream", 1);
         itemServer.verifyCalls("StatusConfirmation", 1);
     }
-
-    @Test
-    public void updateItemMetadata() throws Exception {
-        final var EXPECTED_METADATA = generateItemMetadata();
-
-        final var expectedResponse = ReceivedResponse.newBuilder()
-            .setTraceId(RandomStringUtils.randomAlphanumeric(30))
-            .build();
-        when(mockServiceBlockingStub.updateItemMetadata(any())).thenReturn(expectedResponse);
-        itemClient.updateItemMetadata(INVENTORY_ID, EXPECTED_METADATA);
-    }
 }

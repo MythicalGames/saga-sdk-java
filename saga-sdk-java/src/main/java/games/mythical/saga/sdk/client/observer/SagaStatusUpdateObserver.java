@@ -13,6 +13,7 @@ import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeUpdate;
+import games.mythical.saga.sdk.proto.streams.metadata.MetadataUpdate;
 import games.mythical.saga.sdk.proto.streams.myth.MythTokenUpdate;
 import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private SagaMythTokenExecutor sagaMythTokenExecutor;
     private SagaPlayerWalletExecutor sagaPlayerWalletExecutor;
     private SagaReservationExecutor sagaReservationExecutor;
+    private SagaMetadataExecutor sagaMetadataExecutor;
 
     public SagaStatusUpdateObserver(StatusStreamGrpc.StatusStreamStub statusStreamStub,
                                     Consumer<SagaStatusUpdateObserver> resubscribe) {
@@ -86,6 +88,11 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         return this;
     }
 
+    public SagaStatusUpdateObserver with(SagaMetadataExecutor sagaMetadataExecutor) {
+        this.sagaMetadataExecutor = sagaMetadataExecutor;
+        return this;
+    }
+
     @Override
     public void onNext(StatusUpdate message) {
         log.trace("StatusUpdateObserver.onNext for event {} with message {}", message.getStatusUpdateCase(), message.getTraceId());
@@ -100,6 +107,9 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     break;
                 case ITEM_UPDATE:
                     handleItemUpdate(message.getItemUpdate(), message.getTraceId());
+                    break;
+                case METADATA_UPDATE:
+                    handleMetadataUpdate(message.getMetadataUpdate(), message.getTraceId());
                     break;
                 case ITEM_TYPE_UPDATE:
                     handleItemTypeUpdate(message.getItemTypeUpdate(), message.getTraceId());
@@ -177,6 +187,25 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     message.getMetadataUrl(),
                     traceId,
                     message.getItemState()
+                );
+            }
+        }
+    }
+
+    private void handleMetadataUpdate(MetadataUpdate update, String traceId) throws Exception {
+        if (sagaMetadataExecutor == null) {
+            log.error("Metadata update received, but no metadata executor registered {}", update);
+        }
+        else {
+            if (update.hasError()) {
+                final var error = update.getError();
+                sagaItemExecutor.onError(toErrData(error));
+            } else {
+                final var message = update.getMetadataUpdated();
+                sagaMetadataExecutor.updateMetadata(
+                        message.getInventoryId(),
+                        message.getMetadataUrl(),
+                        traceId
                 );
             }
         }
