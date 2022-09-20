@@ -179,18 +179,4 @@ public class SagaItemClient extends AbstractSagaStreamClient {
             throw SagaException.fromGrpcException(e);
         }
     }
-
-    public String updateItemMetadata(String inventoryId, SagaMetadata metadata) throws SagaException {
-        try {
-            var request = UpdateItemMetadataRequest.newBuilder()
-                    .setInventoryId(inventoryId)
-                    .setMetadata(SagaMetadata.toProto(metadata))
-                    .build();
-
-            var response = serviceBlockingStub.updateItemMetadata(request);
-            return response.getTraceId();
-        } catch (StatusRuntimeException e) {
-            throw SagaException.fromGrpcException(e);
-        }
-    }
 }
