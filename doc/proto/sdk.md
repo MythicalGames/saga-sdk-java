@@ -37,7 +37,6 @@
     - [ItemProto](#saga-api-item-ItemProto)
     - [ItemsProto](#saga-api-item-ItemsProto)
     - [TransferItemRequest](#saga-api-item-TransferItemRequest)
-    - [UpdateItemMetadataRequest](#saga-api-item-UpdateItemMetadataRequest)
   
 - [api/item/rpc.proto](#api_item_rpc-proto)
     - [ItemService](#saga-api-item-ItemService)
@@ -66,6 +65,12 @@
   
 - [api/listing/rpc.proto](#api_listing_rpc-proto)
     - [ListingService](#saga-api-listing-ListingService)
+  
+- [api/metadata/definition.proto](#api_metadata_definition-proto)
+    - [UpdateItemMetadataRequest](#saga-api-metadata-UpdateItemMetadataRequest)
+  
+- [api/metadata/rpc.proto](#api_metadata_rpc-proto)
+    - [MetadataService](#saga-api-metadata-MetadataService)
   
 - [api/myth/definition.proto](#api_myth_definition-proto)
     - [ConfirmBuyingMythTokenRequest](#saga-api-myth-ConfirmBuyingMythTokenRequest)
@@ -190,6 +195,10 @@
 - [streams/itemtype/definition.proto](#streams_itemtype_definition-proto)
     - [ItemTypeStatusUpdate](#saga-rpc-streams-itemtype-ItemTypeStatusUpdate)
     - [ItemTypeUpdate](#saga-rpc-streams-itemtype-ItemTypeUpdate)
+  
+- [streams/metadata/definition.proto](#streams_metadata_definition-proto)
+    - [MetadataUpdate](#saga-rpc-streams-metadata-MetadataUpdate)
+    - [MetadataUpdateProto](#saga-rpc-streams-metadata-MetadataUpdateProto)
   
 - [streams/myth/definition.proto](#streams_myth_definition-proto)
     - [MythTokenStatusUpdate](#saga-rpc-streams-myth-MythTokenStatusUpdate)
@@ -689,22 +698,6 @@ Transfer item call
 
 
 
-
-<a name="saga-api-item-UpdateItemMetadataRequest"></a>
-
-### UpdateItemMetadataRequest
-Update Metadata call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| inventory_id | [string](#string) |  | Update Metadata for the Item with this id |
-| metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata to update with |
-
-
-
-
-
  
 
  
@@ -741,7 +734,6 @@ Update Metadata call
 | IssueItem | [IssueItemRequest](#saga-api-item-IssueItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Issue an Item |
 | TransferItem | [TransferItemRequest](#saga-api-item-TransferItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Transfer Item between users |
 | BurnItem | [BurnItemRequest](#saga-api-item-BurnItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Burn an Item |
-| UpdateItemMetadata | [UpdateItemMetadataRequest](#saga-api-item-UpdateItemMetadataRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update an Item&#39;s metadata |
 | DepositItem | [DepositItemRequest](#saga-api-item-DepositItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Deposit an Item |
 
  
@@ -1103,6 +1095,64 @@ Get Listings call
 | ConfirmListing | [ConfirmListingRequest](#saga-api-listing-ConfirmListingRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Confirm the Listing |
 | CancelListing | [CancelListingRequest](#saga-api-listing-CancelListingRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Cancel the Listing |
 | GetListings | [GetListingsRequest](#saga-api-listing-GetListingsRequest) | [ListingsProto](#saga-api-listing-ListingsProto) | Get Listings based on filters |
+
+ 
+
+
+
+<a name="api_metadata_definition-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/metadata/definition.proto
+
+
+
+<a name="saga-api-metadata-UpdateItemMetadataRequest"></a>
+
+### UpdateItemMetadataRequest
+Update Metadata call
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| inventory_id | [string](#string) |  | Update Metadata for the Item with this id |
+| metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata to update with |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="api_metadata_rpc-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## api/metadata/rpc.proto
+
+
+ 
+
+ 
+
+ 
+
+
+<a name="saga-api-metadata-MetadataService"></a>
+
+### MetadataService
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| UpdateItemMetadata | [UpdateItemMetadataRequest](#saga-api-metadata-UpdateItemMetadataRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update an Item&#39;s metadata |
 
  
 
@@ -2676,6 +2726,54 @@ Results from a ItemType status update gRPC stream call
 
 
 
+<a name="streams_metadata_definition-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## streams/metadata/definition.proto
+
+
+
+<a name="saga-rpc-streams-metadata-MetadataUpdate"></a>
+
+### MetadataUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
+| metadata_updated | [MetadataUpdateProto](#saga-rpc-streams-metadata-MetadataUpdateProto) |  |  |
+
+
+
+
+
+
+<a name="saga-rpc-streams-metadata-MetadataUpdateProto"></a>
+
+### MetadataUpdateProto
+Results from an metadata status update gRPC stream call
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| inventory_id | [string](#string) |  | Game&#39;s unique Id for the Item |
+| metadata_url | [string](#string) |  | Metadata address |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
 <a name="streams_myth_definition-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -2905,6 +3003,7 @@ Returned results on sending a Status stream call
 | myth_token_update | [myth.MythTokenUpdate](#saga-rpc-streams-myth-MythTokenUpdate) |  |  |
 | player_wallet_update | [playerwallet.PlayerWalletUpdate](#saga-rpc-streams-playerwallet-PlayerWalletUpdate) |  |  |
 | reservation_update | [reservation.ReservationUpdate](#saga-rpc-streams-reservation-ReservationUpdate) |  |  |
+| metadata_update | [metadata.MetadataUpdate](#saga-rpc-streams-metadata-MetadataUpdate) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
 

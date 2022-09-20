@@ -325,10 +325,6 @@
                   <a href="#saga.api.item.TransferItemRequest"><span class="badge">M</span>TransferItemRequest</a>
                 </li>
               
-                <li>
-                  <a href="#saga.api.item.UpdateItemMetadataRequest"><span class="badge">M</span>UpdateItemMetadataRequest</a>
-                </li>
-              
               
               
               
@@ -457,6 +453,36 @@
               
                 <li>
                   <a href="#saga.api.listing.ListingService"><span class="badge">S</span>ListingService</a>
+                </li>
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#api%2fmetadata%2fdefinition.proto">api/metadata/definition.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#saga.api.metadata.UpdateItemMetadataRequest"><span class="badge">M</span>UpdateItemMetadataRequest</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#api%2fmetadata%2frpc.proto">api/metadata/rpc.proto</a>
+            <ul>
+              
+              
+              
+              
+                <li>
+                  <a href="#saga.api.metadata.MetadataService"><span class="badge">S</span>MetadataService</a>
                 </li>
               
             </ul>
@@ -1034,6 +1060,25 @@
               
                 <li>
                   <a href="#saga.rpc.streams.itemtype.ItemTypeUpdate"><span class="badge">M</span>ItemTypeUpdate</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#streams%2fmetadata%2fdefinition.proto">streams/metadata/definition.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#saga.rpc.streams.metadata.MetadataUpdate"><span class="badge">M</span>MetadataUpdate</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.rpc.streams.metadata.MetadataUpdateProto"><span class="badge">M</span>MetadataUpdateProto</a>
                 </li>
               
               
@@ -2122,37 +2167,6 @@
 
         
       
-        <h3 id="saga.api.item.UpdateItemMetadataRequest">UpdateItemMetadataRequest</h3>
-        <p>Update Metadata call</p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>inventory_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>Update Metadata for the Item with this id </p></td>
-                </tr>
-              
-                <tr>
-                  <td>metadata</td>
-                  <td><a href="#saga.common.Metadata">saga.common.Metadata</a></td>
-                  <td></td>
-                  <td><p>Metadata to update with </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
 
       
 
@@ -2221,13 +2235,6 @@
                 <td><a href="#saga.api.item.BurnItemRequest">BurnItemRequest</a></td>
                 <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Burn an Item</p></td>
-              </tr>
-            
-              <tr>
-                <td>UpdateItemMetadata</td>
-                <td><a href="#saga.api.item.UpdateItemMetadataRequest">UpdateItemMetadataRequest</a></td>
-                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
-                <td><p>Update an Item&#39;s metadata</p></td>
               </tr>
             
               <tr>
@@ -3046,6 +3053,84 @@
                 <td><a href="#saga.api.listing.GetListingsRequest">GetListingsRequest</a></td>
                 <td><a href="#saga.api.listing.ListingsProto">ListingsProto</a></td>
                 <td><p>Get Listings based on filters</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+
+        
+    
+      
+      <div class="file-heading">
+        <h2 id="api/metadata/definition.proto">api/metadata/definition.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="saga.api.metadata.UpdateItemMetadataRequest">UpdateItemMetadataRequest</h3>
+        <p>Update Metadata call</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>inventory_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Update Metadata for the Item with this id </p></td>
+                </tr>
+              
+                <tr>
+                  <td>metadata</td>
+                  <td><a href="#saga.common.Metadata">saga.common.Metadata</a></td>
+                  <td></td>
+                  <td><p>Metadata to update with </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+
+      
+
+      
+    
+      
+      <div class="file-heading">
+        <h2 id="api/metadata/rpc.proto">api/metadata/rpc.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+
+      
+
+      
+
+      
+        <h3 id="saga.api.metadata.MetadataService">MetadataService</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Method Name</td><td>Request Type</td><td>Response Type</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>UpdateItemMetadata</td>
+                <td><a href="#saga.api.metadata.UpdateItemMetadataRequest">UpdateItemMetadataRequest</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
+                <td><p>Update an Item&#39;s metadata</p></td>
               </tr>
             
           </tbody>
@@ -6144,6 +6229,82 @@
     
       
       <div class="file-heading">
+        <h2 id="streams/metadata/definition.proto">streams/metadata/definition.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="saga.rpc.streams.metadata.MetadataUpdate">MetadataUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>metadata_updated</td>
+                  <td><a href="#saga.rpc.streams.metadata.MetadataUpdateProto">MetadataUpdateProto</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.rpc.streams.metadata.MetadataUpdateProto">MetadataUpdateProto</h3>
+        <p>Results from an metadata status update gRPC stream call</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>inventory_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Game&#39;s unique Id for the Item </p></td>
+                </tr>
+              
+                <tr>
+                  <td>metadata_url</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Metadata address </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+
+      
+
+      
+    
+      
+      <div class="file-heading">
         <h2 id="streams/myth/definition.proto">streams/myth/definition.proto</h2><a href="#title">Top</a>
       </div>
       <p></p>
@@ -6549,6 +6710,13 @@
                 <tr>
                   <td>reservation_update</td>
                   <td><a href="#saga.rpc.streams.reservation.ReservationUpdate">reservation.ReservationUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>metadata_update</td>
+                  <td><a href="#saga.rpc.streams.metadata.MetadataUpdate">metadata.MetadataUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
