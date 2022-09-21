@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.5.26] - 2022-09-08
+### Changed
+* issue item automatically uses reservations
+* withdrawable added to create item type request
+* nmyth deposit() 
+* Action proto used for kafka messages and trace IDs
+* item type endMint()
+* metadata validation
+* removed orders, listings, offers, payments, bridge, and itemtype.freeze
+
 ## [0.5.17] - 2022-08-10
 ### Changed
 * Removed LargeDecimal in favor of long for saga currency amounts
