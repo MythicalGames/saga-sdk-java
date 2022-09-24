@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.5.xxx] - 2022
+### Changed
+* Maintenance mode feature, will return UNAVAILABLE error
+
+## [0.5.29] - 2022-09-20
+### Changed
+* error source and code should come from originator of error again
+* Switch stream consumer to earliest offset setting
+* Reuse consumer group ID's for same titles
+* Added createdAt/updatedAt to player wallet responses
+* nmyth withdrawal()
+* Moved update item metadata to its own client/executor/stream
+
 ## [0.5.26] - 2022-09-08
 ### Changed
 * issue item automatically uses reservations
