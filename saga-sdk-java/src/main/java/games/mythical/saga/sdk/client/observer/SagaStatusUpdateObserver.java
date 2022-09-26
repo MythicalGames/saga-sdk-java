@@ -2,6 +2,7 @@ package games.mythical.saga.sdk.client.observer;
 
 import com.google.protobuf.Empty;
 import com.google.protobuf.Struct;
+import com.google.protobuf.Value;
 import games.mythical.saga.sdk.client.executor.*;
 import games.mythical.saga.sdk.exception.ErrorData;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
@@ -306,9 +307,19 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private Map<String, String> toMetadata(Struct protoMetadata) {
         final var metadataMap = new HashMap<String, String>();
         protoMetadata.getFieldsMap()
-            .forEach((key, value) -> metadataMap.put(key, value.toString()));
+            .forEach((key, value) -> metadataMap.put(key, metadataValueToString(value)));
         return metadataMap;
     }
+
+    private String metadataValueToString(Value value) {
+        if (value.hasNullValue()) {
+            return null;
+        } else if (value.hasStringValue()) {
+            return value.getStringValue();
+        }
+        return value.toString();
+    }
+
     private SubError toSubError(games.mythical.saga.sdk.proto.common.SubError error) {
         return SubError.builder()
             .code(error.getErrorCode())
