@@ -2544,6 +2544,8 @@ Options allowed when querying
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | title_id | [string](#string) |  |  |
+| stream_id | [string](#string) |  |  |
+| replay_since | [google.protobuf.Timestamp](#google-protobuf-Timestamp) | optional |  |
 
 
 
