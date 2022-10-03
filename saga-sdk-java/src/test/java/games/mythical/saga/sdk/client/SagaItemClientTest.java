@@ -2,7 +2,7 @@ package games.mythical.saga.sdk.client;
 
 import com.google.protobuf.util.Timestamps;
 import games.mythical.saga.sdk.client.executor.MockItemExecutor;
-import games.mythical.saga.sdk.client.model.SagaMetadata;
+import games.mythical.saga.sdk.client.model.SagaIssueItem;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.item.ItemProto;
 import games.mythical.saga.sdk.proto.api.item.ItemServiceGrpc;
@@ -29,8 +29,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Map;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -101,7 +100,7 @@ class SagaItemClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.issueItem(any())).thenReturn(expectedResponse);
         final var traceId = itemClient.issueItem(
-                Map.of(INVENTORY_ID, EXPECTED_METADATA),
+                Collections.singletonList(SagaIssueItem.builder().inventoryId(INVENTORY_ID).metadata(EXPECTED_METADATA).build()),
                 EXPECTED_OAUTH_ID,
                 RandomStringUtils.randomAlphanumeric(30));
         checkTraceAndStart(expectedResponse, traceId);

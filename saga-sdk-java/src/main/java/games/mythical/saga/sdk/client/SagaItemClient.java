@@ -1,8 +1,8 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaItemExecutor;
+import games.mythical.saga.sdk.client.model.SagaIssueItem;
 import games.mythical.saga.sdk.client.model.SagaItem;
-import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
@@ -19,9 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -96,16 +94,10 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String issueItem(Map<String, SagaMetadata> inventoryIdToMetadata,
+    public String issueItem(List<SagaIssueItem> issueItems,
                             String recipientOauthId,
                             String itemTypeId) throws SagaException {
-        var items = new ArrayList<IssueItemProto>();
-        for (var entry : inventoryIdToMetadata.entrySet()) {
-            items.add(IssueItemProto.newBuilder()
-                    .setInventoryId(entry.getKey())
-                    .setMetadata(SagaMetadata.toProto(entry.getValue()))
-                    .build());
-        }
+        var items = issueItems.stream().map(SagaIssueItem::toProto).collect(Collectors.toList());
         var builder = IssueItemRequest.newBuilder()
                 .addAllItems(items)
                 .setItemTypeId(itemTypeId);
