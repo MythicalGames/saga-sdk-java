@@ -25,6 +25,10 @@ public class SagaMythTokenClient extends AbstractSagaStreamClient {
     private final SagaMythTokenExecutor executor;
     private MythServiceGrpc.MythServiceBlockingStub serviceBlockingStub;
 
+    SagaMythTokenClient(SagaSdkConfig config) throws SagaException {
+        this(config, null);
+    }
+
     SagaMythTokenClient(SagaSdkConfig config, SagaMythTokenExecutor executor) throws SagaException {
         super(config);
         this.executor = executor;

@@ -17,6 +17,10 @@ public class SagaPlayerWalletClient extends AbstractSagaStreamClient {
     private final SagaPlayerWalletExecutor executor;
     private PlayerWalletServiceGrpc.PlayerWalletServiceBlockingStub serviceBlockingStub;
 
+    protected SagaPlayerWalletClient(SagaSdkConfig config) throws SagaException {
+        this(config, null);
+    }
+
     protected SagaPlayerWalletClient(SagaSdkConfig config, SagaPlayerWalletExecutor executor) throws SagaException {
         super(config);
         this.executor = executor;

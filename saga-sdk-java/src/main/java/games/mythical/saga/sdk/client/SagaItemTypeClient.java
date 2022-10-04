@@ -22,6 +22,10 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
     private final SagaItemTypeExecutor executor;
     private ItemTypeServiceGrpc.ItemTypeServiceBlockingStub serviceBlockingStub;
 
+    SagaItemTypeClient(SagaSdkConfig config) throws SagaException {
+        this(config, null);
+    }
+
     SagaItemTypeClient(SagaSdkConfig config, SagaItemTypeExecutor executor) throws SagaException {
         super(config);
         this.executor = executor;

@@ -151,7 +151,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
 
     private void handleCurrencyUpdate(CurrencyUpdate update, String traceId) throws Exception {
         if (sagaCurrencyExecutor == null) {
-            log.error("Currency update received, but no currency executor registered {}", update);
+            log.debug("Currency update received, but no currency executor registered {}", update);
         }
         else {
             if (update.hasError()) {
@@ -172,7 +172,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
 
     private void handleItemUpdate(ItemUpdate update, String traceId) throws Exception {
         if (sagaItemExecutor == null) {
-            log.error("Item update received, but no item executor registered {}", update);
+            log.debug("Item update received, but no item executor registered {}", update);
         }
         else {
             if (update.hasError()) {
@@ -195,7 +195,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
 
     private void handleMetadataUpdate(MetadataUpdate update, String traceId) throws Exception {
         if (sagaMetadataExecutor == null) {
-            log.error("Metadata update received, but no metadata executor registered {}", update);
+            log.debug("Metadata update received, but no metadata executor registered {}", update);
         }
         else {
             if (update.hasError()) {
@@ -214,7 +214,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
 
     private void handleItemTypeUpdate(ItemTypeUpdate update, String traceId) throws Exception {
         if (sagaItemTypeExecutor == null) {
-            log.error("Item type update received, but no item type executor registered {}", update);
+            log.debug("Item type update received, but no item type executor registered {}", update);
         }
         else {
             if (update.hasError()) {
@@ -233,7 +233,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
 
     private void handleMythTokenUpdate(MythTokenUpdate update, String traceId) throws Exception {
         if (sagaMythTokenExecutor == null) {
-            log.error("Myth token update received, but no myth token executor registered {}", update);
+            log.debug("Myth token update received, but no myth token executor registered {}", update);
         }
         else {
             if (update.hasError()) {
@@ -259,7 +259,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
 
     private void handlePlayerWalletUpdate(PlayerWalletUpdate update, String traceId) throws Exception {
         if (sagaPlayerWalletExecutor == null) {
-            log.error("Player wallet update received, but no player wallet executor registered {}", update);
+            log.debug("Player wallet update received, but no player wallet executor registered {}", update);
         }
         else {
             if (update.hasError()) {
@@ -274,7 +274,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
 
     private void handleReservationUpdate(ReservationUpdate update, String traceId) throws Exception {
         if (sagaReservationExecutor == null) {
-            log.error("Reservation update received, but no reservation executor registered {}", update);
+            log.debug("Reservation update received, but no reservation executor registered {}", update);
         } else {
             switch (update.getUpdateCase()) {
                 case ERROR:

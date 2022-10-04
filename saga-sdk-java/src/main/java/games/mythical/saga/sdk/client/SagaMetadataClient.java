@@ -14,6 +14,10 @@ public class SagaMetadataClient extends AbstractSagaStreamClient {
     private final SagaMetadataExecutor executor;
     private MetadataServiceGrpc.MetadataServiceBlockingStub serviceBlockingStub;
 
+    SagaMetadataClient(SagaSdkConfig config) throws SagaException {
+        this(config, null);
+    }
+
     SagaMetadataClient(SagaSdkConfig config, SagaMetadataExecutor executor) throws SagaException {
         super(config);
         this.executor = executor;
