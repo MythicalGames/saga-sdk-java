@@ -23,6 +23,10 @@ public class SagaReservationClient extends AbstractSagaStreamClient {
     private final SagaReservationExecutor executor;
     private ReservationServiceGrpc.ReservationServiceBlockingStub serviceBlockingStub;
 
+    protected SagaReservationClient(SagaSdkConfig config) throws SagaException {
+        this(config, null);
+    }
+
     protected SagaReservationClient(SagaSdkConfig config, SagaReservationExecutor executor) throws SagaException {
         super(config);
         this.executor = executor;

@@ -1,5 +1,6 @@
 package games.mythical.saga.sdk.client.executor;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter

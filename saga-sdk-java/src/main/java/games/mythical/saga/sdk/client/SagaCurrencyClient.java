@@ -19,6 +19,10 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
     private final SagaCurrencyExecutor executor;
     private CurrencyServiceGrpc.CurrencyServiceBlockingStub serviceBlockingStub;
 
+    SagaCurrencyClient(SagaSdkConfig config) throws SagaException {
+        this(config, null);
+    }
+
     SagaCurrencyClient(SagaSdkConfig config, SagaCurrencyExecutor executor) throws SagaException {
         super(config);
         this.executor = executor;

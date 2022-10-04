@@ -81,23 +81,40 @@ public class SagaClientFactory {
         }
     }
 
-    public SagaMetadataClient createSagaMetadataClient(SagaMetadataExecutor executor) throws SagaException {
-        return new SagaMetadataClient(config, validateExecutor(executor));
+    public SagaMetadataClient createSagaMetadataClient() throws SagaException {
+        return new SagaMetadataClient(config);
     }
-    public SagaItemClient createSagaItemClient(SagaItemExecutor executor) throws SagaException {
-        return new SagaItemClient(config, validateExecutor(executor));
+    public SagaMetadataClient createSagaMetadataClient(SagaMetadataExecutor executor) throws SagaException {
+        return new SagaMetadataClient(config, executor);
     }
 
+    public SagaItemClient createSagaItemClient() throws SagaException {
+        return new SagaItemClient(config);
+    }
+    public SagaItemClient createSagaItemClient(SagaItemExecutor executor) throws SagaException {
+        return new SagaItemClient(config, executor);
+    }
+
+    public SagaItemTypeClient createSagaItemTypeClient() throws SagaException {
+        return new SagaItemTypeClient(config);
+    }
     public SagaItemTypeClient createSagaItemTypeClient(SagaItemTypeExecutor executor) throws SagaException {
-        return new SagaItemTypeClient(config, validateExecutor(executor));
+        return new SagaItemTypeClient(config, executor);
+    }
+
+    public SagaMythTokenClient createSagaMythTokenClient() throws SagaException {
+        return new SagaMythTokenClient(config);
     }
 
     public SagaMythTokenClient createSagaMythTokenClient(SagaMythTokenExecutor executor) throws SagaException {
-        return new SagaMythTokenClient(config, validateExecutor(executor));
+        return new SagaMythTokenClient(config, executor);
     }
 
+    public SagaCurrencyClient createSagaCurrencyClient() throws SagaException {
+        return new SagaCurrencyClient(config);
+    }
     public SagaCurrencyClient createSagaCurrencyClient(SagaCurrencyExecutor executor) throws SagaException {
-        return new SagaCurrencyClient(config, validateExecutor(executor));
+        return new SagaCurrencyClient(config, executor);
     }
 
     public SagaCurrencyTypeClient createSagaCurrencyTypeClient() throws SagaException {
@@ -112,19 +129,19 @@ public class SagaClientFactory {
         return new SagaTransactionClient(config);
     }
 
+    public SagaPlayerWalletClient createSagaPlayerWalletClient() throws SagaException {
+        return new SagaPlayerWalletClient(config);
+    }
+
     public SagaPlayerWalletClient createSagaPlayerWalletClient(SagaPlayerWalletExecutor executor) throws SagaException {
-        return new SagaPlayerWalletClient(config, validateExecutor(executor));
+        return new SagaPlayerWalletClient(config, executor);
+    }
+
+    public SagaReservationClient createSagaReservationClient() throws SagaException {
+        return new SagaReservationClient(config);
     }
 
     public SagaReservationClient createSagaReservationClient(SagaReservationExecutor executor) throws SagaException {
-        return new SagaReservationClient(config, validateExecutor(executor));
-    }
-
-    private <T extends BaseSagaExecutor> T validateExecutor(T executor) throws SagaException {
-        if (executor == null) {
-            throw new SagaException(SagaErrorCode.EXECUTOR_REQUIRED,
-                                    "An executor implementation is required when creating a SDK client.");
-        }
-        return executor;
+        return new SagaReservationClient(config, executor);
     }
 }
