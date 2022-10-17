@@ -83,7 +83,7 @@ jobs:
           ORG_GRADLE_PROJECT_sonatypeUsername: 'mythical_keith'
           ORG_GRADLE_PROJECT_sonatypePassword : ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
         run: |
-          ./gradlew publishToSonatype closeSonatypeStagingRepository
+          ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
 
       - name: Generate Proto Docs
         if: github.event_name == 'push'

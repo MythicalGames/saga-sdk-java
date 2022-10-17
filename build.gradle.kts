@@ -32,9 +32,6 @@ scmVersion {
 group = "games.mythical"
 version = scmVersion.version
 
-val ossrhUsername: String? by project
-val ossrhPassword: String? by project
-
 nexusPublishing {
     repositories {
         sonatype()
