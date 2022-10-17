@@ -4,6 +4,7 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 import games.mythical.saga.sdk.client.executor.*;
+import games.mythical.saga.sdk.client.model.SagaItem;
 import games.mythical.saga.sdk.exception.ErrorData;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
@@ -287,7 +288,9 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     sagaReservationExecutor.onReservationReleased(update.getReservationReleased().getReservationId(), traceId);
                     break;
                 case RESERVATION_REDEEMED:
-                    sagaReservationExecutor.onReservationRedeemed(update.getReservationRedeemed().getReservationId(), traceId);
+                    final var items = update.getReservationRedeemed().getItemsList().stream()
+                            .map(SagaItem::fromProto).collect(Collectors.toList());
+                    sagaReservationExecutor.onReservationRedeemed(update.getReservationRedeemed().getReservationId(), items, traceId);
                     break;
                 default:
                     log.error("Unknown reservation update: {}", update.getUpdateCase());

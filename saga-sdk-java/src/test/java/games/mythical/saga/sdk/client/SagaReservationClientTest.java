@@ -3,6 +3,7 @@ package games.mythical.saga.sdk.client;
 import games.mythical.saga.sdk.client.executor.MockReservationExecutor;
 import games.mythical.saga.sdk.client.model.SagaMetadata;
 import games.mythical.saga.sdk.client.model.SagaRedeemItem;
+import games.mythical.saga.sdk.proto.api.item.ItemProto;
 import games.mythical.saga.sdk.proto.api.reservation.ReservationServiceGrpc;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
@@ -79,7 +80,10 @@ public class SagaReservationClientTest  extends AbstractClientTest {
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ReservationUpdate.newBuilder()
-                .setReservationRedeemed(ReservationRedeemedProto.newBuilder().setReservationId(reservationId).build()).build();
+                .setReservationRedeemed(ReservationRedeemedProto.newBuilder().
+                        setReservationId(reservationId)
+                        .addItems(ItemProto.newBuilder().setInventoryId(item.getInventoryId()).build())
+                        .build()).build();
         server.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(traceId)
                 .setReservationUpdate(update)
@@ -89,6 +93,8 @@ public class SagaReservationClientTest  extends AbstractClientTest {
 
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
         assertEquals(reservationId, executor.getReservationId());
+        assertEquals(1, executor.getItems().size());
+        assertEquals(item.getInventoryId(), executor.getItems().get(0).getInventoryId());
 
         server.verifyCalls("StatusStream", 1);
         server.verifyCalls("StatusConfirmation", 1);
