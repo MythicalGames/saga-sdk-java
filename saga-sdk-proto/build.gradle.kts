@@ -2,13 +2,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.google.protobuf.gradle.*
 
 plugins {
-    id("idea")
     id("java")
     id("java-library")
     id("maven-publish")
-    id("com.google.protobuf")
+    id("signing")
 
-    kotlin("jvm")
+    id("com.google.protobuf") version "0.9.1"
+
+    kotlin("jvm") version "1.7.20"
 }
 
 repositories {
@@ -82,4 +83,50 @@ protobuf {
             }
         }
     }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+
+            group = rootProject.group
+            version = rootProject.version as String
+
+            pom {
+                name.set("Saga SDK")
+                description.set("Saga SDK for Java game servers")
+                url.set("https://mythicalgames.com/")
+
+                scm {
+                    connection.set("https://github.com/MythicalGames/saga-sdk-java.git")
+                    developerConnection.set("https://github.com/MythicalGames/saga-sdk-java.git")
+                    url.set("https://github.com/MythicalGames/saga-sdk-java")
+                }
+
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+
+                developers {
+                    developer {
+                        organization.set("Mythical Games")
+                        organizationUrl.set("https://mythicalgames.com/")
+                    }
+                }
+            }
+        }
+    }
+}
+
+tasks.withType<Sign> {
+    onlyIf { project.hasProperty("signingKey") && project.hasProperty("signingPassword") }
+}
+
+signing {
+    useInMemoryPgpKeys(project.findProperty("signingKey") as String?, project.findProperty("signingPassword") as String?)
+    sign(publishing.publications["mavenJava"])
 }

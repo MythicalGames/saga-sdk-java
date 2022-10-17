@@ -1,13 +1,6 @@
 plugins {
-    id("idea")
-    id("java")
-    id("java-library")
-    id("maven-publish")
-
-    id("com.google.protobuf") version "0.9.1" //apply false
-    id("org.jetbrains.kotlin.jvm") version "1.7.10" apply false
-
     id("pl.allegro.tech.build.axion-release") version "1.14.0"
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
 scmVersion {
@@ -39,3 +32,11 @@ scmVersion {
 group = "games.mythical"
 version = scmVersion.version
 
+val ossrhUsername: String? by project
+val ossrhPassword: String? by project
+
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+}

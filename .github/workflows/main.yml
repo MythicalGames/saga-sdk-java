@@ -41,6 +41,11 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
+      - name: Set up local Git user
+        run: |
+          git config user.name "Mythical Buildbot"
+          git config user.email "buildbot@mythical.games"
+
       - name: Release major version
         if: (github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[MAJOR]'))
         run: |
@@ -73,8 +78,12 @@ jobs:
         env:
           USERNAME: 'Mythical Buildbot'
           TOKEN: ${{ github.token }}
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
+          ORG_GRADLE_PROJECT_sonatypeUsername: 'mythical_keith'
+          ORG_GRADLE_PROJECT_sonatypePassword : ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
         run: |
-          ./gradlew publish
+          ./gradlew publishToSonatype closeSonatypeStagingRepository
 
       - name: Generate Proto Docs
         if: github.event_name == 'push'
@@ -91,8 +100,6 @@ jobs:
         run: |
           mkdir -p doc/proto
           cp -v saga-sdk-proto/build/generated/source/proto/main/doc/* doc/proto
-          git config user.name "Mythical Buildbot"
-          git config user.email "buildbot@mythical.games"
           git add doc/proto/index.html
           git add doc/proto/sdk.md
           git commit -m "Updating docs"
