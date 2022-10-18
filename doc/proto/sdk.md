@@ -2921,6 +2921,7 @@ Results from a MYTH Token status update gRPC stream call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | reservation_id | [string](#string) |  |  |
+| items | [saga.api.item.ItemProto](#saga-api-item-ItemProto) | repeated |  |
 
 
 
