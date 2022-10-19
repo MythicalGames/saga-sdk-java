@@ -46,6 +46,14 @@ jobs:
           git config user.name "Mythical Buildbot"
           git config user.email "buildbot@mythical.games"
 
+      - name: Release SNAPSHOT version
+        if: github.ref == 'refs/heads/develop'
+        env:
+          USERNAME: 'Mythical Buildbot'
+          TOKEN: ${{ github.token }}
+        run: |
+          ./gradlew publishMavenPublicationToGitHubPackagesRepository
+
       - name: Release major version
         if: (github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[MAJOR]'))
         run: |
