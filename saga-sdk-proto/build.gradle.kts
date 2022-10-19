@@ -85,7 +85,21 @@ protobuf {
     }
 }
 
+val user: String? = project.findProperty("gprUser") as String? ?: System.getenv("USERNAME")
+val token: String? = project.findProperty("gprKey") as String? ?: System.getenv("TOKEN")
+
 publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/MythicalGames/saga-java-sdk")
+            credentials {
+                username = user
+                password = token
+            }
+        }
+    }
+
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
