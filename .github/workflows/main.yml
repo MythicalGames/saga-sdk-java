@@ -53,7 +53,7 @@ jobs:
           USERNAME: 'Mythical Buildbot'
           TOKEN: ${{ github.token }}
         run: |
-          ./gradlew publishMavenPublicationToGitHubPackagesRepository
+          ./gradlew publishAllPublicationsToGitHubPackagesRepository
 
       - name: Release major version
         if: (github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[MAJOR]'))
