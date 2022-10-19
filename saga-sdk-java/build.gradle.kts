@@ -46,7 +46,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/MythicalGames/saga-java-sdk")
+            url = uri("https://maven.pkg.github.com/MythicalGames/saga-sdk-java")
             credentials {
                 username = user
                 password = token
