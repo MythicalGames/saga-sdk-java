@@ -16,7 +16,6 @@ import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeUpdate;
 import games.mythical.saga.sdk.proto.streams.metadata.MetadataUpdate;
-import games.mythical.saga.sdk.proto.streams.myth.MythTokenUpdate;
 import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +34,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private SagaCurrencyExecutor sagaCurrencyExecutor;
     private SagaItemExecutor sagaItemExecutor;
     private SagaItemTypeExecutor sagaItemTypeExecutor;
-    private SagaMythTokenExecutor sagaMythTokenExecutor;
     private SagaPlayerWalletExecutor sagaPlayerWalletExecutor;
     private SagaReservationExecutor sagaReservationExecutor;
     private SagaMetadataExecutor sagaMetadataExecutor;
@@ -75,11 +73,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         return this;
     }
 
-    public SagaStatusUpdateObserver with(SagaMythTokenExecutor sagaMythTokenExecutor) {
-        this.sagaMythTokenExecutor = sagaMythTokenExecutor;
-        return this;
-    }
-
     public SagaStatusUpdateObserver with(SagaPlayerWalletExecutor sagaPlayerWalletExecutor) {
         this.sagaPlayerWalletExecutor = sagaPlayerWalletExecutor;
         return this;
@@ -115,9 +108,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     break;
                 case ITEM_TYPE_UPDATE:
                     handleItemTypeUpdate(message.getItemTypeUpdate(), message.getTraceId());
-                    break;
-                case MYTH_TOKEN_UPDATE:
-                    handleMythTokenUpdate(message.getMythTokenUpdate(), message.getTraceId());
                     break;
                 case PLAYER_WALLET_UPDATE:
                     handlePlayerWalletUpdate(message.getPlayerWalletUpdate(), message.getTraceId());
@@ -227,32 +217,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     message.getItemTypeId(),
                     traceId,
                     message.getItemTypeState()
-                );
-            }
-        }
-    }
-
-    private void handleMythTokenUpdate(MythTokenUpdate update, String traceId) throws Exception {
-        if (sagaMythTokenExecutor == null) {
-            log.debug("Myth token update received, but no myth token executor registered {}", update);
-        }
-        else {
-            if (update.hasError()) {
-                final var error = update.getError();
-                sagaMythTokenExecutor.onError(toErrData(error));
-            } else if (update.hasWithdrawalCompleted()) {
-                sagaMythTokenExecutor.onWithdrawalCompleted(
-                        traceId,
-                        update.getWithdrawalCompleted().getOauthId(),
-                        update.getWithdrawalCompleted().getQuoteId(),
-                        update.getWithdrawalCompleted().getAmountInNmyth(),
-                        update.getWithdrawalCompleted().getGasFeeInWei()
-                );
-            } else {
-                final var message = update.getStatusUpdate();
-                sagaMythTokenExecutor.updateMythToken(
-                    traceId,
-                    message.getTokenState()
                 );
             }
         }

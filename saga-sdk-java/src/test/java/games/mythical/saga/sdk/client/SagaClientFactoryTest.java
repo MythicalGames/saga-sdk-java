@@ -6,7 +6,6 @@ import games.mythical.saga.sdk.client.executor.MockCurrencyExecutor;
 import games.mythical.saga.sdk.client.executor.MockItemExecutor;
 import games.mythical.saga.sdk.client.executor.MockItemTypeExecutor;
 import games.mythical.saga.sdk.client.executor.MockMetadataExecutor;
-import games.mythical.saga.sdk.client.executor.MockMythTokenExecutor;
 import games.mythical.saga.sdk.client.executor.MockPlayerWalletExecutor;
 import games.mythical.saga.sdk.client.executor.MockReservationExecutor;
 import games.mythical.saga.sdk.exception.SagaException;
@@ -50,12 +49,6 @@ public class SagaClientFactoryTest extends AbstractClientTest {
     public void testCreateMetadataClient() throws SagaException {
         assertNotNull(factory.createSagaMetadataClient());
         assertNotNull(factory.createSagaMetadataClient(MockMetadataExecutor.builder().build()));
-    }
-
-    @Test
-    public void testCreateMythTokenClient() throws SagaException {
-        assertNotNull(factory.createSagaMythTokenClient());
-        assertNotNull(factory.createSagaMythTokenClient(MockMythTokenExecutor.builder().build()));
     }
 
     @Test
