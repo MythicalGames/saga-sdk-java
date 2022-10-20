@@ -1,8 +1,9 @@
 # Changelog
 
-## [0.5.xxx] - 2022
+## [1.1.0] - 2022-10-20
 ### Changed
 * Maintenance mode feature, will return UNAVAILABLE error
+* Removed Myth Token client and Executor
 
 ## [0.5.29] - 2022-09-20
 ### Changed
