@@ -122,7 +122,7 @@ jobs:
         run: |
           git checkout develop
           git merge main
-          git push origin main
+          git push origin develop
 
       - name: Cleanup Gradle Cache
         run: |
