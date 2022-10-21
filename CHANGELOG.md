@@ -4,6 +4,8 @@
 ### Changed
 * Maintenance mode feature, will return UNAVAILABLE error
 * Removed Myth Token client and Executor
+* New randomize field for item types
+* Include item protos in redeem responses
 
 ## [0.5.29] - 2022-09-20
 ### Changed
