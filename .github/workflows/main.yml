@@ -18,7 +18,7 @@ on:
 
 jobs:
   build:
-    runs-on: mono-runner
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -113,6 +113,16 @@ jobs:
           git add doc/proto/sdk.md
           git commit -m "Updating docs"
           git push
+
+      - name: Merge main branch down to develop
+        if: (github.ref == 'refs/heads/main')
+        env:
+          GITHUB_USER: 'Mythical Buildbot'
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          git checkout develop
+          git merge main
+          git push origin develop
 
       - name: Cleanup Gradle Cache
         run: |

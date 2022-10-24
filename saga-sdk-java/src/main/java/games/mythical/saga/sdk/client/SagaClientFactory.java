@@ -102,14 +102,6 @@ public class SagaClientFactory {
         return new SagaItemTypeClient(config, executor);
     }
 
-    public SagaMythTokenClient createSagaMythTokenClient() throws SagaException {
-        return new SagaMythTokenClient(config);
-    }
-
-    public SagaMythTokenClient createSagaMythTokenClient(SagaMythTokenExecutor executor) throws SagaException {
-        return new SagaMythTokenClient(config, executor);
-    }
-
     public SagaCurrencyClient createSagaCurrencyClient() throws SagaException {
         return new SagaCurrencyClient(config);
     }
