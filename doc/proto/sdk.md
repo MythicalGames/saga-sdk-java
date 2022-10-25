@@ -565,6 +565,7 @@ Get Items for Player call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  | Player to get Items for |
+| query_options | [saga.common.QueryOptionsProto](#saga-common-QueryOptionsProto) |  | Sort/filter options |
 
 
 
@@ -632,7 +633,7 @@ Issue item call
 | trace_id | [string](#string) |  |  |
 | inventory_id | [string](#string) |  | The game&#39;s unique id for this Item |
 | oauth_id | [string](#string) |  |  |
-| token_id | [uint64](#uint64) |  |  |
+| token_id | [int64](#int64) |  |  |
 | finalized | [bool](#bool) |  |  |
 | block_explorer_url | [string](#string) |  |  |
 | metadata_url | [string](#string) |  |  |
@@ -2350,7 +2351,7 @@ Results from an Item status update gRPC stream call
 | inventory_id | [string](#string) |  | Game&#39;s unique Id for the Item |
 | item_type_id | [string](#string) |  | Game&#39;s ItemTypeId for the ItemType for this Item |
 | oauth_id | [string](#string) |  | User for this Item |
-| token_id | [uint64](#uint64) |  |  |
+| token_id | [int64](#int64) |  |  |
 | metadata_url | [string](#string) |  | Metadata address |
 | item_state | [saga.proto.common.item.ItemState](#saga-proto-common-item-ItemState) |  | State of the Item, see ItemState |
 
