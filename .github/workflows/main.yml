@@ -120,9 +120,7 @@ jobs:
           GITHUB_USER: 'Mythical Buildbot'
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          git checkout develop
-          git merge main
-          git push origin develop
+          sh .github/scripts/merge-to-develop.sh
 
       - name: Cleanup Gradle Cache
         run: |
