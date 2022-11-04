@@ -113,14 +113,6 @@ public class SagaClientFactory {
         return new SagaCurrencyTypeClient(config);
     }
 
-    public SagaTitleClient createSagaTitleClient() throws SagaException {
-        return new SagaTitleClient(config);
-    }
-
-    public SagaTransactionClient createSagaTransactionClient() throws SagaException {
-        return new SagaTransactionClient(config);
-    }
-
     public SagaPlayerWalletClient createSagaPlayerWalletClient() throws SagaException {
         return new SagaPlayerWalletClient(config);
     }

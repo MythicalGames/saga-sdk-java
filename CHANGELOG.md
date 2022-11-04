@@ -1,5 +1,9 @@
 # Changelog
 
+## - 2022
+### Changed
+* Removed Title and Transaction clients
+
 ## [1.1.0] - 2022-10-20
 ### Changed
 * Maintenance mode feature, will return UNAVAILABLE error
