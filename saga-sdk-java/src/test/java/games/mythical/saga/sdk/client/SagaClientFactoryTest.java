@@ -62,14 +62,4 @@ public class SagaClientFactoryTest extends AbstractClientTest {
         assertNotNull(factory.createSagaReservationClient());
         assertNotNull(factory.createSagaReservationClient(new MockReservationExecutor()));
     }
-
-    @Test
-    public void testCreateTitleClient() throws SagaException {
-        assertNotNull(factory.createSagaTitleClient());
-    }
-
-    @Test
-    public void testCreateTransactionClient() throws SagaException {
-        assertNotNull(factory.createSagaTransactionClient());
-    }
 }
