@@ -11,6 +11,7 @@ import games.mythical.saga.sdk.proto.common.item.BlockChains;
 import games.mythical.saga.sdk.proto.common.item.ItemState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemStatusUpdate;
+import games.mythical.saga.sdk.proto.streams.item.ItemStatusUpdates;
 import games.mythical.saga.sdk.proto.streams.item.ItemUpdate;
 import games.mythical.saga.sdk.server.MockServer;
 import games.mythical.saga.sdk.server.stream.MockStatusStreamingImpl;
@@ -109,9 +110,10 @@ class SagaItemClientTest extends AbstractClientTest {
                 .setInventoryId(INVENTORY_ID)
                 .setOauthId(EXPECTED_OAUTH_ID)
                 .setItemState(ItemState.ISSUED);
+        final var updates = ItemStatusUpdates.newBuilder().addStatusUpdates(update).build();
         itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(traceId)
-                .setItemUpdate(ItemUpdate.newBuilder().setStatusUpdate(update))
+                .setItemUpdate(ItemUpdate.newBuilder().setStatusUpdates(updates))
                 .build());
 
         ConcurrentFinisher.wait(traceId);
