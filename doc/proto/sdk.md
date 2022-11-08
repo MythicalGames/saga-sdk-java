@@ -154,6 +154,7 @@
   
 - [streams/item/definition.proto](#streams_item_definition-proto)
     - [ItemStatusUpdate](#saga-rpc-streams-item-ItemStatusUpdate)
+    - [ItemStatusUpdates](#saga-rpc-streams-item-ItemStatusUpdates)
     - [ItemUpdate](#saga-rpc-streams-item-ItemUpdate)
   
 - [streams/itemtype/definition.proto](#streams_itemtype_definition-proto)
@@ -2146,6 +2147,21 @@ Results from an Item status update gRPC stream call
 
 
 
+<a name="saga-rpc-streams-item-ItemStatusUpdates"></a>
+
+### ItemStatusUpdates
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| status_updates | [ItemStatusUpdate](#saga-rpc-streams-item-ItemStatusUpdate) | repeated |  |
+
+
+
+
+
+
 <a name="saga-rpc-streams-item-ItemUpdate"></a>
 
 ### ItemUpdate
@@ -2156,6 +2172,7 @@ Results from an Item status update gRPC stream call
 | ----- | ---- | ----- | ----------- |
 | error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [ItemStatusUpdate](#saga-rpc-streams-item-ItemStatusUpdate) |  |  |
+| status_updates | [ItemStatusUpdates](#saga-rpc-streams-item-ItemStatusUpdates) |  |  |
 
 
 
