@@ -4,6 +4,7 @@ import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 import games.mythical.saga.sdk.client.executor.*;
 import games.mythical.saga.sdk.client.model.SagaItem;
+import games.mythical.saga.sdk.client.model.SagaItemUpdate;
 import games.mythical.saga.sdk.exception.ErrorData;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
@@ -161,7 +162,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
             if (update.hasError()) {
                 final var error = update.getError();
                 sagaItemExecutor.onError(toErrData(error));
-            } else {
+            } else if (update.hasStatusUpdate()) {
                 final var message = update.getStatusUpdate();
                 sagaItemExecutor.updateItem(
                     message.getInventoryId(),
@@ -172,6 +173,10 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     traceId,
                     message.getItemState()
                 );
+            } else {
+                final var updates = update.getStatusUpdates().getStatusUpdatesList().stream()
+                        .map(SagaItemUpdate::fromProto).collect(Collectors.toList());
+                sagaItemExecutor.updateItems(updates, traceId);
             }
         }
     }
