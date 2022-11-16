@@ -112,23 +112,6 @@
 - [api/reservation/rpc.proto](#api_reservation_rpc-proto)
     - [ReservationService](#saga-api-reservation-ReservationService)
   
-- [api/title/definition.proto](#api_title_definition-proto)
-    - [GetTitlesRequest](#saga-api-title-GetTitlesRequest)
-    - [TitleProto](#saga-api-title-TitleProto)
-    - [TitlesProto](#saga-api-title-TitlesProto)
-  
-- [api/title/rpc.proto](#api_title_rpc-proto)
-    - [TitleService](#saga-api-title-TitleService)
-  
-- [api/transaction/definition.proto](#api_transaction_definition-proto)
-    - [GetTransactionsForItemTypeRequest](#saga-api-transaction-GetTransactionsForItemTypeRequest)
-    - [GetTransactionsForPlayerRequest](#saga-api-transaction-GetTransactionsForPlayerRequest)
-    - [TransactionProto](#saga-api-transaction-TransactionProto)
-    - [TransactionsProto](#saga-api-transaction-TransactionsProto)
-  
-- [api/transaction/rpc.proto](#api_transaction_rpc-proto)
-    - [TransactionService](#saga-api-transaction-TransactionService)
-  
 - [common/common.proto](#common_common-proto)
     - [ErrorData](#saga-common-ErrorData)
     - [Metadata](#saga-common-Metadata)
@@ -171,6 +154,7 @@
   
 - [streams/item/definition.proto](#streams_item_definition-proto)
     - [ItemStatusUpdate](#saga-rpc-streams-item-ItemStatusUpdate)
+    - [ItemStatusUpdates](#saga-rpc-streams-item-ItemStatusUpdates)
     - [ItemUpdate](#saga-rpc-streams-item-ItemUpdate)
   
 - [streams/itemtype/definition.proto](#streams_itemtype_definition-proto)
@@ -565,6 +549,7 @@ Get Items for Player call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  | Player to get Items for |
+| query_options | [saga.common.QueryOptionsProto](#saga-common-QueryOptionsProto) |  | Sort/filter options |
 
 
 
@@ -632,7 +617,7 @@ Issue item call
 | trace_id | [string](#string) |  |  |
 | inventory_id | [string](#string) |  | The game&#39;s unique id for this Item |
 | oauth_id | [string](#string) |  |  |
-| token_id | [uint64](#uint64) |  |  |
+| token_id | [int64](#int64) |  |  |
 | finalized | [bool](#bool) |  |  |
 | block_explorer_url | [string](#string) |  |  |
 | metadata_url | [string](#string) |  |  |
@@ -1665,203 +1650,6 @@ Get Offers call
 
 
 
-<a name="api_title_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## api/title/definition.proto
-
-
-
-<a name="saga-api-title-GetTitlesRequest"></a>
-
-### GetTitlesRequest
-Get Titles call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| query_options | [saga.common.QueryOptionsProto](#saga-common-QueryOptionsProto) |  | Sort/Filter options |
-
-
-
-
-
-
-<a name="saga-api-title-TitleProto"></a>
-
-### TitleProto
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| title_id | [string](#string) |  | Unique id |
-| name | [string](#string) |  | Name for this Title |
-| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When this Title was created |
-
-
-
-
-
-
-<a name="saga-api-title-TitlesProto"></a>
-
-### TitlesProto
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| titles | [TitleProto](#saga-api-title-TitleProto) | repeated |  |
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
-<a name="api_title_rpc-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## api/title/rpc.proto
-
-
- 
-
- 
-
- 
-
-
-<a name="saga-api-title-TitleService"></a>
-
-### TitleService
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| GetTitles | [GetTitlesRequest](#saga-api-title-GetTitlesRequest) | [TitlesProto](#saga-api-title-TitlesProto) | Get all titles from a filter |
-
- 
-
-
-
-<a name="api_transaction_definition-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## api/transaction/definition.proto
-
-
-
-<a name="saga-api-transaction-GetTransactionsForItemTypeRequest"></a>
-
-### GetTransactionsForItemTypeRequest
-Get Transactions for an ItemType
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| item_type_id | [string](#string) |  | Id of ItemType to query on |
-| token_id | [string](#string) |  | Token Id |
-| query_options | [saga.common.QueryOptionsProto](#saga-common-QueryOptionsProto) |  | Sort/Filter options |
-
-
-
-
-
-
-<a name="saga-api-transaction-GetTransactionsForPlayerRequest"></a>
-
-### GetTransactionsForPlayerRequest
-Get Transactions for a Player call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  | Player to get Transactions for |
-| query_options | [saga.common.QueryOptionsProto](#saga-common-QueryOptionsProto) |  | Sort/Filter options |
-
-
-
-
-
-
-<a name="saga-api-transaction-TransactionProto"></a>
-
-### TransactionProto
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| transaction_id | [string](#string) |  | Unique Id |
-| title_id | [string](#string) |  | title that this transaction is from |
-| created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When this Transaction was created |
-
-
-
-
-
-
-<a name="saga-api-transaction-TransactionsProto"></a>
-
-### TransactionsProto
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| transactions | [TransactionProto](#saga-api-transaction-TransactionProto) | repeated |  |
-
-
-
-
-
- 
-
- 
-
- 
-
- 
-
-
-
-<a name="api_transaction_rpc-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## api/transaction/rpc.proto
-
-
- 
-
- 
-
- 
-
-
-<a name="saga-api-transaction-TransactionService"></a>
-
-### TransactionService
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| GetTransactionsForPlayer | [GetTransactionsForPlayerRequest](#saga-api-transaction-GetTransactionsForPlayerRequest) | [TransactionsProto](#saga-api-transaction-TransactionsProto) | Get all Transactions for a Player |
-| GetTransactionsForItemType | [GetTransactionsForItemTypeRequest](#saga-api-transaction-GetTransactionsForItemTypeRequest) | [TransactionsProto](#saga-api-transaction-TransactionsProto) | Get all Transactions for an ItemType |
-
- 
-
-
-
 <a name="common_common-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -2350,9 +2138,24 @@ Results from an Item status update gRPC stream call
 | inventory_id | [string](#string) |  | Game&#39;s unique Id for the Item |
 | item_type_id | [string](#string) |  | Game&#39;s ItemTypeId for the ItemType for this Item |
 | oauth_id | [string](#string) |  | User for this Item |
-| token_id | [uint64](#uint64) |  |  |
+| token_id | [int64](#int64) |  |  |
 | metadata_url | [string](#string) |  | Metadata address |
 | item_state | [saga.proto.common.item.ItemState](#saga-proto-common-item-ItemState) |  | State of the Item, see ItemState |
+
+
+
+
+
+
+<a name="saga-rpc-streams-item-ItemStatusUpdates"></a>
+
+### ItemStatusUpdates
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| status_updates | [ItemStatusUpdate](#saga-rpc-streams-item-ItemStatusUpdate) | repeated |  |
 
 
 
@@ -2369,6 +2172,7 @@ Results from an Item status update gRPC stream call
 | ----- | ---- | ----- | ----------- |
 | error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [ItemStatusUpdate](#saga-rpc-streams-item-ItemStatusUpdate) |  |  |
+| status_updates | [ItemStatusUpdates](#saga-rpc-streams-item-ItemStatusUpdates) |  |  |
 
 
 

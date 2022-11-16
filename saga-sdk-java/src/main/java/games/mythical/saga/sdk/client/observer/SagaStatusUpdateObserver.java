@@ -1,36 +1,33 @@
 package games.mythical.saga.sdk.client.observer;
 
-import com.google.protobuf.Empty;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 import games.mythical.saga.sdk.client.executor.*;
 import games.mythical.saga.sdk.client.model.SagaItem;
+import games.mythical.saga.sdk.client.model.SagaItemUpdate;
 import games.mythical.saga.sdk.exception.ErrorData;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.exception.SubError;
-import games.mythical.saga.sdk.proto.streams.StatusConfirmRequest;
-import games.mythical.saga.sdk.proto.streams.StatusStreamGrpc;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeUpdate;
 import games.mythical.saga.sdk.proto.streams.metadata.MetadataUpdate;
 import games.mythical.saga.sdk.proto.streams.playerwallet.PlayerWalletUpdate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 import games.mythical.saga.sdk.proto.streams.reservation.ReservationUpdate;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Slf4j
 public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdate> {
     private static final String PING_TRACE = "ping";
     private static SagaStatusUpdateObserver instance;
-    private final StatusStreamGrpc.StatusStreamStub statusStreamStub;
     private final Consumer<SagaStatusUpdateObserver> resubscribe;
-    private final ConfirmationObserver confirmationObserver = new ConfirmationObserver();
     private SagaCurrencyExecutor sagaCurrencyExecutor;
     private SagaItemExecutor sagaItemExecutor;
     private SagaItemTypeExecutor sagaItemTypeExecutor;
@@ -38,9 +35,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private SagaReservationExecutor sagaReservationExecutor;
     private SagaMetadataExecutor sagaMetadataExecutor;
 
-    public SagaStatusUpdateObserver(StatusStreamGrpc.StatusStreamStub statusStreamStub,
-                                    Consumer<SagaStatusUpdateObserver> resubscribe) {
-        this.statusStreamStub = statusStreamStub;
+    public SagaStatusUpdateObserver(Consumer<SagaStatusUpdateObserver> resubscribe) {
         this.resubscribe = resubscribe;
     }
 
@@ -48,9 +43,8 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         return instance;
     }
 
-    public static SagaStatusUpdateObserver initialize(StatusStreamGrpc.StatusStreamStub statusStreamStub,
-                                                      Consumer<SagaStatusUpdateObserver> resubscribe) {
-        instance = new SagaStatusUpdateObserver(statusStreamStub, resubscribe);
+    public static SagaStatusUpdateObserver initialize(Consumer<SagaStatusUpdateObserver> resubscribe) {
+        instance = new SagaStatusUpdateObserver(resubscribe);
         return instance;
     }
 
@@ -120,7 +114,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     throw new SagaException(SagaErrorCode.UNRECOGNIZED);
                 }
             }
-            updateStatusConfirmation(message.getTraceId());
         } catch (Exception e) {
             log.error("Exception calling executor action for message:{}. {}", message.getTraceId(), e);
         }
@@ -169,7 +162,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
             if (update.hasError()) {
                 final var error = update.getError();
                 sagaItemExecutor.onError(toErrData(error));
-            } else {
+            } else if (update.hasStatusUpdate()) {
                 final var message = update.getStatusUpdate();
                 sagaItemExecutor.updateItem(
                     message.getInventoryId(),
@@ -180,6 +173,10 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     traceId,
                     message.getItemState()
                 );
+            } else {
+                final var updates = update.getStatusUpdates().getStatusUpdatesList().stream()
+                        .map(SagaItemUpdate::fromProto).collect(Collectors.toList());
+                sagaItemExecutor.updateItems(updates, traceId);
             }
         }
     }
@@ -237,7 +234,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
         }
     }
 
-    private void handleReservationUpdate(ReservationUpdate update, String traceId) throws Exception {
+    private void handleReservationUpdate(ReservationUpdate update, String traceId) {
         if (sagaReservationExecutor == null) {
             log.debug("Reservation update received, but no reservation executor registered {}", update);
         } else {
@@ -261,14 +258,6 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     break;
             }
         }
-    }
-
-    private void updateStatusConfirmation(String traceId) {
-        var request = StatusConfirmRequest.newBuilder()
-                .setTraceId(traceId)
-                .build();
-        //noinspection ResultOfMethodCallIgnored
-        statusStreamStub.statusConfirmation(request, confirmationObserver);
     }
 
     private Map<String, String> toMetadata(Struct protoMetadata) {
@@ -309,24 +298,5 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
             .metadata(toMetadata(error.getMetadata()))
             .suberrors(subErrors)
             .build();
-    }
-
-    // Doesn't need to do anything since confirmations are just for logging on the gateway.
-    private static class ConfirmationObserver extends AbstractObserver<Empty> {
-
-        @Override
-        public void onNext(Empty value) {
-            // no-op
-        }
-
-        @Override
-        public void onError(Throwable t) {
-            // no-op
-        }
-
-        @Override
-        public void onCompleted() {
-            // no-op
-        }
     }
 }

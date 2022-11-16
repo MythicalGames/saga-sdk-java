@@ -82,9 +82,13 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         }
     }
 
-    public List<SagaItem> getItemsForPlayer(String oauthId) throws SagaException {
+    public List<SagaItem> getItemsForPlayer(String oauthId,
+                                            int pageSize,
+                                            SortOrder sortOrder,
+                                            Instant createdAtCursor) throws SagaException {
         ValidateUtil.notBlank(oauthId, "oauthId is a required value");
         var request = GetItemsForPlayerRequest.newBuilder()
+                .setQueryOptions(CommonFactory.toProto(pageSize, sortOrder, createdAtCursor))
                 .setOauthId(oauthId)
                 .build();
         try {

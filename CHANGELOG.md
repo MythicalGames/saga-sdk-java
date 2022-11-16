@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.3] - 2022-11-16
+### Changed
+* Removed Title and Transaction clients
+* Add pagination/query params to `SagaItemClient.getItemsForPlayer`
+* Deny blank item type IDs when creating new item types
+* Add batch item updates to `SagaItemExecutor`
+* Remove unused gRPC stream acks/confirmation
+
 ## [1.1.0] - 2022-10-20
 ### Changed
 * Maintenance mode feature, will return UNAVAILABLE error

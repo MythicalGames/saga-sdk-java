@@ -78,6 +78,11 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
                                  Instant dateFinished,
                                  boolean withdrawable) throws SagaException {
         try {
+            if(itemTypeId.isBlank()) {
+                var msg = "itemTypeId cannot be empty";
+                log.error(msg);
+                throw new SagaException(SagaErrorCode.PARSING_DATA_EXCEPTION, msg);
+            }
             log.trace("ItemTypeClient.createItemType called for game item type id: {}", itemTypeId);
             var builder = CreateItemTypeRequest.newBuilder()
                     .setItemTypeId(itemTypeId)
@@ -93,6 +98,8 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
 
             var result = serviceBlockingStub.createItemType(builder.build());
             return result.getTraceId();
+        } catch (SagaException e) {
+            throw e;
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
         } catch (Exception e) {
