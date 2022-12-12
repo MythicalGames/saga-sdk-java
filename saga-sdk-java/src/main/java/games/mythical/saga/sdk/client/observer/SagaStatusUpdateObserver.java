@@ -9,6 +9,7 @@ import games.mythical.saga.sdk.exception.ErrorData;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.exception.SubError;
+import games.mythical.saga.sdk.proto.api.itemtype.FailedItemTypeBatch;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemUpdate;
@@ -251,7 +252,9 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                 case RESERVATION_REDEEMED:
                     final var items = update.getReservationRedeemed().getItemsList().stream()
                             .map(SagaItem::fromProto).collect(Collectors.toList());
-                    sagaReservationExecutor.onReservationRedeemed(update.getReservationRedeemed().getReservationId(), items, traceId);
+                    final var failedBatches = update.getReservationRedeemed().getFailedBatchesList().stream()
+                            .map(FailedItemTypeBatch::getItemTypeId).collect(Collectors.toList());
+                    sagaReservationExecutor.onReservationRedeemed(update.getReservationRedeemed().getReservationId(), items, failedBatches, traceId);
                     break;
                 default:
                     log.error("Unknown reservation update: {}", update.getUpdateCase());
