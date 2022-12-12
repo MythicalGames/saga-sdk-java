@@ -252,7 +252,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                 case RESERVATION_REDEEMED:
                     final var items = update.getReservationRedeemed().getItemsList().stream()
                             .map(SagaItem::fromProto).collect(Collectors.toList());
-                    final var failedBatches= update.getReservationRedeemed().getFailedBatchesList().stream()
+                    final var failedBatches = update.getReservationRedeemed().getFailedBatchesList().stream()
                             .map(FailedItemTypeBatch::getItemTypeId).collect(Collectors.toList());
                     sagaReservationExecutor.onReservationRedeemed(update.getReservationRedeemed().getReservationId(), items, failedBatches, traceId);
                     break;
