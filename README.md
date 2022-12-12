@@ -1,3 +1,3 @@
 # saga-sdk-java
 
-## Current version: 1.1.3
+## Current version: 1.1.4
