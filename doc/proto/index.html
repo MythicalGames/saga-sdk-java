@@ -360,6 +360,10 @@
                 </li>
               
                 <li>
+                  <a href="#saga.api.itemtype.FailedItemTypeBatch"><span class="badge">M</span>FailedItemTypeBatch</a>
+                </li>
+              
+                <li>
                   <a href="#saga.api.itemtype.GetItemTypeRequest"><span class="badge">M</span>GetItemTypeRequest</a>
                 </li>
               
@@ -2146,6 +2150,30 @@
         
       
         <h3 id="saga.api.itemtype.EndMintRequest">EndMintRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>item_type_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.itemtype.FailedItemTypeBatch">FailedItemTypeBatch</h3>
         <p></p>
 
         
@@ -5368,6 +5396,13 @@
                 <tr>
                   <td>items</td>
                   <td><a href="#saga.api.item.ItemProto">saga.api.item.ItemProto</a></td>
+                  <td>repeated</td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>failed_batches</td>
+                  <td><a href="#saga.api.itemtype.FailedItemTypeBatch">saga.api.itemtype.FailedItemTypeBatch</a></td>
                   <td>repeated</td>
                   <td><p> </p></td>
                 </tr>

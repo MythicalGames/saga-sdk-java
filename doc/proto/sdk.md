@@ -44,6 +44,7 @@
 - [api/itemtype/definition.proto](#api_itemtype_definition-proto)
     - [CreateItemTypeRequest](#saga-api-itemtype-CreateItemTypeRequest)
     - [EndMintRequest](#saga-api-itemtype-EndMintRequest)
+    - [FailedItemTypeBatch](#saga-api-itemtype-FailedItemTypeBatch)
     - [GetItemTypeRequest](#saga-api-itemtype-GetItemTypeRequest)
     - [GetItemTypesRequest](#saga-api-itemtype-GetItemTypesRequest)
     - [ItemTypeProto](#saga-api-itemtype-ItemTypeProto)
@@ -732,6 +733,21 @@ Create item type call
 <a name="saga-api-itemtype-EndMintRequest"></a>
 
 ### EndMintRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| item_type_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="saga-api-itemtype-FailedItemTypeBatch"></a>
+
+### FailedItemTypeBatch
 
 
 
@@ -2363,6 +2379,7 @@ Results from an metadata status update gRPC stream call
 | ----- | ---- | ----- | ----------- |
 | reservation_id | [string](#string) |  |  |
 | items | [saga.api.item.ItemProto](#saga-api-item-ItemProto) | repeated |  |
+| failed_batches | [saga.api.itemtype.FailedItemTypeBatch](#saga-api-itemtype-FailedItemTypeBatch) | repeated |  |
 
 
 
