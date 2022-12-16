@@ -6,7 +6,9 @@ import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
+import games.mythical.saga.sdk.factory.CommonFactory;
 import games.mythical.saga.sdk.proto.api.itemtype.*;
+import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.util.ConversionUtils;
 import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.Status;
@@ -53,10 +55,15 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public List<SagaItemType> getItemTypes(String gameTitleId, String publisherAddress) throws SagaException {
+    public List<SagaItemType> getItemTypes(String gameTitleId,
+                                           String publisherAddress,
+                                           int pageSize,
+                                           SortOrder sortOrder,
+                                           Instant createdAtCursor) throws SagaException {
         var request = GetItemTypesRequest.newBuilder()
                 .setGameTitleId(StringUtils.defaultString(gameTitleId))
                 .setPublisherAddress(StringUtils.defaultString(publisherAddress))
+                .setQueryOptions(CommonFactory.toProto(pageSize, sortOrder, createdAtCursor))
                 .build();
 
         try {
