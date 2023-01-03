@@ -6,6 +6,7 @@ import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeProto;
 import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeServiceGrpc;
 import games.mythical.saga.sdk.proto.api.itemtype.ItemTypesProto;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
+import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeStatusUpdate;
@@ -28,6 +29,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -103,7 +105,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 .build();
 
         when(mockServiceBlockingStub.getItemTypes(any())).thenReturn(expectedResponse);
-        var itemTypeResponseList = itemTypeClient.getItemTypes("game-title", "");
+        var itemTypeResponseList = itemTypeClient.getItemTypes("game-title", "", 10, SortOrder.ASC, Instant.now());
 
         assertFalse(itemTypeResponseList.isEmpty());
         var itemType = itemTypeResponseList.get(0);
@@ -111,7 +113,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         assertEquals(proto_1.getName(), itemType.getName());
 
         when(mockServiceBlockingStub.getItemTypes(any())).thenReturn(ItemTypesProto.getDefaultInstance());
-        itemTypeResponseList = itemTypeClient.getItemTypes("", "");
+        itemTypeResponseList = itemTypeClient.getItemTypes("", "", 10, SortOrder.ASC, Instant.now());
 
         assertTrue(itemTypeResponseList.isEmpty());
     }
