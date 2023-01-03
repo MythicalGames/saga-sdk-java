@@ -785,6 +785,7 @@ Get ItemTypes call
 | ----- | ---- | ----- | ----------- |
 | game_title_id | [string](#string) |  |  |
 | publisher_address | [string](#string) |  |  |
+| query_options | [saga.common.QueryOptionsProto](#saga-common-QueryOptionsProto) |  |  |
 
 
 
