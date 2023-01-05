@@ -24,6 +24,7 @@ public class SagaItemType {
     private String symbol;
     private long maxSupply;
     private long issuedSupply;
+    private long totalSupply;
     @DtoExclude
     private Long availableSupply;
     private String contractAddress;
