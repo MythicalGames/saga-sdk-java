@@ -816,6 +816,7 @@ Get ItemTypes call
 | mintable | [bool](#bool) |  |  |
 | mint_ended | [bool](#bool) |  |  |
 | randomize | [bool](#bool) |  |  |
+| total_supply | [int64](#int64) |  |  |
 
 
 
