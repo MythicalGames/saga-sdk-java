@@ -166,6 +166,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
     }
 
     @Test
+    @Timeout(value = 1, unit = TimeUnit.MINUTES)
     public void startMint() throws Exception {
         final var expectedResponse = ReceivedResponse.newBuilder()
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
@@ -195,6 +196,7 @@ class SagaItemTypeClientTest extends AbstractClientTest {
     }
 
     @Test
+    @Timeout(value = 1, unit = TimeUnit.MINUTES)
     public void endMint() throws Exception {
         final var expectedResponse = ReceivedResponse.newBuilder()
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
