@@ -142,6 +142,25 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         }
     }
 
+    public String transferBulkItem(String requestId, String destOauthId, Boolean prefund, List<String> inventoryIds) throws SagaException {
+        var request = TransferBulkItemRequest.newBuilder()
+                .setRequestId(requestId)
+                .setDestinationOauthId(destOauthId)
+                .setPrefundGas(prefund)
+                .addAllInventoryIds(inventoryIds)
+                .build();
+
+        try {
+            var receivedResponse = serviceBlockingStub.transferBulkItem(request);
+            return receivedResponse.getTraceId();
+        } catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
+        } catch (Exception e) {
+            log.error("Exception calling emitReceived on transferBulkItem, items may be out of sync!", e);
+            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
+        }
+    }
+
     public String burnItem(String inventoryId) throws SagaException {
         var request = BurnItemRequest.newBuilder()
                 .setInventoryId(inventoryId)
