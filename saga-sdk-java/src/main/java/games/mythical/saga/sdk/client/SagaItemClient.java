@@ -150,7 +150,7 @@ public class SagaItemClient extends AbstractSagaStreamClient {
                 .build();
 
         try {
-            var receivedResponse = serviceBlockingStub.transferBulkItem(request);
+            var receivedResponse = serviceBlockingStub.transferItemBulk(request);
             return receivedResponse.getTraceId();
         } catch (StatusRuntimeException e) {
             throw SagaException.fromGrpcException(e);
