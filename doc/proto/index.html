@@ -322,6 +322,10 @@
                 </li>
               
                 <li>
+                  <a href="#saga.api.item.TransferItemBulkRequest"><span class="badge">M</span>TransferItemBulkRequest</a>
+                </li>
+              
+                <li>
                   <a href="#saga.api.item.TransferItemRequest"><span class="badge">M</span>TransferItemRequest</a>
                 </li>
               
@@ -1963,6 +1967,51 @@
 
         
       
+        <h3 id="saga.api.item.TransferItemBulkRequest">TransferItemBulkRequest</h3>
+        <p>Transfer bulk item call</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>game_title_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>inventory_ids</td>
+                  <td><a href="#string">string</a></td>
+                  <td>repeated</td>
+                  <td><p>Game&#39;s ids for the Item to transfer </p></td>
+                </tr>
+              
+                <tr>
+                  <td>destination_oauth_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>User of Item to transfer to </p></td>
+                </tr>
+              
+                <tr>
+                  <td>idempotency_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="saga.api.item.TransferItemRequest">TransferItemRequest</h3>
         <p>Transfer item call</p>
 
@@ -1985,6 +2034,13 @@
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>User of Item to transfer to </p></td>
+                </tr>
+              
+                <tr>
+                  <td>idempotency_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -2055,6 +2111,13 @@
                 <td><a href="#saga.api.item.TransferItemRequest">TransferItemRequest</a></td>
                 <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Transfer Item between users</p></td>
+              </tr>
+            
+              <tr>
+                <td>TransferItemBulk</td>
+                <td><a href="#saga.api.item.TransferItemBulkRequest">TransferItemBulkRequest</a></td>
+                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
+                <td><p>Transfer Items between users</p></td>
               </tr>
             
               <tr>

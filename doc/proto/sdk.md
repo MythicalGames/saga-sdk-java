@@ -36,6 +36,7 @@
     - [IssueItemRequest](#saga-api-item-IssueItemRequest)
     - [ItemProto](#saga-api-item-ItemProto)
     - [ItemsProto](#saga-api-item-ItemsProto)
+    - [TransferItemBulkRequest](#saga-api-item-TransferItemBulkRequest)
     - [TransferItemRequest](#saga-api-item-TransferItemRequest)
   
 - [api/item/rpc.proto](#api_item_rpc-proto)
@@ -645,6 +646,24 @@ Issue item call
 
 
 
+<a name="saga-api-item-TransferItemBulkRequest"></a>
+
+### TransferItemBulkRequest
+Transfer bulk item call
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| game_title_id | [string](#string) |  |  |
+| inventory_ids | [string](#string) | repeated | Game&#39;s ids for the Item to transfer |
+| destination_oauth_id | [string](#string) |  | User of Item to transfer to |
+| idempotency_id | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="saga-api-item-TransferItemRequest"></a>
 
 ### TransferItemRequest
@@ -655,6 +674,7 @@ Transfer item call
 | ----- | ---- | ----- | ----------- |
 | inventory_id | [string](#string) |  | Game&#39;s id for the Item to transfer |
 | destination_oauth_id | [string](#string) |  | User of Item to transfer to |
+| idempotency_id | [string](#string) |  |  |
 
 
 
@@ -695,6 +715,7 @@ Transfer item call
 | GetItemsForPlayer | [GetItemsForPlayerRequest](#saga-api-item-GetItemsForPlayerRequest) | [ItemsProto](#saga-api-item-ItemsProto) | Get all Items for a player |
 | IssueItem | [IssueItemRequest](#saga-api-item-IssueItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Issue an Item |
 | TransferItem | [TransferItemRequest](#saga-api-item-TransferItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Transfer Item between users |
+| TransferItemBulk | [TransferItemBulkRequest](#saga-api-item-TransferItemBulkRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Transfer Items between users |
 | BurnItem | [BurnItemRequest](#saga-api-item-BurnItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Burn an Item |
 | DepositItem | [DepositItemRequest](#saga-api-item-DepositItemRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Deposit an Item |
 
