@@ -5,6 +5,7 @@ import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeProto;
 import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeServiceGrpc;
 import games.mythical.saga.sdk.proto.api.itemtype.ItemTypesProto;
+import games.mythical.saga.sdk.proto.api.itemtype.MintMode;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.proto.common.itemtype.ItemTypeState;
@@ -27,8 +28,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -132,7 +131,8 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 RandomUtils.nextInt(0, 1000),
                 false,
                 null,
-                false);
+                false,
+                MintMode.UNRECOGNIZED);
 
         checkTraceAndStart(expectedResponse, traceId);
 

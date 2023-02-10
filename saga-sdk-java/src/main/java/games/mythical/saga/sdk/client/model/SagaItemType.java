@@ -38,6 +38,7 @@ public class SagaItemType {
     private boolean mintable;
     private boolean mintEnded;
     private boolean randomize;
+    private String mintMode;
 
     public static SagaItemType fromProto(ItemTypeProto proto) {
         var itemType = ProtoUtil.toDto(proto, SagaItemType.class);
