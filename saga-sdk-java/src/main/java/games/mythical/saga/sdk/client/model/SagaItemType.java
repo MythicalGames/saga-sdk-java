@@ -3,6 +3,7 @@ package games.mythical.saga.sdk.client.model;
 import games.mythical.proto_util.ProtoUtil;
 import games.mythical.proto_util.dto.DtoExclude;
 import games.mythical.saga.sdk.proto.api.itemtype.ItemTypeProto;
+import games.mythical.saga.sdk.proto.api.itemtype.MintMode;
 import games.mythical.saga.sdk.util.ConversionUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,7 +38,7 @@ public class SagaItemType {
     private Instant updatedAt;
     private boolean mintable;
     private boolean mintEnded;
-    private String mintMode;
+    private MintMode mintMode;
 
     public static SagaItemType fromProto(ItemTypeProto proto) {
         var itemType = ProtoUtil.toDto(proto, SagaItemType.class);
