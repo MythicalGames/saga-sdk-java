@@ -15,6 +15,7 @@ public class SagaRedeemItem {
     @ProtoExclude
     @DtoExclude
     private SagaMetadata metadata;
+    private long tokenId;
 
     public static RedeemItemProto toProto(SagaRedeemItem item) {
         var builder = ProtoUtil.toProtoBuilder(item, RedeemItemProto.Builder.class);

@@ -81,9 +81,9 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
                                  String name,
                                  String symbol,
                                  int maxSupply,
-                                 boolean randomize,
                                  Instant dateFinished,
-                                 boolean withdrawable) throws SagaException {
+                                 boolean withdrawable,
+                                 MintMode mintMode) throws SagaException {
         try {
             if(itemTypeId.isBlank()) {
                 var msg = "itemTypeId cannot be empty";
@@ -96,8 +96,8 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
                     .setName(name)
                     .setSymbol(symbol)
                     .setMaxSupply(maxSupply)
-                    .setRandomize(randomize)
-                    .setWithdrawable(withdrawable);
+                    .setWithdrawable(withdrawable)
+                    .setMintMode(mintMode);
 
             if (dateFinished != null) {
                 builder.setDateFinished(ConversionUtils.instantToProtoTimestamp(dateFinished));
