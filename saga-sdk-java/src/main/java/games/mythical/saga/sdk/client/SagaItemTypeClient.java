@@ -81,7 +81,6 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
                                  String name,
                                  String symbol,
                                  int maxSupply,
-                                 boolean randomize,
                                  Instant dateFinished,
                                  boolean withdrawable,
                                  MintMode mintMode) throws SagaException {
@@ -97,7 +96,6 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
                     .setName(name)
                     .setSymbol(symbol)
                     .setMaxSupply(maxSupply)
-                    .setRandomize(randomize)
                     .setWithdrawable(withdrawable)
                     .setMintMode(mintMode);
 

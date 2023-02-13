@@ -37,7 +37,6 @@ public class SagaItemType {
     private Instant updatedAt;
     private boolean mintable;
     private boolean mintEnded;
-    private boolean randomize;
     private String mintMode;
 
     public static SagaItemType fromProto(ItemTypeProto proto) {

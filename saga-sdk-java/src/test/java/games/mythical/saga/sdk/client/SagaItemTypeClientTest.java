@@ -129,10 +129,9 @@ class SagaItemTypeClientTest extends AbstractClientTest {
                 RandomStringUtils.randomAlphanumeric(30),
                 RandomStringUtils.randomAlphanumeric(30),
                 RandomUtils.nextInt(0, 1000),
-                false,
                 null,
                 false,
-                MintMode.UNRECOGNIZED);
+                MintMode.MINT_MODE_UNSPECIFIED);
 
         checkTraceAndStart(expectedResponse, traceId);
 
