@@ -53,6 +53,8 @@
     - [StartMintRequest](#saga-api-itemtype-StartMintRequest)
     - [UpdateItemTypePayload](#saga-api-itemtype-UpdateItemTypePayload)
   
+    - [MintMode](#saga-api-itemtype-MintMode)
+  
 - [api/itemtype/rpc.proto](#api_itemtype_rpc-proto)
     - [ItemTypeService](#saga-api-itemtype-ItemTypeService)
   
@@ -585,6 +587,7 @@ Get Items call
 | ----- | ---- | ----- | ----------- |
 | inventory_id | [string](#string) |  | GameInventory Ids of Items being issued |
 | metadata | [saga.common.Metadata](#saga-common-Metadata) |  | Metadata associated to Item being issued |
+| token_id | [uint64](#uint64) |  | TokenId associated to Item being issued |
 
 
 
@@ -742,9 +745,10 @@ Create item type call
 | name | [string](#string) |  |  |
 | symbol | [string](#string) |  |  |
 | max_supply | [int64](#int64) |  |  |
-| randomize | [bool](#bool) |  |  |
+| randomize | [bool](#bool) |  | **Deprecated.**  |
 | date_finished | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | withdrawable | [bool](#bool) |  |  |
+| mint_mode | [MintMode](#saga-api-itemtype-MintMode) |  |  |
 
 
 
@@ -836,8 +840,9 @@ Get ItemTypes call
 | available_supply | [google.protobuf.Int64Value](#google-protobuf-Int64Value) |  |  |
 | mintable | [bool](#bool) |  |  |
 | mint_ended | [bool](#bool) |  |  |
-| randomize | [bool](#bool) |  |  |
+| randomize | [bool](#bool) |  | **Deprecated.**  |
 | total_supply | [int64](#int64) |  |  |
+| mint_mode | [MintMode](#saga-api-itemtype-MintMode) |  |  |
 
 
 
@@ -890,6 +895,20 @@ Update ItemType call
 
 
  
+
+
+<a name="saga-api-itemtype-MintMode"></a>
+
+### MintMode
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| MINT_MODE_UNSPECIFIED | 0 |  |
+| MINT_MODE_SERIAL | 1 |  |
+| MINT_MODE_RANDOM | 2 |  |
+| MINT_MODE_SELECTED | 3 |  |
+
 
  
 
@@ -1613,6 +1632,7 @@ Get Offers call
 | inventory_id | [string](#string) |  |  |
 | item_type_id | [string](#string) |  |  |
 | metadata | [saga.common.Metadata](#saga-common-Metadata) |  |  |
+| token_id | [uint64](#uint64) |  |  |
 
 
 

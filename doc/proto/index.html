@@ -392,6 +392,10 @@
                 </li>
               
               
+                <li>
+                  <a href="#saga.api.itemtype.MintMode"><span class="badge">E</span>MintMode</a>
+                </li>
+              
               
               
             </ul>
@@ -1818,6 +1822,13 @@
                   <td><p>Metadata associated to Item being issued </p></td>
                 </tr>
               
+                <tr>
+                  <td>token_id</td>
+                  <td><a href="#uint64">uint64</a></td>
+                  <td></td>
+                  <td><p>TokenId associated to Item being issued </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
@@ -2188,7 +2199,7 @@
                   <td>randomize</td>
                   <td><a href="#bool">bool</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p><strong>Deprecated.</strong>  </p></td>
                 </tr>
               
                 <tr>
@@ -2205,9 +2216,37 @@
                   <td><p> </p></td>
                 </tr>
               
+                <tr>
+                  <td>mint_mode</td>
+                  <td><a href="#saga.api.itemtype.MintMode">MintMode</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
+          
+            
+            
+            <h4>Fields with deprecated option</h4>
+            <table>
+              <thead>
+                <tr>
+                  <td>Name</td>
+                  <td>Option</td>
+                </tr>
+              </thead>
+              <tbody>
+              
+                <tr>
+                  <td>randomize</td>
+                  <td><p>true</p></td>
+                </tr>
+              
+              </tbody>
+            </table>
+            
           
 
         
@@ -2441,7 +2480,7 @@
                   <td>randomize</td>
                   <td><a href="#bool">bool</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p><strong>Deprecated.</strong>  </p></td>
                 </tr>
               
                 <tr>
@@ -2451,9 +2490,37 @@
                   <td><p> </p></td>
                 </tr>
               
+                <tr>
+                  <td>mint_mode</td>
+                  <td><a href="#saga.api.itemtype.MintMode">MintMode</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
             </tbody>
           </table>
 
+          
+            
+            
+            <h4>Fields with deprecated option</h4>
+            <table>
+              <thead>
+                <tr>
+                  <td>Name</td>
+                  <td>Option</td>
+                </tr>
+              </thead>
+              <tbody>
+              
+                <tr>
+                  <td>randomize</td>
+                  <td><p>true</p></td>
+                </tr>
+              
+              </tbody>
+            </table>
+            
           
 
         
@@ -2538,6 +2605,41 @@
         
       
 
+      
+        <h3 id="saga.api.itemtype.MintMode">MintMode</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>MINT_MODE_UNSPECIFIED</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>MINT_MODE_SERIAL</td>
+                <td>1</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>MINT_MODE_RANDOM</td>
+                <td>2</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>MINT_MODE_SELECTED</td>
+                <td>3</td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
       
 
       
@@ -4035,6 +4137,13 @@
                 <tr>
                   <td>metadata</td>
                   <td><a href="#saga.common.Metadata">saga.common.Metadata</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>token_id</td>
+                  <td><a href="#uint64">uint64</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
