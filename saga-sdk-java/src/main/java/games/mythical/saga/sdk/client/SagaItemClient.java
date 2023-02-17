@@ -143,12 +143,11 @@ public class SagaItemClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String transferItemBulk(String idempotencyId, String destOauthId, List<String> inventoryIds, Boolean prefundGas) throws SagaException {
+    public String transferItemBulk(String idempotencyId, String destOauthId, List<String> inventoryIds) throws SagaException {
         var request = TransferItemBulkRequest.newBuilder()
                 .setIdempotencyId(idempotencyId)
                 .setDestinationOauthId(destOauthId)
                 .addAllInventoryIds(inventoryIds)
-                .setPrefundGas(prefundGas)
                 .build();
 
         try {
