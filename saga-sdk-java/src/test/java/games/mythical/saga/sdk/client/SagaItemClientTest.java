@@ -136,7 +136,7 @@ class SagaItemClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.transferItem(any())).thenReturn(expectedResponse);
-        final var traceId = itemClient.transferItem(INVENTORY_ID, DEST);
+        final var traceId = itemClient.transferItem(INVENTORY_ID, DEST, false);
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ItemStatusUpdate.newBuilder()
@@ -166,7 +166,7 @@ class SagaItemClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.burnItem(any())).thenReturn(expectedResponse);
-        final var traceId = itemClient.burnItem(INVENTORY_ID);
+        final var traceId = itemClient.burnItem(INVENTORY_ID, false);
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ItemStatusUpdate.newBuilder()
