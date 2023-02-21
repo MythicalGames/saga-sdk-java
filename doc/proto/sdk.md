@@ -503,6 +503,7 @@ Burn item call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | inventory_id | [string](#string) |  | Game&#39;s id for the Item to burn |
+| prefund_gas | [bool](#bool) |  |  |
 
 
 
@@ -678,6 +679,7 @@ Transfer item call
 | inventory_id | [string](#string) |  | Game&#39;s id for the Item to transfer |
 | destination_oauth_id | [string](#string) |  | User of Item to transfer to |
 | idempotency_id | [string](#string) |  |  |
+| prefund_gas | [bool](#bool) |  |  |
 
 
 
