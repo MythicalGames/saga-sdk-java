@@ -12,6 +12,7 @@ import games.mythical.saga.sdk.exception.SubError;
 import games.mythical.saga.sdk.proto.api.itemtype.FailedItemTypeBatch;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
 import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
+import games.mythical.saga.sdk.proto.streams.currencytype.CurrencyTypeUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemUpdate;
 import games.mythical.saga.sdk.proto.streams.itemtype.ItemTypeUpdate;
 import games.mythical.saga.sdk.proto.streams.metadata.MetadataUpdate;
@@ -30,6 +31,7 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
     private static SagaStatusUpdateObserver instance;
     private final Consumer<SagaStatusUpdateObserver> resubscribe;
     private SagaCurrencyExecutor sagaCurrencyExecutor;
+    private SagaCurrencyTypeExecutor sagaCurrencyTypeExecutor;
     private SagaItemExecutor sagaItemExecutor;
     private SagaItemTypeExecutor sagaItemTypeExecutor;
     private SagaPlayerWalletExecutor sagaPlayerWalletExecutor;
@@ -55,6 +57,11 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
 
     public SagaStatusUpdateObserver with(SagaCurrencyExecutor sagaCurrencyExecutor) {
         this.sagaCurrencyExecutor = sagaCurrencyExecutor;
+        return this;
+    }
+
+    public SagaStatusUpdateObserver with(SagaCurrencyTypeExecutor sagaCurrencyTypeExecutor) {
+        this.sagaCurrencyTypeExecutor = sagaCurrencyTypeExecutor;
         return this;
     }
 
@@ -94,6 +101,9 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
             switch (message.getStatusUpdateCase()) {
                 case CURRENCY_UPDATE:
                     handleCurrencyUpdate(message.getCurrencyUpdate(), message.getTraceId());
+                    break;
+                case CURRENCY_TYPE_UPDATE:
+                    handleCurrencyTypeUpdate(message.getCurrencyTypeUpdate(), message.getTraceId());
                     break;
                 case ITEM_UPDATE:
                     handleItemUpdate(message.getItemUpdate(), message.getTraceId());
@@ -150,6 +160,25 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     message.getOauthId(),
                     traceId,
                     message.getCurrencyState()
+                );
+            }
+        }
+    }
+
+    private void handleCurrencyTypeUpdate(CurrencyTypeUpdate update, String traceId) throws Exception {
+        if (sagaCurrencyTypeExecutor == null) {
+            log.debug("CurrencyType update received, but no currencytype executor registered {}", update);
+        }
+        else {
+            if (update.hasError()) {
+                final var error = update.getError();
+                sagaCurrencyTypeExecutor.onError(toErrData(error));
+            } else {
+                final var message = update.getStatusUpdate();
+                sagaCurrencyTypeExecutor.updateCurrencyType(
+                        message.getCurrencyTypeId(),
+                        traceId,
+                        message.getCurrencyTypeState()
                 );
             }
         }
