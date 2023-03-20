@@ -22,6 +22,7 @@
     - [CurrencyTypesProto](#saga-api-currencytype-CurrencyTypesProto)
     - [GetCurrencyTypeRequest](#saga-api-currencytype-GetCurrencyTypeRequest)
     - [GetCurrencyTypesRequest](#saga-api-currencytype-GetCurrencyTypesRequest)
+    - [PublisherBalanceProto](#saga-api-currencytype-PublisherBalanceProto)
   
 - [api/currencytype/rpc.proto](#api_currencytype_rpc-proto)
     - [CurrencyTypeService](#saga-api-currencytype-CurrencyTypeService)
@@ -126,6 +127,9 @@
 - [common/currency/definition.proto](#common_currency_definition-proto)
     - [CurrencyState](#saga-proto-common-currency-CurrencyState)
   
+- [common/currencytype/definition.proto](#common_currencytype_definition-proto)
+    - [CurrencyTypeState](#saga-proto-common-currencytype-CurrencyTypeState)
+  
 - [common/finalization.proto](#common_finalization-proto)
     - [Finalized](#saga-common-Finalized)
   
@@ -155,6 +159,10 @@
     - [CurrencyStatusConfirmRequest](#saga-rpc-streams-currency-CurrencyStatusConfirmRequest)
     - [CurrencyStatusUpdate](#saga-rpc-streams-currency-CurrencyStatusUpdate)
     - [CurrencyUpdate](#saga-rpc-streams-currency-CurrencyUpdate)
+  
+- [streams/currencytype/definition.proto](#streams_currencytype_definition-proto)
+    - [CurrencyTypeStatusUpdate](#saga-rpc-streams-currencytype-CurrencyTypeStatusUpdate)
+    - [CurrencyTypeUpdate](#saga-rpc-streams-currencytype-CurrencyTypeUpdate)
   
 - [streams/item/definition.proto](#streams_item_definition-proto)
     - [ItemStatusUpdate](#saga-rpc-streams-item-ItemStatusUpdate)
@@ -364,15 +372,16 @@ Transfer currency call
 <a name="saga-api-currencytype-CreateCurrencyTypeRequest"></a>
 
 ### CreateCurrencyTypeRequest
-
+Create currencyType call
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| currency_type_id | [string](#string) |  |  |
+| currency_type_id | [string](#string) |  | The game&#39;s unique id for this CurrencyType |
 | name | [string](#string) |  |  |
-| symbol | [string](#string) |  |  |
-| max_supply | [int64](#int64) |  |  |
+| symbol | [string](#string) |  | Unique symbol across all of Saga |
+| image_url | [string](#string) |  |  |
+| idempotency_id | [string](#string) |  | The game&#39;s unique string per request |
 
 
 
@@ -389,13 +398,13 @@ Transfer currency call
 | ----- | ---- | ----- | ----------- |
 | trace_id | [string](#string) |  |  |
 | currency_type_id | [string](#string) |  |  |
-| game_title_id | [string](#string) |  |  |
-| publisher_address | [string](#string) |  |  |
 | name | [string](#string) |  |  |
 | symbol | [string](#string) |  |  |
+| image_url | [string](#string) |  |  |
 | contract_address | [string](#string) |  |  |
+| transaction_id | [string](#string) |  |  |
 | finalized | [bool](#bool) |  |  |
-| max_supply | [int64](#int64) |  |  |
+| publisher_balance | [PublisherBalanceProto](#saga-api-currencytype-PublisherBalanceProto) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
@@ -442,8 +451,25 @@ Currency Type call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| page_size | [int32](#int32) |  |  |
-| sort_order | [saga.common.SortOrder](#saga-common-SortOrder) |  |  |
+| game_title_id | [string](#string) |  |  |
+| publisher_address | [string](#string) |  |  |
+| query_options | [saga.common.QueryOptionsProto](#saga-common-QueryOptionsProto) |  |  |
+
+
+
+
+
+
+<a name="saga-api-currencytype-PublisherBalanceProto"></a>
+
+### PublisherBalanceProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| publisher_address | [string](#string) |  |  |
+| balance_in_wei | [string](#string) |  |  |
 
 
 
@@ -1852,6 +1878,34 @@ Metadata properties of Item
 
 
 
+<a name="common_currencytype_definition-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## common/currencytype/definition.proto
+
+
+ 
+
+
+<a name="saga-proto-common-currencytype-CurrencyTypeState"></a>
+
+### CurrencyTypeState
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| FAILED | 0 | CurrencyType failed to perform current action |
+| CREATED | 1 | CurrencyType issued successfully |
+
+
+ 
+
+ 
+
+ 
+
+
+
 <a name="common_finalization-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -2166,6 +2220,54 @@ Results from a Currency status update gRPC stream call
 | ----- | ---- | ----- | ----------- |
 | error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
 | status_update | [CurrencyStatusUpdate](#saga-rpc-streams-currency-CurrencyStatusUpdate) |  |  |
+
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="streams_currencytype_definition-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## streams/currencytype/definition.proto
+
+
+
+<a name="saga-rpc-streams-currencytype-CurrencyTypeStatusUpdate"></a>
+
+### CurrencyTypeStatusUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| currency_type_id | [string](#string) |  |  |
+| currency_type_state | [saga.proto.common.currencytype.CurrencyTypeState](#saga-proto-common-currencytype-CurrencyTypeState) |  |  |
+
+
+
+
+
+
+<a name="saga-rpc-streams-currencytype-CurrencyTypeUpdate"></a>
+
+### CurrencyTypeUpdate
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| error | [saga.common.ErrorData](#saga-common-ErrorData) |  |  |
+| status_update | [CurrencyTypeStatusUpdate](#saga-rpc-streams-currencytype-CurrencyTypeStatusUpdate) |  |  |
 
 
 
@@ -2510,6 +2612,7 @@ Returned results on sending a Status stream call
 | player_wallet_update | [playerwallet.PlayerWalletUpdate](#saga-rpc-streams-playerwallet-PlayerWalletUpdate) |  |  |
 | reservation_update | [reservation.ReservationUpdate](#saga-rpc-streams-reservation-ReservationUpdate) |  |  |
 | metadata_update | [metadata.MetadataUpdate](#saga-rpc-streams-metadata-MetadataUpdate) |  |  |
+| currency_type_update | [currencytype.CurrencyTypeUpdate](#saga-rpc-streams-currencytype-CurrencyTypeUpdate) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 
 

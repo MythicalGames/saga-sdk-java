@@ -259,6 +259,10 @@
                   <a href="#saga.api.currencytype.GetCurrencyTypesRequest"><span class="badge">M</span>GetCurrencyTypesRequest</a>
                 </li>
               
+                <li>
+                  <a href="#saga.api.currencytype.PublisherBalanceProto"><span class="badge">M</span>PublisherBalanceProto</a>
+                </li>
+              
               
               
               
@@ -732,6 +736,21 @@
         
           
           <li>
+            <a href="#common%2fcurrencytype%2fdefinition.proto">common/currencytype/definition.proto</a>
+            <ul>
+              
+              
+                <li>
+                  <a href="#saga.proto.common.currencytype.CurrencyTypeState"><span class="badge">E</span>CurrencyTypeState</a>
+                </li>
+              
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
             <a href="#common%2ffinalization.proto">common/finalization.proto</a>
             <ul>
               
@@ -869,6 +888,25 @@
               
                 <li>
                   <a href="#saga.rpc.streams.currency.CurrencyUpdate"><span class="badge">M</span>CurrencyUpdate</a>
+                </li>
+              
+              
+              
+              
+            </ul>
+          </li>
+        
+          
+          <li>
+            <a href="#streams%2fcurrencytype%2fdefinition.proto">streams/currencytype/definition.proto</a>
+            <ul>
+              
+                <li>
+                  <a href="#saga.rpc.streams.currencytype.CurrencyTypeStatusUpdate"><span class="badge">M</span>CurrencyTypeStatusUpdate</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.rpc.streams.currencytype.CurrencyTypeUpdate"><span class="badge">M</span>CurrencyTypeUpdate</a>
                 </li>
               
               
@@ -1344,7 +1382,7 @@
 
       
         <h3 id="saga.api.currencytype.CreateCurrencyTypeRequest">CreateCurrencyTypeRequest</h3>
-        <p></p>
+        <p>Create currencyType call</p>
 
         
           <table class="field-table">
@@ -1357,7 +1395,7 @@
                   <td>currency_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p>The game&#39;s unique id for this CurrencyType </p></td>
                 </tr>
               
                 <tr>
@@ -1371,14 +1409,21 @@
                   <td>symbol</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
+                  <td><p>Unique symbol across all of Saga </p></td>
+                </tr>
+              
+                <tr>
+                  <td>image_url</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>max_supply</td>
-                  <td><a href="#int64">int64</a></td>
+                  <td>idempotency_id</td>
+                  <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p>The game&#39;s unique string per request </p></td>
                 </tr>
               
             </tbody>
@@ -1413,20 +1458,6 @@
                 </tr>
               
                 <tr>
-                  <td>game_title_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>publisher_address</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
                   <td>name</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
@@ -1441,7 +1472,21 @@
                 </tr>
               
                 <tr>
+                  <td>image_url</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
                   <td>contract_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>transaction_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -1455,8 +1500,8 @@
                 </tr>
               
                 <tr>
-                  <td>max_supply</td>
-                  <td><a href="#int64">int64</a></td>
+                  <td>publisher_balance</td>
+                  <td><a href="#saga.api.currencytype.PublisherBalanceProto">PublisherBalanceProto</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -1541,15 +1586,53 @@
             <tbody>
               
                 <tr>
-                  <td>page_size</td>
-                  <td><a href="#int32">int32</a></td>
+                  <td>game_title_id</td>
+                  <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>sort_order</td>
-                  <td><a href="#saga.common.SortOrder">saga.common.SortOrder</a></td>
+                  <td>publisher_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>query_options</td>
+                  <td><a href="#saga.common.QueryOptionsProto">saga.common.QueryOptionsProto</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.currencytype.PublisherBalanceProto">PublisherBalanceProto</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>publisher_address</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>balance_in_wei</td>
+                  <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -4617,6 +4700,43 @@
     
       
       <div class="file-heading">
+        <h2 id="common/currencytype/definition.proto">common/currencytype/definition.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+
+      
+        <h3 id="saga.proto.common.currencytype.CurrencyTypeState">CurrencyTypeState</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>FAILED</td>
+                <td>0</td>
+                <td><p>CurrencyType failed to perform current action</p></td>
+              </tr>
+            
+              <tr>
+                <td>CREATED</td>
+                <td>1</td>
+                <td><p>CurrencyType issued successfully</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+
+      
+
+      
+    
+      
+      <div class="file-heading">
         <h2 id="common/finalization.proto">common/finalization.proto</h2><a href="#title">Top</a>
       </div>
       <p></p>
@@ -5171,6 +5291,82 @@
                 <tr>
                   <td>status_update</td>
                   <td><a href="#saga.rpc.streams.currency.CurrencyStatusUpdate">CurrencyStatusUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+
+      
+
+      
+    
+      
+      <div class="file-heading">
+        <h2 id="streams/currencytype/definition.proto">streams/currencytype/definition.proto</h2><a href="#title">Top</a>
+      </div>
+      <p></p>
+
+      
+        <h3 id="saga.rpc.streams.currencytype.CurrencyTypeStatusUpdate">CurrencyTypeStatusUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>currency_type_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>currency_type_state</td>
+                  <td><a href="#saga.proto.common.currencytype.CurrencyTypeState">saga.proto.common.currencytype.CurrencyTypeState</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.rpc.streams.currencytype.CurrencyTypeUpdate">CurrencyTypeUpdate</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>error</td>
+                  <td><a href="#saga.common.ErrorData">saga.common.ErrorData</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status_update</td>
+                  <td><a href="#saga.rpc.streams.currencytype.CurrencyTypeStatusUpdate">CurrencyTypeStatusUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -5776,6 +5972,13 @@
                 <tr>
                   <td>metadata_update</td>
                   <td><a href="#saga.rpc.streams.metadata.MetadataUpdate">metadata.MetadataUpdate</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>currency_type_update</td>
+                  <td><a href="#saga.rpc.streams.currencytype.CurrencyTypeUpdate">currencytype.CurrencyTypeUpdate</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
