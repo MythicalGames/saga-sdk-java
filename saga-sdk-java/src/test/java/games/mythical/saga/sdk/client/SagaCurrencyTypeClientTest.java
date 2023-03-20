@@ -7,7 +7,6 @@ import games.mythical.saga.sdk.proto.api.currencytype.CurrencyTypeServiceGrpc;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,10 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -45,7 +41,6 @@ class SagaCurrencyTypeClientTest extends AbstractClientTest {
     @Test
     public void getCurrencyType() throws Exception {
         var expectedResponse = CurrencyTypeProto.newBuilder()
-                .setMaxSupply(RandomUtils.nextInt(0, 1000))
                 .setContractAddress(ADDRESS)
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .setCreatedAt(Timestamps.fromMillis(Instant.now().toEpochMilli() - 86400))
@@ -56,7 +51,6 @@ class SagaCurrencyTypeClientTest extends AbstractClientTest {
 
         assertNotNull(currencyResponse);
         assertEquals(expectedResponse.getContractAddress(), currencyResponse.getContractAddress());
-        assertEquals(expectedResponse.getMaxSupply(), currencyResponse.getMaxSupply());
 
         when(mockServiceBlockingStub.getCurrencyType(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
         assertThrows(SagaException.class, () -> currencyTypeClient.getCurrencyType("INVALID-CURRENCY-ID"));
