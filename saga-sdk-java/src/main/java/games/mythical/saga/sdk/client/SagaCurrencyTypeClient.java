@@ -4,6 +4,7 @@ import games.mythical.saga.sdk.client.model.SagaCurrencyType;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
+import games.mythical.saga.sdk.factory.CommonFactory;
 import games.mythical.saga.sdk.proto.api.currencytype.CreateCurrencyTypeRequest;
 import games.mythical.saga.sdk.proto.api.currencytype.CurrencyTypeServiceGrpc;
 import games.mythical.saga.sdk.proto.api.currencytype.GetCurrencyTypeRequest;
@@ -13,7 +14,9 @@ import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,10 +51,15 @@ public class SagaCurrencyTypeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public List<SagaCurrencyType> getCurrencyTypes(int pageSize, SortOrder sortOrder) throws SagaException {
+    public List<SagaCurrencyType> getCurrencyTypes(String gameTitleId,
+                                                   String publisherAddress,
+                                                   int pageSize,
+                                                   SortOrder sortOrder,
+                                                   Instant createdAtCursor) throws SagaException {
         var request = GetCurrencyTypesRequest.newBuilder()
-                .setPageSize(pageSize)
-                .setSortOrder(sortOrder)
+                .setGameTitleId(StringUtils.defaultString(gameTitleId))
+                .setPublisherAddress(StringUtils.defaultString(publisherAddress))
+                .setQueryOptions(CommonFactory.toProto(pageSize, sortOrder, createdAtCursor))
                 .build();
 
         try {
