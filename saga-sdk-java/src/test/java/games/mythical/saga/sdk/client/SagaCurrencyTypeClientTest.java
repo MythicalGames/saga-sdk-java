@@ -63,7 +63,7 @@ class SagaCurrencyTypeClientTest extends AbstractClientTest {
     }
 
     @Test
-    public void getItemTypes() throws Exception {
+    public void getCurrencyTypes() throws Exception {
         var proto_1 = generateCurrencyTypeProto();
         var proto_2 = generateCurrencyTypeProto();
         var proto_3 = generateCurrencyTypeProto();
