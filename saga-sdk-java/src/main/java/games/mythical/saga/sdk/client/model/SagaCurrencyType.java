@@ -18,13 +18,14 @@ import java.time.Instant;
 public class SagaCurrencyType {
     private String traceId;
     private String currencyTypeId;
-    private String gameTitleId;
-    private String publisherAddress;
     private String name;
     private String symbol;
+    private String imageUrl;
     private String contractAddress;
-    private boolean finalized;
+    private String transactionId;
     private long maxSupply;
+    @DtoExclude
+    private SagaBalance publisherBalance;
     @DtoExclude
     private Instant createdAt;
     @DtoExclude
@@ -32,6 +33,10 @@ public class SagaCurrencyType {
 
     public static SagaCurrencyType fromProto(CurrencyTypeProto proto) {
         var currencyType = ProtoUtil.toDto(proto, SagaCurrencyType.class);
+
+        if (proto.hasPublisherBalance()) {
+            currencyType.setPublisherBalance(SagaBalance.fromProto(proto.getPublisherBalance()));
+        }
 
         var createdAt = ConversionUtils.protoTimestampToInstant(proto.getCreatedAt());
         currencyType.setCreatedAt(createdAt);
