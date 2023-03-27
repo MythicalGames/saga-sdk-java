@@ -17,7 +17,6 @@
     - [CurrencyService](#saga-api-currency-CurrencyService)
   
 - [api/currencytype/definition.proto](#api_currencytype_definition-proto)
-    - [CreateCurrencyTypeRequest](#saga-api-currencytype-CreateCurrencyTypeRequest)
     - [CurrencyTypeProto](#saga-api-currencytype-CurrencyTypeProto)
     - [CurrencyTypesProto](#saga-api-currencytype-CurrencyTypesProto)
     - [GetCurrencyTypeRequest](#saga-api-currencytype-GetCurrencyTypeRequest)
@@ -369,25 +368,6 @@ Transfer currency call
 
 
 
-<a name="saga-api-currencytype-CreateCurrencyTypeRequest"></a>
-
-### CreateCurrencyTypeRequest
-Create currencyType call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| currency_type_id | [string](#string) |  | The game&#39;s unique id for this CurrencyType |
-| name | [string](#string) |  |  |
-| symbol | [string](#string) |  | Unique symbol across all of Saga |
-| image_url | [string](#string) |  |  |
-| idempotency_id | [string](#string) |  | The game&#39;s unique string per request |
-
-
-
-
-
-
 <a name="saga-api-currencytype-CurrencyTypeProto"></a>
 
 ### CurrencyTypeProto
@@ -403,7 +383,6 @@ Create currencyType call
 | image_url | [string](#string) |  |  |
 | contract_address | [string](#string) |  |  |
 | transaction_id | [string](#string) |  |  |
-| finalized | [bool](#bool) |  |  |
 | publisher_balance | [PublisherBalanceProto](#saga-api-currencytype-PublisherBalanceProto) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
@@ -451,8 +430,6 @@ Currency Type call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| game_title_id | [string](#string) |  |  |
-| publisher_address | [string](#string) |  |  |
 | query_options | [saga.common.QueryOptionsProto](#saga-common-QueryOptionsProto) |  |  |
 
 
@@ -507,7 +484,6 @@ Currency Type call
 | ----------- | ------------ | ------------- | ------------|
 | GetCurrencyType | [GetCurrencyTypeRequest](#saga-api-currencytype-GetCurrencyTypeRequest) | [CurrencyTypeProto](#saga-api-currencytype-CurrencyTypeProto) |  |
 | GetCurrencyTypes | [GetCurrencyTypesRequest](#saga-api-currencytype-GetCurrencyTypesRequest) | [CurrencyTypesProto](#saga-api-currencytype-CurrencyTypesProto) |  |
-| CreateCurrencyType | [CreateCurrencyTypeRequest](#saga-api-currencytype-CreateCurrencyTypeRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
 
  
 

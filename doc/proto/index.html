@@ -240,10 +240,6 @@
             <ul>
               
                 <li>
-                  <a href="#saga.api.currencytype.CreateCurrencyTypeRequest"><span class="badge">M</span>CreateCurrencyTypeRequest</a>
-                </li>
-              
-                <li>
                   <a href="#saga.api.currencytype.CurrencyTypeProto"><span class="badge">M</span>CurrencyTypeProto</a>
                 </li>
               
@@ -1381,58 +1377,6 @@
       <p></p>
 
       
-        <h3 id="saga.api.currencytype.CreateCurrencyTypeRequest">CreateCurrencyTypeRequest</h3>
-        <p>Create currencyType call</p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>currency_type_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>The game&#39;s unique id for this CurrencyType </p></td>
-                </tr>
-              
-                <tr>
-                  <td>name</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>symbol</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>Unique symbol across all of Saga </p></td>
-                </tr>
-              
-                <tr>
-                  <td>image_url</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>idempotency_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>The game&#39;s unique string per request </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
         <h3 id="saga.api.currencytype.CurrencyTypeProto">CurrencyTypeProto</h3>
         <p></p>
 
@@ -1488,13 +1432,6 @@
                 <tr>
                   <td>transaction_id</td>
                   <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>finalized</td>
-                  <td><a href="#bool">bool</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -1586,20 +1523,6 @@
             <tbody>
               
                 <tr>
-                  <td>game_title_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>publisher_address</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
                   <td>query_options</td>
                   <td><a href="#saga.common.QueryOptionsProto">saga.common.QueryOptionsProto</a></td>
                   <td></td>
@@ -1683,13 +1606,6 @@
                 <td>GetCurrencyTypes</td>
                 <td><a href="#saga.api.currencytype.GetCurrencyTypesRequest">GetCurrencyTypesRequest</a></td>
                 <td><a href="#saga.api.currencytype.CurrencyTypesProto">CurrencyTypesProto</a></td>
-                <td><p></p></td>
-              </tr>
-            
-              <tr>
-                <td>CreateCurrencyType</td>
-                <td><a href="#saga.api.currencytype.CreateCurrencyTypeRequest">CreateCurrencyTypeRequest</a></td>
-                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p></p></td>
               </tr>
             
