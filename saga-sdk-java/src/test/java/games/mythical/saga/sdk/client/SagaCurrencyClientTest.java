@@ -1,7 +1,7 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockCurrencyExecutor;
-import games.mythical.saga.sdk.client.model.SagaUserAmounts;
+import games.mythical.saga.sdk.client.model.SagaUserAmount;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.currency.CurrencyProto;
 import games.mythical.saga.sdk.proto.api.currency.CurrencyServiceGrpc;
@@ -91,8 +91,8 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.issueCurrency(any())).thenReturn(expectedResponse);
-        List<SagaUserAmounts> userAmountsList = new ArrayList<>();
-        userAmountsList.add(SagaUserAmounts.builder().amount_in_wei("1000").oauth_id("oauth").build());
+        List<SagaUserAmount> userAmountsList = new ArrayList<>();
+        userAmountsList.add(SagaUserAmount.builder().amount_in_wei("1000").oauth_id("oauth").build());
         final var traceId = currencyClient.issueCurrency(
                 CURRENCY_ID,
                 userAmountsList,

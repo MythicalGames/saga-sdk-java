@@ -2,7 +2,7 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaCurrencyExecutor;
 import games.mythical.saga.sdk.client.model.SagaCurrency;
-import games.mythical.saga.sdk.client.model.SagaUserAmounts;
+import games.mythical.saga.sdk.client.model.SagaUserAmount;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
@@ -55,7 +55,7 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
     }
 
     public String issueCurrency(String currencyTypeId,
-                                List<SagaUserAmounts> userAmounts,
+                                List<SagaUserAmount> userAmounts,
                                 String idempotencyId) throws SagaException {
 
         List<UserAmountProto> amounts = new ArrayList<>();
