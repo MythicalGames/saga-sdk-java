@@ -1,6 +1,7 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockCurrencyExecutor;
+import games.mythical.saga.sdk.client.model.SagaUserAmounts;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.currency.CurrencyProto;
 import games.mythical.saga.sdk.proto.api.currency.CurrencyServiceGrpc;
@@ -25,6 +26,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -88,10 +91,12 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.issueCurrency(any())).thenReturn(expectedResponse);
+        List<SagaUserAmounts> userAmountsList = new ArrayList<>();
+        userAmountsList.add(SagaUserAmounts.builder().amount_in_wei("1000").oauth_id("oauth").build());
         final var traceId = currencyClient.issueCurrency(
                 CURRENCY_ID,
-                OAUTH_ID,
-                RandomUtils.nextLong(0, 1000));
+                userAmountsList,
+                "idempotencyId");
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = CurrencyStatusUpdate.newBuilder()
