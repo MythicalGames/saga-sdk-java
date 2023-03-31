@@ -26,7 +26,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -91,11 +90,9 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.issueCurrency(any())).thenReturn(expectedResponse);
-        List<SagaUserAmount> userAmountsList = new ArrayList<>();
-        userAmountsList.add(SagaUserAmount.builder().amount_in_wei("1000").oauth_id("oauth").build());
         final var traceId = currencyClient.issueCurrency(
                 CURRENCY_ID,
-                userAmountsList,
+                List.of(SagaUserAmount.builder().amount_in_wei("1000").oauth_id("oauth").build()),
                 "idempotencyId");
         checkTraceAndStart(expectedResponse, traceId);
 
