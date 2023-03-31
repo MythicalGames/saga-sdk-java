@@ -12,6 +12,7 @@
     - [GetCurrencyForPlayerRequest](#saga-api-currency-GetCurrencyForPlayerRequest)
     - [IssueCurrencyRequest](#saga-api-currency-IssueCurrencyRequest)
     - [TransferCurrencyRequest](#saga-api-currency-TransferCurrencyRequest)
+    - [UserAmountProto](#saga-api-currency-UserAmountProto)
   
 - [api/currency/rpc.proto](#api_currency_rpc-proto)
     - [CurrencyService](#saga-api-currency-CurrencyService)
@@ -296,9 +297,9 @@ Issue currency call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| amount | [int64](#int64) |  | amount to issue |
 | currency_type_id | [string](#string) |  | Currency Type the currency to issue belongs to |
-| oauth_id | [string](#string) |  | Wallet address to issue currency to |
+| user_amounts | [UserAmountProto](#saga-api-currency-UserAmountProto) | repeated | Users to issue currency to |
+| idempotency_id | [string](#string) |  | Unique id to ensure request is processed only once |
 
 
 
@@ -317,6 +318,22 @@ Transfer currency call
 | destination_oauth_id | [string](#string) |  | User to transfer currency to |
 | currency_id | [string](#string) |  |  |
 | amount | [int64](#int64) |  | Amount of currency to transfer |
+
+
+
+
+
+
+<a name="saga-api-currency-UserAmountProto"></a>
+
+### UserAmountProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| oauth_id | [string](#string) |  | User to issue currency to |
+| amount_in_wei | [string](#string) |  | Amount to issue |
 
 
 

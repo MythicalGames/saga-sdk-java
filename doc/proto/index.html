@@ -213,6 +213,10 @@
                   <a href="#saga.api.currency.TransferCurrencyRequest"><span class="badge">M</span>TransferCurrencyRequest</a>
                 </li>
               
+                <li>
+                  <a href="#saga.api.currency.UserAmountProto"><span class="badge">M</span>UserAmountProto</a>
+                </li>
+              
               
               
               
@@ -1237,13 +1241,6 @@
             <tbody>
               
                 <tr>
-                  <td>amount</td>
-                  <td><a href="#int64">int64</a></td>
-                  <td></td>
-                  <td><p>amount to issue </p></td>
-                </tr>
-              
-                <tr>
                   <td>currency_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
@@ -1251,10 +1248,17 @@
                 </tr>
               
                 <tr>
-                  <td>oauth_id</td>
+                  <td>user_amounts</td>
+                  <td><a href="#saga.api.currency.UserAmountProto">UserAmountProto</a></td>
+                  <td>repeated</td>
+                  <td><p>Users to issue currency to </p></td>
+                </tr>
+              
+                <tr>
+                  <td>idempotency_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Wallet address to issue currency to </p></td>
+                  <td><p>Unique id to ensure request is processed only once </p></td>
                 </tr>
               
             </tbody>
@@ -1300,6 +1304,37 @@
                   <td><a href="#int64">int64</a></td>
                   <td></td>
                   <td><p>Amount of currency to transfer </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.currency.UserAmountProto">UserAmountProto</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>oauth_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>User to issue currency to </p></td>
+                </tr>
+              
+                <tr>
+                  <td>amount_in_wei</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>Amount to issue </p></td>
                 </tr>
               
             </tbody>
