@@ -100,7 +100,6 @@ class SagaMultiClientTest extends AbstractClientTest {
 
         // make sure the network calls all align
         mockServer.verifyCalls("StatusStream", 1);
-        mockServer.verifyCalls("StatusConfirmation", 1);
 
         // make sure no other stream is catching this currency event
         final var update2 = CurrencyStatusUpdate.newBuilder()
@@ -123,6 +122,5 @@ class SagaMultiClientTest extends AbstractClientTest {
 
         // using the existing stream, confirm the currency event
         mockServer.verifyCalls("StatusStream", 1);
-        mockServer.verifyCalls("StatusConfirmation", 2);
     }
 }

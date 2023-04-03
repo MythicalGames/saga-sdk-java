@@ -116,11 +116,9 @@ class SagaCurrencyClientTest extends AbstractClientTest {
 
         assertEquals(OAUTH_ID, executor.getOauthId());
         assertEquals(expectedResponse.getTraceId(), executor.getTraceId());
-        assertEquals(CurrencyState.ISSUED, executor.getCurrencyState());
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         currencyServer.verifyCalls("StatusStream", 1);
-        currencyServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -138,7 +136,7 @@ class SagaCurrencyClientTest extends AbstractClientTest {
 
         final var update = CurrencyStatusUpdate.newBuilder()
                 .addBalances(BalanceProto.newBuilder()
-                        .setOauthId(OAUTH_ID)
+                        .setOauthId(DEST)
                         .setCurrencyTypeId(CURRENCY_TYPE_ID)
                         .build())
                 .setCurrencyState(CurrencyState.TRANSFERRED);
@@ -155,7 +153,6 @@ class SagaCurrencyClientTest extends AbstractClientTest {
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         currencyServer.verifyCalls("StatusStream", 1);
-        currencyServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -186,6 +183,5 @@ class SagaCurrencyClientTest extends AbstractClientTest {
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         currencyServer.verifyCalls("StatusStream", 1);
-        currencyServer.verifyCalls("StatusConfirmation", 1);
     }
 }

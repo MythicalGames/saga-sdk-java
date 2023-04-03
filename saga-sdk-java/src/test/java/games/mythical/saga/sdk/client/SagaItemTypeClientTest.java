@@ -151,7 +151,6 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         itemTypeServer.verifyCalls("StatusStream", 1);
-        itemTypeServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -191,7 +190,6 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         itemTypeServer.verifyCalls("StatusStream", 1);
-        itemTypeServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -221,7 +219,6 @@ class SagaItemTypeClientTest extends AbstractClientTest {
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         itemTypeServer.verifyCalls("StatusStream", 1);
-        itemTypeServer.verifyCalls("StatusConfirmation", 1);
     }
 
 }

@@ -24,13 +24,16 @@ public class MockStatusStreamingImpl extends StatusStreamGrpc.StatusStreamImplBa
         responseObserver.onNext(Empty.newBuilder().build());
         responseObserver.onCompleted();
 
+        // TODO: since 10/28 confirmation message is no longer being sent to Saga
         ConcurrentFinisher.finish(request.getTraceId());
     }
 
-    public void sendStatus(String titleId, StatusUpdate statusUpdate) {
+    public void sendStatus(String titleId, StatusUpdate statusUpdate) throws InterruptedException {
         if (streamObservers.containsKey(titleId)) {
             var observer = streamObservers.get(titleId);
             observer.onNext(statusUpdate);
+            Thread.sleep(250);
+            ConcurrentFinisher.finish(statusUpdate.getTraceId());
         }
     }
 
