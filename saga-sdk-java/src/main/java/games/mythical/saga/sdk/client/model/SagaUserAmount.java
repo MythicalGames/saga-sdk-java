@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SagaUserAmount {
-    private String oauth_id;
-    private String amount_in_wei;
+    private String oauthId;
+    private String amountInWei;
 }

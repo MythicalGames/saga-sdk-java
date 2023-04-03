@@ -8,6 +8,7 @@ import games.mythical.saga.sdk.proto.api.currency.CurrencyServiceGrpc;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.currency.CurrencyState;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
+import games.mythical.saga.sdk.proto.streams.currency.BalanceProto;
 import games.mythical.saga.sdk.proto.streams.currency.CurrencyStatusUpdate;
 import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
 import games.mythical.saga.sdk.server.MockServer;
@@ -35,7 +36,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SagaCurrencyClientTest extends AbstractClientTest {
-    private static final String CURRENCY_ID = RandomStringUtils.randomAlphanumeric(30);
+    private static final String CURRENCY_TYPE_ID = RandomStringUtils.randomAlphanumeric(30);
     private static final String OAUTH_ID = RandomStringUtils.randomAlphanumeric(30);
     private final MockCurrencyExecutor executor = MockCurrencyExecutor.builder().build();
     private MockServer currencyServer;
@@ -66,16 +67,16 @@ class SagaCurrencyClientTest extends AbstractClientTest {
     @Test
     public void getCurrency() throws Exception {
         var expectedResponse = CurrencyProto.newBuilder()
-                .setCurrencyTypeId(CURRENCY_ID)
+                .setCurrencyTypeId(CURRENCY_TYPE_ID)
                 .setAmount(RandomUtils.nextLong(0, 1000))
                 .setOauthId(OAUTH_ID)
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.getCurrencyForPlayer(any())).thenReturn(expectedResponse);
-        var currencyResponse = currencyClient.getCurrency(CURRENCY_ID, OAUTH_ID);
+        var currencyResponse = currencyClient.getCurrency(CURRENCY_TYPE_ID, OAUTH_ID);
 
         assertNotNull(currencyResponse);
-        assertEquals(CURRENCY_ID, currencyResponse.getCurrencyTypeId());
+        assertEquals(CURRENCY_TYPE_ID, currencyResponse.getCurrencyTypeId());
         assertEquals(expectedResponse.getOauthId(), currencyResponse.getOauthId());
         assertEquals(expectedResponse.getAmount(), currencyResponse.getAmount());
 
@@ -91,14 +92,20 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.issueCurrency(any())).thenReturn(expectedResponse);
         final var traceId = currencyClient.issueCurrency(
-                CURRENCY_ID,
-                List.of(SagaUserAmount.builder().amount_in_wei("1000").oauth_id("oauth").build()),
+                CURRENCY_TYPE_ID,
+                List.of(SagaUserAmount.builder()
+                        .amountInWei("1000")
+                        .oauthId("oauth")
+                        .build()
+                ),
                 "idempotencyId");
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = CurrencyStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
-                .setCurrencyTypeId(CURRENCY_ID)
+                .addBalances(BalanceProto.newBuilder()
+                        .setOauthId(OAUTH_ID)
+                        .setCurrencyTypeId(CURRENCY_TYPE_ID)
+                        .build())
                 .setCurrencyState(CurrencyState.ISSUED);
         currencyServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(traceId)
@@ -126,12 +133,14 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.transferCurrency(any())).thenReturn(expectedResponse);
-        final var traceId = currencyClient.transferCurrency(CURRENCY_ID, SOURCE, DEST, RandomUtils.nextLong(1, 1000));
+        final var traceId = currencyClient.transferCurrency(CURRENCY_TYPE_ID, SOURCE, DEST, RandomUtils.nextLong(1, 1000));
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = CurrencyStatusUpdate.newBuilder()
-                .setOauthId(DEST)
-                .setCurrencyTypeId(CURRENCY_ID)
+                .addBalances(BalanceProto.newBuilder()
+                        .setOauthId(OAUTH_ID)
+                        .setCurrencyTypeId(CURRENCY_TYPE_ID)
+                        .build())
                 .setCurrencyState(CurrencyState.TRANSFERRED);
         currencyServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(traceId)
@@ -156,12 +165,14 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.burnCurrency(any())).thenReturn(expectedResponse);
-        final var traceId = currencyClient.burnCurrency(CURRENCY_ID, OAUTH_ID, RandomUtils.nextLong(1, 1000));
+        final var traceId = currencyClient.burnCurrency(CURRENCY_TYPE_ID, OAUTH_ID, RandomUtils.nextLong(1, 1000));
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = CurrencyStatusUpdate.newBuilder()
-                .setOauthId(OAUTH_ID)
-                .setCurrencyTypeId(CURRENCY_ID)
+                .addBalances(BalanceProto.newBuilder()
+                        .setOauthId(OAUTH_ID)
+                        .setCurrencyTypeId(CURRENCY_TYPE_ID)
+                        .build())
                 .setCurrencyState(CurrencyState.BURNED);
         currencyServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(traceId)

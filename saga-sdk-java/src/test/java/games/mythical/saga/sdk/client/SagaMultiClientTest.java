@@ -2,9 +2,10 @@ package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.MockCurrencyExecutor;
 import games.mythical.saga.sdk.client.executor.MockItemExecutor;
-import games.mythical.saga.sdk.proto.api.item.ItemServiceGrpc;
 import games.mythical.saga.sdk.proto.api.currency.CurrencyServiceGrpc;
+import games.mythical.saga.sdk.proto.api.item.ItemServiceGrpc;
 import games.mythical.saga.sdk.proto.streams.StatusUpdate;
+import games.mythical.saga.sdk.proto.streams.currency.BalanceProto;
 import games.mythical.saga.sdk.proto.streams.currency.CurrencyStatusUpdate;
 import games.mythical.saga.sdk.proto.streams.currency.CurrencyUpdate;
 import games.mythical.saga.sdk.proto.streams.item.ItemStatusUpdate;
@@ -82,8 +83,8 @@ class SagaMultiClientTest extends AbstractClientTest {
 
         // firing an item event so item executor should catch it
         final var update = ItemStatusUpdate.newBuilder()
-            .setOauthId(OAUTH_ID)
-            .setItemTypeId(RandomStringUtils.randomAlphanumeric(30));
+                .setOauthId(OAUTH_ID)
+                .setItemTypeId(RandomStringUtils.randomAlphanumeric(30));
         var statusUpdate = StatusUpdate.newBuilder()
                 .setTraceId(TRACE_ID_2)
                 .setItemUpdate(ItemUpdate.newBuilder().setStatusUpdate(update).build())
@@ -103,8 +104,10 @@ class SagaMultiClientTest extends AbstractClientTest {
 
         // make sure no other stream is catching this currency event
         final var update2 = CurrencyStatusUpdate.newBuilder()
-            .setOauthId(OAUTH_ID)
-            .setCurrencyTypeId(RandomStringUtils.randomAlphanumeric(30));
+                .addBalances(BalanceProto.newBuilder()
+                        .setOauthId(OAUTH_ID)
+                        .setCurrencyTypeId(RandomStringUtils.randomAlphanumeric(30))
+                        .build());
         var statusUpdate2 = StatusUpdate.newBuilder()
                 .setTraceId(TRACE_ID_1)
                 .setCurrencyUpdate(CurrencyUpdate.newBuilder().setStatusUpdate(update2))

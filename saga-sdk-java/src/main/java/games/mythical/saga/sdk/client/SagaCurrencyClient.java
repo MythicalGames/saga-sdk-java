@@ -60,8 +60,8 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
 
         List<UserAmountProto> amounts = new ArrayList<>();
         userAmounts.forEach(userAmount -> amounts.add(UserAmountProto.newBuilder()
-                .setAmountInWei(userAmount.getAmount_in_wei())
-                .setOauthId(userAmount.getOauth_id())
+                .setAmountInWei(userAmount.getAmountInWei())
+                .setOauthId(userAmount.getOauthId())
                 .build()));
         var request = IssueCurrencyRequest.newBuilder()
                 .setCurrencyTypeId(currencyTypeId)
