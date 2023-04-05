@@ -3,7 +3,7 @@ package games.mythical.saga.sdk.client;
 import games.mythical.saga.sdk.client.executor.MockCurrencyExecutor;
 import games.mythical.saga.sdk.client.model.SagaUserAmount;
 import games.mythical.saga.sdk.exception.SagaException;
-import games.mythical.saga.sdk.proto.api.currency.CurrencyProto;
+import games.mythical.saga.sdk.proto.api.currency.BalanceOfPlayerProto;
 import games.mythical.saga.sdk.proto.api.currency.CurrencyServiceGrpc;
 import games.mythical.saga.sdk.proto.common.ReceivedResponse;
 import games.mythical.saga.sdk.proto.common.currency.CurrencyState;
@@ -30,6 +30,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static games.mythical.saga.sdk.proto.api.currency.BalanceProto.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -65,23 +66,25 @@ class SagaCurrencyClientTest extends AbstractClientTest {
     }
 
     @Test
-    public void getCurrency() throws Exception {
-        var expectedResponse = CurrencyProto.newBuilder()
-                .setCurrencyTypeId(CURRENCY_TYPE_ID)
-                .setAmount(RandomUtils.nextLong(0, 1000))
+    public void getBalanceOfPlayer() throws Exception {
+        var expectedResponse = BalanceOfPlayerProto.newBuilder()
+                .setBalance(newBuilder()
+                        .setCurrencyTypeId(CURRENCY_TYPE_ID)
+                        .setBalanceInWei(RandomStringUtils.randomNumeric(10))
+                        .build())
                 .setOauthId(OAUTH_ID)
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
-        when(mockServiceBlockingStub.getCurrencyForPlayer(any())).thenReturn(expectedResponse);
-        var currencyResponse = currencyClient.getCurrency(CURRENCY_TYPE_ID, OAUTH_ID);
+        when(mockServiceBlockingStub.getBalanceOfPlayer(any())).thenReturn(expectedResponse);
+        var currencyResponse = currencyClient.getBalanceOfPlayer(CURRENCY_TYPE_ID, OAUTH_ID);
 
         assertNotNull(currencyResponse);
-        assertEquals(CURRENCY_TYPE_ID, currencyResponse.getCurrencyTypeId());
+        assertEquals(CURRENCY_TYPE_ID, currencyResponse.getBalance().getCurrencyTypeId());
         assertEquals(expectedResponse.getOauthId(), currencyResponse.getOauthId());
-        assertEquals(expectedResponse.getAmount(), currencyResponse.getAmount());
+        assertEquals(expectedResponse.getBalance().getBalanceInWei(), currencyResponse.getBalance().getBalanceInWei());
 
-        when(mockServiceBlockingStub.getCurrencyForPlayer(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
-        assertThrows(SagaException.class, () -> currencyClient.getCurrency("INVALID-CURRENCY-ID", "INVALID-USER"));
+        when(mockServiceBlockingStub.getBalanceOfPlayer(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
+        assertThrows(SagaException.class, () -> currencyClient.getBalanceOfPlayer("INVALID-CURRENCY-ID", "INVALID-USER"));
     }
 
     @Test

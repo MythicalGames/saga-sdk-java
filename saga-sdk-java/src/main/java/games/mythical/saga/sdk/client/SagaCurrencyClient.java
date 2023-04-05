@@ -1,17 +1,21 @@
 package games.mythical.saga.sdk.client;
 
 import games.mythical.saga.sdk.client.executor.SagaCurrencyExecutor;
-import games.mythical.saga.sdk.client.model.SagaCurrency;
+import games.mythical.saga.sdk.client.model.SagaBalanceOfPlayer;
+import games.mythical.saga.sdk.client.model.SagaBalancesOfPlayer;
 import games.mythical.saga.sdk.client.model.SagaUserAmount;
 import games.mythical.saga.sdk.client.observer.SagaStatusUpdateObserver;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
+import games.mythical.saga.sdk.factory.CommonFactory;
 import games.mythical.saga.sdk.proto.api.currency.*;
+import games.mythical.saga.sdk.proto.common.SortOrder;
 import games.mythical.saga.sdk.util.ValidateUtil;
 import io.grpc.StatusRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,23 +39,6 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
         serviceBlockingStub = CurrencyServiceGrpc.newBlockingStub(channel).withCallCredentials(addAuthentication());
         initStreamStub();
         SagaStatusUpdateObserver.getInstance().with(executor);
-    }
-
-    public SagaCurrency getCurrency(String currencyId, String oauthId) throws SagaException {
-        var request = GetCurrencyForPlayerRequest.newBuilder()
-                .setCurrencyTypeId(currencyId)
-                .setOauthId(oauthId)
-                .build();
-
-        try {
-            var currency = serviceBlockingStub.getCurrencyForPlayer(request);
-            ValidateUtil.checkFound(currency,
-                    String.format("Unable to find currency %s for player %s",
-                            currencyId, oauthId));
-            return SagaCurrency.fromProto(currency);
-        } catch (StatusRuntimeException e) {
-            throw SagaException.fromGrpcException(e);
-        }
     }
 
     public String issueCurrency(String currencyTypeId,
@@ -117,6 +104,43 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
         } catch (Exception e) {
             log.error("Exception calling emitReceived on burnCurrency, coin may be out of sync!", e);
             throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
+        }
+    }
+
+    public SagaBalanceOfPlayer getBalanceOfPlayer(String currencyTypeId,
+                                                  String oauthId) throws SagaException {
+        var request = GetBalanceOfPlayerRequest.newBuilder()
+                .setCurrencyTypeId(currencyTypeId)
+                .setOauthId(oauthId)
+                .build();
+
+        try {
+            var balance = serviceBlockingStub.getBalanceOfPlayer(request);
+            ValidateUtil.checkFound(balance,
+                    String.format("Unable to get currency %s balance for player %s",
+                            currencyTypeId, oauthId));
+            return SagaBalanceOfPlayer.fromProto(balance);
+        } catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
+        }
+    }
+
+    public SagaBalancesOfPlayer getBalancesOfPlayer(String oauthId,
+                                                   int pageSize,
+                                                   SortOrder sortOrder,
+                                                   Instant createdAtCursor) throws SagaException {
+        var request = GetBalancesOfPlayerRequest.newBuilder()
+                .setOauthId(oauthId)
+                .setQueryOptions(CommonFactory.toProto(pageSize, sortOrder, createdAtCursor))
+                .build();
+
+        try {
+            var balances = serviceBlockingStub.getBalancesOfPlayer(request);
+            ValidateUtil.checkFound(balances,
+                    String.format("Unable to get currency balances for player %s", oauthId));
+            return SagaBalancesOfPlayer.fromProto(balances);
+        } catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
         }
     }
 
