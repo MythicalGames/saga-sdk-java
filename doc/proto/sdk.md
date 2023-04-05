@@ -7,8 +7,12 @@
     - [ErrorProto](#saga-api-common-ErrorProto)
   
 - [api/currency/definition.proto](#api_currency_definition-proto)
+    - [BalanceOfPlayerProto](#saga-api-currency-BalanceOfPlayerProto)
+    - [BalanceProto](#saga-api-currency-BalanceProto)
+    - [BalancesOfPlayerProto](#saga-api-currency-BalancesOfPlayerProto)
     - [BurnCurrencyRequest](#saga-api-currency-BurnCurrencyRequest)
-    - [CurrencyProto](#saga-api-currency-CurrencyProto)
+    - [GetBalanceOfPlayerRequest](#saga-api-currency-GetBalanceOfPlayerRequest)
+    - [GetBalancesOfPlayerRequest](#saga-api-currency-GetBalancesOfPlayerRequest)
     - [GetCurrencyForPlayerRequest](#saga-api-currency-GetCurrencyForPlayerRequest)
     - [IssueCurrencyRequest](#saga-api-currency-IssueCurrencyRequest)
     - [TransferCurrencyRequest](#saga-api-currency-TransferCurrencyRequest)
@@ -238,6 +242,56 @@
 
 
 
+<a name="saga-api-currency-BalanceOfPlayerProto"></a>
+
+### BalanceOfPlayerProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| oauth_id | [string](#string) |  |  |
+| balance | [BalanceProto](#saga-api-currency-BalanceProto) |  |  |
+| trace_id | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="saga-api-currency-BalanceProto"></a>
+
+### BalanceProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| currency_type_id | [string](#string) |  |  |
+| balance_in_wei | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="saga-api-currency-BalancesOfPlayerProto"></a>
+
+### BalancesOfPlayerProto
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| oauth_id | [string](#string) |  |  |
+| balances | [BalanceProto](#saga-api-currency-BalanceProto) | repeated |  |
+| trace_id | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="saga-api-currency-BurnCurrencyRequest"></a>
 
 ### BurnCurrencyRequest
@@ -255,18 +309,32 @@ Burn currency call
 
 
 
-<a name="saga-api-currency-CurrencyProto"></a>
+<a name="saga-api-currency-GetBalanceOfPlayerRequest"></a>
 
-### CurrencyProto
+### GetBalanceOfPlayerRequest
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| trace_id | [string](#string) |  |  |
-| amount | [int64](#int64) |  | Amount of currency |
 | currency_type_id | [string](#string) |  |  |
-| oauth_id | [string](#string) |  | Wallet address the currency belongs to |
+| oauth_id | [string](#string) |  | User to get balance for |
+
+
+
+
+
+
+<a name="saga-api-currency-GetBalancesOfPlayerRequest"></a>
+
+### GetBalancesOfPlayerRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| oauth_id | [string](#string) |  | User to get balances for |
+| query_options | [saga.common.QueryOptionsProto](#saga-common-QueryOptionsProto) |  |  |
 
 
 
@@ -369,10 +437,11 @@ Transfer currency call
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| GetCurrencyForPlayer | [GetCurrencyForPlayerRequest](#saga-api-currency-GetCurrencyForPlayerRequest) | [CurrencyProto](#saga-api-currency-CurrencyProto) | Get a Currency for a user |
 | IssueCurrency | [IssueCurrencyRequest](#saga-api-currency-IssueCurrencyRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Issue currency to a user |
 | TransferCurrency | [TransferCurrencyRequest](#saga-api-currency-TransferCurrencyRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Transfer currency between users |
 | BurnCurrency | [BurnCurrencyRequest](#saga-api-currency-BurnCurrencyRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Burn currency for a user |
+| GetBalanceOfPlayer | [GetBalanceOfPlayerRequest](#saga-api-currency-GetBalanceOfPlayerRequest) | [BalanceOfPlayerProto](#saga-api-currency-BalanceOfPlayerProto) | Get Balance of a player |
+| GetBalancesOfPlayer | [GetBalancesOfPlayerRequest](#saga-api-currency-GetBalancesOfPlayerRequest) | [BalancesOfPlayerProto](#saga-api-currency-BalancesOfPlayerProto) | Get Balances of a player |
 
  
 

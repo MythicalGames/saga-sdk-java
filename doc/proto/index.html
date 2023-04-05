@@ -194,11 +194,27 @@
             <ul>
               
                 <li>
+                  <a href="#saga.api.currency.BalanceOfPlayerProto"><span class="badge">M</span>BalanceOfPlayerProto</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.api.currency.BalanceProto"><span class="badge">M</span>BalanceProto</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.api.currency.BalancesOfPlayerProto"><span class="badge">M</span>BalancesOfPlayerProto</a>
+                </li>
+              
+                <li>
                   <a href="#saga.api.currency.BurnCurrencyRequest"><span class="badge">M</span>BurnCurrencyRequest</a>
                 </li>
               
                 <li>
-                  <a href="#saga.api.currency.CurrencyProto"><span class="badge">M</span>CurrencyProto</a>
+                  <a href="#saga.api.currency.GetBalanceOfPlayerRequest"><span class="badge">M</span>GetBalanceOfPlayerRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#saga.api.currency.GetBalancesOfPlayerRequest"><span class="badge">M</span>GetBalancesOfPlayerRequest</a>
                 </li>
               
                 <li>
@@ -1116,6 +1132,113 @@
       <p></p>
 
       
+        <h3 id="saga.api.currency.BalanceOfPlayerProto">BalanceOfPlayerProto</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>oauth_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>balance</td>
+                  <td><a href="#saga.api.currency.BalanceProto">BalanceProto</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>trace_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.currency.BalanceProto">BalanceProto</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>currency_type_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>balance_in_wei</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.currency.BalancesOfPlayerProto">BalancesOfPlayerProto</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>oauth_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>balances</td>
+                  <td><a href="#saga.api.currency.BalanceProto">BalanceProto</a></td>
+                  <td>repeated</td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>trace_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="saga.api.currency.BurnCurrencyRequest">BurnCurrencyRequest</h3>
         <p>Burn currency call</p>
 
@@ -1154,7 +1277,7 @@
 
         
       
-        <h3 id="saga.api.currency.CurrencyProto">CurrencyProto</h3>
+        <h3 id="saga.api.currency.GetBalanceOfPlayerRequest">GetBalanceOfPlayerRequest</h3>
         <p></p>
 
         
@@ -1163,20 +1286,6 @@
               <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
             </thead>
             <tbody>
-              
-                <tr>
-                  <td>trace_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>amount</td>
-                  <td><a href="#int64">int64</a></td>
-                  <td></td>
-                  <td><p>Amount of currency </p></td>
-                </tr>
               
                 <tr>
                   <td>currency_type_id</td>
@@ -1189,7 +1298,38 @@
                   <td>oauth_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Wallet address the currency belongs to </p></td>
+                  <td><p>User to get balance for </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="saga.api.currency.GetBalancesOfPlayerRequest">GetBalancesOfPlayerRequest</h3>
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>oauth_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>User to get balances for </p></td>
+                </tr>
+              
+                <tr>
+                  <td>query_options</td>
+                  <td><a href="#saga.common.QueryOptionsProto">saga.common.QueryOptionsProto</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -1373,13 +1513,6 @@
           <tbody>
             
               <tr>
-                <td>GetCurrencyForPlayer</td>
-                <td><a href="#saga.api.currency.GetCurrencyForPlayerRequest">GetCurrencyForPlayerRequest</a></td>
-                <td><a href="#saga.api.currency.CurrencyProto">CurrencyProto</a></td>
-                <td><p>Get a Currency for a user</p></td>
-              </tr>
-            
-              <tr>
                 <td>IssueCurrency</td>
                 <td><a href="#saga.api.currency.IssueCurrencyRequest">IssueCurrencyRequest</a></td>
                 <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
@@ -1398,6 +1531,20 @@
                 <td><a href="#saga.api.currency.BurnCurrencyRequest">BurnCurrencyRequest</a></td>
                 <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
                 <td><p>Burn currency for a user</p></td>
+              </tr>
+            
+              <tr>
+                <td>GetBalanceOfPlayer</td>
+                <td><a href="#saga.api.currency.GetBalanceOfPlayerRequest">GetBalanceOfPlayerRequest</a></td>
+                <td><a href="#saga.api.currency.BalanceOfPlayerProto">BalanceOfPlayerProto</a></td>
+                <td><p>Get Balance of a player</p></td>
+              </tr>
+            
+              <tr>
+                <td>GetBalancesOfPlayer</td>
+                <td><a href="#saga.api.currency.GetBalancesOfPlayerRequest">GetBalancesOfPlayerRequest</a></td>
+                <td><a href="#saga.api.currency.BalancesOfPlayerProto">BalancesOfPlayerProto</a></td>
+                <td><p>Get Balances of a player</p></td>
               </tr>
             
           </tbody>
