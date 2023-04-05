@@ -156,7 +156,7 @@
     - [Subscribe](#saga-rpc-streams-Subscribe)
   
 - [streams/currency/definition.proto](#streams_currency_definition-proto)
-    - [CurrencyStatusConfirmRequest](#saga-rpc-streams-currency-CurrencyStatusConfirmRequest)
+    - [BalanceProto](#saga-rpc-streams-currency-BalanceProto)
     - [CurrencyStatusUpdate](#saga-rpc-streams-currency-CurrencyStatusUpdate)
     - [CurrencyUpdate](#saga-rpc-streams-currency-CurrencyUpdate)
   
@@ -2167,18 +2167,17 @@ Options allowed when querying
 
 
 
-<a name="saga-rpc-streams-currency-CurrencyStatusConfirmRequest"></a>
+<a name="saga-rpc-streams-currency-BalanceProto"></a>
 
-### CurrencyStatusConfirmRequest
-Currency information sent on a confirm request
+### BalanceProto
+
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| trace_id | [string](#string) |  |  |
-| title_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  |  |
 | currency_type_id | [string](#string) |  |  |
-| currency_state | [saga.proto.common.currency.CurrencyState](#saga-proto-common-currency-CurrencyState) |  |  |
+| balance_in_wei | [string](#string) |  |  |
 
 
 
@@ -2193,9 +2192,9 @@ Results from a Currency status update gRPC stream call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  | Wallet address of Currency |
-| currency_type_id | [string](#string) |  |  |
-| amount | [int64](#int64) |  | Amount of coins |
+| transaction_id | [string](#string) |  | Id given from chain |
+| balances | [BalanceProto](#saga-rpc-streams-currency-BalanceProto) | repeated |  |
+| idempotency_id | [string](#string) |  |  |
 | currency_state | [saga.proto.common.currency.CurrencyState](#saga-proto-common-currency-CurrencyState) |  | State of the Currency, see CurrencyState |
 
 

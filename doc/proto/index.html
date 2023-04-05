@@ -879,7 +879,7 @@
             <ul>
               
                 <li>
-                  <a href="#saga.rpc.streams.currency.CurrencyStatusConfirmRequest"><span class="badge">M</span>CurrencyStatusConfirmRequest</a>
+                  <a href="#saga.rpc.streams.currency.BalanceProto"><span class="badge">M</span>BalanceProto</a>
                 </li>
               
                 <li>
@@ -5132,8 +5132,8 @@
       <p></p>
 
       
-        <h3 id="saga.rpc.streams.currency.CurrencyStatusConfirmRequest">CurrencyStatusConfirmRequest</h3>
-        <p>Currency information sent on a confirm request</p>
+        <h3 id="saga.rpc.streams.currency.BalanceProto">BalanceProto</h3>
+        <p></p>
 
         
           <table class="field-table">
@@ -5143,14 +5143,7 @@
             <tbody>
               
                 <tr>
-                  <td>trace_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>title_id</td>
+                  <td>oauth_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
@@ -5164,8 +5157,8 @@
                 </tr>
               
                 <tr>
-                  <td>currency_state</td>
-                  <td><a href="#saga.proto.common.currency.CurrencyState">saga.proto.common.currency.CurrencyState</a></td>
+                  <td>balance_in_wei</td>
+                  <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
@@ -5188,24 +5181,24 @@
             <tbody>
               
                 <tr>
-                  <td>oauth_id</td>
+                  <td>transaction_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Wallet address of Currency </p></td>
+                  <td><p>Id given from chain </p></td>
                 </tr>
               
                 <tr>
-                  <td>currency_type_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
+                  <td>balances</td>
+                  <td><a href="#saga.rpc.streams.currency.BalanceProto">BalanceProto</a></td>
+                  <td>repeated</td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>amount</td>
-                  <td><a href="#int64">int64</a></td>
+                  <td>idempotency_id</td>
+                  <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Amount of coins </p></td>
+                  <td><p> </p></td>
                 </tr>
               
                 <tr>
