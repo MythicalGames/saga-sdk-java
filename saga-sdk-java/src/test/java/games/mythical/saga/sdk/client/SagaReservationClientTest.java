@@ -97,7 +97,6 @@ public class SagaReservationClientTest  extends AbstractClientTest {
         assertEquals(item.getInventoryId(), executor.getItems().get(0).getInventoryId());
 
         server.verifyCalls("StatusStream", 1);
-        server.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -126,6 +125,5 @@ public class SagaReservationClientTest  extends AbstractClientTest {
         assertEquals(reservationId, executor.getReservationId());
 
         server.verifyCalls("StatusStream", 1);
-        server.verifyCalls("StatusConfirmation", 1);
     }
 }

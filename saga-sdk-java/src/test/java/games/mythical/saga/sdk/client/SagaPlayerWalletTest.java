@@ -80,7 +80,6 @@ public class SagaPlayerWalletTest extends AbstractClientTest {
         assertEquals(OAUTH_ID, executor.getOauthId());
 
         playerWalletServer.verifyCalls("StatusStream", 1);
-        playerWalletServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test

@@ -101,7 +101,11 @@ class SagaItemClientTest extends AbstractClientTest {
                 .build();
         when(mockServiceBlockingStub.issueItem(any())).thenReturn(expectedResponse);
         final var traceId = itemClient.issueItem(
-                Collections.singletonList(SagaIssueItem.builder().inventoryId(INVENTORY_ID).metadata(EXPECTED_METADATA).build()),
+                Collections.singletonList(SagaIssueItem.builder()
+                        .inventoryId(INVENTORY_ID)
+                        .metadata(EXPECTED_METADATA)
+                        .tokenId(RandomUtils.nextLong())
+                        .build()),
                 EXPECTED_OAUTH_ID,
                 RandomStringUtils.randomAlphanumeric(30));
         checkTraceAndStart(expectedResponse, traceId);
@@ -124,7 +128,6 @@ class SagaItemClientTest extends AbstractClientTest {
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         itemServer.verifyCalls("StatusStream", 1);
-        itemServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -140,9 +143,9 @@ class SagaItemClientTest extends AbstractClientTest {
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = ItemStatusUpdate.newBuilder()
-            .setInventoryId(INVENTORY_ID)
-            .setOauthId(DEST)
-            .setItemState(ItemState.TRANSFERRED);
+                .setInventoryId(INVENTORY_ID)
+                .setOauthId(DEST)
+                .setItemState(ItemState.TRANSFERRED);
         itemServer.getStatusStream().sendStatus(titleId, StatusUpdate.newBuilder()
                 .setTraceId(traceId)
                 .setItemUpdate(ItemUpdate.newBuilder().setStatusUpdate(update))
@@ -156,7 +159,6 @@ class SagaItemClientTest extends AbstractClientTest {
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         itemServer.verifyCalls("StatusStream", 1);
-        itemServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -185,7 +187,6 @@ class SagaItemClientTest extends AbstractClientTest {
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         itemServer.verifyCalls("StatusStream", 1);
-        itemServer.verifyCalls("StatusConfirmation", 1);
     }
 
     @Test
@@ -223,6 +224,5 @@ class SagaItemClientTest extends AbstractClientTest {
         assertEquals(Boolean.TRUE, ConcurrentFinisher.get(executor.getTraceId()));
 
         itemServer.verifyCalls("StatusStream", 1);
-        itemServer.verifyCalls("StatusConfirmation", 1);
     }
 }

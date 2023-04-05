@@ -5,6 +5,7 @@ import com.google.protobuf.Value;
 import games.mythical.saga.sdk.client.executor.*;
 import games.mythical.saga.sdk.client.model.SagaItem;
 import games.mythical.saga.sdk.client.model.SagaItemUpdate;
+import games.mythical.saga.sdk.client.model.SagaUserAmount;
 import games.mythical.saga.sdk.exception.ErrorData;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
@@ -154,13 +155,37 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                 sagaCurrencyExecutor.onError(toErrData(error));
             } else {
                 final var message = update.getStatusUpdate();
-                sagaCurrencyExecutor.updateCurrency(
-                    message.getCurrencyTypeId(),
-                    message.getAmount(),
-                    message.getOauthId(),
-                    traceId,
-                    message.getCurrencyState()
-                );
+                if (message.getBalancesList().isEmpty()) {
+                    log.error("No balances were issued, this shouldn't have occurred. {}", traceId);
+                    return;
+                }
+
+                switch (message.getCurrencyState()) {
+                    case ISSUED:
+                        var balances = message.getBalancesList().stream()
+                                .map(balance -> new SagaUserAmount(balance.getOauthId(), balance.getBalanceInWei()))
+                                .collect(Collectors.toList());
+                        sagaCurrencyExecutor.currencyIssued(
+                                message.getBalancesList().get(0).getCurrencyTypeId(),
+                                message.getTransactionId(),
+                                balances,
+                                message.getIdempotencyId(),
+                                traceId
+                        );
+                        break;
+                    default:
+                        var balance = message.getBalancesList().stream().findFirst().get();
+                        sagaCurrencyExecutor.updateCurrency(
+                                balance.getCurrencyTypeId(),
+                                message.getTransactionId(),
+                                balance.getOauthId(),
+                                balance.getBalanceInWei(),
+                                message.getIdempotencyId(),
+                                traceId,
+                                message.getCurrencyState()
+                        );
+                        break;
+                }
             }
         }
     }
