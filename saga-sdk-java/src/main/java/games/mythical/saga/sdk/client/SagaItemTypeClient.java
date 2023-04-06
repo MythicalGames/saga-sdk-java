@@ -115,23 +115,6 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String updateItemType(String itemTypeId, boolean withdrawable) throws SagaException {
-        try {
-            log.trace("ItemTypeClient.updateItemType called for {}", itemTypeId);
-            var request = UpdateItemTypePayload.newBuilder()
-                    .setItemTypeId(itemTypeId)
-                    .setWithdrawable(withdrawable)
-                    .build();
-            var result = serviceBlockingStub.updateItemType(request);
-            return result.getTraceId();
-        } catch (StatusRuntimeException e) {
-            throw SagaException.fromGrpcException(e);
-        } catch (Exception e) {
-            log.error("Exception calling emitReceived on updateItemType, item type may be lost!", e);
-            throw new SagaException(SagaErrorCode.LOCAL_EXCEPTION);
-        }
-    }
-
     public String startMint(String itemTypeId) throws SagaException {
         try  {
             log.trace("ItemTypeClient.startMint called for {}", itemTypeId);

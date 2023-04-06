@@ -154,16 +154,6 @@ class SagaItemTypeClientTest extends AbstractClientTest {
     }
 
     @Test
-    public void updateItemType() throws Exception {
-        final var expectedResponse = ReceivedResponse.newBuilder()
-                .setTraceId(RandomStringUtils.randomAlphanumeric(30))
-                .build();
-        when(mockServiceBlockingStub.updateItemType(any())).thenReturn(expectedResponse);
-        final var traceId = itemTypeClient.updateItemType(ITEM_TYPE_ID, true);
-
-    }
-
-    @Test
     @Timeout(value = 1, unit = TimeUnit.MINUTES)
     public void startMint() throws Exception {
         final var expectedResponse = ReceivedResponse.newBuilder()
