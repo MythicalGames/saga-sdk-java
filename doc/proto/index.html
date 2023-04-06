@@ -407,10 +407,6 @@
                   <a href="#saga.api.itemtype.StartMintRequest"><span class="badge">M</span>StartMintRequest</a>
                 </li>
               
-                <li>
-                  <a href="#saga.api.itemtype.UpdateItemTypePayload"><span class="badge">M</span>UpdateItemTypePayload</a>
-                </li>
-              
               
                 <li>
                   <a href="#saga.api.itemtype.MintMode"><span class="badge">E</span>MintMode</a>
@@ -2408,7 +2404,7 @@
                   <td>withdrawable</td>
                   <td><a href="#bool">bool</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p><strong>Deprecated.</strong>  </p></td>
                 </tr>
               
                 <tr>
@@ -2436,6 +2432,11 @@
               
                 <tr>
                   <td>randomize</td>
+                  <td><p>true</p></td>
+                </tr>
+              
+                <tr>
+                  <td>withdrawable</td>
                   <td><p>true</p></td>
                 </tr>
               
@@ -2626,7 +2627,7 @@
                   <td>withdrawable</td>
                   <td><a href="#bool">bool</a></td>
                   <td></td>
-                  <td><p> </p></td>
+                  <td><p><strong>Deprecated.</strong>  </p></td>
                 </tr>
               
                 <tr>
@@ -2709,6 +2710,11 @@
               <tbody>
               
                 <tr>
+                  <td>withdrawable</td>
+                  <td><p>true</p></td>
+                </tr>
+              
+                <tr>
                   <td>randomize</td>
                   <td><p>true</p></td>
                 </tr>
@@ -2759,37 +2765,6 @@
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
-        <h3 id="saga.api.itemtype.UpdateItemTypePayload">UpdateItemTypePayload</h3>
-        <p>Update ItemType call</p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>item_type_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>Game&#39;s ItemTypeId for the ItemType to update </p></td>
-                </tr>
-              
-                <tr>
-                  <td>withdrawable</td>
-                  <td><a href="#bool">bool</a></td>
-                  <td></td>
-                  <td><p>withdrawable state to update to </p></td>
                 </tr>
               
             </tbody>
@@ -2884,17 +2859,10 @@
               </tr>
             
               <tr>
-                <td>UpdateItemType</td>
-                <td><a href="#saga.api.itemtype.UpdateItemTypePayload">UpdateItemTypePayload</a></td>
-                <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
-                <td><p>Update the ItemType</p></td>
-              </tr>
-            
-              <tr>
                 <td>StartMint</td>
                 <td><a href="#saga.api.itemtype.StartMintRequest">StartMintRequest</a></td>
                 <td><a href="#saga.common.ReceivedResponse">.saga.common.ReceivedResponse</a></td>
-                <td><p></p></td>
+                <td><p>Update the ItemType</p></td>
               </tr>
             
               <tr>

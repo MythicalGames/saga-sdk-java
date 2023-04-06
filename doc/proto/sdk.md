@@ -56,7 +56,6 @@
     - [ItemTypeProto](#saga-api-itemtype-ItemTypeProto)
     - [ItemTypesProto](#saga-api-itemtype-ItemTypesProto)
     - [StartMintRequest](#saga-api-itemtype-StartMintRequest)
-    - [UpdateItemTypePayload](#saga-api-itemtype-UpdateItemTypePayload)
   
     - [MintMode](#saga-api-itemtype-MintMode)
   
@@ -837,7 +836,7 @@ Create item type call
 | max_supply | [int64](#int64) |  |  |
 | randomize | [bool](#bool) |  | **Deprecated.**  |
 | date_finished | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
-| withdrawable | [bool](#bool) |  |  |
+| withdrawable | [bool](#bool) |  | **Deprecated.**  |
 | mint_mode | [MintMode](#saga-api-itemtype-MintMode) |  |  |
 
 
@@ -923,7 +922,7 @@ Get ItemTypes call
 | contract_address | [string](#string) |  |  |
 | block_explorer_url | [string](#string) |  |  |
 | finalized | [bool](#bool) |  |  |
-| withdrawable | [bool](#bool) |  |  |
+| withdrawable | [bool](#bool) |  | **Deprecated.**  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | issued_supply | [int64](#int64) |  |  |
@@ -963,22 +962,6 @@ Get ItemTypes call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | item_type_id | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="saga-api-itemtype-UpdateItemTypePayload"></a>
-
-### UpdateItemTypePayload
-Update ItemType call
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| item_type_id | [string](#string) |  | Game&#39;s ItemTypeId for the ItemType to update |
-| withdrawable | [bool](#bool) |  | withdrawable state to update to |
 
 
 
@@ -1031,8 +1014,7 @@ Update ItemType call
 | GetItemType | [GetItemTypeRequest](#saga-api-itemtype-GetItemTypeRequest) | [ItemTypeProto](#saga-api-itemtype-ItemTypeProto) | Get an ItemType by Id |
 | GetItemTypes | [GetItemTypesRequest](#saga-api-itemtype-GetItemTypesRequest) | [ItemTypesProto](#saga-api-itemtype-ItemTypesProto) | Get ItemTypes based on filters |
 | CreateItemType | [CreateItemTypeRequest](#saga-api-itemtype-CreateItemTypeRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Create an ItemType |
-| UpdateItemType | [UpdateItemTypePayload](#saga-api-itemtype-UpdateItemTypePayload) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update the ItemType |
-| StartMint | [StartMintRequest](#saga-api-itemtype-StartMintRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
+| StartMint | [StartMintRequest](#saga-api-itemtype-StartMintRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) | Update the ItemType |
 | EndMint | [EndMintRequest](#saga-api-itemtype-EndMintRequest) | [.saga.common.ReceivedResponse](#saga-common-ReceivedResponse) |  |
 
  
