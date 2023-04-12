@@ -138,6 +138,7 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 SOURCE,
                 DEST,
                 "1000",
+                false,
                 "idempotencyId");
         checkTraceAndStart(expectedResponse, traceId);
 
@@ -173,6 +174,7 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 CURRENCY_TYPE_ID,
                 OAUTH_ID,
                 "10000",
+                false,
                 "idempotencyId");
         checkTraceAndStart(expectedResponse, traceId);
 
