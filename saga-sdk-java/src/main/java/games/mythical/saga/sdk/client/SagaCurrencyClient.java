@@ -67,15 +67,19 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String transferCurrency(String currencyId,
+    public String transferCurrency(String currencyTypeId,
                                    String sourceOauthId,
                                    String destOauthId,
-                                   long amount) throws SagaException {
+                                   String amountInWei,
+                                   Boolean publisherPays,
+                                   String idempotencyId) throws SagaException {
         var request = TransferCurrencyRequest.newBuilder()
-                .setCurrencyId(currencyId)
+                .setCurrencyTypeId(currencyTypeId)
                 .setSourceOauthId(sourceOauthId)
-                .setDestinationOauthId(destOauthId)
-                .setAmount(amount)
+                .setDestOauthId(destOauthId)
+                .setAmountInWei(amountInWei)
+                .setPublisherPays(publisherPays)
+                .setIdempotencyId(idempotencyId)
                 .build();
 
         try {
@@ -89,11 +93,17 @@ public class SagaCurrencyClient extends AbstractSagaStreamClient {
         }
     }
 
-    public String burnCurrency(String currencyId, String oauthId, long amount) throws SagaException {
+    public String burnCurrency(String currencyTypeId,
+                               String oauthId,
+                               String amountInWei,
+                               Boolean publisherPays,
+                               String idempotencyId) throws SagaException {
         var request = BurnCurrencyRequest.newBuilder()
-                .setCurrencyId(currencyId)
+                .setCurrencyTypeId(currencyTypeId)
                 .setOauthId(oauthId)
-                .setAmount(amount)
+                .setAmountInWei(amountInWei)
+                .setPublisherPays(publisherPays)
+                .setIdempotencyId(idempotencyId)
                 .build();
 
         try {

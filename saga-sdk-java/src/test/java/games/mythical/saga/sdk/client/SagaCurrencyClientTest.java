@@ -17,7 +17,6 @@ import games.mythical.saga.sdk.util.ConcurrentFinisher;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +29,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static games.mythical.saga.sdk.proto.api.currency.BalanceProto.*;
+import static games.mythical.saga.sdk.proto.api.currency.BalanceProto.newBuilder;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -134,7 +133,13 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.transferCurrency(any())).thenReturn(expectedResponse);
-        final var traceId = currencyClient.transferCurrency(CURRENCY_TYPE_ID, SOURCE, DEST, RandomUtils.nextLong(1, 1000));
+        final var traceId = currencyClient.transferCurrency(
+                CURRENCY_TYPE_ID,
+                SOURCE,
+                DEST,
+                "1000",
+                false,
+                "idempotencyId");
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = CurrencyStatusUpdate.newBuilder()
@@ -165,7 +170,12 @@ class SagaCurrencyClientTest extends AbstractClientTest {
                 .setTraceId(RandomStringUtils.randomAlphanumeric(30))
                 .build();
         when(mockServiceBlockingStub.burnCurrency(any())).thenReturn(expectedResponse);
-        final var traceId = currencyClient.burnCurrency(CURRENCY_TYPE_ID, OAUTH_ID, RandomUtils.nextLong(1, 1000));
+        final var traceId = currencyClient.burnCurrency(
+                CURRENCY_TYPE_ID,
+                OAUTH_ID,
+                "10000",
+                false,
+                "idempotencyId");
         checkTraceAndStart(expectedResponse, traceId);
 
         final var update = CurrencyStatusUpdate.newBuilder()
