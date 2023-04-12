@@ -299,9 +299,11 @@ Burn currency call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| oauth_id | [string](#string) |  | User to burn currency from |
-| currency_id | [string](#string) |  |  |
-| amount | [int64](#int64) |  | Amount of currency to burn |
+| currency_type_id | [string](#string) |  |  |
+| oauth_id | [string](#string) |  |  |
+| amount_in_wei | [string](#string) |  |  |
+| idempotency_id | [string](#string) |  |  |
+| publisher_pays | [bool](#bool) |  |  |
 
 
 
@@ -381,10 +383,12 @@ Transfer currency call
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| source_oauth_id | [string](#string) |  | User to transfer currency from |
-| destination_oauth_id | [string](#string) |  | User to transfer currency to |
-| currency_id | [string](#string) |  |  |
-| amount | [int64](#int64) |  | Amount of currency to transfer |
+| currency_type_id | [string](#string) |  |  |
+| source_oauth_id | [string](#string) |  |  |
+| dest_oauth_id | [string](#string) |  |  |
+| amount_in_wei | [string](#string) |  |  |
+| idempotency_id | [string](#string) |  |  |
+| publisher_pays | [bool](#bool) |  |  |
 
 
 

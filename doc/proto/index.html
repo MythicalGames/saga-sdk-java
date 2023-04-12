@@ -1246,24 +1246,38 @@
             <tbody>
               
                 <tr>
-                  <td>oauth_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>User to burn currency from </p></td>
-                </tr>
-              
-                <tr>
-                  <td>currency_id</td>
+                  <td>currency_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>amount</td>
-                  <td><a href="#int64">int64</a></td>
+                  <td>oauth_id</td>
+                  <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Amount of currency to burn </p></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>amount_in_wei</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>idempotency_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>publisher_pays</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -1415,31 +1429,45 @@
             <tbody>
               
                 <tr>
-                  <td>source_oauth_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>User to transfer currency from </p></td>
-                </tr>
-              
-                <tr>
-                  <td>destination_oauth_id</td>
-                  <td><a href="#string">string</a></td>
-                  <td></td>
-                  <td><p>User to transfer currency to </p></td>
-                </tr>
-              
-                <tr>
-                  <td>currency_id</td>
+                  <td>currency_type_id</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p> </p></td>
                 </tr>
               
                 <tr>
-                  <td>amount</td>
-                  <td><a href="#int64">int64</a></td>
+                  <td>source_oauth_id</td>
+                  <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Amount of currency to transfer </p></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>dest_oauth_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>amount_in_wei</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>idempotency_id</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>publisher_pays</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
