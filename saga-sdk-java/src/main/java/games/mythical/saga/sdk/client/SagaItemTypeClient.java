@@ -82,7 +82,6 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
                                  String symbol,
                                  int maxSupply,
                                  Instant dateFinished,
-                                 boolean withdrawable,
                                  MintMode mintMode) throws SagaException {
         try {
             if(itemTypeId.isBlank()) {
@@ -96,8 +95,7 @@ public class SagaItemTypeClient extends AbstractSagaStreamClient {
                     .setName(name)
                     .setSymbol(symbol)
                     .setMaxSupply(maxSupply)
-                    .setWithdrawable(withdrawable)
-                    .setMintMode(mintMode);
+                     .setMintMode(mintMode);
 
             if (dateFinished != null) {
                 builder.setDateFinished(ConversionUtils.instantToProtoTimestamp(dateFinished));
