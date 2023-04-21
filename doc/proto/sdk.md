@@ -303,7 +303,7 @@ Burn currency call
 | oauth_id | [string](#string) |  |  |
 | amount_in_wei | [string](#string) |  |  |
 | idempotency_id | [string](#string) |  |  |
-| publisher_pays | [bool](#bool) |  |  |
+| prefund_gas | [bool](#bool) |  |  |
 
 
 
@@ -388,7 +388,7 @@ Transfer currency call
 | dest_oauth_id | [string](#string) |  |  |
 | amount_in_wei | [string](#string) |  |  |
 | idempotency_id | [string](#string) |  |  |
-| publisher_pays | [bool](#bool) |  |  |
+| prefund_gas | [bool](#bool) |  |  |
 
 
 
