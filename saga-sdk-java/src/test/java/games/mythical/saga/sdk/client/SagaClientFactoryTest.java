@@ -43,7 +43,7 @@ public class SagaClientFactoryTest extends AbstractClientTest {
 
     @Test
     public void testCreateCurrencyTypeClient() throws SagaException {
-        var client_1 = factory.createSagaCurrencyTypeClient();
+        var client_1 = factory.createSagaCurrencyTypeClient(MockCurrencyTypeExecutor.builder().build());
         clientCleanupTargets.add(client_1);
         assertNotNull(client_1);
     }

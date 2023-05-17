@@ -1,6 +1,7 @@
 package games.mythical.saga.sdk.client;
 
 import com.google.protobuf.util.Timestamps;
+import games.mythical.saga.sdk.client.executor.MockCurrencyTypeExecutor;
 import games.mythical.saga.sdk.exception.SagaException;
 import games.mythical.saga.sdk.proto.api.currencytype.CurrencyTypeProto;
 import games.mythical.saga.sdk.proto.api.currencytype.CurrencyTypeServiceGrpc;
@@ -29,13 +30,14 @@ class SagaCurrencyTypeClientTest extends AbstractClientTest {
 
     private SagaCurrencyTypeClient currencyTypeClient;
 
+    private final MockCurrencyTypeExecutor executor = MockCurrencyTypeExecutor.builder().build();
     @Mock
     private CurrencyTypeServiceGrpc.CurrencyTypeServiceBlockingStub mockServiceBlockingStub;
 
     @BeforeEach
     void setUp() throws Exception {
         port = 65001; // Doesn't matter since there isn't anything to connect to.
-        currencyTypeClient = setUpFactory().createSagaCurrencyTypeClient();
+        currencyTypeClient = setUpFactory().createSagaCurrencyTypeClient(executor);
         // mocking the service blocking stub clients are connected to
         FieldUtils.writeField(currencyTypeClient, "serviceBlockingStub", mockServiceBlockingStub, true);
     }
