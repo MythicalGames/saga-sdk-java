@@ -4,9 +4,10 @@ import games.mythical.saga.sdk.client.executor.*;
 import games.mythical.saga.sdk.config.SagaSdkConfig;
 import games.mythical.saga.sdk.exception.SagaErrorCode;
 import games.mythical.saga.sdk.exception.SagaException;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 import static games.mythical.saga.sdk.config.Constants.*;
 
@@ -109,8 +110,8 @@ public class SagaClientFactory {
         return new SagaCurrencyClient(config, executor);
     }
 
-    public SagaCurrencyTypeClient createSagaCurrencyTypeClient() throws SagaException {
-        return new SagaCurrencyTypeClient(config);
+    public SagaCurrencyTypeClient createSagaCurrencyTypeClient(SagaCurrencyTypeExecutor executor) throws SagaException {
+        return new SagaCurrencyTypeClient(config, executor);
     }
 
     public SagaPlayerWalletClient createSagaPlayerWalletClient() throws SagaException {
