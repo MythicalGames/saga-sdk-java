@@ -2299,6 +2299,9 @@ Results from a Currency status update gRPC stream call
 | ----- | ---- | ----- | ----------- |
 | currency_type_id | [string](#string) |  |  |
 | currency_type_state | [saga.proto.common.currencytype.CurrencyTypeState](#saga-proto-common-currencytype-CurrencyTypeState) |  |  |
+| transaction_id | [string](#string) |  |  |
+| contract_address | [string](#string) |  |  |
+| idempotency_id | [string](#string) |  |  |
 
 
 
