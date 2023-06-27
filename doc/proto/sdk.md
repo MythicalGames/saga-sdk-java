@@ -720,6 +720,7 @@ Issue item call
 | metadata_url | [string](#string) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When was this Item created |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  | When was this Item last updated |
+| state | [string](#string) |  |  |
 
 
 
