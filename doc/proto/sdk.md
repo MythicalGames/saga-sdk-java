@@ -1615,6 +1615,7 @@ Get Offers call
 | balance_in_wei | [string](#string) |  |  |
 | created_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
 | updated_at | [google.protobuf.Timestamp](#google-protobuf-Timestamp) |  |  |
+| withdrawable_limit_in_wei | [string](#string) |  |  |
 
 
 
