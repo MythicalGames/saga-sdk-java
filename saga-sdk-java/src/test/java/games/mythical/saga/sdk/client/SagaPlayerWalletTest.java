@@ -89,6 +89,7 @@ public class SagaPlayerWalletTest extends AbstractClientTest {
                 .setOauthId(OAUTH_ID)
                 .setAddress("address")
                 .setBalanceInWei("1000")
+                .setWithdrawableLimitInWei("1000")
                 .build();
         when(mockServiceBlockingStub.getPlayerWallet(any())).thenReturn(expectedResponse);
         var playerWalletResponse = client.getPlayerWallet(OAUTH_ID);
@@ -97,6 +98,7 @@ public class SagaPlayerWalletTest extends AbstractClientTest {
         assertEquals(OAUTH_ID, playerWalletResponse.getOauthId());
         assertEquals(expectedResponse.getAddress(), playerWalletResponse.getAddress());
         assertEquals(expectedResponse.getBalanceInWei(), playerWalletResponse.getBalanceInWei());
+        assertEquals(expectedResponse.getWithdrawableLimitInWei(), playerWalletResponse.getWithdrawableLimitInWei());
 
         when(mockServiceBlockingStub.getPlayerWallet(any())).thenThrow(new StatusRuntimeException(Status.NOT_FOUND));
         assertThrows(SagaException.class, () -> client.getPlayerWallet("INVALID-OAUTH-ID"));

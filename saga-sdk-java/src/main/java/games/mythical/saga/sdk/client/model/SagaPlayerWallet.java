@@ -18,6 +18,7 @@ public class SagaPlayerWallet {
     private String oauthId;
     private String address;
     private String balanceInWei;
+    private String withdrawableLimitInWei;
     @DtoExclude
     private Instant createdAt;
     @DtoExclude
