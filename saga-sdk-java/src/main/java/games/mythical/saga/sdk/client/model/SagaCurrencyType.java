@@ -35,7 +35,12 @@ public class SagaCurrencyType {
         var currencyType = ProtoUtil.toDto(proto, SagaCurrencyType.class);
 
         if (proto.hasPublisherBalance()) {
-            currencyType.setPublisherBalance(SagaBalance.fromProto(proto.getPublisherBalance()));
+            // don't use prototutil due to DtoExclude
+            var publisherBalance = SagaBalance.builder()
+                    .address(proto.getPublisherBalance().getPublisherAddress())
+                    .balanceInWei(proto.getPublisherBalance().getBalanceInWei())
+                    .build();
+            currencyType.setPublisherBalance(publisherBalance);
         }
 
         var createdAt = ConversionUtils.protoTimestampToInstant(proto.getCreatedAt());
