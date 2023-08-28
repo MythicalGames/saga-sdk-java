@@ -48,6 +48,20 @@ public class SagaPlayerWalletClient extends AbstractSagaStreamClient {
         }
     }
 
+    public SagaPlayerWallet getPlayerWalletByAddress(String address) throws SagaException {
+        var request = GetPlayerWalletRequest.newBuilder()
+                .setWalletAddress(address)
+                .build();
+
+        try {
+            var proto = serviceBlockingStub.getPlayerWallet(request);
+            ValidateUtil.checkFound(proto, String.format("Player wallet not found by address %s", address));
+            return SagaPlayerWallet.fromProto(proto);
+        } catch (StatusRuntimeException e) {
+            throw SagaException.fromGrpcException(e);
+        }
+    }
+
     public String createPlayerWallet(String oauthId) throws SagaException {
         try {
             log.trace("SagaPlayerWalletClient.createPlayerWallet - oauthId: {}", oauthId);
