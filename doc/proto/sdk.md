@@ -1595,6 +1595,7 @@ Get Offers call
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | oauth_id | [string](#string) |  |  |
+| wallet_address | [string](#string) |  |  |
 
 
 
@@ -2020,6 +2021,8 @@ Metadata properties of Item
 | LISTING_CLOSED | 5 | Listing for Item is closed |
 | WITHDRAWN | 6 | Item withdrawn successfully |
 | DEPOSITED | 7 | Item deposited successfully |
+| BRIDGED_FROM_MYTHICAL_CHAIN | 8 |  |
+| BRIDGED_TO_MYTHICAL_CHAIN | 9 |  |
 
 
  
