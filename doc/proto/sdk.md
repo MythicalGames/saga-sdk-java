@@ -937,6 +937,7 @@ Get ItemTypes call
 | randomize | [bool](#bool) |  | **Deprecated.**  |
 | total_supply | [int64](#int64) |  |  |
 | mint_mode | [MintMode](#saga-api-itemtype-MintMode) |  |  |
+| bridgeable | [bool](#bool) |  |  |
 
 
 
@@ -2056,6 +2057,7 @@ Metadata properties of Item
 | EXPIRED | 4 | ItemType has been expired |
 | MINTABLE | 5 | ItemType can be minted |
 | MINT_ENDED | 6 | ItemType mint has permanently ended |
+| BRIDGEABLE | 7 | ItemType is now bridgeable to an external chain(s) |
 
 
  
