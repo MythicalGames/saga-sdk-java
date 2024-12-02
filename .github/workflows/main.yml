@@ -82,17 +82,17 @@ jobs:
             -Prelease.customUsername='Mythical Buildbot' \
             -Prelease.customPassword=${{ github.token }}
 
-      - name: Publish with Gradle
-        if: (github.ref == 'refs/heads/main')
-        env:
-          USERNAME: 'Mythical Buildbot'
-          TOKEN: ${{ github.token }}
-          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
-          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
-          ORG_GRADLE_PROJECT_sonatypeUsername: 'mythical_keith'
-          ORG_GRADLE_PROJECT_sonatypePassword : ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
-        run: |
-          ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+#      - name: Publish with Gradle
+#        if: (github.ref == 'refs/heads/main')
+#        env:
+#          USERNAME: 'Mythical Buildbot'
+#          TOKEN: ${{ github.token }}
+#          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
+#          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
+#          ORG_GRADLE_PROJECT_sonatypeUsername: 'mythical_keith'
+#          ORG_GRADLE_PROJECT_sonatypePassword : ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
+#        run: |
+#          ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
 
       - name: Generate Proto Docs
         if: github.event_name == 'push'
