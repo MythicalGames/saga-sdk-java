@@ -12,7 +12,8 @@ public interface SagaItemExecutor extends BaseSagaExecutor {
                     Long tokenId,
                     String metadataUrl,
                     String traceId,
-                    ItemState itemState) throws Exception;
+                    ItemState itemState,
+                    Long version) throws Exception;
 
     void updateItems(List<SagaItemUpdate> updates, String traceId) throws Exception;
 

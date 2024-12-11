@@ -28,6 +28,7 @@ public class SagaItem {
     @DtoExclude
     private Instant updatedAt;
     private String state;
+    private long version;
 
     public static SagaItem fromProto(ItemProto proto) {
         var user = ProtoUtil.toDto(proto, SagaItem.class);

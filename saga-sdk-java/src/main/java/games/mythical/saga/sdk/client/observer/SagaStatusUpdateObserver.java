@@ -229,7 +229,8 @@ public final class SagaStatusUpdateObserver extends AbstractObserver<StatusUpdat
                     message.getTokenId(),
                     message.getMetadataUrl(),
                     traceId,
-                    message.getItemState()
+                    message.getItemState(),
+                    message.getVersion()
                 );
             } else {
                 final var updates = update.getStatusUpdates().getStatusUpdatesList().stream()

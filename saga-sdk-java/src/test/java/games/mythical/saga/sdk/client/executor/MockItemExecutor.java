@@ -17,6 +17,7 @@ public class MockItemExecutor extends MockBaseExecutor implements SagaItemExecut
     private String metadataUri;
     private String traceId;
     private ItemState itemState;
+    private Long version;
 
     @Override
     public void updateItem(String inventoryId,
@@ -25,7 +26,8 @@ public class MockItemExecutor extends MockBaseExecutor implements SagaItemExecut
                            Long tokenId,
                            String metadataUrl,
                            String traceId,
-                           ItemState itemState) throws Exception {
+                           ItemState itemState,
+                           Long version) throws Exception {
         this.inventoryId = inventoryId;
         this.itemTypeId = itemTypeId;
         this.oauthId = oauthId;
@@ -33,6 +35,7 @@ public class MockItemExecutor extends MockBaseExecutor implements SagaItemExecut
         this.metadataUri = metadataUrl;
         this.traceId = traceId;
         this.itemState = itemState;
+        this.version = version;
     }
 
     @Override
@@ -45,7 +48,8 @@ public class MockItemExecutor extends MockBaseExecutor implements SagaItemExecut
                 update.getTokenId(),
                 update.getMetadataUrl(),
                 traceId,
-                update.getItemState()
+                update.getItemState(),
+                update.getVersion()
         );
     }
 
