@@ -79,6 +79,7 @@ class SagaItemClientTest extends AbstractClientTest {
                 .setMetadataUrl("metadata-url")
                 .setCreatedAt(Timestamps.fromMillis(Instant.now().toEpochMilli() - 86400))
                 .setUpdatedAt(Timestamps.fromMillis(Instant.now().toEpochMilli()))
+                .setVersion(1L)
                 .build();
         when(mockServiceBlockingStub.getItem(any())).thenReturn(expectedResponse);
         var itemResponse = itemClient.getItem(INVENTORY_ID);

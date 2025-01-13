@@ -19,6 +19,7 @@ public class SagaItemUpdate {
     private String oauthId;
     private long tokenId;
     private String metadataUrl;
+    private long version;
     @DtoExclude
     private ItemState itemState;
 
